@@ -1,9 +1,6 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./src/",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -18,10 +15,10 @@
     "types": ["lucide-angular"],
     "module": "preserve",
     "paths": {
-      "@core/*": ["app/core/*"],
-      "@features/*": ["app/features/*"],
-      "@shared/*": ["app/shared/*"],
-      "@environments/*": ["environments/*"]
+      "@core/*": ["./src/app/core/*"],
+      "@features/*": ["./src/app/features/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@environments/*": ["./src/environments/*"]
     }
   },
   "angularCompilerOptions": {
