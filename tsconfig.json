@@ -12,7 +12,6 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "types": ["lucide-angular"],
     "module": "preserve",
     "paths": {
       "@core/*": ["./src/app/core/*"],

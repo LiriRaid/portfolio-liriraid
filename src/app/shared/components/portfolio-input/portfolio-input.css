@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+fieldset {
+  border-style: solid;
+}
+
+.portfolio-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.portfolio-input-field {
+  background-color: transparent;
+  color: inherit;
+}
+
+
+.portfolio-input-invalid .portfolio-input-field {
+  border-color: #e51d21 !important;
+}
+
+.portfolio-input-invalid label {
+  color: #e51d21 !important;
+}
+
+.portfolio-input-error {
+  color: #e51d21;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  padding-left: 1.25rem;
+  top: 100%;
+  z-index: 10;
+}

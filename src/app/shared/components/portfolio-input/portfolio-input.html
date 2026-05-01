@@ -1,0 +1,173 @@
+<div class="portfolio-input-wrapper" [ngClass]="{ 'portfolio-input-invalid': hasErrors() }">
+  <div class="relative w-full">
+    @if (!isTagInput()) {
+      @if (label() && variant() === 'on') {
+        <fieldset class="relative w-full rounded-lg border transition-colors duration-180" style="padding: 0; margin: 0; min-inline-size: 0" [ngClass]="fieldsetClasses()">
+          <legend class="h-0 invisible overflow-hidden whitespace-nowrap block leading-none" style="padding: 0" [style.margin-left]="legendOffset()" [style.max-width]="legendMaxWidth()" [style.transition]="legendTransition()">
+            <span class="px-2 text-caption-2-bold">{{ label() }}</span>
+          </legend>
+
+          <input
+            [type]="inputType()"
+            [disabled]="isDisabled()"
+            [value]="displayValue()"
+            [readOnly]="readonly()"
+            (input)="onInput($event)"
+            (focus)="onFocusInput()"
+            (blur)="onBlurInput()"
+            [attr.inputmode]="type() === 'price' ? 'decimal' : null"
+            [attr.placeholder]="placeholderAttr()"
+            [class]="'portfolio-input-field peer w-full bg-transparent border-0 text-caption-1-medium focus:outline-none focus:ring-0 transition-colors duration-180 placeholder:text-transparent placeholder:transition-colors placeholder:duration-180 focus:placeholder:text-(--app-text-subtle) focus:placeholder:delay-100 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
+            [ngClass]="{
+              'text-(--app-control-surface-text)': !isDisabled() && !readonly(),
+              'cursor-not-allowed text-(--app-control-disabled-text)': isDisabled() || readonly(),
+            }"
+          />
+
+          @if (showCurrencySymbol()) {
+            <span
+              class="absolute top-1/2 -translate-y-1/2 pointer-events-none select-none text-caption-1-medium"
+              [ngClass]="{
+                'left-3': !hasLeftIcon(),
+                'left-8': hasLeftIcon(),
+                'text-(--app-control-disabled-text)': isDisabled() || readonly(),
+                'text-(--app-text-subtle)': !isDisabled() && !readonly(),
+              }"
+              >{{ currencySymbol() }}</span
+            >
+          }
+
+          @if (hasIcon() && lucideIcon()) {
+            <portfolio-icon
+              [name]="lucideIcon()"
+              [size]="16"
+              class="absolute top-1/2 -translate-y-1/2 transition-colors duration-150"
+              [ngClass]="{
+                'left-3': iconPosition() === 'left',
+                'right-3': iconPosition() === 'right',
+                'text-(--app-control-disabled-text)': isDisabled() || readonly(),
+                'text-(--app-action-icon-color)': !isDisabled() && !readonly() && !iconClickable(),
+                'cursor-pointer text-(--app-action-icon-color) hover:text-(--app-text-primary)': iconClickable() && !isDisabled() && !readonly(),
+              }"
+              (click)="onIconClick($event)"
+            ></portfolio-icon>
+          }
+
+          <label class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-180 z-10" [ngClass]="labelClass()" [style.color]="labelColor()">
+            {{ label() }}
+          </label>
+        </fieldset>
+      } @else {
+        <div class="relative w-full">
+          <input
+            [type]="inputType()"
+            [disabled]="isDisabled()"
+            [value]="displayValue()"
+            [readOnly]="readonly()"
+            (input)="onInput($event)"
+            (focus)="onFocusInput()"
+            (blur)="onBlurInput()"
+            [attr.inputmode]="type() === 'price' ? 'decimal' : null"
+            [attr.placeholder]="placeholderAttr()"
+            [class]="'portfolio-input-field peer w-full rounded-lg border text-caption-1-medium focus:outline-none transition-all duration-150 placeholder:text-transparent placeholder:transition-colors placeholder:duration-180 focus:placeholder:text-(--app-text-subtle) focus:placeholder:delay-100 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
+            [ngClass]="{
+              'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-(--app-control-surface-border)': !isDisabled() && !readonly() && !hasErrors(),
+              'focus:ring-2 focus:ring-(--app-control-focus-ring) focus:border-transparent': !hasErrors(),
+              'cursor-not-allowed bg-(--app-control-disabled-bg) text-(--app-control-disabled-text) border-(--app-control-disabled-border)': isDisabled() || readonly(),
+              'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-red-500 focus:ring-2 focus:ring-red-500/25 focus:border-transparent': hasErrors(),
+            }"
+          />
+
+          @if (showCurrencySymbol()) {
+            <span
+              class="absolute top-1/2 -translate-y-1/2 pointer-events-none select-none text-caption-1-medium"
+              [ngClass]="{
+                'left-3': !hasLeftIcon(),
+                'left-8': hasLeftIcon(),
+                'text-(--app-control-disabled-text)': isDisabled() || readonly(),
+                'text-(--app-text-subtle)': !isDisabled() && !readonly(),
+              }"
+              >{{ currencySymbol() }}</span
+            >
+          }
+
+          @if (hasIcon() && lucideIcon()) {
+            <portfolio-icon
+              [name]="lucideIcon()"
+              [size]="16"
+              class="absolute top-1/2 -translate-y-1/2 transition-colors duration-150"
+              [ngClass]="{
+                'left-3': iconPosition() === 'left',
+                'right-3': iconPosition() === 'right',
+                'text-(--app-control-disabled-text)': isDisabled() || readonly(),
+                'text-(--app-action-icon-color)': !isDisabled() && !readonly() && !iconClickable(),
+                'cursor-pointer text-(--app-action-icon-color) hover:text-(--app-text-primary)': iconClickable() && !isDisabled() && !readonly(),
+              }"
+              (click)="onIconClick($event)"
+            ></portfolio-icon>
+          }
+
+          @if (label()) {
+            <label class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-150 z-10" [ngClass]="labelClass()" [style.background]="labelBackground()" [style.color]="labelColor()">
+              {{ label() }}
+            </label>
+          }
+        </div>
+      }
+    } @else {
+      <div
+        class="peer w-full py-2 border rounded-lg px-3 transition-all duration-150 focus-within:outline-none"
+        [ngClass]="{
+          'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-(--app-control-surface-border)': !isDisabled() && !readonly() && !hasErrors(),
+          'focus-within:ring-2 focus-within:ring-(--app-control-focus-ring) focus-within:border-transparent': !hasErrors(),
+          'cursor-not-allowed bg-(--app-control-disabled-bg) text-(--app-control-disabled-text) border-(--app-control-disabled-border)': isDisabled() || readonly(),
+          'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-red-500 focus-within:ring-2 focus-within:ring-red-500/25 focus-within:border-transparent': hasErrors(),
+        }"
+        [class.has-content]="tags().length > 0"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          @for (tag of tags(); track $index; let i = $index) {
+            <span class="tag border flex items-center gap-2 flex-none bg-(--app-panel-muted-bg) border-(--app-border-color) text-(--app-text-color)">
+              <p class="text-caption-2-bold truncate">{{ tag }}</p>
+
+              @if (!readonly() && !isDisabled()) {
+                <button type="button" (click)="removeTag(i)" class="shrink-0 transition-colors duration-150 cursor-pointer text-(--app-action-icon-color) hover:text-(--app-text-primary)">
+                  <portfolio-icon name="CloseCircle" size="16"></portfolio-icon>
+                </button>
+              }
+            </span>
+          }
+
+          @if (readonly() && tags().length === 0) {
+            <span class="cursor-not-allowed text-caption-1-medium px-2 py-0.5 flex-auto min-w-0 whitespace-normal wrap-break-words text-(--app-disabled-text)"> No hay números de serie registrados </span>
+          }
+
+          @if (!readonly() && !isDisabled()) {
+            <input type="text" [value]="currentTagValue()" [placeholder]="tags().length > 0 || isFocused() ? tagPlaceholder() : ' '" (input)="onInput($event)" (keydown)="onTagKeyDown($event)" (focus)="onFocus()" (blur)="onBlur()" class="outline-none text-caption-1-regular px-2 py-0.5 border-none rounded-md max-w-full flex-[1_0_14.5rem] min-w-40 bg-transparent text-(--app-control-surface-text)" [class.placeholder-transparent]="!isFocused() && tags().length === 0" />
+          }
+        </div>
+
+        @if (label()) {
+          <label
+            class="absolute left-3 px-2 select-none pointer-events-none transition-all duration-150 z-10 bg-(--app-panel-bg)"
+            [ngClass]="{
+              'top-1/2 -translate-y-1/2 text-caption-1-medium': !hasValue() && !readonly(),
+              '-top-3 translate-y-0 text-caption-1-medium': hasValue() || readonly(),
+              'text-red-500': hasErrors(),
+              'text-(--app-control-disabled-text)': (isDisabled() || readonly()) && !hasErrors(),
+              'text-(--app-text-subtle)': !isDisabled() && !readonly() && !hasErrors(),
+            }"
+          >
+            {{ label() }}
+          </label>
+        }
+      </div>
+    }
+  </div>
+
+  @if (hasErrors() && showErrorMessage()) {
+    <small class="portfolio-input-error">
+      {{ errorMessage() }}
+    </small>
+  }
+</div>
