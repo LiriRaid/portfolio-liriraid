@@ -28,6 +28,9 @@ const MAP: Record<string, string> = {
   'VS Code':         `${SKILL}vscode`,
   'Postman':         `${SKILL}postman`,
   'Figma':           `${SKILL}figma`,
+  'GSAP':            'assets/svg/gsap-black.svg',
+  'Vitest':          'assets/svg/vitest-logo.svg',
+  'NPM':             'assets/svg/npm-logo.svg',
   'GitHub':          `${SKILL}github`,
   'LinkedIn':        `${SKILL}linkedin`,
 };

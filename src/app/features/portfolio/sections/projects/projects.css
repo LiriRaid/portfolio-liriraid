@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 5rem 1.5rem;
+  padding: 5rem 0;
   background-color: var(--app-panel-muted-bg);
 }
 
@@ -11,6 +11,7 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -384,6 +385,8 @@
 
 .project-stats {
   padding: 1rem 1.5rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .project-stat {
@@ -514,7 +517,11 @@
 
 @media (max-width: 640px) {
   .section {
-    padding: 4rem 1rem;
+    padding: 4rem 0;
+  }
+
+  .section-inner {
+    padding: 0 1rem;
   }
 
   ::ng-deep .p-popover.project-filter-panel {

@@ -18,8 +18,8 @@ export class About {
   });
 
   protected readonly stats = signal<Stat[]>([
-    { value: '3+', label: 'Años de experiencia' },
-    { value: '10+', label: 'Proyectos entregados' },
+    { value: '2+', label: 'Años de experiencia' },
+    { value: '2', label: 'Proyectos públicos en GitHub' },
     { value: '100%', label: 'Orientado a producto' },
   ]);
 

@@ -13,6 +13,20 @@ import { techIconUrl } from '@shared/utils/tech-icons';
 export class Skills {
   protected readonly techIconUrl = techIconUrl;
 
+  private readonly fallbackIcons: Record<string, string> = {
+    'REST API': 'Server',
+    'Clean Architecture': 'Layers',
+    'Screaming Architecture': 'Folder',
+    'SSR + Hydration': 'Server',
+    'Lazy Loading': 'Download',
+    'DRY / SOLID': 'ShieldCheck',
+    DDD: 'Database',
+  };
+
+  protected skillFallbackIcon(skill: string): string {
+    return this.fallbackIcons[skill] ?? 'Code';
+  }
+
   protected readonly categories = signal<SkillCategory[]>([
     {
       label: 'Frontend',
@@ -32,7 +46,7 @@ export class Skills {
     {
       label: 'Herramientas',
       icon: 'Settings',
-      skills: ['Git', 'Docker', 'GitHub Actions', 'VS Code', 'Postman', 'Figma'],
+      skills: ['Git', 'Docker', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'GSAP', 'Vitest', 'NPM'],
     },
     {
       label: 'Arquitectura',

@@ -24,6 +24,8 @@
               <li class="skill-badge">
                 @if (techIconUrl(skill); as iconUrl) {
                   <img [src]="iconUrl" [alt]="skill" class="skill-badge-icon" width="16" height="16" loading="lazy" />
+                } @else {
+                  <portfolio-icon [name]="skillFallbackIcon(skill)" size="14" />
                 }
                 {{ skill }}
               </li>

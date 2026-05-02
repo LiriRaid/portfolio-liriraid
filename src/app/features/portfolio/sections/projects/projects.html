@@ -133,10 +133,12 @@
                       <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
                     </span>
 
-                    <span class="project-stat">
-                      <portfolio-icon name="License" size="14" />
-                      <span>{{ formatLicense(project.githubStats.license) }}</span>
-                    </span>
+                    @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
+                      <span class="project-stat">
+                        <portfolio-icon name="License" size="14" />
+                        <span>{{ formatLicense(project.githubStats.license) }}</span>
+                      </span>
+                    }
                   } @else if (isRepositoryLoading(project.repo)) {
                     <span class="project-stat project-stat--loading">Cargando datos de GitHub...</span>
                   } @else {
