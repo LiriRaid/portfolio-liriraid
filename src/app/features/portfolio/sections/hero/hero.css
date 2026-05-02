@@ -101,6 +101,30 @@
 .hero-visual {
   flex-shrink: 0;
   width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Avatar */
+.hero-avatar {
+  width: 14rem;
+  height: 14rem;
+  border-radius: 9999px;
+  padding: 5px;
+  background: linear-gradient(135deg, var(--app-text-primary), color-mix(in srgb, var(--app-text-primary) 40%, transparent));
+  box-shadow: var(--app-container-shadow), 0 0 0 8px color-mix(in srgb, var(--app-text-primary) 12%, transparent);
+  flex-shrink: 0;
+}
+
+.hero-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+  background-color: var(--app-panel-muted-bg);
 }
 
 .hero-card {
@@ -110,6 +134,7 @@
   overflow: hidden;
   box-shadow: var(--app-container-shadow);
   font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  width: 100%;
 }
 
 .hero-card-header {

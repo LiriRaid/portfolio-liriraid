@@ -24,43 +24,52 @@
 
 /* Popover panel overrides */
 ::ng-deep .p-popover.color-picker-panel {
-  background: var(--app-panel-bg);
-  border-color: var(--app-border-color);
-  min-width: 252px;
+  --p-popover-background: var(--p-surface-0);
+  --p-popover-border-color: var(--p-surface-200);
+  background: var(--p-surface-0);
+  border-color: var(--p-surface-200);
+  min-width: 242px;
 }
 
-::ng-deep .p-popover.color-picker-panel .p-popover-content {
-  padding: 1rem;
+::ng-deep .dark .p-popover.color-picker-panel,
+::ng-deep .dark.p-popover.color-picker-panel,
+::ng-deep .p-popover.color-picker-panel:where(.dark *) {
+  --p-popover-background: var(--p-surface-900);
+  --p-popover-border-color: var(--p-surface-700);
+  background: var(--p-surface-900);
+  border-color: var(--p-surface-700);
 }
 
-.picker-content {
+.color-picker-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 10px;
+  padding: 0;
 }
 
-.picker-section {
+.color-picker-section {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
-.picker-label {
-  font-size: 0.6875rem;
+.color-picker-label {
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   color: var(--app-text-subtle);
   margin: 0;
 }
 
-.picker-grid {
+.color-picker-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  width: 218px;
 }
 
-.picker-grid--surface {
+.color-picker-grid--surface {
   flex-wrap: nowrap;
 }
 
@@ -73,24 +82,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s, border-color 0.15s;
+  transition:
+    transform 0.15s,
+    border-color 0.15s;
   padding: 0;
 }
 
 .color-swatch:hover {
-  transform: scale(1.2);
+  transform: scale(1.18);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
 .color-swatch.active {
   border-color: white;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
-.swatch-check {
+.color-swatch .check {
   color: white;
   font-size: 10px;
-  font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   line-height: 1;
 }

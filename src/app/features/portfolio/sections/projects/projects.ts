@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { techIconUrl } from '@shared/utils/tech-icons';
 
 export interface Project {
   title: string;
@@ -18,6 +19,8 @@ export interface Project {
   styleUrl: './projects.css',
 })
 export class Projects {
+  protected readonly techIconUrl = techIconUrl;
+
   protected readonly projects = signal<Project[]>([
     {
       title: 'OmniInbox',

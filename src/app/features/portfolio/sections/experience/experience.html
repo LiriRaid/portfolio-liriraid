@@ -1,0 +1,53 @@
+<section id="experiencia" class="section" aria-labelledby="experience-heading">
+  <div class="section-inner">
+    <header class="section-header">
+      <p class="section-label">Trayectoria</p>
+      <h2 id="experience-heading" class="section-title text-tittle-4-bold">
+        Experiencia laboral
+      </h2>
+      <p class="section-subtitle text-body-1-regular">
+        Roles donde he construido productos reales, liderado decisiones técnicas y crecido como ingeniero.
+      </p>
+    </header>
+
+    <ol class="experience-timeline" role="list">
+      @for (item of experiences(); track item.company + item.period) {
+        <li class="experience-item">
+          <div class="experience-marker" aria-hidden="true">
+            <span class="experience-dot" [class.experience-dot--current]="item.current"></span>
+          </div>
+
+          <article class="experience-card">
+            <header class="experience-card-header">
+              <div class="experience-card-meta">
+                <h3 class="experience-role text-subtitle-2-bold">{{ item.role }}</h3>
+                <p class="experience-company text-body-2-medium">
+                  <portfolio-icon name="Company" size="14" />
+                  <span>{{ item.company }}</span>
+                  @if (item.current) {
+                    <span class="experience-current-badge">Actual</span>
+                  }
+                </p>
+              </div>
+
+              <div class="experience-period-block">
+                <p class="experience-period text-caption-1-medium">{{ item.period }}</p>
+                @if (item.location) {
+                  <p class="experience-location text-caption-2-regular">{{ item.location }}</p>
+                }
+              </div>
+            </header>
+
+            <p class="experience-description text-body-2-regular">{{ item.description }}</p>
+
+            <div class="experience-tags" aria-label="Tecnologías utilizadas">
+              @for (tech of item.technologies; track tech) {
+                <span class="experience-tag">{{ tech }}</span>
+              }
+            </div>
+          </article>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

@@ -1,13 +1,13 @@
 <header class="header" role="banner">
   <div class="header-inner">
-    <a href="#inicio" class="header-logo" aria-label="Ir al inicio - Liriraid">
+    <a href="#inicio" class="header-logo" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#inicio')">
       <span class="logo-text">Liriraid</span>
       <span class="logo-dot" aria-hidden="true">.</span>
     </a>
 
     <nav class="header-nav" aria-label="Navegación principal">
       @for (link of navLinks; track link.href) {
-        <a [href]="link.href" class="nav-link">{{ link.label }}</a>
+        <a [href]="link.href" class="nav-link" (click)="onNavLinkClick($event, link.href)">{{ link.label }}</a>
       }
     </nav>
 
@@ -27,7 +27,7 @@
   @if (mobileMenuOpen()) {
     <nav class="mobile-nav" aria-label="Navegación móvil">
       @for (link of navLinks; track link.href) {
-        <a [href]="link.href" class="mobile-nav-link" (click)="closeMobileMenu()">
+        <a [href]="link.href" class="mobile-nav-link" (click)="onNavLinkClick($event, link.href); closeMobileMenu()">
           {{ link.label }}
         </a>
       }

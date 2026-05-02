@@ -153,6 +153,12 @@
   outline-offset: 2px;
 }
 
+.project-link-icon {
+  border-radius: 3px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
 .project-private {
   display: flex;
   align-items: center;

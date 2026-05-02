@@ -38,7 +38,9 @@
                   class="project-link"
                   [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'"
                 >
-                  <portfolio-icon name="Github" size="16" />
+                  @if (techIconUrl('GitHub'); as iconUrl) {
+                    <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="project-link-icon" />
+                  }
                   <span>GitHub</span>
                 </a>
               }

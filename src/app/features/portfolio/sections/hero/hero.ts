@@ -25,9 +25,21 @@ export class Hero {
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+
       afterNextRender(() => {
+        this.resetToHeroOnLoad();
         this.animateEntrance();
       });
+    }
+  }
+
+  private resetToHeroOnLoad(): void {
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      window.scrollTo(0, 0);
     }
   }
 
