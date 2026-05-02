@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { techIconUrl } from '@shared/utils/tech-icons';
 
 export interface SkillCategory {
   label: string;
@@ -15,6 +16,8 @@ export interface SkillCategory {
   styleUrl: './skills.css',
 })
 export class Skills {
+  protected readonly techIconUrl = techIconUrl;
+
   protected readonly categories = signal<SkillCategory[]>([
     {
       label: 'Frontend',
@@ -24,12 +27,12 @@ export class Skills {
     {
       label: 'Backend',
       icon: 'Server',
-      skills: ['Node.js', 'Ruby on Rails', 'Express', 'REST API', 'GraphQL', 'WebSocket'],
+      skills: ['Node.js', 'NestJS', 'Ruby on Rails', 'Express', 'REST API'],
     },
     {
       label: 'Base de datos',
       icon: 'Database',
-      skills: ['PostgreSQL', 'MySQL', 'Redis', 'ActiveRecord', 'Prisma'],
+      skills: ['PostgreSQL', 'Redis', ],
     },
     {
       label: 'Herramientas',

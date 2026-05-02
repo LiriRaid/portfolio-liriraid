@@ -72,7 +72,7 @@
             [class]="'portfolio-input-field peer w-full rounded-lg border text-caption-1-medium focus:outline-none transition-all duration-150 placeholder:text-transparent placeholder:transition-colors placeholder:duration-180 focus:placeholder:text-(--app-text-subtle) focus:placeholder:delay-100 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
             [ngClass]="{
               'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-(--app-control-surface-border)': !isDisabled() && !readonly() && !hasErrors(),
-              'focus:ring-2 focus:ring-(--app-control-focus-ring) focus:border-transparent': !hasErrors(),
+              'focus:ring-2 focus:ring-(--app-control-focus-ring)/25 focus:border-(--app-control-focus-ring)': !hasErrors(),
               'cursor-not-allowed bg-(--app-control-disabled-bg) text-(--app-control-disabled-text) border-(--app-control-disabled-border)': isDisabled() || readonly(),
               'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-red-500 focus:ring-2 focus:ring-red-500/25 focus:border-transparent': hasErrors(),
             }"

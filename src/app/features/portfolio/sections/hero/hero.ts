@@ -2,6 +2,8 @@ import { Component, PLATFORM_ID, afterNextRender, inject, signal } from '@angula
 import { isPlatformBrowser } from '@angular/common';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { techIconUrl } from '@shared/utils/tech-icons';
+import { PortfolioSectionNavigationService } from '../../portfolio-section-navigation.service';
 
 @Component({
   selector: 'portfolio-hero',
@@ -12,9 +14,13 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 })
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly sectionNavigation = inject(PortfolioSectionNavigationService);
+
+  protected readonly techIconUrl = techIconUrl;
 
   protected readonly stack = [
-    'Angular', 'TypeScript', 'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS',
+    'Angular', 'TypeScript', 'HTML', 'CSS', 'SASS',
+    'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS',
   ] as const;
 
   protected readonly visible = signal(false);
@@ -38,12 +44,10 @@ export class Hero {
   }
 
   protected scrollToProjects(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    document.getElementById('proyectos')?.scrollIntoView({ behavior: 'smooth' });
+    this.sectionNavigation.requestNavigation('proyectos');
   }
 
   protected scrollToContact(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+    this.sectionNavigation.requestNavigation('contacto');
   }
 }

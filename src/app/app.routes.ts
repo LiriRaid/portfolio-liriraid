@@ -8,6 +8,11 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'inicio',
+      },
+      {
+        path: ':section',
         loadComponent: () =>
           import('./features/portfolio/page/portfolio').then((m) => m.Portfolio),
       },

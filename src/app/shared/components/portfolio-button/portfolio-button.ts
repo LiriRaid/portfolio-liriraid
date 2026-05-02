@@ -27,6 +27,10 @@ export class PortfolioButton {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly variant = input<'outlined' | 'text' | undefined>(undefined);
   readonly type = input<'button' | 'submit' | 'reset'>('button');
+  readonly href = input<string | null>(null);
+  readonly target = input<string | null>(null);
+  readonly rel = input<string | null>(null);
+  readonly ariaLabel = input<string | null>(null);
 
   readonly styleClass = input<string>('');
   readonly labelClass = input<string>('');
@@ -80,6 +84,12 @@ export class PortfolioButton {
   });
 
   handleClick(event: MouseEvent): void {
+    if (this.disabled()) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     this.onClick.emit(event);
   }
 }

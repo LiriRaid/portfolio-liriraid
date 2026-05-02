@@ -1,13 +1,25 @@
 <header class="header" role="banner">
   <div class="header-inner">
-    <a href="#inicio" class="header-logo" aria-label="Ir al inicio - Liriraid">
+    <a
+      href="/inicio"
+      class="header-logo"
+      aria-label="Ir al inicio - Liriraid"
+      (click)="navigateToSection($event, 'inicio')"
+    >
       <span class="logo-text">Liriraid</span>
       <span class="logo-dot" aria-hidden="true">.</span>
     </a>
 
     <nav class="header-nav" aria-label="Navegación principal">
-      @for (link of navLinks; track link.href) {
-        <a [href]="link.href" class="nav-link">{{ link.label }}</a>
+      @for (link of navLinks; track link.id) {
+        <portfolio-button
+          [label]="link.label"
+          [href]="'/' + link.path"
+          outlined
+          [ariaLabel]="'Ir a ' + link.label"
+          [styleClass]="'header-nav-btn portfolio-outline-soft text-caption-1-medium' + (isActive(link.id) ? ' header-nav-btn-active' : '')"
+          (onClick)="navigateToSection($event, link.id)"
+        />
       }
     </nav>
 
@@ -40,14 +52,14 @@
 
   @if (mobileMenuOpen()) {
     <nav class="mobile-nav" aria-label="Navegación móvil">
-      @for (link of navLinks; track link.href) {
-        <a
-          [href]="link.href"
-          class="mobile-nav-link"
-          (click)="closeMobileMenu()"
-        >
-          {{ link.label }}
-        </a>
+      @for (link of navLinks; track link.id) {
+        <portfolio-button
+          [label]="link.label"
+          [href]="'/' + link.path"
+          outlined
+          [styleClass]="'mobile-nav-btn portfolio-outline-soft text-body-2-medium' + (isActive(link.id) ? ' header-nav-btn-active' : '')"
+          (onClick)="navigateToSection($event, link.id)"
+        />
       }
     </nav>
   }

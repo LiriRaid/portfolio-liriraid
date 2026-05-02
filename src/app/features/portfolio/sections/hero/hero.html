@@ -21,20 +21,25 @@
         label="Ver proyectos"
         icon="ArrowRight"
         iconPos="right"
-        styleClass="hero-btn-primary text-body-2-medium"
+        styleClass="rounded-2xl text-body-2-medium"
         (onClick)="scrollToProjects()"
       />
       <portfolio-button
         label="Contactar"
         variant="outlined"
-        styleClass="hero-btn-outline text-body-2-medium"
+        styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium"
         (onClick)="scrollToContact()"
       />
     </div>
 
     <div class="hero-stack" aria-label="Stack tecnológico principal">
       @for (tech of stack; track tech) {
-        <span class="tech-badge">{{ tech }}</span>
+        <span class="tech-badge">
+          @if (techIconUrl(tech); as iconUrl) {
+            <img [src]="iconUrl" [alt]="tech" class="tech-badge-icon" width="16" height="16" loading="lazy" />
+          }
+          {{ tech }}
+        </span>
       }
     </div>
   </div>

@@ -227,7 +227,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
   readonly fieldsetClasses = computed(() => ({
     'border-(--app-control-surface-border) bg-(--app-control-surface-bg)': !this.isDisabled() && !this.readonly() && !this.hasErrors(),
-    'focus-within:ring-2 focus-within:ring-(--app-control-focus-ring) focus-within:border-transparent': !this.hasErrors(),
+    'focus-within:ring-2 focus-within:ring-(--app-control-focus-ring)/25 focus-within:border-(--app-control-focus-ring)': !this.hasErrors(),
     'cursor-not-allowed bg-(--app-control-disabled-bg) border-(--app-control-disabled-border)': this.isDisabled() || this.readonly(),
     'bg-(--app-control-surface-bg) border-red-500 focus-within:ring-2 focus-within:ring-red-500/25 focus-within:border-transparent': this.hasErrors(),
   }));

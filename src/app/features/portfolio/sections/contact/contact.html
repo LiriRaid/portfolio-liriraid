@@ -1,6 +1,8 @@
 <section id="contacto" class="section" aria-labelledby="contact-heading">
   <div class="section-inner">
     <div class="contact-layout">
+
+      <!-- Lado izquierdo: texto + redes -->
       <div class="contact-content">
         <p class="section-label">Hablemos</p>
         <h2 id="contact-heading" class="contact-title text-tittle-4-bold">
@@ -12,44 +14,70 @@
           Si tienes una idea que quieras llevar a producción, me encantaría escucharte.
         </p>
 
-        <div class="contact-cta">
-          <portfolio-button
-            label="Enviar email"
-            icon="Email"
-            styleClass="text-body-2-medium"
-          />
+        <div class="contact-social">
+          @for (link of socialLinks; track link.label) {
+            <portfolio-button
+              [label]="link.label"
+              [icon]="link.icon"
+              [href]="link.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              outlined
+              [ariaLabel]="link.label"
+              styleClass="contact-social-btn portfolio-outline-soft text-body-2-medium"
+            />
+          }
         </div>
       </div>
 
-      <div class="contact-links-wrap">
-        <ul class="contact-links" role="list">
-          @for (link of contactLinks; track link.label) {
-            <li>
-              <a
-                [href]="link.href"
-                [target]="link.external ? '_blank' : '_self'"
-                [rel]="link.external ? 'noopener noreferrer' : null"
-                class="contact-link"
-                [attr.aria-label]="link.label + ': ' + link.value"
-              >
-                <div class="contact-link-icon" aria-hidden="true">
-                  <portfolio-icon [name]="link.icon" size="20" />
-                </div>
-                <div class="contact-link-body">
-                  <span class="contact-link-label text-caption-1-bold">{{ link.label }}</span>
-                  <span class="contact-link-value text-body-2-regular">{{ link.value }}</span>
-                </div>
-                <portfolio-icon
-                  name="ExternalLink"
-                  size="14"
-                  [color]="'var(--app-text-subtle)'"
-                  extraClass="contact-link-arrow"
-                />
-              </a>
-            </li>
-          }
-        </ul>
+      <!-- Lado derecho: formulario -->
+      <div class="contact-form-wrap">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
+
+          <portfolio-input
+            formControlName="name"
+            label="Nombre"
+            placeholder="Tu nombre completo"
+            type="text"
+            variant="on"
+            lucideIcon="User"
+            iconPosition="left"
+          />
+
+          <portfolio-input
+            formControlName="email"
+            label="Correo electrónico"
+            placeholder="Ingresa tu correo electrónico"
+            type="email"
+            variant="on"
+            lucideIcon="Email"
+            iconPosition="left"
+          />
+
+          <div
+            class="contact-textarea-wrap textarea textarea-default"
+            [class.textarea-focused]="messageFocused()"
+          >
+            <textarea
+              formControlName="message"
+              class="contact-textarea text-body-2-regular"
+              placeholder="Cuéntame sobre tu proyecto o idea..."
+              rows="5"
+              (focus)="messageFocused.set(true)"
+              (blur)="messageFocused.set(false)"
+            ></textarea>
+          </div>
+
+          <portfolio-button
+            label="Enviar mensaje"
+            icon="Send"
+            iconPos="right"
+            styleClass="text-body-2-medium contact-submit-btn"
+            type="submit"
+          />
+        </form>
       </div>
+
     </div>
   </div>
 </section>

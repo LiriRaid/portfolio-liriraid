@@ -21,7 +21,12 @@
           </div>
           <ul class="skill-list" role="list" [attr.aria-label]="'Habilidades de ' + category.label">
             @for (skill of category.skills; track skill) {
-              <li class="skill-badge">{{ skill }}</li>
+              <li class="skill-badge">
+                @if (techIconUrl(skill); as iconUrl) {
+                  <img [src]="iconUrl" [alt]="skill" class="skill-badge-icon" width="16" height="16" loading="lazy" />
+                }
+                {{ skill }}
+              </li>
             }
           </ul>
         </div>

@@ -472,8 +472,8 @@
   }
 
   .textarea.textarea-default:focus-within {
-    border: 1px solid transparent;
-    box-shadow: 0 0 0 2px var(--app-textarea-focus-outline);
+    border-color: var(--app-control-focus-ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-control-focus-ring) 20%, transparent);
   }
 
   .textarea.textarea-default:focus-within > svg[lucideIcon],
@@ -536,4 +536,23 @@
 .p-button.p-button-outlined:disabled {
   color: var(--app-outline-button-disabled-text);
   background: var(--app-outline-button-disabled-bg);
+}
+
+.p-button.p-button-outlined.portfolio-outline-soft,
+a.p-button.p-button-outlined.portfolio-outline-soft {
+  color: var(--app-text-color);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--app-text-primary) 32%, var(--app-border-color));
+}
+
+.p-button.p-button-outlined.portfolio-outline-soft:not(:disabled):hover,
+a.p-button.p-button-outlined.portfolio-outline-soft:not(.p-disabled):hover {
+  color: var(--app-text-primary);
+  background: color-mix(in srgb, var(--app-text-primary) 14%, transparent);
+  border-color: color-mix(in srgb, var(--app-text-primary) 48%, var(--app-border-color));
+}
+
+.p-button.p-button-outlined.portfolio-outline-soft:focus-visible,
+a.p-button.p-button-outlined.portfolio-outline-soft:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-text-primary) 20%, transparent);
 }

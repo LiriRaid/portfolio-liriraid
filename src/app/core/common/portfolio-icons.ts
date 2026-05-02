@@ -6,15 +6,8 @@ export interface PortfolioSvg {
 
 export const PortfolioIconsSVG: PortfolioSvg[] = [
   {
-    name: 'Instagram',
-    url: 'assets/svg/instagram.svg',
+    name: 'Angular',
+    url: 'assets/svg/angular-logo.svg',
   },
-  {
-    name: 'WhatsApp',
-    url: 'assets/svg/whatsapp.svg',
-  },
-  {
-    name: 'Trello',
-    url: 'assets/svg/trello.svg',
-  },
+
 ];

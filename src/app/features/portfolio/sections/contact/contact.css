@@ -24,11 +24,12 @@
 /* Layout */
 .contact-layout {
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 1fr 480px;
   gap: 5rem;
   align-items: center;
 }
 
+/* Left side */
 .contact-content {
   display: flex;
   flex-direction: column;
@@ -51,81 +52,58 @@
   max-width: 480px;
 }
 
-.contact-cta {
+/* Social links */
+.contact-social {
   display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-/* Contact links */
-.contact-links-wrap {
+:host ::ng-deep .contact-social-btn.p-button {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+}
+
+/* Form panel */
+.contact-form-wrap {
   background-color: var(--app-panel-bg);
   border: 1px solid var(--app-container-border, var(--app-border-color));
   border-radius: 1.25rem;
-  overflow: hidden;
+  padding: 2rem;
   box-shadow: var(--app-container-shadow);
 }
 
-.contact-links {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.contact-links > li + li {
-  border-top: 1px solid var(--app-border-color);
-}
-
-.contact-link {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-
-.contact-link:hover {
-  background-color: var(--app-panel-muted-bg);
-}
-
-.contact-link:hover .contact-link-value {
-  color: var(--app-text-primary);
-}
-
-.contact-link:focus-visible {
-  outline: 2px solid var(--app-text-primary);
-  outline-offset: -2px;
-}
-
-.contact-link-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  background-color: var(--app-badge-soft-bg);
-  color: var(--app-text-primary);
-  flex-shrink: 0;
-}
-
-.contact-link-body {
+.contact-form {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
-  flex: 1;
-  min-width: 0;
+  gap: 1.25rem;
 }
 
-.contact-link-label {
-  color: var(--app-text-color);
+/* Textarea wrapper */
+.contact-textarea-wrap {
+  align-items: flex-start !important;
 }
 
-.contact-link-value {
-  color: var(--app-text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: color 0.2s;
+.contact-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: vertical;
+  min-height: 7rem;
+  color: var(--app-control-surface-text);
+  line-height: 1.6;
+  padding: 0.25rem 0 !important;
+}
+
+.contact-textarea::placeholder {
+  color: var(--app-text-subtle);
+}
+
+/* Submit button full width */
+.contact-form ::ng-deep .contact-submit-btn.p-button {
+  width: 100%;
+  justify-content: center;
 }
 
 /* Responsive */
@@ -141,7 +119,7 @@
     padding: 4rem 1rem;
   }
 
-  .contact-layout {
-    gap: 2.5rem;
+  .contact-form-wrap {
+    padding: 1.5rem;
   }
 }
