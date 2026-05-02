@@ -5,9 +5,11 @@ import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-b
 import { PortfolioInput } from '@shared/components/portfolio-input/portfolio-input';
 
 export interface SocialLink {
-  icon: string;
+  techIcon: string;
   label: string;
   href: string;
+  target?: string;
+  rel?: string;
 }
 
 @Component({
@@ -23,14 +25,18 @@ export class Contact {
 
   protected readonly socialLinks: SocialLink[] = [
     {
-      icon: 'Github',
+      techIcon: 'GitHub',
       label: 'GitHub',
       href: 'https://github.com/liriraid',
+      target: '_blank',
+      rel: 'noopener noreferrer',
     },
     {
-      icon: 'Linkedin',
+      techIcon: 'LinkedIn',
       label: 'LinkedIn',
       href: 'https://www.linkedin.com/in/gabriel-leonardo-cruz-flores-64570a1a4/',
+      target: '_blank',
+      rel: 'noopener noreferrer',
     },
   ];
 

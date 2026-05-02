@@ -2,7 +2,7 @@
   --app-shell-bg: var(--p-surface-200);
   --app-panel-bg: var(--p-surface-0);
   --app-panel-muted-bg: var(--p-surface-50);
-  --app-border-color: var(--p-surface-200);
+  --app-border-color: var(--p-surface-300);
 
   --app-text-color: var(--p-surface-900);
   --app-text-muted: var(--p-surface-600);
@@ -90,7 +90,7 @@
   --app-select-disabled-bg: var(--p-surface-300);
   --app-select-disabled-text: #888888;
   --app-textarea-bg: var(--app-panel-bg);
-  --app-textarea-border: var(--p-surface-500);
+  --app-textarea-border: var(--p-surface-300);
   --app-textarea-focus-outline: solid 3px rgba(251, 0, 33, 0.3);
   --app-checkbox-bg: var(--p-surface-50);
   --app-checkbox-border: var(--p-surface-300);

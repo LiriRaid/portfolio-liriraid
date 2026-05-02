@@ -1,7 +1,6 @@
 <section id="contacto" class="section" aria-labelledby="contact-heading">
   <div class="section-inner">
     <div class="contact-layout">
-
       <!-- Lado izquierdo: texto + redes -->
       <div class="contact-content">
         <p class="section-label">Hablemos</p>
@@ -9,22 +8,11 @@
           ¿Listo para construir<br />
           <span class="contact-highlight">algo juntos</span>?
         </h2>
-        <p class="contact-description text-body-1-regular">
-          Estoy disponible para proyectos freelance, colaboraciones o posiciones full time.
-          Si tienes una idea que quieras llevar a producción, me encantaría escucharte.
-        </p>
+        <p class="contact-description text-body-1-regular">Estoy disponible para proyectos freelance, colaboraciones o posiciones full time. Si tienes una idea que quieras llevar a producción, me encantaría escucharte.</p>
 
         <div class="contact-social">
           @for (link of socialLinks; track link.label) {
-
-            <portfolio-button
-              [label]="link.label"
-              [icon]="link.icon"
-              [href]="link.href"
-              variant="outlined"
-              [ariaLabel]="link.label"
-              styleClass=" text-body-2-medium"
-            />
+            <portfolio-button [label]="link.label" [techIcon]="link.techIcon" [href]="link.href" [target]="link.target" [rel]="link.rel" variant="outlined" [ariaLabel]="link.label" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" />
           }
         </div>
       </div>
@@ -32,51 +20,17 @@
       <!-- Lado derecho: formulario -->
       <div class="contact-form-wrap">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
+          <portfolio-input formControlName="name" label="Nombre" placeholder="Tu nombre completo" type="text" variant="on" lucideIcon="User" iconPosition="left" />
 
-          <portfolio-input
-            formControlName="name"
-            label="Nombre"
-            placeholder="Tu nombre completo"
-            type="text"
-            variant="on"
-            lucideIcon="User"
-            iconPosition="left"
-          />
+          <portfolio-input formControlName="email" label="Correo electrónico" placeholder="Ingresa tu correo electrónico" type="email" variant="on" lucideIcon="Email" iconPosition="left" />
 
-          <portfolio-input
-            formControlName="email"
-            label="Correo electrónico"
-            placeholder="Ingresa tu correo electrónico"
-            type="email"
-            variant="on"
-            lucideIcon="Email"
-            iconPosition="left"
-          />
-
-          <div
-            class="contact-textarea-wrap textarea textarea-default"
-            [class.textarea-focused]="messageFocused()"
-          >
-            <textarea
-              formControlName="message"
-              class="contact-textarea text-body-2-regular"
-              placeholder="Cuéntame sobre tu proyecto o idea..."
-              rows="5"
-              (focus)="messageFocused.set(true)"
-              (blur)="messageFocused.set(false)"
-            ></textarea>
+          <div class="textarea textarea-default" [class.textarea-focused]="messageFocused()">
+            <textarea formControlName="message" class="contact-textarea text-caption-1-medium" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" (focus)="messageFocused.set(true)" (blur)="messageFocused.set(false)"></textarea>
           </div>
 
-          <portfolio-button
-            label="Enviar mensaje"
-            icon="Send"
-            iconPos="right"
-            styleClass="text-body-2-medium contact-submit-btn"
-            type="submit"
-          />
+          <portfolio-button label="Enviar mensaje" icon="Send" iconPos="right" styleClass="w-full text-body-2-medium rounded-2xl contact-submit-btn" type="submit" />
         </form>
       </div>
-
     </div>
   </div>
 </section>

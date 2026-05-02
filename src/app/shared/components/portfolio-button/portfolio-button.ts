@@ -2,6 +2,7 @@ import { Component, booleanAttribute, computed, input, output } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { ButtonModule, type ButtonSeverity } from 'primeng/button';
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
+import { techIconUrl } from '@shared/utils/tech-icons';
 
 @Component({
   selector: 'portfolio-button',
@@ -16,8 +17,14 @@ import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 export class PortfolioButton {
   readonly label = input<string>('');
   readonly icon = input<string | null>(null);
+  readonly techIcon = input<string | null>(null);
   readonly iconSize = input<string | number>('16');
   readonly iconPos = input<'left' | 'right' | 'top' | 'bottom'>('left');
+
+  readonly techIconImgUrl = computed(() => {
+    const name = this.techIcon();
+    return name ? techIconUrl(name) : null;
+  });
 
   readonly severity = input<ButtonSeverity | undefined>(undefined);
   readonly outlined = input(false, { transform: booleanAttribute });
@@ -28,8 +35,8 @@ export class PortfolioButton {
   readonly variant = input<'outlined' | 'text' | undefined>(undefined);
   readonly type = input<'button' | 'submit' | 'reset'>('button');
   readonly href = input<string | null>(null);
-  readonly target = input<string | null>(null);
-  readonly rel = input<string | null>(null);
+  readonly target = input<string | null | undefined>(null);
+  readonly rel = input<string | null | undefined>(null);
   readonly ariaLabel = input<string | null>(null);
 
   readonly styleClass = input<string>('');

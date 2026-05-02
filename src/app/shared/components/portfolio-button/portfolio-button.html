@@ -1,52 +1,29 @@
 <ng-template #buttonContent>
-  @if (icon() && (iconPos() === 'left' || iconPos() === 'top')) {
-    <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+  @if ((icon() || techIconImgUrl()) && (iconPos() === 'left' || iconPos() === 'top')) {
+    @if (techIconImgUrl(); as imgUrl) {
+      <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
+    } @else {
+      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+    }
   }
   @if (label()) {
     <span pButtonLabel [ngClass]="computedLabelClass()">{{ label() }}</span>
   }
-  @if (icon() && (iconPos() === 'right' || iconPos() === 'bottom')) {
-    <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+  @if ((icon() || techIconImgUrl()) && (iconPos() === 'right' || iconPos() === 'bottom')) {
+    @if (techIconImgUrl(); as imgUrl) {
+      <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
+    } @else {
+      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+    }
   }
 </ng-template>
 
 @if (href()) {
-  <a
-    pButton
-    [href]="href()!"
-    [target]="target() || undefined"
-    [rel]="rel() || undefined"
-    [severity]="severity()"
-    [outlined]="outlined()"
-    [raised]="raised()"
-    [text]="text()"
-    [loading]="loading()"
-    [iconPos]="iconPos()"
-    [attr.aria-label]="ariaLabel() || undefined"
-    [attr.aria-disabled]="disabled()"
-    [attr.tabindex]="disabled() ? -1 : null"
-    [class]="buttonClass()"
-    [class.p-disabled]="disabled()"
-    (click)="handleClick($event)"
-  >
+  <a pButton [href]="href()!" [attr.target]="target() || null" [attr.rel]="rel() || null" [severity]="severity()" [outlined]="outlined() || variant() === 'outlined'" [raised]="raised()" [text]="text() || variant() === 'text'" [loading]="loading()" [iconPos]="iconPos()" [attr.aria-label]="ariaLabel() || undefined" [attr.aria-disabled]="disabled()" [attr.tabindex]="disabled() ? -1 : null" [class]="buttonClass()" [class.p-disabled]="disabled()" (click)="handleClick($event)">
     <ng-container [ngTemplateOutlet]="buttonContent" />
   </a>
 } @else {
-  <p-button
-    [severity]="severity()"
-    [label]="label() || undefined"
-    [outlined]="outlined()"
-    [raised]="raised()"
-    [text]="text()"
-    [variant]="variant()"
-    [iconPos]="iconPos()"
-    [loading]="loading()"
-    [disabled]="disabled()"
-    [type]="type()"
-    [styleClass]="buttonClass()"
-    [ariaLabel]="ariaLabel() || undefined"
-    (onClick)="handleClick($event)"
-  >
+  <p-button [severity]="severity()" [label]="label() || undefined" [outlined]="outlined()" [raised]="raised()" [text]="text()" [variant]="variant()" [iconPos]="iconPos()" [loading]="loading()" [disabled]="disabled()" [type]="type()" [styleClass]="buttonClass()" [ariaLabel]="ariaLabel() || undefined" (onClick)="handleClick($event)">
     <ng-template pTemplate="content">
       <ng-container [ngTemplateOutlet]="buttonContent" />
     </ng-template>

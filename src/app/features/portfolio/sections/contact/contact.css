@@ -79,31 +79,8 @@
   gap: 1.25rem;
 }
 
-/* Textarea wrapper */
-.contact-textarea-wrap {
-  align-items: flex-start !important;
-}
-
-.contact-textarea {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  resize: vertical;
-  min-height: 7rem;
-  color: var(--app-control-surface-text);
-  line-height: 1.6;
-  padding: 0.25rem 0 !important;
-}
-
 .contact-textarea::placeholder {
   color: var(--app-text-subtle);
-}
-
-/* Submit button full width */
-.contact-form ::ng-deep .contact-submit-btn.p-button {
-  width: 100%;
-  justify-content: center;
 }
 
 /* Responsive */
