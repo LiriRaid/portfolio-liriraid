@@ -39,6 +39,9 @@ testem.log
 /typings
 __screenshots__/
 
+# Environment (contiene claves privadas)
+src/environments/
+
 # System files
 .DS_Store
 Thumbs.db

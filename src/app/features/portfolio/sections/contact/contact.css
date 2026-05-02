@@ -84,6 +84,30 @@
   color: var(--app-text-subtle);
 }
 
+/* Success / error states */
+.contact-success {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.contact-success-title {
+  color: var(--app-text-primary);
+  margin: 0;
+}
+
+.contact-success-body {
+  color: var(--app-text-muted);
+  margin: 0;
+}
+
+.contact-error {
+  color: #f87171;
+  margin: 0;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .contact-layout {
