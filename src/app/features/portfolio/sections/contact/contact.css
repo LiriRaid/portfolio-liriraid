@@ -1,0 +1,147 @@
+.section {
+  min-height: calc(100dvh - 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem 1.5rem;
+  background-color: var(--app-shell-bg);
+}
+
+.section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: var(--font-size-caption-1);
+  font-weight: 600;
+  color: var(--app-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.75rem;
+}
+
+/* Layout */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 5rem;
+  align-items: center;
+}
+
+.contact-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-title {
+  color: var(--app-text-color);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.contact-highlight {
+  color: var(--app-text-primary);
+}
+
+.contact-description {
+  color: var(--app-text-muted);
+  margin: 0;
+  max-width: 480px;
+}
+
+.contact-cta {
+  display: flex;
+}
+
+/* Contact links */
+.contact-links-wrap {
+  background-color: var(--app-panel-bg);
+  border: 1px solid var(--app-container-border, var(--app-border-color));
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: var(--app-container-shadow);
+}
+
+.contact-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.contact-links > li + li {
+  border-top: 1px solid var(--app-border-color);
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.contact-link:hover {
+  background-color: var(--app-panel-muted-bg);
+}
+
+.contact-link:hover .contact-link-value {
+  color: var(--app-text-primary);
+}
+
+.contact-link:focus-visible {
+  outline: 2px solid var(--app-text-primary);
+  outline-offset: -2px;
+}
+
+.contact-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--app-badge-soft-bg);
+  color: var(--app-text-primary);
+  flex-shrink: 0;
+}
+
+.contact-link-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-link-label {
+  color: var(--app-text-color);
+}
+
+.contact-link-value {
+  color: var(--app-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 4rem 1rem;
+  }
+
+  .contact-layout {
+    gap: 2.5rem;
+  }
+}

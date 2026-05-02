@@ -1,0 +1,51 @@
+<section id="sobre-mi" class="section" aria-labelledby="about-heading">
+  <div class="section-inner">
+    <div class="about-layout">
+      <div class="about-content">
+        <header class="section-header">
+          <p class="section-label">¿Quién soy?</p>
+          <h2 id="about-heading" class="section-title text-tittle-4-bold">Sobre mí</h2>
+        </header>
+
+        <div class="about-body">
+          <p class="about-text text-body-1-regular">
+            Soy <strong>Gabriel Leonardo Cruz Flores</strong>, desarrollador Full Angular apasionado por construir
+            aplicaciones web modernas con Angular, TypeScript y Node.js. Me identifico con la
+            marca <strong>Liriraid</strong> como mi identidad profesional en la web.
+          </p>
+
+          <p class="about-text text-body-1-regular">
+            Trabajo con Angular moderno (Angular 21) y versiones legacy (AngularJS), SSR, Hydration e Incremental Hydration,
+            arquitectura limpia, performance y mantenibilidad a largo plazo. Cada proyecto que
+            construyo está pensado desde la perspectiva del producto: simple de entender,
+            fácil de escalar, agradable de usar.
+          </p>
+
+          <p class="about-text text-body-1-regular">
+            Me interesa trabajar en el punto de intersección entre ingeniería y producto.
+            Donde la calidad técnica se traduce directamente en valor para el usuario y
+            para el negocio.
+          </p>
+        </div>
+
+        <div class="about-cta">
+          <portfolio-button
+            label="Ver proyectos"
+            icon="ArrowRight"
+            iconPos="right"
+            styleClass="text-body-2-medium"
+          />
+        </div>
+      </div>
+
+      <div class="about-stats" aria-label="Estadísticas profesionales">
+        @for (stat of stats(); track stat.label) {
+          <div class="stat-card">
+            <span class="stat-value text-tittle-4-bold">{{ stat.value }}</span>
+            <span class="stat-label text-caption-1-regular">{{ stat.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

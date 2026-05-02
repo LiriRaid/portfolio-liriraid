@@ -1,0 +1,633 @@
+/* =========================================================
+   Shared Animations Library
+   Angular 21 CSS-based animations
+========================================================= */
+
+
+/* =========================================================
+   Used Animations
+========================================================= */
+
+
+/* =========================
+   Fade In / Fade Out
+   Equivalent to legacy fadeInOut
+========================= */
+
+.fade-in-out-enter {
+  opacity: 0;
+  animation: fade-in-out-enter 350ms ease-out forwards;
+}
+
+.fade-in-out-leave {
+  opacity: 1;
+  animation: fade-in-out-leave 200ms ease-in forwards;
+}
+
+@keyframes fade-in-out-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-out-leave {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+
+/* =========================
+   Soft Fade In / Out
+   Equivalent to legacy softFadeInOut
+========================= */
+
+.soft-fade-in-out-enter {
+  opacity: 0;
+  animation: soft-fade-in-out-enter 250ms ease-in forwards;
+}
+
+.soft-fade-in-out-leave {
+  opacity: 1;
+  animation: soft-fade-in-out-leave 200ms ease-out forwards;
+}
+
+@keyframes soft-fade-in-out-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes soft-fade-in-out-leave {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+
+/* =========================
+   Route Fade Transition
+   withViewTransitions()
+   Only animates route content area
+========================= */
+
+.route-transition {
+  view-transition-name: route-content;
+  contain: layout paint;
+}
+
+::view-transition-old(route-content) {
+  animation: route-fade-out 200ms ease-out both;
+}
+
+::view-transition-new(route-content) {
+  animation: route-fade-in 250ms ease-in both;
+}
+
+@keyframes route-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes route-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================
+   Section Slide In / Out
+   Replacement for legacy sectionSlideInOut
+
+   Usage:
+   animate.enter="section-slide-in-out-enter"
+   animate.leave="section-slide-in-out-leave"
+
+   Requires one direct child wrapper.
+========================= */
+
+.section-slide-in-out-enter,
+.section-slide-in-out-leave {
+  display: grid;
+  overflow: hidden;
+}
+
+.section-slide-in-out-enter > *,
+.section-slide-in-out-leave > * {
+  min-height: 0;
+}
+
+.section-slide-in-out-enter {
+  animation: section-slide-in-out-enter 500ms ease-in-out forwards;
+}
+
+.section-slide-in-out-leave {
+  animation: section-slide-in-out-leave 500ms ease-in-out forwards;
+}
+
+@keyframes section-slide-in-out-enter {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@keyframes section-slide-in-out-leave {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+
+/* =========================
+   Slide Expand / Collapse
+   Better for sidebar <ul> lists
+
+   Usage:
+   class="slide-expand-collapse"
+   [class.slide-expand-collapse-expanded]="expanded()"
+   [class.slide-expand-collapse-collapsed]="!expanded()"
+========================= */
+
+.slide-expand-collapse {
+  overflow: hidden;
+  transition:
+    max-height 400ms ease-in-out,
+    opacity 400ms ease-in-out;
+}
+
+.slide-expand-collapse-expanded {
+  max-height: 3000px;
+  opacity: 1;
+}
+
+.slide-expand-collapse-collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+
+/* =========================================================
+   Prepared Animations
+   Not currently used
+   Native CSS animation equivalents kept for future reuse
+========================================================= */
+
+
+/* =========================
+   Card Animation
+   Card enter/leave motion preset:
+   duration: 500ms
+   delay: 0ms
+   easing: ease-out
+
+   Usage:
+   animate.enter="card-animation-enter"
+========================= */
+
+.card-animation-enter {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: card-animation-enter 500ms ease-out forwards;
+}
+
+@keyframes card-animation-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================
+   Fade Slide In / Out
+   Equivalent to legacy fadeSlideInOut()
+   State-based animation
+
+   Usage:
+   class="fade-slide-in-out"
+   [class.fade-slide-in-out-expanded]="expanded()"
+   [class.fade-slide-in-out-collapsed]="!expanded()"
+========================= */
+
+.fade-slide-in-out {
+  overflow: hidden;
+  transition:
+    max-height 400ms ease-in-out,
+    opacity 400ms ease-in-out;
+}
+
+.fade-slide-in-out-expanded {
+  max-height: 3000px;
+  opacity: 1;
+}
+
+.fade-slide-in-out-collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+
+/* =========================
+   Primary Level Slide In / Out
+   Equivalent to legacy primaryLevelSlideInOut()
+   State-based animation
+
+   Usage:
+   class="primary-level-slide-in-out"
+   [class.primary-level-slide-in-out-expanded]="expanded()"
+   [class.primary-level-slide-in-out-collapsed]="!expanded()"
+========================= */
+
+.primary-level-slide-in-out {
+  overflow: hidden;
+  transition:
+    max-height 400ms ease-in-out,
+    opacity 400ms ease-in-out;
+}
+
+.primary-level-slide-in-out-expanded {
+  max-height: 3000px;
+  opacity: 1;
+}
+
+.primary-level-slide-in-out-collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+
+/* =========================
+   Second Level Fade Slide In / Out
+   Equivalent to legacy secondLevelFadeSlideInOut()
+   State-based animation
+
+   Legacy:
+   true => false: 400ms
+   false => true: 350ms
+
+   Usage:
+   class="second-level-fade-slide-in-out"
+   [class.second-level-fade-slide-in-out-expanded]="expanded()"
+   [class.second-level-fade-slide-in-out-collapsed]="!expanded()"
+========================= */
+
+.second-level-fade-slide-in-out {
+  overflow: hidden;
+  transition-property: max-height, opacity;
+  transition-timing-function: ease-in-out;
+}
+
+.second-level-fade-slide-in-out-expanded {
+  max-height: 3000px;
+  opacity: 1;
+  transition-duration: 350ms;
+}
+
+.second-level-fade-slide-in-out-collapsed {
+  max-height: 0;
+  opacity: 0;
+  transition-duration: 400ms;
+}
+
+
+/* =========================
+   Status Pulse
+   Equivalent to legacy statusPulse active state
+
+   Usage:
+   class="status-pulse-active"
+========================= */
+
+.status-pulse-active {
+  animation: status-pulse 2s infinite;
+}
+
+@keyframes status-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+  }
+}
+
+
+/* =========================
+   Sidebar Slide
+   Equivalent to legacy sidebarSlide
+
+   Usage:
+   animate.enter="sidebar-slide-enter"
+   animate.leave="sidebar-slide-leave"
+========================= */
+
+.sidebar-slide-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+  animation: sidebar-slide-enter 300ms ease-out forwards;
+}
+
+.sidebar-slide-leave {
+  opacity: 1;
+  transform: translateX(0);
+  animation: sidebar-slide-leave 250ms ease-in forwards;
+}
+
+@keyframes sidebar-slide-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sidebar-slide-leave {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+
+/* =========================
+   Slide In From Right
+   Equivalent to legacy slideInFromRight
+
+   Usage:
+   animate.enter="slide-in-from-right-enter"
+   animate.leave="slide-in-from-right-leave"
+========================= */
+
+.slide-in-from-right-enter {
+  opacity: 0;
+  transform: translateX(100%);
+  animation: slide-in-from-right-enter 300ms ease-out forwards;
+}
+
+.slide-in-from-right-leave {
+  opacity: 1;
+  transform: translateX(0);
+  animation: slide-in-from-right-leave 300ms ease-in forwards;
+}
+
+@keyframes slide-in-from-right-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-from-right-leave {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+
+/* =========================
+   Slide In / Out
+   Equivalent to legacy slideInOut
+
+   Usage:
+   animate.enter="slide-in-out-enter"
+   animate.leave="slide-in-out-leave"
+
+   Requires one direct child wrapper.
+========================= */
+
+.slide-in-out-enter,
+.slide-in-out-leave {
+  display: grid;
+  overflow: hidden;
+}
+
+.slide-in-out-enter > *,
+.slide-in-out-leave > * {
+  min-height: 0;
+}
+
+.slide-in-out-enter {
+  animation: slide-in-out-enter 450ms ease-in-out forwards;
+}
+
+.slide-in-out-leave {
+  animation: slide-in-out-leave 350ms ease-in-out forwards;
+}
+
+@keyframes slide-in-out-enter {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-out-leave {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+
+/* =========================
+   Staggered Fade In
+   Equivalent to legacy staggeredFadeIn
+
+   Usage:
+   animate.enter="staggered-fade-in-enter"
+   animate.leave="staggered-fade-in-leave"
+========================= */
+
+.staggered-fade-in-enter {
+  opacity: 0;
+  animation: staggered-fade-in-enter 600ms ease-in forwards;
+}
+
+.staggered-fade-in-leave {
+  opacity: 1;
+  animation: staggered-fade-in-leave 150ms ease-out forwards;
+}
+
+@keyframes staggered-fade-in-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes staggered-fade-in-leave {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+
+/* =========================
+   Slide Animation
+   Equivalent to legacy slideAnimation
+
+   Usage:
+   animate.enter="slide-animation-enter"
+   animate.leave="slide-animation-leave"
+========================= */
+
+.slide-animation-enter {
+  opacity: 0;
+  transform: translateX(30px);
+  animation: slide-animation-enter 400ms cubic-bezier(0.35, 0, 0.25, 1) forwards;
+}
+
+.slide-animation-leave {
+  opacity: 1;
+  transform: translateX(0);
+  animation: slide-animation-leave 300ms cubic-bezier(0.35, 0, 0.25, 1) forwards;
+}
+
+@keyframes slide-animation-enter {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-animation-leave {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+
+/* =========================
+   Fade Animation
+   Equivalent to legacy fadeAnimation
+
+   Usage:
+   animate.enter="fade-animation-enter"
+   animate.leave="fade-animation-leave"
+========================= */
+
+.fade-animation-enter {
+  opacity: 0;
+  animation: fade-animation-enter 300ms ease-out forwards;
+}
+
+.fade-animation-leave {
+  opacity: 1;
+  animation: fade-animation-leave 200ms ease-in forwards;
+}
+
+@keyframes fade-animation-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-animation-leave {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}

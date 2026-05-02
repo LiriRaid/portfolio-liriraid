@@ -1,0 +1,26 @@
+<p-button
+  [severity]="severity()"
+  [label]="label() || undefined"
+  [outlined]="outlined()"
+  [raised]="raised()"
+  [text]="text()"
+  [variant]="variant()"
+  [iconPos]="iconPos()"
+  [loading]="loading()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [styleClass]="buttonClass()"
+  (onClick)="handleClick($event)"
+>
+  <ng-template pTemplate="content">
+    @if (icon() && (iconPos() === 'left' || iconPos() === 'top')) {
+      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+    }
+    @if (label()) {
+      <span pButtonLabel [ngClass]="computedLabelClass()">{{ label() }}</span>
+    }
+    @if (icon() && (iconPos() === 'right' || iconPos() === 'bottom')) {
+      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+    }
+  </ng-template>
+</p-button>

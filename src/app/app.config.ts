@@ -1,4 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideClientHydration, withIncrementalHydration } from '@angular/platform-browser';
 import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withViewTransitions({ skipInitialTransition: true }), withComponentInputBinding()),
     provideHttpClient(withInterceptors([])),
     provideThemeInitializer(),
+    provideClientHydration(withIncrementalHydration()),
     providePrimeNG({
       ripple: true,
       theme: {

@@ -1,0 +1,69 @@
+<section id="proyectos" class="section" aria-labelledby="projects-heading">
+  <div class="section-inner">
+    <header class="section-header">
+      <p class="section-label">Trabajo reciente</p>
+      <h2 id="projects-heading" class="section-title text-tittle-4-bold">
+        Proyectos destacados
+      </h2>
+      <p class="section-subtitle text-body-1-regular">
+        Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.
+      </p>
+    </header>
+
+    <ul class="projects-grid" role="list">
+      @for (project of projects(); track project.title) {
+        <li>
+          <article class="project-card" [class.project-card--featured]="project.featured">
+            @if (project.featured) {
+              <span class="project-featured-badge">Destacado</span>
+            }
+
+            <div class="project-card-body">
+              <h3 class="project-title text-subtitle-2-bold">{{ project.title }}</h3>
+              <p class="project-description text-body-2-regular">{{ project.description }}</p>
+
+              <div class="project-tags" aria-label="Tecnologías utilizadas">
+                @for (tag of project.tags; track tag) {
+                  <span class="project-tag">{{ tag }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="project-card-footer">
+              @if (project.githubUrl) {
+                <a
+                  [href]="project.githubUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-link"
+                  [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'"
+                >
+                  <portfolio-icon name="Github" size="16" />
+                  <span>GitHub</span>
+                </a>
+              }
+              @if (project.liveUrl) {
+                <a
+                  [href]="project.liveUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-link"
+                  [attr.aria-label]="'Ver demo en vivo de ' + project.title"
+                >
+                  <portfolio-icon name="ExternalLink" size="16" />
+                  <span>Demo</span>
+                </a>
+              }
+              @if (!project.githubUrl && !project.liveUrl) {
+                <span class="project-private">
+                  <portfolio-icon name="Lock" size="14" />
+                  Proyecto privado
+                </span>
+              }
+            </div>
+          </article>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

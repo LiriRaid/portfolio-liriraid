@@ -1,0 +1,55 @@
+<section id="contacto" class="section" aria-labelledby="contact-heading">
+  <div class="section-inner">
+    <div class="contact-layout">
+      <div class="contact-content">
+        <p class="section-label">Hablemos</p>
+        <h2 id="contact-heading" class="contact-title text-tittle-4-bold">
+          ¿Listo para construir<br />
+          <span class="contact-highlight">algo juntos</span>?
+        </h2>
+        <p class="contact-description text-body-1-regular">
+          Estoy disponible para proyectos freelance, colaboraciones o posiciones full time.
+          Si tienes una idea que quieras llevar a producción, me encantaría escucharte.
+        </p>
+
+        <div class="contact-cta">
+          <portfolio-button
+            label="Enviar email"
+            icon="Email"
+            styleClass="text-body-2-medium"
+          />
+        </div>
+      </div>
+
+      <div class="contact-links-wrap">
+        <ul class="contact-links" role="list">
+          @for (link of contactLinks; track link.label) {
+            <li>
+              <a
+                [href]="link.href"
+                [target]="link.external ? '_blank' : '_self'"
+                [rel]="link.external ? 'noopener noreferrer' : null"
+                class="contact-link"
+                [attr.aria-label]="link.label + ': ' + link.value"
+              >
+                <div class="contact-link-icon" aria-hidden="true">
+                  <portfolio-icon [name]="link.icon" size="20" />
+                </div>
+                <div class="contact-link-body">
+                  <span class="contact-link-label text-caption-1-bold">{{ link.label }}</span>
+                  <span class="contact-link-value text-body-2-regular">{{ link.value }}</span>
+                </div>
+                <portfolio-icon
+                  name="ExternalLink"
+                  size="14"
+                  [color]="'var(--app-text-subtle)'"
+                  extraClass="contact-link-arrow"
+                />
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

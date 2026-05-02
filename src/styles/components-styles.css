@@ -1,0 +1,539 @@
+@layer components {
+  /* =========================
+     Buttons
+     ========================= */
+
+  .btn {
+    padding: 6px 10px;
+    user-select: none;
+    display: flex;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--app-primary-button-disabled-text);
+    background-color: var(--app-primary-button-bg);
+    transition: all 0.2s ease;
+    position: relative;
+
+    /* typo.text-style(caption, 1, 400) */
+    font-size: var(--font-size-caption-1);
+    line-height: var(--line-height-caption-1);
+    font-weight: 400;
+  }
+
+  .btn:hover {
+    background-color: var(--app-primary-button-hover-bg);
+    border-color: transparent;
+  }
+
+  .btn:active,
+  .btn[aria-expanded="true"] {
+    box-shadow: 0 0 0 2px var(--app-primary-button-focus-ring);
+    border: transparent;
+  }
+
+  .btn[disabled] {
+    background-color: var(--app-primary-button-disabled-bg);
+    box-shadow: none;
+  }
+
+  .btn-outline {
+    background-color: var(--app-outline-button-bg);
+    border: 1px solid var(--app-outline-button-border);
+    color: var(--app-outline-button-text);
+    transition: all 0.2s ease;
+
+    /* typo.text-style(body, 2, 400) */
+    font-size: var(--font-size-body-2);
+    line-height: var(--line-height-body-2);
+    font-weight: 400;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--app-outline-button-hover-bg);
+    color: var(--app-outline-button-hover-text);
+    transition: transform 0.3s ease;
+  }
+
+  .btn-outline:active {
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px var(--app-outline-button-focus-ring);
+    outline: none;
+    transition: all 0.1s ease;
+  }
+
+  .btn-outline.btn-outline-light-hover {
+    background-color: var(--p-surface-500);
+  }
+
+  .btn-outline.btn-outline-light-hover:hover {
+    background-color: var(--p-primary-600) !important;
+    color: var(--p-surface-0) !important;
+  }
+
+  .btn-outline[disabled] {
+    background-color: var(--app-outline-button-disabled-bg);
+    color: var(--app-outline-button-disabled-text);
+    box-shadow: none;
+  }
+
+  .btn-delete {
+    padding: 6px 10px;
+    user-select: none;
+    display: flex;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--app-danger-button-text);
+    background-color: var(--app-danger-button-bg);
+    transition: all 0.2s ease;
+    position: relative;
+
+    /* typo.text-style(body, 2, 400) */
+    font-size: var(--font-size-body-2);
+    line-height: var(--line-height-body-2);
+    font-weight: 400;
+  }
+
+  .btn-delete:hover {
+    background-color: var(--app-danger-button-hover-bg);
+    border-color: transparent;
+  }
+
+  .btn-delete:active,
+  .btn-delete[aria-expanded="true"] {
+    box-shadow: 0 0 0 2px var(--app-danger-button-focus-ring);
+    border: transparent;
+  }
+
+  .btn-link {
+    padding: 0 !important;
+    background-color: transparent;
+    border: none;
+    color: var(--app-link-button-color);
+  }
+
+  .btn-link:hover {
+    background-color: transparent;
+    text-shadow: 1px 1px 2px pink;
+    border: none;
+    box-shadow: none;
+  }
+
+  .btn-link:focus {
+    background-color: transparent;
+    outline: none;
+  }
+
+  .btn-link[disabled] {
+    background-color: transparent;
+    color: var(--app-link-button-disabled-text);
+    text-shadow: none;
+  }
+
+  .btn-xs {
+    padding: 8px 12.5px;
+    font-size: var(--font-size-caption-2);
+    line-height: var(--line-height-caption-2);
+    font-weight: 500;
+  }
+
+  .btn-sm {
+    padding: 8px 14.5px;
+    font-size: var(--font-size-caption-1);
+    line-height: var(--line-height-caption-1);
+    font-weight: 500;
+  }
+
+  .btn-lg {
+    padding: 8px 23px;
+  }
+
+  .btn-xl {
+    padding: 12px 27px;
+  }
+
+  /* =========================
+     Inputs (wrapper)
+     ========================= */
+
+  .input {
+    padding: 6px 14px 6px 10px ;
+    border-radius: 8px;
+    height: 2.375rem;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--app-control-surface-text);
+    transition: all 0.2s ease;
+  }
+
+.input > span.prefix {
+  color: var(--app-search-input-prefix);
+  transition: color 0.2s ease;
+}
+
+.input.input-default {
+  border: 1px solid var(--app-search-input-border);
+  background-color: var(--app-search-input-bg);
+  color: var(--app-search-input-text);
+  background-clip: padding-box;
+}
+
+.input.input-default:focus-within {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 2px var(--app-control-focus-ring);
+}
+
+.input.input-default:focus-within > span.prefix {
+  color: var(--app-search-input-text);
+}
+
+.input.input-default:focus-within omniinbox-icon {
+  color: var(--app-search-input-text);
+}
+
+  /* equivalente a &:has(input:disabled) */
+  .input.input-default:has(input:disabled) {
+    background-color: hsl(var(--muted, 240 4.8% 95.9%) / 0.5);
+    border: 1px solid var(--app-control-disabled-border);
+    color: var(--app-control-disabled-text);
+  }
+
+  .input.input-disable {
+    color: var(--app-control-disabled-text);
+    border: 1px solid var(--app-control-disabled-border);
+    background-color: var(--app-control-disabled-bg);
+  }
+
+  .input.input-blocked {
+    color: var(--app-control-surface-text);
+    border: 1px solid var(--app-control-disabled-border);
+    background-color: color-mix(in srgb, var(--app-control-disabled-bg) 50%, transparent);
+  }
+
+  .input-default input,
+  .input-disable input,
+  .input-blocked input {
+    outline: none !important;
+    border: none !important;
+    flex: 1;
+    width: 100%;
+    padding: 0 !important;
+    background-color: transparent;
+    box-shadow: none !important;
+  }
+
+  /* =========================
+     Table primary
+     ========================= */
+
+  .table-primary thead {
+    text-transform: uppercase;
+  }
+
+  .table-primary thead tr th {
+    padding: 9px 16px;
+    text-align: left;
+    background-color: var(--app-table-header-bg);
+    color: var(--app-table-header-text);
+    white-space: nowrap;
+
+    /* typo.text-style(caption, 1, 700) */
+    font-size: var(--font-size-caption-1);
+    line-height: var(--line-height-caption-1);
+    font-weight: 700;
+  }
+
+  .table-primary tbody {
+    background-color: var(--app-table-surface-bg);
+  }
+
+  .table-primary tbody tr:hover {
+    background-color: var(--app-table-row-hover-bg);
+  }
+
+  .table-primary tbody tr td {
+    border-bottom-width: 1px;
+    border-color: var(--app-table-border-color);
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+
+  .table-primary tbody tr:last-child td {
+    padding: 0.625rem 1rem;
+  }
+
+  /* =========================
+     Dropdown
+     ========================= */
+
+  .dropdown {
+    width: 100%;
+    min-width: unset !important;
+    box-shadow:
+      0px 0px 1px 0px rgba(9, 30, 66, 0.31),
+      0px 18px 28px 0px rgba(9, 30, 66, 0.15);
+    border: solid 1px var(--app-dropdown-border);
+    overflow: hidden;
+  }
+
+  .dropdown .dropdown-content {
+    background-color: var(--app-dropdown-bg);
+    display: flex;
+    max-height: 344px;
+    overflow: auto;
+    flex-direction: column;
+  }
+
+  .dropdown .dropdown-content .dropdown-option {
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: solid 1px var(--app-dropdown-option-border);
+  }
+
+  .dropdown .dropdown-content .dropdown-option:last-child {
+    border-bottom: none;
+  }
+
+  /* =========================
+     Row collapsable
+     ========================= */
+
+  .row-collapsable {
+    padding: 1rem;
+    border: 1px solid var(--app-border-color);
+    background-color: var(--app-panel-bg);
+
+    /* typo.text-style(body, 2, 400) */
+    font-size: var(--font-size-body-2);
+    line-height: var(--line-height-body-2);
+    font-weight: 400;
+  }
+
+  /* =========================
+     Tag
+     ========================= */
+
+  .tag {
+    display: flex;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: default;
+    font-weight: 700;
+    align-items: center;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* =========================
+     Tooltip
+     ========================= */
+
+  .tooltip {
+    box-shadow: var(--shadow-extra-large);
+    background-color: var(--app-tooltip-bg);
+    border: 1px solid var(--app-tooltip-border);
+    border-radius: 0 8px 8px 8px;
+    padding: 8px 12px;
+  }
+
+  /* =========================
+     Select
+     ========================= */
+
+  .select {
+    padding: 0.5rem 18px 0.5rem 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--app-select-border);
+  }
+
+  .select-disable {
+    color: var(--app-select-disabled-text);
+    background-color: var(--app-select-disabled-bg);
+  }
+
+  /* =========================
+     Flex helpers
+     ========================= */
+
+  .flex-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .flex-row-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* =========================
+     Button outline variants
+     ========================= */
+
+  .button-outline {
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    border: 1px solid var(--app-search-button-border);
+    color: var(--app-search-button-text);
+    background-color: var(--app-search-button-bg);
+    transition: all 0.2s ease;
+    position: relative;
+
+    /* typo.text-style(caption, 1, 400) */
+    font-size: var(--font-size-caption-1);
+    line-height: var(--line-height-caption-1);
+    font-weight: 400;
+  }
+
+  .button-outline:hover {
+    background-color: var(--app-search-button-hover-bg);
+    color: var(--app-search-button-hover-text);
+    border-color: transparent;
+  }
+
+  .button-outline:active,
+  .button-outline[aria-expanded="true"] {
+    background-color: var(--app-search-button-active-bg);
+    box-shadow: 0 0 0 1px var(--app-search-button-focus-ring);
+  }
+
+  .button-outline .span-outline,
+  .button-outline .icon-outline {
+    font-size: 0.875rem;
+    transition: transform 0.2s ease;
+  }
+
+  .button-outline:hover .span-outline,
+  .button-outline:hover .icon-outline,
+  .button-outline[aria-expanded="true"] .span-outline,
+  .button-outline[aria-expanded="true"] .icon-outline {
+    transform: scale(1.1);
+  }
+
+  .button-outline-delete {
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid var(--app-danger-button-bg);
+    color: var(--app-danger-button-bg);
+    background-color: var(--p-surface-0);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .button-outline-delete:hover {
+    background-color: var(--app-danger-button-bg);
+    color: var(--app-danger-button-text);
+    border-color: transparent;
+  }
+
+  .button-outline-delete:active,
+  .button-outline-delete[aria-expanded="true"] {
+    background-color: var(--p-primary-600);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-600) 40%, transparent);
+    transform: scale(0.99);
+  }
+
+  /* =========================
+     Textarea wrapper
+     ========================= */
+
+  .textarea {
+    padding: 8px 4px 8px 18px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--app-control-surface-text);
+    transition: all 0.2s ease;
+  }
+
+  .textarea.textarea-default {
+    border: 1px solid var(--app-textarea-border);
+    background-color: var(--app-textarea-bg);
+  }
+
+  .textarea.textarea-default:focus-within {
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px var(--app-textarea-focus-outline);
+  }
+
+  .textarea.textarea-default:focus-within > svg[lucideIcon],
+  .textarea.textarea-default:focus-within > span.prefix {
+    color: var(--app-control-surface-text);
+  }
+
+  .textarea.textarea-disable {
+    color: var(--app-control-disabled-text);
+    border: 1px solid var(--app-control-disabled-border);
+    background-color: var(--app-control-disabled-bg);
+  }
+
+  .textarea.textarea-blocked {
+    color: var(--app-control-surface-text);
+    border: 1px solid var(--app-control-disabled-border);
+    background-color: color-mix(in srgb, var(--app-control-disabled-bg) 50%, transparent);
+  }
+
+  .textarea-default textarea,
+  .textarea-disable textarea,
+  .textarea-blocked textarea {
+    outline: none !important;
+    border: none !important;
+    flex: 1;
+    width: 100%;
+    padding: 0 14px 0 0 !important;
+    background-color: transparent;
+    box-shadow: none !important;
+  }
+}
+
+/* =============================================================
+   p-button global overrides — fuera de @layer para ganar
+   especificidad sobre los estilos internos de PrimeNG.
+   Objetivo: no tener que pasar iconColor="white" / labelClass="text-white!"
+   en cada instancia de portfolio-button / omniinbox-button.
+   ============================================================= */
+
+/* Filled (con color de fondo): texto e iconos SIEMPRE blancos */
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(.p-button-plain) {
+  color: #ffffff;
+}
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(.p-button-plain):not(:disabled):hover {
+  color: #ffffff;
+}
+
+/* Outlined: texto e iconos siguen el modo
+   — blanco en dark, surface-900 (casi negro) en light */
+.p-button.p-button-outlined {
+  color: var(--app-outline-button-text);
+  background: var(--app-outline-button-bg);
+  border-color: var(--app-outline-button-border);
+}
+.p-button.p-button-outlined:not(:disabled):hover {
+  color: var(--app-outline-button-hover-text);
+  background: var(--app-outline-button-hover-bg);
+  border-color: var(--app-outline-button-hover-bg);
+}
+.p-button.p-button-outlined:disabled {
+  color: var(--app-outline-button-disabled-text);
+  background: var(--app-outline-button-disabled-bg);
+}

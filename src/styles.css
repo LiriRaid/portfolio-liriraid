@@ -3,3 +3,46 @@
 @import 'tailwindcss';
 @import "tailwindcss-primeui";
 @plugin "@tailwindcss/forms";
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Compensa el header sticky (4rem) al navegar por anclas */
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
+body {
+  background-color: var(--app-shell-bg);
+  color: var(--app-text-color);
+  margin: 0;
+}
+
+@import './styles/theme-styles.css';
+@import './styles/components-styles.css';
+@import './styles/input-styles.css';
+@import './styles/scrollbar-styles.css';
+@import './styles/text-and-color-styles.css';
+@import './styles/typography-styles.css';
+@import './app/shared/animations/animations.css';
+
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after,
+:root.theme-switching omniinbox-header .header-icon-btn.header-icon-btn,
+:root.theme-switching omniinbox-header .header-icon-btn.header-icon-btn :is(.p-button-icon, omniinbox-icon) {
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    fill,
+    stroke,
+    box-shadow,
+    outline-color,
+    text-decoration-color,
+    column-rule-color,
+    -webkit-text-fill-color !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}

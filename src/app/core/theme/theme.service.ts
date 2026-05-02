@@ -54,6 +54,7 @@ export class ThemeService {
     this.primaryColorKey.set(color.key);
     setStoredPrimaryColorKey(color.key);
     if (!this.isBrowser) return;
+    this.clearFlashStyles('primary');
     updatePrimaryPalette(color.palette);
     this.rootElement.dataset['primaryColor'] = color.key;
     this.updateFavicon(color.palette['500']);
@@ -66,6 +67,7 @@ export class ThemeService {
     this.surfaceColorKey.set(color.key);
     setStoredSurfaceColorKey(color.key);
     if (!this.isBrowser) return;
+    this.clearFlashStyles('surface');
     updateSurfacePalette(color.palette);
     this.rootElement.dataset['surfaceColor'] = color.key;
   }
@@ -86,6 +88,20 @@ export class ThemeService {
 
   private initSurface(): void {
     this.applySurface(getStoredSurfaceColorKey());
+  }
+
+  private clearFlashStyles(scope: 'primary' | 'surface'): void {
+    const root = this.rootElement;
+    if (scope === 'primary') {
+      [50,100,200,300,400,500,600,700,800,900,950].forEach(s =>
+        root.style.removeProperty(`--p-primary-${s}`)
+      );
+      root.style.removeProperty('--p-primary-color');
+    } else {
+      [0,50,100,200,300,400,500,600,700,800,900,950].forEach(s =>
+        root.style.removeProperty(`--p-surface-${s}`)
+      );
+    }
   }
 
   private applyMode(mode: ThemeMode, withTransitionGuard: boolean): void {
@@ -110,7 +126,7 @@ export class ThemeService {
         favicon.href = this.createTintedFaviconHref(svg, color);
       })
       .catch(() => {
-        this.ensureFaviconLink().href = this.faviconSourceUrl;
+        // this.ensureFaviconLink().href = this.faviconSourceUrl;
       });
   }
 

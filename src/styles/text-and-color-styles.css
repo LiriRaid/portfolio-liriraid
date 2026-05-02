@@ -1,0 +1,67 @@
+@theme {
+    /* ===== Breakpoints ===== */
+  --breakpoint-xs: 480px;
+  
+  /* ===== Tipografía ===== */
+
+  --font-size-h1: 42px;
+  --font-size-h2: 20px;
+  --font-size-h3: 16px;
+  --font-size-h4: 15px;
+  --font-size-h5: 13px;
+  --font-size-h6: 12px;
+
+  /* Titles */
+  --font-size-tittle-1: 3rem;        /* 48px */
+  --font-size-tittle-2: 2.5rem;      /* 40px */
+  --font-size-tittle-3: 3rem;        /* 48px -> para parecerse a text-5xl */
+  --font-size-tittle-4: 2rem;        /* 32px */
+
+  /* Subtitles */
+  --font-size-subtitle-1: 1.875rem;  /* 30px -> parecido a text-3xl */
+  --font-size-subtitle-2: 1.25rem;   /* 20px -> parecido a text-xl */
+
+  /* Body */
+  --font-size-body-1: 1.125rem;      /* 18px */
+  --font-size-body-2: 1rem;          /* 16px */
+
+  /* Captions */
+  --font-size-caption-1: 0.875rem;   /* 14px */
+  --font-size-caption-2: 0.75rem;    /* 12px */
+
+  /* ===== Line-height ===== */
+
+ --line-height-tittle-1: 3.5rem;      /* 56px */
+  --line-height-tittle-2: 3rem;        /* 48px */
+  --line-height-tittle-3: 3.5rem;      /* 56px */
+  --line-height-tittle-4: 2.5rem;      /* 40px */
+
+  --line-height-subtitle-1: 2.375rem;  /* 38px */
+  --line-height-subtitle-2: 1.75rem;   /* 28px */
+
+  --line-height-body-1: 1.75rem;       /* 28px */
+  --line-height-body-2: 1.75rem;       /* 28px */
+
+  --line-height-caption-1: 1.5rem;   /* 24px -> como text-sm leading-6 */
+  --line-height-caption-2: 1rem;     /* 16px */
+
+  /* ===== Shadows ===== */
+  --shadow-small: 0px 0px 1px 0px rgba(9, 30, 66, 0.31), 0px 3px 5px 0px rgba(9, 30, 66, 0.2);
+  --shadow-medium: 0px 3px 18px 0px rgba(0, 0, 0, 0.1);
+  --shadow-medium-two: 0px 3px 4px -3px rgba(9, 30, 66, 0.71);
+  --shadow-extra-large:
+    0px 0px 1px 0px rgba(9, 30, 66, 0.31), 0px 18px 28px 0px rgba(9, 30, 66, 0.15);
+
+  /* ===== Colores alias ===== */
+  --color-primary-50: var(--p-primary-50);
+  --color-primary-100: var(--p-primary-100);
+  --color-primary-200: var(--p-primary-200);
+  --color-primary-300: var(--p-primary-300);
+  --color-primary-400: var(--p-primary-400);
+  --color-primary-500: var(--p-primary-500);
+  --color-primary-600: var(--p-primary-600);
+  --color-primary-700: var(--p-primary-700);
+  --color-primary-800: var(--p-primary-800);
+  --color-primary-900: var(--p-primary-900);
+  --color-primary-950: var(--p-primary-950);
+}
