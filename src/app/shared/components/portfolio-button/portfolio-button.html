@@ -3,17 +3,27 @@
     @if (techIconImgUrl(); as imgUrl) {
       <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
     } @else {
-      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
     }
   }
+
   @if (label()) {
-    <span pButtonLabel [ngClass]="computedLabelClass()">{{ label() }}</span>
+    <span pButtonLabel [ngClass]="computedLabelClass()">
+      {{ label() }}
+    </span>
   }
+
+  @if (badge() !== null && badge() !== undefined && badge() !== '') {
+    <span [ngClass]="computedBadgeClass()">
+      {{ badge() }}
+    </span>
+  }
+
   @if ((icon() || techIconImgUrl()) && (iconPos() === 'right' || iconPos() === 'bottom')) {
     @if (techIconImgUrl(); as imgUrl) {
       <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
     } @else {
-      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()"></portfolio-icon>
+      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
     }
   }
 </ng-template>

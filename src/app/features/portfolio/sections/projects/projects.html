@@ -2,70 +2,185 @@
   <div class="section-inner">
     <header class="section-header">
       <p class="section-label">Trabajo reciente</p>
-      <h2 id="projects-heading" class="section-title text-tittle-4-bold">
-        Proyectos destacados
-      </h2>
-      <p class="section-subtitle text-body-1-regular">
-        Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.
-      </p>
+
+      <h2 id="projects-heading" class="section-title text-tittle-4-bold">Proyectos destacados</h2>
+
+      <p class="section-subtitle text-body-1-regular">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
     </header>
 
-    <ul class="projects-grid" role="list">
-      @for (project of projects(); track project.title) {
-        <li>
-          <article class="project-card" [class.project-card--featured]="project.featured">
-            @if (project.featured) {
-              <span class="project-featured-badge">Destacado</span>
+    <div class="project-filter-bar">
+      <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="project-filter-button text-caption-1-medium" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
+
+      @if (hasSelectedTechnologies()) {
+        <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="project-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
+      }
+    </div>
+
+    @if (hasSelectedTechnologies()) {
+      <div class="project-selected-tags" aria-label="Tecnologías seleccionadas">
+        @for (tech of selectedTechnologies(); track tech) {
+          <span class="project-selected-tag">
+            @if (techIconUrl(tech); as iconUrl) {
+              <img [src]="iconUrl" [alt]="tech" class="project-selected-tag-icon" width="16" height="16" loading="lazy" />
+            } @else {
+              <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
             }
 
-            <div class="project-card-body">
-              <h3 class="project-title text-subtitle-2-bold">{{ project.title }}</h3>
-              <p class="project-description text-body-2-regular">{{ project.description }}</p>
+            <span>{{ tech }}</span>
 
-              <div class="project-tags" aria-label="Tecnologías utilizadas">
-                @for (tag of project.tags; track tag) {
-                  <span class="project-tag">{{ tag }}</span>
+            <button type="button" class="project-selected-tag-remove" [attr.aria-label]="'Quitar filtro ' + tech" (click)="removeTechnology(tech)">
+              <portfolio-icon name="Close" size="13" />
+            </button>
+          </span>
+        }
+      </div>
+    }
+
+    <p-popover #filterPanel styleClass="project-filter-panel" appendTo="body">
+      <div class="project-filter-panel-content">
+        <div class="project-filter-panel-header">
+          <p class="project-filter-panel-title">Tecnologías</p>
+
+          @if (hasSelectedTechnologies()) {
+            <button type="button" class="project-filter-panel-clear" (click)="clearFilters()">Limpiar</button>
+          }
+        </div>
+
+        <div class="project-filter-category-grid">
+          @for (category of technologyCategories(); track category.label) {
+            <section class="project-filter-category">
+              <header class="project-filter-category-header">
+                <span class="project-filter-category-icon" aria-hidden="true">
+                  <portfolio-icon [name]="category.icon" size="15" />
+                </span>
+
+                <h3 class="project-filter-category-title">
+                  {{ category.label }}
+                </h3>
+              </header>
+
+              <div class="project-filter-options">
+                @for (tech of category.technologies; track tech) {
+                  <button type="button" class="project-filter-option" [class.project-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
+                    @if (techIconUrl(tech); as iconUrl) {
+                      <img [src]="iconUrl" [alt]="tech" class="project-filter-option-icon" width="16" height="16" loading="lazy" />
+                    } @else {
+                      <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
+                    }
+
+                    <span>{{ tech }}</span>
+
+                    @if (isTechnologySelected(tech)) {
+                      <portfolio-icon name="Check" size="13" />
+                    }
+                  </button>
                 }
               </div>
-            </div>
+            </section>
+          }
+        </div>
+      </div>
+    </p-popover>
 
-            <div class="project-card-footer">
-              @if (project.githubUrl) {
-                <a
-                  [href]="project.githubUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="project-link"
-                  [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'"
-                >
-                  @if (techIconUrl('GitHub'); as iconUrl) {
-                    <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="project-link-icon" />
+    @if (filteredProjects().length) {
+      <ul class="projects-grid" role="list">
+        @for (project of filteredProjects(); track project.title) {
+          <li>
+            <article class="project-card" [class.project-card--featured]="project.featured">
+              @if (project.featured) {
+                <span class="project-featured-badge">Destacado</span>
+              }
+
+              <div class="project-card-body">
+                <h3 class="project-title text-subtitle-2-bold">
+                  {{ project.title }}
+                </h3>
+
+                <p class="project-description text-body-2-regular">
+                  {{ project.description }}
+                </p>
+
+                <div class="project-tags" aria-label="Tecnologías utilizadas">
+                  @for (tag of project.tags; track tag) {
+                    <span class="project-tag">
+                      @if (techIconUrl(tag); as iconUrl) {
+                        <img [src]="iconUrl" [alt]="tag" class="project-tag-icon" width="16" height="16" loading="lazy" />
+                      } @else {
+                        <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
+                      }
+
+                      <span>{{ tag }}</span>
+                    </span>
                   }
-                  <span>GitHub</span>
-                </a>
-              }
-              @if (project.liveUrl) {
-                <a
-                  [href]="project.liveUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="project-link"
-                  [attr.aria-label]="'Ver demo en vivo de ' + project.title"
-                >
-                  <portfolio-icon name="ExternalLink" size="16" />
-                  <span>Demo</span>
-                </a>
-              }
-              @if (!project.githubUrl && !project.liveUrl) {
-                <span class="project-private">
-                  <portfolio-icon name="Lock" size="14" />
-                  Proyecto privado
-                </span>
-              }
-            </div>
-          </article>
-        </li>
-      }
-    </ul>
+                </div>
+              </div>
+
+              <div class="project-card-github">
+                <div class="project-stats" aria-label="Estadísticas del repositorio">
+                  @if (project.githubStats) {
+                    <span class="project-stat project-stat--stars">
+                      <portfolio-icon name="Star" size="14" />
+                      <span>{{ project.githubStats.stars }}</span>
+                    </span>
+
+                    <span class="project-stat">
+                      <portfolio-icon name="GitFork" size="14" />
+                      <span>Fork {{ project.githubStats.forks }}</span>
+                    </span>
+
+                    <span class="project-stat">
+                      <portfolio-icon name="Globe" size="14" />
+                      <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
+                    </span>
+
+                    <span class="project-stat">
+                      <portfolio-icon name="License" size="14" />
+                      <span>{{ formatLicense(project.githubStats.license) }}</span>
+                    </span>
+                  } @else if (isRepositoryLoading(project.repo)) {
+                    <span class="project-stat project-stat--loading">Cargando datos de GitHub...</span>
+                  } @else {
+                    <span class="project-stat project-stat--loading">Datos de GitHub no disponibles</span>
+                  }
+                </div>
+
+                <div class="project-card-footer">
+                  @if (project.githubUrl) {
+                    <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="project-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
+                      @if (techIconUrl('GitHub'); as iconUrl) {
+                        <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="project-link-icon" />
+                      } @else {
+                        <portfolio-icon name="Github" size="16" />
+                      }
+
+                      <span>GitHub</span>
+                    </a>
+                  }
+
+                  @if (project.liveUrl) {
+                    <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="project-link" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
+                      <portfolio-icon name="ExternalLink" size="16" />
+                      <span>Demo</span>
+                    </a>
+                  }
+
+                  @if (!project.githubUrl && !project.liveUrl) {
+                    <span class="project-private">
+                      <portfolio-icon name="Lock" size="14" />
+                      Proyecto privado
+                    </span>
+                  }
+                </div>
+              </div>
+            </article>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="project-empty-state">
+        <p class="project-empty-title">No hay proyectos públicos con estos filtros.</p>
+        <p class="project-empty-description">Esta tecnología forma parte de mi stack, pero todavía no tengo un proyecto público asociado en esta sección.</p>
+      </div>
+    }
   </div>
 </section>

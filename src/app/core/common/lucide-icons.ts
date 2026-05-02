@@ -3,6 +3,7 @@ import {
   LucideArrowRight,
   LucideBell,
   LucideBuilding2,
+  LucideCheck,
   LucideChevronDown,
   LucideChevronRight,
   LucideChevronUp,
@@ -22,6 +23,7 @@ import {
   LucideFileUser,
   LucideFolderInput,
   LucideGitBranch,
+  LucideGitFork,
   LucideGlobe,
   LucideHouse,
   LucideImagePlus,
@@ -30,6 +32,7 @@ import {
   LucideLayers,
   LucideLayoutPanelTop,
   LucideLink2,
+  LucideListFilter,
   LucideLock,
   LucideLogOut,
   LucideMail,
@@ -44,6 +47,7 @@ import {
   LucidePhoneIncoming,
   LucidePhoneMissed,
   LucidePhoneOutgoing,
+  LucideScale,
   LucideSearch,
   LucideSend,
   LucideSendHorizontal,
@@ -52,6 +56,7 @@ import {
   LucideShieldCheck,
   LucideSmile,
   LucideSquarePen,
+  LucideStar,
   LucideSun,
   LucideUser,
   LucideVideo,
@@ -72,6 +77,7 @@ const PortfolioLucideIcons = {
   CallIncoming: LucidePhoneIncoming,
   CallMissed: LucidePhoneMissed,
   CallOutgoing: LucidePhoneOutgoing,
+  Check: LucideCheck,
   ChevronCircleDown: LucideCircleChevronDown,
   ChevronCircleUp: LucideCircleChevronUp,
   ChevronDown: LucideChevronDown,
@@ -92,8 +98,10 @@ const PortfolioLucideIcons = {
   Eye: LucideEye,
   EyeOff: LucideEyeOff,
   FileLink: LucideLink2,
+  Filter: LucideListFilter,
   Folder: LucideFolderInput,
   Github: LucideGitBranch,
+  GitFork: LucideGitFork,
   Globe: LucideGlobe,
   Home: LucideHouse,
   IdCard: LucideFileUser,
@@ -102,6 +110,7 @@ const PortfolioLucideIcons = {
   Info: LucideInfo,
   Information: LucideFileText,
   Layers: LucideLayers,
+  License: LucideScale,
   Linkedin: LucideLink2,
   Lock: LucideLock,
   LogOut: LucideLogOut,
@@ -121,6 +130,7 @@ const PortfolioLucideIcons = {
   Settings: LucideSettings,
   ShieldCheck: LucideShieldCheck,
   SignOut: LucideLogOut,
+  Star: LucideStar,
   Sun: LucideSun,
   User: LucideUser,
   Video: LucideVideo,
@@ -129,8 +139,6 @@ const PortfolioLucideIcons = {
   WorkOrders: LucideClipboardList,
 } as const satisfies Record<string, PortfolioLucideIcon>;
 
-export const LucideIcons = Object.fromEntries(
-  Object.entries(PortfolioLucideIcons).map(([name, icon]) => [name, toLucideIconData(icon)]),
-) as { [Name in keyof typeof PortfolioLucideIcons]: LucideIconData };
+export const LucideIcons = Object.fromEntries(Object.entries(PortfolioLucideIcons).map(([name, icon]) => [name, toLucideIconData(icon)])) as { [Name in keyof typeof PortfolioLucideIcons]: LucideIconData };
 
 export type LucideIconName = keyof typeof LucideIcons;
