@@ -60,24 +60,25 @@
   justify-content: center;
 }
 
-:host ::ng-deep .header-nav-btn.p-button {
+.nav-link {
   padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  min-width: auto;
+  border-radius: 0.5rem;
+  font-size: var(--font-size-caption-1);
+  font-weight: 500;
+  color: var(--app-text-muted);
+  text-decoration: none;
+  transition: color 0.2s, background-color 0.2s;
   white-space: nowrap;
 }
 
-:host ::ng-deep .header-nav-btn-active.p-button {
-  background: transparent;
+.nav-link:hover {
   color: var(--app-text-color);
-  border-color: color-mix(in srgb, var(--app-text-primary) 52%, var(--app-border-color));
+  background-color: var(--app-panel-muted-bg);
 }
 
-:host ::ng-deep .mobile-nav-btn.p-button {
-  width: 100%;
-  justify-content: flex-start;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
+.nav-link:focus-visible {
+  outline: 2px solid var(--app-text-primary);
+  outline-offset: 2px;
 }
 
 /* Actions */
@@ -125,6 +126,27 @@
   flex-direction: column;
   gap: 0.25rem;
   background-color: var(--app-panel-bg);
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: var(--font-size-body-2);
+  font-weight: 500;
+  color: var(--app-text-muted);
+  text-decoration: none;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.mobile-nav-link:hover {
+  color: var(--app-text-color);
+  background-color: var(--app-panel-muted-bg);
+}
+
+.mobile-nav-link:focus-visible {
+  outline: 2px solid var(--app-text-primary);
+  outline-offset: 2px;
 }
 
 /* Responsive */

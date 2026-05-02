@@ -3,7 +3,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
-import { PortfolioSectionNavigationService } from '../../portfolio-section-navigation.service';
 
 @Component({
   selector: 'portfolio-hero',
@@ -14,7 +13,6 @@ import { PortfolioSectionNavigationService } from '../../portfolio-section-navig
 })
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly sectionNavigation = inject(PortfolioSectionNavigationService);
 
   protected readonly techIconUrl = techIconUrl;
 
@@ -44,10 +42,12 @@ export class Hero {
   }
 
   protected scrollToProjects(): void {
-    this.sectionNavigation.requestNavigation('proyectos');
+    if (!isPlatformBrowser(this.platformId)) return;
+    document.getElementById('proyectos')?.scrollIntoView({ behavior: 'smooth' });
   }
 
   protected scrollToContact(): void {
-    this.sectionNavigation.requestNavigation('contacto');
+    if (!isPlatformBrowser(this.platformId)) return;
+    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
   }
 }

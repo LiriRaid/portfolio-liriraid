@@ -16,15 +16,14 @@
 
         <div class="contact-social">
           @for (link of socialLinks; track link.label) {
+
             <portfolio-button
               [label]="link.label"
               [icon]="link.icon"
               [href]="link.href"
-              target="_blank"
-              rel="noopener noreferrer"
-              outlined
+              variant="outlined"
               [ariaLabel]="link.label"
-              styleClass="contact-social-btn portfolio-outline-soft text-body-2-medium"
+              styleClass=" text-body-2-medium"
             />
           }
         </div>

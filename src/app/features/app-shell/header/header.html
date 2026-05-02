@@ -1,50 +1,24 @@
 <header class="header" role="banner">
   <div class="header-inner">
-    <a
-      href="/inicio"
-      class="header-logo"
-      aria-label="Ir al inicio - Liriraid"
-      (click)="navigateToSection($event, 'inicio')"
-    >
+    <a href="#inicio" class="header-logo" aria-label="Ir al inicio - Liriraid">
       <span class="logo-text">Liriraid</span>
       <span class="logo-dot" aria-hidden="true">.</span>
     </a>
 
     <nav class="header-nav" aria-label="Navegación principal">
-      @for (link of navLinks; track link.id) {
-        <portfolio-button
-          [label]="link.label"
-          [href]="'/' + link.path"
-          outlined
-          [ariaLabel]="'Ir a ' + link.label"
-          [styleClass]="'header-nav-btn portfolio-outline-soft text-caption-1-medium' + (isActive(link.id) ? ' header-nav-btn-active' : '')"
-          (onClick)="navigateToSection($event, link.id)"
-        />
+      @for (link of navLinks; track link.href) {
+        <a [href]="link.href" class="nav-link">{{ link.label }}</a>
       }
     </nav>
 
     <div class="header-actions">
       <portfolio-theme-color-picker />
 
-      <button
-        class="icon-btn"
-        type="button"
-        [attr.aria-label]="themeService.mode() === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'"
-        (click)="themeService.toggleMode()"
-      >
-        <portfolio-icon
-          [name]="themeService.mode() === 'dark' ? 'Sun' : 'Moon'"
-          size="18"
-        />
+      <button class="icon-btn" type="button" [attr.aria-label]="themeService.mode() === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'" (click)="themeService.toggleMode()">
+        <portfolio-icon [name]="themeService.mode() === 'dark' ? 'Sun' : 'Moon'" size="18" />
       </button>
 
-      <button
-        class="icon-btn mobile-menu-btn"
-        type="button"
-        [attr.aria-expanded]="mobileMenuOpen()"
-        [attr.aria-label]="mobileMenuOpen() ? 'Cerrar menú' : 'Abrir menú'"
-        (click)="toggleMobileMenu()"
-      >
+      <button class="icon-btn mobile-menu-btn" type="button" [attr.aria-expanded]="mobileMenuOpen()" [attr.aria-label]="mobileMenuOpen() ? 'Cerrar menú' : 'Abrir menú'" (click)="toggleMobileMenu()">
         <portfolio-icon [name]="mobileMenuOpen() ? 'Close' : 'Menu'" size="20" />
       </button>
     </div>
@@ -52,14 +26,10 @@
 
   @if (mobileMenuOpen()) {
     <nav class="mobile-nav" aria-label="Navegación móvil">
-      @for (link of navLinks; track link.id) {
-        <portfolio-button
-          [label]="link.label"
-          [href]="'/' + link.path"
-          outlined
-          [styleClass]="'mobile-nav-btn portfolio-outline-soft text-body-2-medium' + (isActive(link.id) ? ' header-nav-btn-active' : '')"
-          (onClick)="navigateToSection($event, link.id)"
-        />
+      @for (link of navLinks; track link.href) {
+        <a [href]="link.href" class="mobile-nav-link" (click)="closeMobileMenu()">
+          {{ link.label }}
+        </a>
       }
     </nav>
   }
