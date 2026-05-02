@@ -11,25 +11,12 @@
       y mantenibles.
     </h1>
 
-    <p class="hero-description">
-      Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS).
-      Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.
-    </p>
+    <p class="hero-description">Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.</p>
 
     <div class="hero-ctas">
-      <portfolio-button
-        label="Ver proyectos"
-        icon="ArrowRight"
-        iconPos="right"
-        styleClass="rounded-2xl text-body-2-medium"
-        (onClick)="scrollToProjects()"
-      />
-      <portfolio-button
-        label="Contactar"
-        variant="outlined"
-        styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium"
-        (onClick)="scrollToContact()"
-      />
+      <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
+
+      <portfolio-button label="Descargar CV" icon="Download" iconPos="right" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
     </div>
 
     <div class="hero-stack" aria-label="Stack tecnológico principal">
@@ -38,6 +25,7 @@
           @if (techIconUrl(tech); as iconUrl) {
             <img [src]="iconUrl" [alt]="tech" class="tech-badge-icon" width="16" height="16" loading="lazy" />
           }
+
           {{ tech }}
         </span>
       }
@@ -46,14 +34,7 @@
 
   <div class="hero-visual">
     <div class="hero-avatar">
-      <img
-        src="assets/img/Me.jpg"
-        alt="Gabriel Leonardo Cruz Flores"
-        width="224"
-        height="224"
-        fetchpriority="high"
-        decoding="async"
-      />
+      <img src="assets/img/Me.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
     </div>
 
     <div class="hero-card" aria-hidden="true">
@@ -63,37 +44,42 @@
         <span class="dot dot-green"></span>
         <span class="hero-card-title">portfolio.ts</span>
       </div>
+
       <div class="hero-card-body">
         <div class="code-line">
           <span class="code-keyword">export class</span>
           <span class="code-class"> GabrielCruz</span>
           <span class="code-punct"> &#123;</span>
         </div>
+
         <div class="code-line code-indent">
           <span class="code-prop">role</span>
           <span class="code-punct"> = </span>
           <span class="code-string">'Full Angular Dev'</span><span class="code-punct">;</span>
         </div>
+
         <div class="code-line code-indent">
           <span class="code-prop">focus</span>
           <span class="code-punct"> = </span>
           <span class="code-string">'Product &amp; Scale'</span><span class="code-punct">;</span>
         </div>
+
         <div class="code-line code-indent">
           <span class="code-prop">stack</span>
           <span class="code-punct"> = [</span>
         </div>
-        <div class="code-line code-indent-2">
-          <span class="code-string">'Angular'</span><span class="code-punct">,</span>
-          <span class="code-string"> 'Node.js'</span><span class="code-punct">,</span>
-        </div>
+
+        <div class="code-line code-indent-2"><span class="code-string">'Angular'</span><span class="code-punct">,</span> <span class="code-string"> 'Node.js'</span><span class="code-punct">,</span></div>
+
         <div class="code-line code-indent-2">
           <span class="code-string">'Rails'</span><span class="code-punct">,</span>
           <span class="code-string"> 'PostgreSQL'</span>
         </div>
+
         <div class="code-line code-indent">
           <span class="code-punct">];</span>
         </div>
+
         <div class="code-line">
           <span class="code-punct">&#125;</span>
         </div>

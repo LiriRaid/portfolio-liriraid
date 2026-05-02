@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, DestroyRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
@@ -14,7 +14,21 @@ import { ThemeService } from '@core/theme/theme.service';
 export class Header {
   protected readonly themeService = inject(ThemeService);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly mobileMenuOpen = signal(false);
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      afterNextRender(() => {
+        const desktopMq = window.matchMedia('(min-width: 769px)');
+        const onChange = (e: MediaQueryListEvent) => {
+          if (e.matches) this.closeMobileMenu();
+        };
+        desktopMq.addEventListener('change', onChange);
+        this.destroyRef.onDestroy(() => desktopMq.removeEventListener('change', onChange));
+      });
+    }
+  }
 
   protected readonly navLinks = [
     { label: 'Inicio', href: '#inicio' },

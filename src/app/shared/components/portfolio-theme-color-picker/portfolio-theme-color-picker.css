@@ -9,7 +9,9 @@
   background-color: transparent;
   color: var(--app-text-muted);
   cursor: pointer;
-  transition: color 0.2s, background-color 0.2s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
 }
 
 .picker-trigger:hover {
@@ -22,22 +24,45 @@
   outline-offset: 2px;
 }
 
-/* Popover panel overrides */
+/* Popover base */
 ::ng-deep .p-popover.color-picker-panel {
   --p-popover-background: var(--p-surface-0);
   --p-popover-border-color: var(--p-surface-200);
+
   background: var(--p-surface-0);
   border-color: var(--p-surface-200);
+
   min-width: 242px;
+  max-width: 242px;
+
+  transform: translateX(-15px) !important;
 }
 
+::ng-deep .p-popover.color-picker-panel::before,
+::ng-deep .p-popover.color-picker-panel::after {
+  transform: translateX(8px) !important;
+}
+
+/* Responsive */
 ::ng-deep .dark .p-popover.color-picker-panel,
 ::ng-deep .dark.p-popover.color-picker-panel,
 ::ng-deep .p-popover.color-picker-panel:where(.dark *) {
   --p-popover-background: var(--p-surface-900);
   --p-popover-border-color: var(--p-surface-700);
+
   background: var(--p-surface-900);
   border-color: var(--p-surface-700);
+}
+
+@media (max-width: 768px) {
+  ::ng-deep .p-popover.color-picker-panel {
+    transform: translateX(15px) !important;
+  }
+
+  ::ng-deep .p-popover.color-picker-panel::before,
+  ::ng-deep .p-popover.color-picker-panel::after {
+    transform: translateX(8px) !important;
+  }
 }
 
 .color-picker-content {
@@ -79,12 +104,15 @@
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   transition:
     transform 0.15s,
     border-color 0.15s;
+
   padding: 0;
 }
 

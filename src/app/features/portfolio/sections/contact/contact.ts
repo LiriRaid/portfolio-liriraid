@@ -3,14 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioInput } from '@shared/components/portfolio-input/portfolio-input';
-
-export interface SocialLink {
-  techIcon: string;
-  label: string;
-  href: string;
-  target?: string;
-  rel?: string;
-}
+import { SocialLink } from '@features/portfolio/entities';
 
 @Component({
   selector: 'portfolio-contact',

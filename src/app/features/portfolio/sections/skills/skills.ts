@@ -1,12 +1,7 @@
 import { Component, signal } from '@angular/core';
+import { SkillCategory } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
-
-export interface SkillCategory {
-  label: string;
-  icon: string;
-  skills: string[];
-}
 
 @Component({
   selector: 'portfolio-skills',

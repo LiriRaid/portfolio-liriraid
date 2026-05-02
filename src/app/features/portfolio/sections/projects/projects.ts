@@ -1,15 +1,7 @@
 import { Component, signal } from '@angular/core';
+import { Project } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
-
-export interface Project {
-  title: string;
-  description: string;
-  tags: string[];
-  githubUrl: string | null;
-  liveUrl: string | null;
-  featured?: boolean;
-}
 
 @Component({
   selector: 'portfolio-projects',

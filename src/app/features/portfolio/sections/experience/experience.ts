@@ -1,15 +1,7 @@
 import { Component, signal } from '@angular/core';
+import { ExperienceItem } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
-
-export interface ExperienceItem {
-  company: string;
-  role: string;
-  period: string;
-  location?: string;
-  description: string;
-  technologies: string[];
-  current?: boolean;
-}
+import { techIconUrl } from '@shared/utils/tech-icons';
 
 @Component({
   selector: 'portfolio-experience',
@@ -19,15 +11,36 @@ export interface ExperienceItem {
   styleUrl: './experience.css',
 })
 export class Experience {
+  protected readonly techIconUrl = techIconUrl;
+
   protected readonly experiences = signal<ExperienceItem[]>([
     {
-      company: 'Empresa actual',
+      company: 'CIT (Creative Infotainment Technologies)',
       role: 'Desarrollador Full Angular',
-      period: '2024 — Presente',
-      location: 'Remoto',
+      period: 'Julio · 2024 — Presente',
+      location: 'Presencial',
       description:
-        'Diseño e implementación de aplicaciones Angular 21 con SSR e hidratación incremental. Liderazgo técnico en arquitectura limpia, design systems y rendimiento.',
-      technologies: ['Angular 21', 'TypeScript', 'Tailwind CSS', 'PrimeNG', 'Node.js'],
+        'Desarrollo de aplicaciones web empresariales con Angular moderno, enfocadas en arquitectura escalable, componentes reutilizables, rendimiento y experiencia de usuario.',
+      responsibilities: [
+        'Construcción de módulos administrativos con Angular 21, TypeScript, PrimeNG y Tailwind CSS.',
+        'Implementación de arquitectura frontend basada en features, rutas lazy loading y separación clara por dominio.',
+        'Desarrollo de componentes reutilizables para formularios, botones, iconos, sidebars, modales, filtros, inputs y elementos de interfaz.',
+        'Manejo de estado moderno con signals, computed, effects, servicios reactivos y RxJS cuando aplica.',
+        'Integración con APIs REST para flujos CRUD, autenticación, permisos, paginación, filtros avanzados y dashboards.',
+        'Optimización de rendimiento, carga inicial, experiencia responsive y consistencia visual del sistema.',
+        'Mantenimiento y mejora de proyectos legacy con AngularJS, migrando lógica hacia soluciones más modernas y mantenibles.',
+      ],
+      technologies: [
+        'Angular 21',
+        'AngularJS',
+        'TypeScript',
+        'Signals',
+        'RxJS',
+        'PrimeNG',
+        'Tailwind CSS',
+        'Node.js',
+        'PostgreSQL',
+      ],
       current: true,
     },
   ]);

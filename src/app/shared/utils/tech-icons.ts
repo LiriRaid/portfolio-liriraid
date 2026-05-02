@@ -4,6 +4,7 @@ const MAP: Record<string, string> = {
   'Angular':         'assets/svg/angular-logo.svg',
   'Angular 21':      'assets/svg/angular-logo.svg',
   'AngularJS':       'assets/svg/angular-logo.svg',
+  'PrimeNG':         `assets/svg/primeng-logo.svg`,
   'TypeScript':      `${SKILL}ts`,
   'JavaScript':      `${SKILL}js`,
   'HTML':            `${SKILL}html`,

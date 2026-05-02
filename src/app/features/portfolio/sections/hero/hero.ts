@@ -1,5 +1,5 @@
-import { Component, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
@@ -13,13 +13,11 @@ import { techIconUrl } from '@shared/utils/tech-icons';
 })
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly cvUrl = 'assets/docs/gabriel-cruz-cv.pdf';
 
   protected readonly techIconUrl = techIconUrl;
 
-  protected readonly stack = [
-    'Angular', 'TypeScript', 'HTML', 'CSS', 'SASS',
-    'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS',
-  ] as const;
+  protected readonly stack = ['Angular', 'TypeScript', 'HTML', 'CSS', 'SASS', 'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS'] as const;
 
   protected readonly visible = signal(false);
 
@@ -45,21 +43,28 @@ export class Hero {
 
   private animateEntrance(): void {
     import('gsap').then(({ gsap }) => {
-      gsap.fromTo(
-        '.hero-content',
-        { opacity: 0, y: 32 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-      );
+      gsap.fromTo('.hero-content', { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
     });
   }
 
-  protected scrollToProjects(): void {
+  protected scrollToExperience(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    document.getElementById('proyectos')?.scrollIntoView({ behavior: 'smooth' });
+
+    document.getElementById('experiencia')?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  protected scrollToContact(): void {
+  protected downloadCV(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+
+    const link = document.createElement('a');
+
+    link.href = this.cvUrl;
+    link.download = 'Gabriel-Leonardo-Cruz-Flores-CV.pdf';
+    link.rel = 'noopener';
+    link.target = '_blank';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }

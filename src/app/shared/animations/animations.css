@@ -3,11 +3,9 @@
    Angular 21 CSS-based animations
 ========================================================= */
 
-
 /* =========================================================
    Used Animations
 ========================================================= */
-
 
 /* =========================
    Fade In / Fade Out
@@ -44,7 +42,6 @@
   }
 }
 
-
 /* =========================
    Soft Fade In / Out
    Equivalent to legacy softFadeInOut
@@ -79,7 +76,6 @@
     opacity: 0;
   }
 }
-
 
 /* =========================
    Route Fade Transition
@@ -119,7 +115,6 @@
     opacity: 1;
   }
 }
-
 
 /* =========================
    Section Slide In / Out
@@ -175,7 +170,6 @@
   }
 }
 
-
 /* =========================
    Slide Expand / Collapse
    Better for sidebar <ul> lists
@@ -203,13 +197,11 @@
   opacity: 0;
 }
 
-
 /* =========================================================
    Prepared Animations
    Not currently used
    Native CSS animation equivalents kept for future reuse
 ========================================================= */
-
 
 /* =========================
    Card Animation
@@ -240,7 +232,6 @@
   }
 }
 
-
 /* =========================
    Fade Slide In / Out
    Equivalent to legacy fadeSlideInOut()
@@ -269,7 +260,6 @@
   opacity: 0;
 }
 
-
 /* =========================
    Primary Level Slide In / Out
    Equivalent to legacy primaryLevelSlideInOut()
@@ -297,7 +287,6 @@
   max-height: 0;
   opacity: 0;
 }
-
 
 /* =========================
    Second Level Fade Slide In / Out
@@ -332,7 +321,6 @@
   transition-duration: 400ms;
 }
 
-
 /* =========================
    Status Pulse
    Equivalent to legacy statusPulse active state
@@ -358,7 +346,6 @@
     box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
   }
 }
-
 
 /* =========================
    Sidebar Slide
@@ -405,7 +392,6 @@
   }
 }
 
-
 /* =========================
    Slide In From Right
    Equivalent to legacy slideInFromRight
@@ -450,7 +436,6 @@
     transform: translateX(100%);
   }
 }
-
 
 /* =========================
    Slide In / Out
@@ -506,7 +491,6 @@
   }
 }
 
-
 /* =========================
    Staggered Fade In
    Equivalent to legacy staggeredFadeIn
@@ -545,7 +529,6 @@
     opacity: 0;
   }
 }
-
 
 /* =========================
    Slide Animation
@@ -591,7 +574,6 @@
     transform: translateX(-30px);
   }
 }
-
 
 /* =========================
    Fade Animation
