@@ -1,13 +1,13 @@
 import { Component, DestroyRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
 import { ThemeService } from '@core/theme/theme.service';
+import { PortfolioButton, PortfolioIcon } from '@shared/components';
 
 @Component({
   selector: 'portfolio-header',
   standalone: true,
-  imports: [PortfolioIcon, PortfolioThemeColorPicker],
+  imports: [PortfolioButton, PortfolioIcon, PortfolioThemeColorPicker],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

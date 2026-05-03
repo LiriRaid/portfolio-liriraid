@@ -1,25 +1,40 @@
-.picker-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+:host {
+  display: inline-flex;
+}
+
+/* Botón usando portfolio-button */
+:host ::ng-deep .picker-trigger.p-button {
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0.5rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
+  border-radius: 0.5rem;
   background-color: transparent;
   color: var(--app-text-muted);
-  cursor: pointer;
+  box-shadow: none;
   transition:
     color 0.2s,
     background-color 0.2s;
 }
 
-.picker-trigger:hover {
-  color: var(--app-text-color);
-  background-color: var(--app-panel-muted-bg);
+:host ::ng-deep .picker-trigger.p-button .p-button-icon,
+:host ::ng-deep .picker-trigger.p-button portfolio-icon {
+  color: inherit;
 }
 
-.picker-trigger:focus-visible {
+:host ::ng-deep .picker-trigger.p-button:hover,
+:host ::ng-deep .picker-trigger.p-button:focus-visible,
+:host ::ng-deep .picker-trigger.p-button.picker-trigger--active {
+  color: var(--app-text-color);
+  background-color: var(--app-accent-soft-bg) !important;
+}
+
+:host ::ng-deep .picker-trigger.p-button:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
 }
@@ -29,21 +44,30 @@
   --p-popover-background: var(--p-surface-0);
   --p-popover-border-color: var(--p-surface-200);
 
+  min-width: 242px;
+  max-width: 242px;
   background: var(--p-surface-0);
   border-color: var(--p-surface-200);
 
-  min-width: 242px;
-  max-width: 242px;
-
-  transform: translateX(-15px) !important;
+  opacity: 0;
 }
 
+::ng-deep .p-popover.color-picker-panel[data-positioned='true'] {
+  opacity: 1;
+}
+
+/*
+  NO mover aquí el triángulo con translateX manual.
+  El TS calcula --color-picker-arrow-x para que siga apuntando al botón.
+*/
 ::ng-deep .p-popover.color-picker-panel::before,
-::ng-deep .p-popover.color-picker-panel::after {
-  transform: translateX(8px) !important;
+::ng-deep .p-popover.color-picker-panel::after,
+::ng-deep .p-popover.color-picker-panel .p-popover-arrow {
+  left: var(--color-picker-arrow-x, 50%) !important;
+  transform: translateX(-50%) !important;
 }
 
-/* Responsive */
+/* Dark mode */
 ::ng-deep .dark .p-popover.color-picker-panel,
 ::ng-deep .dark.p-popover.color-picker-panel,
 ::ng-deep .p-popover.color-picker-panel:where(.dark *) {
@@ -52,17 +76,6 @@
 
   background: var(--p-surface-900);
   border-color: var(--p-surface-700);
-}
-
-@media (max-width: 768px) {
-  ::ng-deep .p-popover.color-picker-panel {
-    transform: translateX(15px) !important;
-  }
-
-  ::ng-deep .p-popover.color-picker-panel::before,
-  ::ng-deep .p-popover.color-picker-panel::after {
-    transform: translateX(8px) !important;
-  }
 }
 
 .color-picker-content {

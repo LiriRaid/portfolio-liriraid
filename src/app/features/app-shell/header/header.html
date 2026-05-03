@@ -7,7 +7,7 @@
 
     <nav class="header-nav" aria-label="Navegación principal">
       @for (link of navLinks; track link.href) {
-        <a [href]="link.href" class="nav-link" (click)="onNavLinkClick($event, link.href)">{{ link.label }}</a>
+        <portfolio-button variant="text" [label]="link.label" [href]="link.href" styleClass="nav-link" (onClick)="onNavLinkClick($event, link.href)" />
       }
     </nav>
 
@@ -27,9 +27,7 @@
   @if (mobileMenuOpen()) {
     <nav class="mobile-nav" aria-label="Navegación móvil">
       @for (link of navLinks; track link.href) {
-        <a [href]="link.href" class="mobile-nav-link" (click)="onNavLinkClick($event, link.href); closeMobileMenu()">
-          {{ link.label }}
-        </a>
+        <portfolio-button variant="text" [label]="link.label" [href]="link.href" styleClass="mobile-nav-link" (onClick)="onNavLinkClick($event, link.href); closeMobileMenu()" />
       }
     </nav>
   }

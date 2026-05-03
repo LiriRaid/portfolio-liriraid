@@ -1,7 +1,8 @@
-<p-popover #panel styleClass="color-picker-panel" appendTo="body">
+<p-popover #panel styleClass="color-picker-panel" appendTo="body" (onShow)="onPanelShow()" (onHide)="onPanelHide()">
   <div class="color-picker-content">
     <div class="color-picker-section">
       <p class="color-picker-label">Colores Primarios</p>
+
       <div class="color-picker-grid">
         @for (color of primaryColors; track color.key) {
           <button type="button" class="color-swatch" [class.active]="currentPrimaryKey() === color.key" [style.background]="color.swatch" [title]="color.label" [attr.aria-label]="'Seleccionar color ' + color.label" [attr.aria-pressed]="currentPrimaryKey() === color.key" (click)="selectPrimary(color.key, panel)">
@@ -15,6 +16,7 @@
 
     <div class="color-picker-section">
       <p class="color-picker-label">Surface</p>
+
       <div class="color-picker-grid color-picker-grid--surface">
         @for (surface of surfaceColors; track surface.key) {
           <button type="button" class="color-swatch" [class.active]="currentSurfaceKey() === surface.key" [style.background]="surface.swatch" [title]="surface.label" [attr.aria-label]="'Seleccionar superficie ' + surface.label" [attr.aria-pressed]="currentSurfaceKey() === surface.key" (click)="selectSurface(surface.key)">
@@ -28,6 +30,4 @@
   </div>
 </p-popover>
 
-<button type="button" class="picker-trigger" aria-label="Seleccionar paleta de colores" title="Paleta de colores" (click)="toggle(panel, $event)">
-  <portfolio-icon name="Palette" size="18" />
-</button>
+<portfolio-button icon="Palette" variant="text" iconSize="18" [styleClass]="pickerButtonClass()" ariaLabel="Seleccionar paleta de colores" (onClick)="toggle(panel, $event)" />
