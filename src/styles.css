@@ -30,8 +30,11 @@ body {
 :root.theme-switching *,
 :root.theme-switching *::before,
 :root.theme-switching *::after,
-:root.theme-switching omniinbox-header .header-icon-btn.header-icon-btn,
-:root.theme-switching omniinbox-header .header-icon-btn.header-icon-btn :is(.p-button-icon, omniinbox-icon) {
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button *,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button::before,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button::after,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button :is(.p-button-icon, portfolio-icon, svg) {
   transition-property:
     background-color,
     border-color,
