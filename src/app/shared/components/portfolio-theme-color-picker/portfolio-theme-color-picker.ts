@@ -22,12 +22,18 @@ export class PortfolioThemeColorPicker {
 
   protected readonly primaryColors = PRIMARY_COLORS;
   protected readonly surfaceColors = SURFACE_COLORS;
+
   protected readonly currentPrimaryKey = this.themeService.primaryColorKey;
   protected readonly currentSurfaceKey = this.themeService.surfaceColorKey;
 
   protected readonly isPanelOpen = signal(false);
 
-  protected readonly pickerButtonClass = computed(() => (this.isPanelOpen() ? 'picker-trigger picker-trigger--active' : 'picker-trigger'));
+  protected readonly pickerButtonClass = computed(() => {
+    return this.joinClasses(
+      'picker-trigger',
+      this.isPanelOpen() ? 'picker-trigger--active' : '',
+    );
+  });
 
   private triggerElement: HTMLElement | null = null;
   private panelVisible = false;
@@ -37,31 +43,53 @@ export class PortfolioThemeColorPicker {
   private readonly panelGap = 8;
   private readonly arrowMinOffset = 14;
 
+  private get isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
   private readonly repositionPanel = (): void => {
     this.schedulePanelPosition();
   };
 
+  private readonly onOutsidePointerDown = (event: PointerEvent): void => {
+    if (!this.panelVisible || this.isEventInsidePicker(event)) {
+      return;
+    }
+
+    this.markPanelAsClosing();
+  };
+
+  private readonly onEscapeKeyDown = (event: KeyboardEvent): void => {
+    if (this.panelVisible && event.key === 'Escape') {
+      this.markPanelAsClosing();
+    }
+  };
+
   constructor() {
     this.destroyRef.onDestroy(() => {
-      this.cancelScheduledPosition();
-      this.removePositionListeners();
+      this.cleanupPanelRuntime();
     });
   }
 
   protected toggle(panel: Popover, event: MouseEvent): void {
     this.triggerElement = this.resolveTriggerElement(event);
+
+    if (this.panelVisible) {
+      this.markPanelAsClosing();
+    }
+
     panel.toggle(event);
   }
 
   protected onPanelShow(): void {
     this.isPanelOpen.set(true);
 
-    if (!isPlatformBrowser(this.platformId)) {
+    if (!this.isBrowser) {
       return;
     }
 
     this.panelVisible = true;
-    this.addPositionListeners();
+    this.addRuntimeListeners();
     this.schedulePanelPosition();
   }
 
@@ -70,13 +98,13 @@ export class PortfolioThemeColorPicker {
     this.panelVisible = false;
     this.triggerElement = null;
 
-    this.cancelScheduledPosition();
-    this.removePositionListeners();
+    this.cleanupPanelRuntime();
     this.resetPanelPosition();
   }
 
   protected selectPrimary(key: string, panel: Popover): void {
     this.themeService.applyColor(key);
+    this.markPanelAsClosing();
     panel.hide();
   }
 
@@ -84,18 +112,14 @@ export class PortfolioThemeColorPicker {
     this.themeService.applySurface(key);
   }
 
-  private resolveTriggerElement(event: MouseEvent): HTMLElement | null {
-    const element = event.currentTarget as HTMLElement | null;
-
-    if (!element) {
-      return null;
-    }
-
-    return element.classList.contains('p-button') ? element : (element.querySelector<HTMLElement>('.p-button') ?? element);
+  private markPanelAsClosing(): void {
+    this.isPanelOpen.set(false);
+    this.panelVisible = false;
+    this.cleanupPanelRuntime();
   }
 
   private schedulePanelPosition(): void {
-    if (!isPlatformBrowser(this.platformId) || !this.panelVisible) {
+    if (!this.isBrowser || !this.panelVisible) {
       return;
     }
 
@@ -122,32 +146,67 @@ export class PortfolioThemeColorPicker {
     const viewportHeight = this.document.documentElement.clientHeight;
 
     const triggerCenterX = triggerRect.left + triggerRect.width / 2;
-    const visualOffsetX = this.getVisualOffsetX();
 
-    let left = triggerCenterX - panelWidth / 2 + visualOffsetX;
+    const left = this.getPanelLeft({
+      triggerCenterX,
+      panelWidth,
+      viewportWidth,
+    });
 
-    left = this.clamp(left, this.viewportMargin, viewportWidth - panelWidth - this.viewportMargin);
+    const top = this.getPanelTop({
+      panel,
+      triggerRect,
+      panelHeight,
+      viewportHeight,
+    });
 
-    const belowTop = triggerRect.bottom + this.panelGap;
-    const aboveTop = triggerRect.top - panelHeight - this.panelGap;
+    const arrowX = this.clamp(
+      triggerCenterX - left + 8,
+      this.arrowMinOffset,
+      panelWidth - this.arrowMinOffset,
+    );
 
-    let top = belowTop;
+    this.applyPanelPosition(panel, left, top, arrowX);
+  }
 
-    if (belowTop + panelHeight > viewportHeight - this.viewportMargin && aboveTop >= this.viewportMargin) {
-      top = aboveTop;
-      panel.dataset['placement'] = 'top';
-    } else {
-      top = this.clamp(belowTop, this.viewportMargin, viewportHeight - panelHeight - this.viewportMargin);
-      panel.dataset['placement'] = 'bottom';
+  private getPanelLeft(params: {
+    triggerCenterX: number;
+    panelWidth: number;
+    viewportWidth: number;
+  }): number {
+    const left = params.triggerCenterX - params.panelWidth / 2 + this.getVisualOffsetX();
+
+    return this.clamp(
+      left,
+      this.viewportMargin,
+      params.viewportWidth - params.panelWidth - this.viewportMargin,
+    );
+  }
+
+  private getPanelTop(params: {
+    panel: HTMLElement;
+    triggerRect: DOMRect;
+    panelHeight: number;
+    viewportHeight: number;
+  }): number {
+    const belowTop = params.triggerRect.bottom + this.panelGap;
+    const aboveTop = params.triggerRect.top - params.panelHeight - this.panelGap;
+
+    if (belowTop + params.panelHeight > params.viewportHeight - this.viewportMargin && aboveTop >= this.viewportMargin) {
+      params.panel.dataset['placement'] = 'top';
+      return aboveTop;
     }
 
-    /*
-      NO CAMBIAR:
-      Este +8 es el ajuste que ya te mantenía el triángulo centrado visualmente.
-      El contenedor se mueve con getVisualOffsetX(), pero la flecha sigue apuntando al botón.
-    */
-    const arrowX = this.clamp(triggerCenterX - left + 8, this.arrowMinOffset, panelWidth - this.arrowMinOffset);
+    params.panel.dataset['placement'] = 'bottom';
 
+    return this.clamp(
+      belowTop,
+      this.viewportMargin,
+      params.viewportHeight - params.panelHeight - this.viewportMargin,
+    );
+  }
+
+  private applyPanelPosition(panel: HTMLElement, left: number, top: number, arrowX: number): void {
     panel.style.setProperty('position', 'fixed', 'important');
     panel.style.setProperty('top', `${top}px`, 'important');
     panel.style.setProperty('left', `${left}px`, 'important');
@@ -160,17 +219,6 @@ export class PortfolioThemeColorPicker {
     panel.dataset['positioned'] = 'true';
   }
 
-  private getVisualOffsetX(): number {
-    const width = this.document.documentElement.clientWidth;
-
-    /*
-      >= 1557px: desktop, contenedor más hacia la derecha.
-      <= 1556px: responsive, contenedor más hacia la izquierda.
-      El triángulo NO se toca.
-    */
-    return width >= 1557 ? 45 : -35;
-  }
-
   private resetPanelPosition(): void {
     const panel = this.getPanelElement();
 
@@ -178,21 +226,50 @@ export class PortfolioThemeColorPicker {
       return;
     }
 
-    panel.style.removeProperty('position');
-    panel.style.removeProperty('top');
-    panel.style.removeProperty('left');
-    panel.style.removeProperty('right');
-    panel.style.removeProperty('bottom');
-    panel.style.removeProperty('transform');
-    panel.style.removeProperty('margin-top');
-    panel.style.removeProperty('--color-picker-arrow-x');
+    for (const property of [
+      'position',
+      'top',
+      'left',
+      'right',
+      'bottom',
+      'transform',
+      'margin-top',
+      '--color-picker-arrow-x',
+    ]) {
+      panel.style.removeProperty(property);
+    }
 
     delete panel.dataset['positioned'];
     delete panel.dataset['placement'];
   }
 
-  private addPositionListeners(): void {
-    if (!isPlatformBrowser(this.platformId)) {
+  private isEventInsidePicker(event: Event): boolean {
+    const target = event.target as Node | null;
+
+    if (!target) {
+      return false;
+    }
+
+    const panel = this.getPanelElement();
+    const trigger = this.triggerElement;
+
+    return Boolean(panel?.contains(target) || trigger?.contains(target));
+  }
+
+  private resolveTriggerElement(event: MouseEvent): HTMLElement | null {
+    const element = event.currentTarget as HTMLElement | null;
+
+    if (!element) {
+      return null;
+    }
+
+    return element.classList.contains('p-button')
+      ? element
+      : (element.querySelector<HTMLElement>('.p-button') ?? element);
+  }
+
+  private addRuntimeListeners(): void {
+    if (!this.isBrowser) {
       return;
     }
 
@@ -200,10 +277,13 @@ export class PortfolioThemeColorPicker {
     window.addEventListener('resize', this.repositionPanel);
     window.visualViewport?.addEventListener('resize', this.repositionPanel);
     window.visualViewport?.addEventListener('scroll', this.repositionPanel);
+
+    this.document.addEventListener('pointerdown', this.onOutsidePointerDown, true);
+    this.document.addEventListener('keydown', this.onEscapeKeyDown, true);
   }
 
-  private removePositionListeners(): void {
-    if (!isPlatformBrowser(this.platformId)) {
+  private removeRuntimeListeners(): void {
+    if (!this.isBrowser) {
       return;
     }
 
@@ -211,6 +291,14 @@ export class PortfolioThemeColorPicker {
     window.removeEventListener('resize', this.repositionPanel);
     window.visualViewport?.removeEventListener('resize', this.repositionPanel);
     window.visualViewport?.removeEventListener('scroll', this.repositionPanel);
+
+    this.document.removeEventListener('pointerdown', this.onOutsidePointerDown, true);
+    this.document.removeEventListener('keydown', this.onEscapeKeyDown, true);
+  }
+
+  private cleanupPanelRuntime(): void {
+    this.cancelScheduledPosition();
+    this.removeRuntimeListeners();
   }
 
   private cancelScheduledPosition(): void {
@@ -226,7 +314,20 @@ export class PortfolioThemeColorPicker {
     return this.document.querySelector<HTMLElement>('.p-popover.color-picker-panel');
   }
 
+  private getVisualOffsetX(): number {
+    const width = this.document.documentElement.clientWidth;
+
+    return width >= 1557 ? 45 : -35;
+  }
+
   private clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
+  }
+
+  private joinClasses(...classes: string[]): string {
+    return classes
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .join(' ');
   }
 }
