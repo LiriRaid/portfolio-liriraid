@@ -1,12 +1,21 @@
 .hero {
   min-height: calc(100dvh - 4rem);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem 0;
+}
+
+.hero-inner {
   max-width: 1280px;
-  width: 100%;
   margin: 0 auto;
-  padding: 5rem 1.5rem;
-  gap: 4rem;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  width: 100%;
 }
 
 .hero-content,
@@ -19,7 +28,8 @@
 .hero-content {
   flex: 1;
   gap: 2rem;
-  max-width: 640px;
+  max-width: 800px;
+  width: 100%;
 }
 
 .hero-badge,
@@ -43,8 +53,8 @@
 .hero-title {
   margin: 0;
   color: var(--app-text-color);
-  font-size: var(--font-size-tittle-1);
-  line-height: var(--line-height-tittle-1);
+  font-size: clamp(var(--font-size-tittle-2), 4.5vw, var(--font-size-tittle-1));
+  line-height: 1.1;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
@@ -54,7 +64,7 @@
 }
 
 .hero-description {
-  max-width: 540px;
+  max-width: 640px;
   margin: 0;
   color: var(--app-text-muted);
   font-size: var(--font-size-body-1);
@@ -102,14 +112,14 @@
 
 .hero-visual {
   flex-shrink: 0;
-  width: 360px;
+  width: clamp(300px, 30vw, 400px);
   align-items: center;
   gap: 1.5rem;
 }
 
 .hero-avatar {
-  width: 14rem;
-  height: 14rem;
+  width: clamp(10rem, 18vw, 15rem);
+  height: clamp(10rem, 18vw, 15rem);
   flex-shrink: 0;
   padding: 5px;
   border-radius: 9999px;
@@ -215,11 +225,10 @@
 }
 
 @media (max-width: 1024px) {
-  .hero {
+  .hero-inner {
     flex-direction: column;
-    align-items: center;
-    gap: 2rem;
     text-align: center;
+    gap: 3rem;
   }
 
   .hero-content {
@@ -244,6 +253,7 @@
 
   .hero-description {
     text-align: center;
+    margin: 0 auto;
   }
 
   .hero-stack,
@@ -254,9 +264,12 @@
 
 @media (max-width: 640px) {
   .hero {
-    min-height: calc(100dvh - 4rem);
-    padding: 2.5rem 1rem 3rem;
-    gap: 1.5rem;
+    padding: 4rem 0;
+  }
+
+  .hero-inner {
+    padding: 0 1rem;
+    gap: 2rem;
   }
 
   .hero-avatar {
@@ -272,5 +285,13 @@
   .hero-ctas {
     flex-direction: column;
     width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  :host ::ng-deep .hero-ctas portfolio-button,
+  :host ::ng-deep .hero-ctas .p-button {
+    width: 100%;
+    justify-content: center;
   }
 }

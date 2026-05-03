@@ -184,24 +184,57 @@
   object-fit: contain;
 }
 
+/* Filter container for popover positioning */
+.project-filter-container {
+  position: relative;
+  width: 100%;
+}
+
 /* PrimeNG Popover */
 ::ng-deep .p-popover.project-filter-panel {
   --p-popover-background: var(--app-panel-bg);
   --p-popover-border-color: var(--app-border-color);
   width: min(1320px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 10rem);
   background: var(--app-panel-bg);
   border-color: var(--app-border-color);
+  
+  /* Force position below the button */
+  position: absolute !important;
+  top: calc(100% + 0.5rem) !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+/* Custom arrow for forced position */
+::ng-deep .p-popover.project-filter-panel::before,
+::ng-deep .p-popover.project-filter-panel::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 2rem;
+  border: solid transparent;
+  pointer-events: none;
+}
+
+::ng-deep .p-popover.project-filter-panel::before {
+  border-color: transparent;
+  border-bottom-color: var(--app-border-color);
+  border-width: 9px;
+  margin-left: -9px;
+}
+
+::ng-deep .p-popover.project-filter-panel::after {
+  border-color: transparent;
+  border-bottom-color: var(--app-panel-bg);
+  border-width: 8px;
+  margin-left: -8px;
 }
 
 ::ng-deep .p-popover.project-filter-panel .p-popover-content {
   width: 100%;
-}
-
-::ng-deep .p-popover.project-filter-panel,
-::ng-deep .p-popover.project-filter-panel::before,
-::ng-deep .p-popover.project-filter-panel::after,
-::ng-deep .p-popover.project-filter-panel .p-popover-arrow {
-  transform: none;
+  max-height: calc(100dvh - 12rem);
+  overflow-y: auto;
 }
 
 /* Filter panel */

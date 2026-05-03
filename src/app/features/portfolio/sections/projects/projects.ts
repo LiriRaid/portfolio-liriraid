@@ -1,4 +1,5 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Popover } from 'primeng/popover';
 
 import { Project, ProjectTechnologyCategory } from '@features/portfolio/entities';
@@ -17,6 +18,21 @@ import { GithubRepositoryService } from './project.service';
 })
 export class Projects implements OnInit {
   private readonly githubRepositoryService = inject(GithubRepositoryService);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
+
+  @ViewChild('filterPanel') filterPanel!: Popover;
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      afterNextRender(() => {
+        const onResize = () => this.filterPanel?.hide();
+
+        window.addEventListener('resize', onResize);
+        this.destroyRef.onDestroy(() => window.removeEventListener('resize', onResize));
+      });
+    }
+  }
 
   protected readonly techIconUrl = techIconUrl;
   protected readonly selectedTechnologies = signal<string[]>([]);

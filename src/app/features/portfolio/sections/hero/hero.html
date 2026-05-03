@@ -1,87 +1,89 @@
 <section id="inicio" class="hero" aria-labelledby="hero-heading">
-  <div class="hero-content">
-    <div class="hero-badge">
-      <portfolio-icon name="Code" size="14" />
-      <span>Desarrollador Full Angular</span>
-    </div>
-
-    <h1 id="hero-heading" class="hero-title">
-      Construyo aplicaciones web
-      <span class="hero-highlight">modernas, escalables</span>
-      y mantenibles.
-    </h1>
-
-    <p class="hero-description">Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.</p>
-
-    <div class="hero-ctas">
-      <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
-
-      <portfolio-button label="Descargar CV" icon="Download" iconPos="right" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
-    </div>
-
-    <div class="hero-stack" aria-label="Stack tecnológico principal">
-      @for (tech of stack; track tech) {
-        <span class="tech-badge">
-          @if (techIconUrl(tech); as iconUrl) {
-            <img [src]="iconUrl" [alt]="tech" class="tech-badge-icon" width="16" height="16" loading="lazy" />
-          }
-
-          {{ tech }}
-        </span>
-      }
-    </div>
-  </div>
-
-  <div class="hero-visual">
-    <div class="hero-avatar">
-      <img src="assets/img/Me.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
-    </div>
-
-    <div class="hero-card" aria-hidden="true">
-      <div class="hero-card-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="hero-card-title">portfolio.ts</span>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <portfolio-icon name="Code" size="14" />
+        <span>Desarrollador Full Angular</span>
       </div>
 
-      <div class="hero-card-body">
-        <div class="code-line">
-          <span class="code-keyword">export class</span>
-          <span class="code-class"> GabrielCruz</span>
-          <span class="code-punct"> &#123;</span>
+      <h1 id="hero-heading" class="hero-title">
+        Construyo aplicaciones web
+        <span class="hero-highlight">modernas, escalables</span>
+        y mantenibles.
+      </h1>
+
+      <p class="hero-description">Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.</p>
+
+      <div class="hero-ctas">
+        <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
+
+        <portfolio-button label="Descargar CV" icon="Download" iconPos="right" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
+      </div>
+
+      <div class="hero-stack" aria-label="Stack tecnológico principal">
+        @for (tech of stack; track tech) {
+          <span class="tech-badge">
+            @if (techIconUrl(tech); as iconUrl) {
+              <img [src]="iconUrl" [alt]="tech" class="tech-badge-icon" width="16" height="16" loading="lazy" />
+            }
+
+            {{ tech }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-avatar">
+        <img src="assets/img/Me.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
+      </div>
+
+      <div class="hero-card" aria-hidden="true">
+        <div class="hero-card-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="hero-card-title">portfolio.ts</span>
         </div>
 
-        <div class="code-line code-indent">
-          <span class="code-prop">role</span>
-          <span class="code-punct"> = </span>
-          <span class="code-string">'Full Angular Dev'</span><span class="code-punct">;</span>
-        </div>
+        <div class="hero-card-body">
+          <div class="code-line">
+            <span class="code-keyword">export class</span>
+            <span class="code-class"> GabrielCruz</span>
+            <span class="code-punct"> &#123;</span>
+          </div>
 
-        <div class="code-line code-indent">
-          <span class="code-prop">focus</span>
-          <span class="code-punct"> = </span>
-          <span class="code-string">'Product &amp; Scale'</span><span class="code-punct">;</span>
-        </div>
+          <div class="code-line code-indent">
+            <span class="code-prop">role</span>
+            <span class="code-punct"> = </span>
+            <span class="code-string">'Full Angular Dev'</span><span class="code-punct">;</span>
+          </div>
 
-        <div class="code-line code-indent">
-          <span class="code-prop">stack</span>
-          <span class="code-punct"> = [</span>
-        </div>
+          <div class="code-line code-indent">
+            <span class="code-prop">focus</span>
+            <span class="code-punct"> = </span>
+            <span class="code-string">'Product &amp; Scale'</span><span class="code-punct">;</span>
+          </div>
 
-        <div class="code-line code-indent-2"><span class="code-string">'Angular'</span><span class="code-punct">,</span> <span class="code-string"> 'Node.js'</span><span class="code-punct">,</span></div>
+          <div class="code-line code-indent">
+            <span class="code-prop">stack</span>
+            <span class="code-punct"> = [</span>
+          </div>
 
-        <div class="code-line code-indent-2">
-          <span class="code-string">'Rails'</span><span class="code-punct">,</span>
-          <span class="code-string"> 'PostgreSQL'</span>
-        </div>
+          <div class="code-line code-indent-2"><span class="code-string">'Angular'</span><span class="code-punct">,</span> <span class="code-string"> 'Node.js'</span><span class="code-punct">,</span></div>
 
-        <div class="code-line code-indent">
-          <span class="code-punct">];</span>
-        </div>
+          <div class="code-line code-indent-2">
+            <span class="code-string">'Rails'</span><span class="code-punct">,</span>
+            <span class="code-string"> 'PostgreSQL'</span>
+          </div>
 
-        <div class="code-line">
-          <span class="code-punct">&#125;</span>
+          <div class="code-line code-indent">
+            <span class="code-punct">];</span>
+          </div>
+
+          <div class="code-line">
+            <span class="code-punct">&#125;</span>
+          </div>
         </div>
       </div>
     </div>

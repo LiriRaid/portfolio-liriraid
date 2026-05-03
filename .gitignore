@@ -40,7 +40,7 @@ testem.log
 __screenshots__/
 
 # Environment (contiene claves privadas)
-src/environments/
+environments
 
 # System files
 .DS_Store
