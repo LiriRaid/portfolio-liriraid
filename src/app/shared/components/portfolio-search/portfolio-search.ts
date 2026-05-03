@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnDestroy, Renderer2, computed, effect, input, output, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, OnDestroy, PLATFORM_ID, afterNextRender, computed, effect, inject, input, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
 import { PortfolioIcon } from '..';
 
 @Component({
@@ -10,39 +12,41 @@ import { PortfolioIcon } from '..';
   styleUrl: './portfolio-search.css',
   host: {
     '(window:resize)': 'onResize()',
+    '[class.desktop-mode]': '!isMobileLayout()',
+    '[class.mobile-mode]': 'isMobileLayout()',
   },
 })
 export class PortfolioSearch implements OnDestroy {
-  private readonly collapseTransitionMs = 400;
+  private readonly platformId = inject(PLATFORM_ID);
 
-  // ✅ Inputs como signals
+  private readonly mobileBreakpoint = 640;
+  private readonly collapsedModeTransitionMs = 400;
+
   readonly collapsedMode = input<boolean>(false);
   readonly control = input.required<FormControl<string | null>>();
   readonly placeholder = input<string>('Buscar...');
   readonly inputClass = input<string>('');
   readonly mobileMode = input<boolean>(false);
 
-  // ✅ Outputs como signals (Angular 17+)
   readonly collapsedSearchClick = output<void>();
   readonly searchEnter = output<string>();
   readonly mobileSearchToggle = output<void>();
 
-  // ✅ Estado interno como signals
-  private readonly _isMobile = signal(false);
-  readonly isMobile = computed(() => this._isMobile());
+  private readonly mobile = signal(false);
 
+  readonly isMobile = this.mobile.asReadonly();
   readonly showMobileInput = signal(false);
   readonly renderCollapsedMode = signal(false);
 
+  readonly isMobileLayout = computed(() => this.mobileMode() && this.mobile());
+
   private collapseTimer: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-  ) {
-    this.checkMobile();
-    this.updateHostClasses();
+  private get isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
 
+  constructor() {
     let initialized = false;
     let previousCollapsed = false;
 
@@ -56,7 +60,9 @@ export class PortfolioSearch implements OnDestroy {
         return;
       }
 
-      if (collapsed === previousCollapsed) return;
+      if (collapsed === previousCollapsed) {
+        return;
+      }
 
       this.clearCollapseTimer();
 
@@ -64,13 +70,19 @@ export class PortfolioSearch implements OnDestroy {
         this.collapseTimer = setTimeout(() => {
           this.renderCollapsedMode.set(true);
           this.collapseTimer = null;
-        }, this.collapseTransitionMs);
+        }, this.collapsedModeTransitionMs);
       } else {
         this.renderCollapsedMode.set(false);
       }
 
       previousCollapsed = collapsed;
     });
+
+    if (this.isBrowser) {
+      afterNextRender(() => {
+        this.checkMobile();
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -79,31 +91,6 @@ export class PortfolioSearch implements OnDestroy {
 
   onResize(): void {
     this.checkMobile();
-  }
-
-  private checkMobile(): void {
-    const wasMobile = this._isMobile();
-    const nowMobile = window.innerWidth < 640;
-
-    this._isMobile.set(nowMobile);
-
-    // Si cambia de móvil a desktop, cerrar sin animación
-    if (wasMobile && !nowMobile) {
-      this.showMobileInput.set(false);
-    }
-
-    this.updateHostClasses();
-  }
-
-  private updateHostClasses(): void {
-    this.renderer.removeClass(this.elementRef.nativeElement, 'desktop-mode');
-    this.renderer.removeClass(this.elementRef.nativeElement, 'mobile-mode');
-
-    if (this.mobileMode() && this.isMobile()) {
-      this.renderer.addClass(this.elementRef.nativeElement, 'mobile-mode');
-    } else {
-      this.renderer.addClass(this.elementRef.nativeElement, 'desktop-mode');
-    }
   }
 
   onKeyup(event: KeyboardEvent): void {
@@ -120,14 +107,31 @@ export class PortfolioSearch implements OnDestroy {
       return;
     }
 
-    this.showMobileInput.update((v) => !v);
+    this.showMobileInput.update((value) => !value);
     this.mobileSearchToggle.emit();
   }
 
-  private clearCollapseTimer(): void {
-    if (this.collapseTimer) {
-      clearTimeout(this.collapseTimer);
-      this.collapseTimer = null;
+  private checkMobile(): void {
+    if (!this.isBrowser) {
+      return;
     }
+
+    const wasMobile = this.mobile();
+    const nowMobile = window.innerWidth <= this.mobileBreakpoint;
+
+    this.mobile.set(nowMobile);
+
+    if (wasMobile && !nowMobile) {
+      this.showMobileInput.set(false);
+    }
+  }
+
+  private clearCollapseTimer(): void {
+    if (!this.collapseTimer) {
+      return;
+    }
+
+    clearTimeout(this.collapseTimer);
+    this.collapseTimer = null;
   }
 }

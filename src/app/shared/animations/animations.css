@@ -123,50 +123,53 @@
    Usage:
    animate.enter="section-slide-in-out-enter"
    animate.leave="section-slide-in-out-leave"
-
-   Requires one direct child wrapper.
 ========================= */
 
 .section-slide-in-out-enter,
 .section-slide-in-out-leave {
-  display: grid;
   overflow: hidden;
-}
-
-.section-slide-in-out-enter > *,
-.section-slide-in-out-leave > * {
-  min-height: 0;
+  will-change: max-height, opacity, transform;
 }
 
 .section-slide-in-out-enter {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-0.35rem);
   animation: section-slide-in-out-enter 500ms ease-in-out forwards;
 }
 
 .section-slide-in-out-leave {
+  max-height: 4.5rem;
+  opacity: 1;
+  transform: translateY(0);
   animation: section-slide-in-out-leave 500ms ease-in-out forwards;
 }
 
 @keyframes section-slide-in-out-enter {
   from {
-    grid-template-rows: 0fr;
+    max-height: 0;
     opacity: 0;
+    transform: translateY(-0.35rem);
   }
 
   to {
-    grid-template-rows: 1fr;
+    max-height: 4.5rem;
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes section-slide-in-out-leave {
   from {
-    grid-template-rows: 1fr;
+    max-height: 4.5rem;
     opacity: 1;
+    transform: translateY(0);
   }
 
   to {
-    grid-template-rows: 0fr;
+    max-height: 0;
     opacity: 0;
+    transform: translateY(-0.35rem);
   }
 }
 

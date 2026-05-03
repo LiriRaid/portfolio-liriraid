@@ -8,60 +8,64 @@
       <p class="section-subtitle text-body-1-regular">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
     </header>
 
-    <div class="project-filter-container" #filterPanelContainer>
-      <div class="project-filter-bar">
-        <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="project-filter-button text-caption-1-medium" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
+    <div class="project-toolbar">
+      <div class="project-filter-container" #filterPanelContainer>
+        <div class="project-filter-bar">
+          <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="project-filter-button text-caption-1-medium" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
 
-        @if (hasSelectedTechnologies()) {
-          <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="project-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
-        }
+          @if (hasSelectedTechnologies()) {
+            <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="project-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
+          }
+        </div>
+
+        <p-popover #filterPanel styleClass="project-filter-panel" [appendTo]="filterPanelContainer">
+          <div class="project-filter-panel-content">
+            <div class="project-filter-panel-header">
+              <p class="project-filter-panel-title">Tecnologías</p>
+
+              @if (hasSelectedTechnologies()) {
+                <button type="button" class="project-filter-panel-clear" (click)="clearFilters()">Limpiar</button>
+              }
+            </div>
+
+            <div class="project-filter-category-grid">
+              @for (category of technologyCategories(); track category.label) {
+                <section class="project-filter-category">
+                  <header class="project-filter-category-header">
+                    <span class="project-filter-category-icon" aria-hidden="true">
+                      <portfolio-icon [name]="category.icon" size="15" />
+                    </span>
+
+                    <h3 class="project-filter-category-title">
+                      {{ category.label }}
+                    </h3>
+                  </header>
+
+                  <div class="project-filter-options">
+                    @for (tech of category.technologies; track tech) {
+                      <button type="button" class="project-filter-option" [class.project-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
+                        @if (techIconUrl(tech); as iconUrl) {
+                          <img [src]="iconUrl" [alt]="tech" class="project-icon" width="16" height="16" loading="lazy" />
+                        } @else {
+                          <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
+                        }
+
+                        <span>{{ tech }}</span>
+
+                        @if (isTechnologySelected(tech)) {
+                          <portfolio-icon name="Check" size="13" />
+                        }
+                      </button>
+                    }
+                  </div>
+                </section>
+              }
+            </div>
+          </div>
+        </p-popover>
       </div>
 
-      <p-popover #filterPanel styleClass="project-filter-panel" [appendTo]="filterPanelContainer">
-        <div class="project-filter-panel-content">
-          <div class="project-filter-panel-header">
-            <p class="project-filter-panel-title">Tecnologías</p>
-
-            @if (hasSelectedTechnologies()) {
-              <button type="button" class="project-filter-panel-clear" (click)="clearFilters()">Limpiar</button>
-            }
-          </div>
-
-          <div class="project-filter-category-grid">
-            @for (category of technologyCategories(); track category.label) {
-              <section class="project-filter-category">
-                <header class="project-filter-category-header">
-                  <span class="project-filter-category-icon" aria-hidden="true">
-                    <portfolio-icon [name]="category.icon" size="15" />
-                  </span>
-
-                  <h3 class="project-filter-category-title">
-                    {{ category.label }}
-                  </h3>
-                </header>
-
-                <div class="project-filter-options">
-                  @for (tech of category.technologies; track tech) {
-                    <button type="button" class="project-filter-option" [class.project-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
-                      @if (techIconUrl(tech); as iconUrl) {
-                        <img [src]="iconUrl" [alt]="tech" class="project-icon" width="16" height="16" loading="lazy" />
-                      } @else {
-                        <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
-                      }
-
-                      <span>{{ tech }}</span>
-
-                      @if (isTechnologySelected(tech)) {
-                        <portfolio-icon name="Check" size="13" />
-                      }
-                    </button>
-                  }
-                </div>
-              </section>
-            }
-          </div>
-        </div>
-      </p-popover>
+      <portfolio-search [control]="searchControl" [mobileMode]="true" placeholder="Buscar proyectos..." inputClass="project-search-input" (searchEnter)="onSearch($event)" />
     </div>
 
     @if (hasSelectedTechnologies()) {
@@ -182,8 +186,15 @@
       </ul>
     } @else {
       <div class="project-empty-state">
-        <p class="project-empty-title">No hay proyectos públicos con estos filtros.</p>
-        <p class="project-empty-description">Esta tecnología forma parte de mi stack, pero todavía no tengo un proyecto público asociado en esta sección.</p>
+        <p class="project-empty-title">
+          @if (hasSearchTerm()) {
+            No encontré proyectos con esa búsqueda.
+          } @else {
+            No hay proyectos públicos con estos filtros.
+          }
+        </p>
+
+        <p class="project-empty-description">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
       </div>
     }
   </div>

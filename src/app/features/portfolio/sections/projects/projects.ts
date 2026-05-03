@@ -1,10 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Popover } from 'primeng/popover';
 
 import { Project, ProjectTechnologyCategory } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { PortfolioSearch } from '@shared/components/portfolio-search/portfolio-search';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
 import { GithubRepositoryService } from './project.service';
@@ -90,7 +92,7 @@ const FALLBACK_ICONS: Record<string, string> = {
 @Component({
   selector: 'portfolio-projects',
   standalone: true,
-  imports: [Popover, PortfolioButton, PortfolioIcon],
+  imports: [Popover, PortfolioButton, PortfolioIcon, PortfolioSearch],
   templateUrl: './projects.html',
   styleUrl: './projects.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,6 +106,9 @@ export class Projects {
 
   protected readonly techIconUrl = techIconUrl;
 
+  protected readonly searchControl = new FormControl<string>('', { nonNullable: true });
+  protected readonly searchTerm = signal('');
+
   protected readonly projects = signal<Project[]>(PROJECTS);
   protected readonly technologyCategories = signal<ProjectTechnologyCategory[]>(TECHNOLOGY_CATEGORIES);
   protected readonly selectedTechnologies = signal<string[]>([]);
@@ -111,18 +116,29 @@ export class Projects {
   private readonly selectedTechnologySet = computed(() => new Set(this.selectedTechnologies()));
 
   protected readonly hasSelectedTechnologies = computed(() => this.selectedTechnologies().length > 0);
+  protected readonly hasSearchTerm = computed(() => this.searchTerm().length > 0);
 
   protected readonly filteredProjects = computed(() => {
     const selected = this.selectedTechnologySet();
+    const term = this.normalizeText(this.searchTerm());
 
-    if (!selected.size) {
-      return this.projects();
-    }
+    return this.projects().filter((project) => {
+      const matchesTechnology = !selected.size || project.tags.some((technology) => selected.has(technology));
+      const matchesSearch = !term || this.projectMatchesSearch(project, term);
 
-    return this.projects().filter((project) => project.tags.some((technology) => selected.has(technology)));
+      return matchesTechnology && matchesSearch;
+    });
   });
 
   constructor() {
+    const searchSubscription = this.searchControl.valueChanges.subscribe((value) => {
+      this.searchTerm.set(value.trim());
+    });
+
+    this.destroyRef.onDestroy(() => {
+      searchSubscription.unsubscribe();
+    });
+
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -140,6 +156,10 @@ export class Projects {
         window.removeEventListener('resize', onResize);
       });
     });
+  }
+
+  protected onSearch(term: string): void {
+    this.searchTerm.set(term.trim());
   }
 
   protected toggleTechnology(technology: string): void {
@@ -176,6 +196,14 @@ export class Projects {
     }
 
     return license.toUpperCase() === 'MIT' ? 'MIT' : license;
+  }
+
+  private projectMatchesSearch(project: Project, term: string): boolean {
+    return this.normalizeText(project.title).includes(term) || this.normalizeText(project.description).includes(term) || project.tags.some((tag) => this.normalizeText(tag).includes(term));
+  }
+
+  private normalizeText(value: string): string {
+    return value.trim().toLowerCase();
   }
 
   private async loadGithubStats(): Promise<void> {
