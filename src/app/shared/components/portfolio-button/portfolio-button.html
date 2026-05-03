@@ -1,10 +1,14 @@
+<ng-template #buttonIcon>
+  @if (techIconImgUrl(); as imgUrl) {
+    <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
+  } @else if (icon(); as iconName) {
+    <portfolio-icon pButtonIcon [name]="iconName" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
+  }
+</ng-template>
+
 <ng-template #buttonContent>
-  @if ((icon() || techIconImgUrl()) && (iconPos() === 'left' || iconPos() === 'top')) {
-    @if (techIconImgUrl(); as imgUrl) {
-      <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
-    } @else {
-      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
-    }
+  @if (showIconBefore()) {
+    <ng-container [ngTemplateOutlet]="buttonIcon" />
   }
 
   @if (label()) {
@@ -13,18 +17,14 @@
     </span>
   }
 
-  @if (badge() !== null && badge() !== undefined && badge() !== '') {
+  @if (hasBadge()) {
     <span [ngClass]="computedBadgeClass()">
       {{ badge() }}
     </span>
   }
 
-  @if ((icon() || techIconImgUrl()) && (iconPos() === 'right' || iconPos() === 'bottom')) {
-    @if (techIconImgUrl(); as imgUrl) {
-      <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
-    } @else {
-      <portfolio-icon pButtonIcon [name]="icon()!" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
-    }
+  @if (showIconAfter()) {
+    <ng-container [ngTemplateOutlet]="buttonIcon" />
   }
 </ng-template>
 
@@ -33,7 +33,7 @@
     <ng-container [ngTemplateOutlet]="buttonContent" />
   </a>
 } @else {
-  <p-button [severity]="severity()" [label]="label() || undefined" [outlined]="outlined()" [raised]="raised()" [text]="text()" [variant]="variant()" [iconPos]="iconPos()" [loading]="loading()" [disabled]="disabled()" [type]="type()" [styleClass]="buttonClass()" [ariaLabel]="ariaLabel() || undefined" (onClick)="handleClick($event)">
+  <p-button [severity]="severity()" [outlined]="outlined()" [raised]="raised()" [text]="text()" [variant]="variant()" [iconPos]="iconPos()" [loading]="loading()" [disabled]="disabled()" [type]="type()" [styleClass]="buttonClass()" [ariaLabel]="ariaLabel() || undefined" (onClick)="handleClick($event)">
     <ng-template pTemplate="content">
       <ng-container [ngTemplateOutlet]="buttonContent" />
     </ng-template>

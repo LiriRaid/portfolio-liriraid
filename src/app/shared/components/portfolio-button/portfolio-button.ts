@@ -6,6 +6,15 @@ import { Ripple } from 'primeng/ripple';
 import { techIconUrl } from '@shared/utils/tech-icons';
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 
+type ButtonVariant = 'outlined' | 'text' | undefined;
+type ButtonType = 'button' | 'submit' | 'reset';
+type IconPosition = 'left' | 'right' | 'top' | 'bottom';
+
+type ButtonClassParts = {
+  button: string;
+  label: string;
+};
+
 @Component({
   selector: 'portfolio-button',
   standalone: true,
@@ -23,13 +32,7 @@ export class PortfolioButton {
   readonly badge = input<string | number | null>(null);
 
   readonly iconSize = input<string | number>('16');
-  readonly iconPos = input<'left' | 'right' | 'top' | 'bottom'>('left');
-
-  readonly techIconImgUrl = computed(() => {
-    const name = this.techIcon();
-
-    return name ? techIconUrl(name) : null;
-  });
+  readonly iconPos = input<IconPosition>('left');
 
   readonly severity = input<ButtonSeverity | undefined>(undefined);
   readonly outlined = input(false, { transform: booleanAttribute });
@@ -37,8 +40,8 @@ export class PortfolioButton {
   readonly text = input(false, { transform: booleanAttribute });
   readonly loading = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
-  readonly variant = input<'outlined' | 'text' | undefined>(undefined);
-  readonly type = input<'button' | 'submit' | 'reset'>('button');
+  readonly variant = input<ButtonVariant>(undefined);
+  readonly type = input<ButtonType>('button');
 
   readonly href = input<string | null>(null);
   readonly target = input<string | null | undefined>(null);
@@ -53,24 +56,17 @@ export class PortfolioButton {
 
   readonly onClick = output<MouseEvent>();
 
-  private readonly splitClasses = computed(() => {
-    const raw = (this.styleClass() ?? '').trim();
+  readonly techIconImgUrl = computed<string | null>(() => {
+    const name = this.techIcon();
 
-    if (!raw) {
-      return { button: '', label: '' };
-    }
+    return name ? techIconUrl(name) : null;
+  });
 
-    const tokens = raw.split(/\s+/).filter(Boolean);
-    const labelTokens: string[] = [];
-    const buttonTokens: string[] = [];
+  private readonly classParts = computed<ButtonClassParts>(() => {
+    const tokens = this.toClassList(this.styleClass());
 
-    for (const token of tokens) {
-      if (/(^|:)text-/.test(token)) {
-        labelTokens.push(token);
-      } else {
-        buttonTokens.push(token);
-      }
-    }
+    const labelTokens = tokens.filter((token) => this.isTextClass(token));
+    const buttonTokens = tokens.filter((token) => !this.isTextClass(token));
 
     return {
       button: buttonTokens.join(' '),
@@ -78,45 +74,42 @@ export class PortfolioButton {
     };
   });
 
-  readonly buttonClass = computed(() => this.splitClasses().button);
+  readonly buttonClass = computed(() => this.classParts().button);
+
+  readonly hostClass = computed(() => {
+    const widthTokens = this.toClassList(this.styleClass()).filter((token) => this.isWidthClass(token));
+
+    return this.joinClasses(widthTokens.length ? 'block' : '', ...widthTokens);
+  });
 
   readonly iconClass = computed(() => `p-button-icon-${this.iconPos()}`);
 
   readonly computedIconClass = computed(() => {
-    const base = this.iconClass();
-    const extra = (this.iconExtraClass() ?? '').trim();
-
-    return [base, extra].filter(Boolean).join(' ');
-  });
-
-  readonly hostClass = computed(() => {
-    const raw = (this.styleClass() ?? '').trim();
-
-    if (!raw) {
-      return '';
-    }
-
-    const tokens = raw.split(/\s+/).filter(Boolean);
-    const widthTokens = tokens.filter((token) => /(^|:)w-/.test(token));
-
-    if (!widthTokens.length) {
-      return '';
-    }
-
-    return ['block', ...widthTokens].join(' ');
+    return this.joinClasses(this.iconClass(), this.iconExtraClass());
   });
 
   readonly computedLabelClass = computed(() => {
-    const fromStyle = this.splitClasses().label;
-    const extra = (this.labelClass() ?? '').trim();
-
-    return [fromStyle, extra].filter(Boolean).join(' ');
+    return this.joinClasses(this.classParts().label, this.labelClass());
   });
 
   readonly computedBadgeClass = computed(() => {
-    const extra = (this.badgeClass() ?? '').trim();
+    return this.joinClasses('portfolio-button__badge', this.badgeClass());
+  });
 
-    return ['portfolio-button__badge', extra].filter(Boolean).join(' ');
+  readonly hasIcon = computed(() => Boolean(this.icon() || this.techIconImgUrl()));
+
+  readonly hasBadge = computed(() => {
+    const value = this.badge();
+
+    return value !== null && value !== undefined && value !== '';
+  });
+
+  readonly showIconBefore = computed(() => {
+    return this.hasIcon() && this.isIconBefore(this.iconPos());
+  });
+
+  readonly showIconAfter = computed(() => {
+    return this.hasIcon() && !this.isIconBefore(this.iconPos());
   });
 
   handleClick(event: MouseEvent): void {
@@ -127,5 +120,25 @@ export class PortfolioButton {
     }
 
     this.onClick.emit(event);
+  }
+
+  private isIconBefore(position: IconPosition): boolean {
+    return position === 'left' || position === 'top';
+  }
+
+  private isTextClass(token: string): boolean {
+    return /(^|:)text-/.test(token);
+  }
+
+  private isWidthClass(token: string): boolean {
+    return /(^|:)w-/.test(token);
+  }
+
+  private toClassList(value: string | null | undefined): string[] {
+    return (value ?? '').trim().split(/\s+/).filter(Boolean);
+  }
+
+  private joinClasses(...classes: Array<string | null | undefined>): string {
+    return classes.flatMap((value) => this.toClassList(value)).join(' ');
   }
 }
