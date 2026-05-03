@@ -33,18 +33,31 @@
   letter-spacing: 0.08em;
 }
 
-.section-title {
+.section-title,
+.project-title,
+.project-filter-panel-title,
+.project-filter-category-title,
+.project-empty-title {
   margin: 0;
   color: var(--app-text-color);
 }
 
 .section-subtitle,
-.project-description {
+.project-description,
+.project-empty-description {
   margin: 0;
   color: var(--app-text-muted);
 }
 
-/* Filter bar */
+/* =========================
+   Filter actions
+   ========================= */
+
+.project-filter-container {
+  position: relative;
+  width: 100%;
+}
+
 .project-filter-bar {
   display: flex;
   align-items: center;
@@ -70,12 +83,8 @@
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .project-filter-button .p-button-label,
-:host ::ng-deep .project-clear-button .p-button-label,
-:host ::ng-deep .project-filter-button .p-button-icon,
-:host ::ng-deep .project-clear-button .p-button-icon,
-:host ::ng-deep .project-filter-button portfolio-icon,
-:host ::ng-deep .project-clear-button portfolio-icon {
+:host ::ng-deep .project-filter-button :is(.p-button-label, .p-button-icon, portfolio-icon),
+:host ::ng-deep .project-clear-button :is(.p-button-label, .p-button-icon, portfolio-icon) {
   color: var(--app-text-color);
 }
 
@@ -88,125 +97,26 @@
   margin-left: 0.35rem;
 }
 
-/* Shared chips */
-.project-selected-tags,
-.project-tags,
-.project-filter-options,
-.project-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-}
+/* =========================
+   Popover
+   ========================= */
 
-.project-selected-tag,
-.project-tag,
-.project-filter-option,
-.project-stat {
-  min-height: 1.85rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  border-radius: 9999px;
-  white-space: nowrap;
-}
-
-/* Selected filters */
-.project-selected-tag {
-  padding: 0.4rem 0.45rem 0.4rem 0.65rem;
-  border: 1px solid var(--app-border-color);
-  background-color: var(--app-panel-bg);
-  color: var(--app-text-color);
-  font-size: var(--font-size-caption-1);
-  font-weight: 700;
-  transition:
-    border-color 0.2s,
-    background-color 0.2s,
-    transform 0.2s;
-}
-
-.project-selected-tag:hover {
-  border-color: color-mix(in srgb, var(--app-text-primary) 40%, transparent);
-  background-color: var(--app-accent-soft-bg);
-  transform: translateY(-1px);
-}
-
-.project-selected-tag span,
-.project-selected-tag portfolio-icon {
-  color: var(--app-text-color);
-}
-
-.project-selected-tag-remove {
-  width: 1.25rem;
-  height: 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  border-radius: 9999px;
-  background: transparent;
-  color: var(--app-text-color);
-  cursor: pointer;
-}
-
-.project-selected-tag-remove:hover {
-  background-color: color-mix(in srgb, var(--app-text-primary) 14%, transparent);
-}
-
-/* Project tag */
-.project-tag {
-  padding: 0.38rem 0.75rem;
-  background-color: var(--app-panel-muted-bg);
-  border: 1px solid var(--app-border-color);
-  color: var(--app-text-color);
-  font-size: var(--font-size-caption-1);
-  font-weight: 600;
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background-color 0.2s;
-}
-
-.project-tag:hover {
-  color: var(--app-text-primary);
-  border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
-  background-color: var(--app-accent-soft-bg);
-}
-
-.project-selected-tag-icon,
-.project-tag-icon,
-.project-filter-option-icon,
-.project-link-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  border-radius: 3px;
-  object-fit: contain;
-}
-
-/* Filter container for popover positioning */
-.project-filter-container {
-  position: relative;
-  width: 100%;
-}
-
-/* PrimeNG Popover */
 ::ng-deep .p-popover.project-filter-panel {
   --p-popover-background: var(--app-panel-bg);
   --p-popover-border-color: var(--app-border-color);
-  width: min(1320px, calc(100vw - 2rem));
-  max-height: calc(100dvh - 10rem);
-  background: var(--app-panel-bg);
-  border-color: var(--app-border-color);
-  
-  /* Force position below the button */
+
   position: absolute !important;
   top: calc(100% + 0.5rem) !important;
   left: 0 !important;
   transform: none !important;
+
+  width: min(1320px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 10rem);
+
+  background: var(--app-panel-bg);
+  border-color: var(--app-border-color);
 }
 
-/* Custom arrow for forced position */
 ::ng-deep .p-popover.project-filter-panel::before,
 ::ng-deep .p-popover.project-filter-panel::after {
   content: '';
@@ -218,14 +128,12 @@
 }
 
 ::ng-deep .p-popover.project-filter-panel::before {
-  border-color: transparent;
   border-bottom-color: var(--app-border-color);
   border-width: 9px;
   margin-left: -9px;
 }
 
 ::ng-deep .p-popover.project-filter-panel::after {
-  border-color: transparent;
   border-bottom-color: var(--app-panel-bg);
   border-width: 8px;
   margin-left: -8px;
@@ -237,7 +145,6 @@
   overflow-y: auto;
 }
 
-/* Filter panel */
 .project-filter-panel-content {
   display: flex;
   flex-direction: column;
@@ -252,8 +159,6 @@
 }
 
 .project-filter-panel-title {
-  margin: 0;
-  color: var(--app-text-color);
   font-size: var(--font-size-caption-1);
   font-weight: 700;
   text-transform: uppercase;
@@ -269,6 +174,10 @@
   font-weight: 700;
 }
 
+/* =========================
+   Filter categories
+   ========================= */
+
 .project-filter-category-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -276,11 +185,11 @@
 }
 
 .project-filter-category {
+  min-height: 128px;
+  padding: 0.875rem;
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
-  min-height: 128px;
-  padding: 0.875rem;
   border: 1px solid var(--app-border-color);
   border-radius: 0.875rem;
   background-color: var(--app-panel-muted-bg);
@@ -305,43 +214,167 @@
 }
 
 .project-filter-category-title {
-  margin: 0;
-  color: var(--app-text-color);
   font-size: var(--font-size-caption-1);
   font-weight: 700;
 }
 
-.project-filter-option {
-  justify-content: center;
-  padding: 0.45rem 0.7rem;
+.project-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+/* =========================
+   Shared chips
+   ========================= */
+
+.project-selected-tags,
+.project-tags,
+.project-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+.project-selected-tag,
+.project-tag,
+.project-filter-option,
+.project-stat,
+.project-link,
+.project-private {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.project-selected-tag,
+.project-tag,
+.project-filter-option,
+.project-stat {
+  min-height: 1.85rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.project-selected-tag,
+.project-tag,
+.project-filter-option,
+.project-stat,
+.project-empty-state,
+.project-card {
   border: 1px solid var(--app-border-color);
+}
+
+.project-selected-tag,
+.project-tag,
+.project-filter-option,
+.project-stat {
+  font-size: var(--font-size-caption-1);
+  font-weight: 600;
+}
+
+.project-selected-tag,
+.project-filter-option,
+.project-stat {
   background-color: var(--app-panel-bg);
   color: var(--app-text-color);
-  font-size: var(--font-size-caption-1);
-  font-weight: 700;
-  cursor: pointer;
+}
+
+.project-tag,
+.project-stat {
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s;
+}
+
+.project-selected-tag,
+.project-filter-option {
   transition:
     border-color 0.2s,
     background-color 0.2s,
     transform 0.2s;
 }
 
-.project-filter-option span,
-.project-filter-option portfolio-icon {
-  color: var(--app-text-color);
+.project-selected-tag:hover,
+.project-filter-option:hover {
+  transform: translateY(-1px);
 }
 
+.project-selected-tag:hover,
 .project-filter-option:hover,
 .project-filter-option--active {
   border-color: color-mix(in srgb, var(--app-text-primary) 40%, transparent);
   background-color: var(--app-accent-soft-bg);
 }
 
-.project-filter-option:hover {
-  transform: translateY(-1px);
+.project-tag:hover,
+.project-stat:hover {
+  color: var(--app-text-primary);
+  border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
+  background-color: var(--app-accent-soft-bg);
 }
 
-/* Grid */
+.project-selected-tag {
+  padding: 0.4rem 0.45rem 0.4rem 0.65rem;
+  font-weight: 700;
+}
+
+.project-tag {
+  padding: 0.38rem 0.75rem;
+  background-color: var(--app-panel-muted-bg);
+  color: var(--app-text-color);
+}
+
+.project-filter-option {
+  justify-content: center;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.project-stat {
+  padding: 0.35rem 0.65rem;
+  background-color: var(--app-panel-muted-bg);
+}
+
+.project-selected-tag span,
+.project-selected-tag portfolio-icon,
+.project-filter-option span,
+.project-filter-option portfolio-icon {
+  color: var(--app-text-color);
+}
+
+.project-selected-tag-remove {
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--app-text-color);
+  cursor: pointer;
+}
+
+.project-selected-tag-remove:hover {
+  background-color: color-mix(in srgb, var(--app-text-primary) 14%, transparent);
+}
+
+.project-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  object-fit: contain;
+}
+
+/* =========================
+   Grid / cards
+   ========================= */
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -351,7 +384,6 @@
   padding: 0;
 }
 
-/* Card */
 .project-card {
   position: relative;
   min-height: 320px;
@@ -359,9 +391,9 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: var(--app-panel-bg);
-  border: 1px solid var(--app-container-border, var(--app-border-color));
+  border-color: var(--app-container-border, var(--app-border-color));
   border-radius: 1rem;
+  background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
   transition:
     border-color 0.2s,
@@ -384,9 +416,9 @@
   top: 1rem;
   right: 1rem;
   padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
   background-color: var(--app-badge-soft-bg);
   color: var(--app-badge-soft-text);
-  border-radius: 9999px;
   font-size: var(--font-size-caption-2);
   font-weight: 600;
 }
@@ -399,16 +431,13 @@
 }
 
 .project-title {
-  margin: 0;
   padding-right: 4.5rem;
-  color: var(--app-text-color);
 }
 
-.project-description {
-  display: block;
-}
+/* =========================
+   Github block
+   ========================= */
 
-/* Github section at bottom */
 .project-card-github {
   margin-top: auto;
   display: flex;
@@ -422,49 +451,24 @@
   overflow: hidden;
 }
 
-.project-stat {
-  padding: 0.35rem 0.65rem;
-  border: 1px solid var(--app-border-color);
-  background-color: var(--app-panel-muted-bg);
-  color: var(--app-text-color);
-  font-size: var(--font-size-caption-1);
-  font-weight: 600;
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background-color 0.2s;
-}
-
 .project-stat portfolio-icon {
   color: var(--app-text-subtle);
-}
-
-.project-stat:hover {
-  color: var(--app-text-primary);
-  border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
-  background-color: var(--app-accent-soft-bg);
 }
 
 .project-stat:hover portfolio-icon {
   color: var(--app-text-primary);
 }
 
-/* Star filled yellow only */
-:host ::ng-deep .project-stat--stars portfolio-icon svg {
-  fill: var(--p-yellow-400);
-  stroke: var(--p-yellow-500);
+.project-stat--loading {
+  color: var(--app-text-subtle);
 }
 
+:host ::ng-deep .project-stat--stars portfolio-icon svg,
 :host ::ng-deep .project-stat--stars:hover portfolio-icon svg {
   fill: var(--p-yellow-400);
   stroke: var(--p-yellow-500);
 }
 
-.project-stat--loading {
-  color: var(--app-text-subtle);
-}
-
-/* Footer */
 .project-card-footer {
   display: flex;
   align-items: center;
@@ -474,9 +478,6 @@
 }
 
 .project-link {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.375rem;
   color: var(--app-text-color);
@@ -494,34 +495,26 @@
 }
 
 .project-private {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: var(--font-size-caption-1);
   color: var(--app-text-subtle);
+  font-size: var(--font-size-caption-1);
 }
 
-/* Empty state */
+/* =========================
+   Empty / focus
+   ========================= */
+
 .project-empty-state {
   padding: 1.5rem;
-  background-color: var(--app-panel-bg);
-  border: 1px solid var(--app-border-color);
   border-radius: 1rem;
+  background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
 }
 
 .project-empty-title {
-  color: var(--app-text-color);
-  margin: 0 0 0.35rem;
+  margin-bottom: 0.35rem;
   font-weight: 700;
 }
 
-.project-empty-description {
-  color: var(--app-text-muted);
-  margin: 0;
-}
-
-/* Focus */
 .project-link:focus-visible,
 .project-selected-tag:focus-within,
 .project-filter-option:focus-visible,
@@ -530,7 +523,10 @@
   outline-offset: 2px;
 }
 
-/* Responsive */
+/* =========================
+   Responsive
+   ========================= */
+
 @media (max-width: 1280px) {
   ::ng-deep .p-popover.project-filter-panel {
     width: min(1180px, calc(100vw - 2rem));

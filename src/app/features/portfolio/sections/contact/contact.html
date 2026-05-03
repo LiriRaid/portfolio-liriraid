@@ -1,14 +1,15 @@
 <section id="contacto" class="section" aria-labelledby="contact-heading">
   <div class="section-inner">
     <div class="contact-layout">
-      <!-- Lado izquierdo: texto + redes -->
       <div class="contact-content">
         <p class="section-label">Hablemos</p>
+
         <h2 id="contact-heading" class="contact-title text-tittle-4-bold">
           ¿Listo para construir<br />
           <span class="contact-highlight">algo juntos</span>?
         </h2>
-        <p class="contact-description text-body-1-regular">Estoy disponible para proyectos freelance, colaboraciones o posiciones full time. Si tienes una idea que quieras llevar a producción, me encantaría escucharte.</p>
+
+        <p class="contact-description text-body-1-regular">Estoy abierto a proyectos freelance, colaboraciones técnicas y propuestas donde pueda aportar valor construyendo soluciones web modernas, escalables y bien cuidadas. Si tienes una idea que quieras llevar a producción, me encantaría escucharla.</p>
 
         <div class="contact-social">
           @for (link of socialLinks; track link.label) {
@@ -17,7 +18,6 @@
         </div>
       </div>
 
-      <!-- Lado derecho: formulario -->
       <div class="contact-form-wrap">
         @if (sent()) {
           <div class="contact-success">

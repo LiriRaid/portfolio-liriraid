@@ -3,15 +3,15 @@
     <div class="about-layout">
       <div class="about-content">
         <header class="section-header">
-          <p class="section-label">{{ about().label }}</p>
+          <p class="section-label">{{ about.label }}</p>
 
           <h2 id="about-heading" class="section-title text-tittle-4-bold">
-            {{ about().title }}
+            {{ about.title }}
           </h2>
         </header>
 
         <div class="about-body">
-          @for (paragraph of about().paragraphs; track paragraph) {
+          @for (paragraph of about.paragraphs; track paragraph) {
             <p class="about-text text-body-1-regular">
               {{ paragraph }}
             </p>
@@ -19,16 +19,16 @@
         </div>
 
         <div class="about-cta">
-          <portfolio-button [label]="about().ctaLabel" icon="ArrowRight" iconPos="right" styleClass="text-body-2-medium" (onClick)="scrollToContact()" />
+          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" styleClass="text-body-2-medium" (onClick)="scrollToContact()" />
         </div>
       </div>
 
       <div class="about-stats" aria-label="Estadísticas profesionales">
-        @for (stat of stats(); track stat.label) {
-          <div class="stat-card">
+        @for (stat of stats; track stat.label) {
+          <article class="stat-card">
             <span class="stat-value text-tittle-4-bold">{{ stat.value }}</span>
             <span class="stat-label text-caption-1-regular">{{ stat.label }}</span>
-          </div>
+          </article>
         }
       </div>
     </div>

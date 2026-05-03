@@ -44,7 +44,7 @@
                   @for (tech of category.technologies; track tech) {
                     <button type="button" class="project-filter-option" [class.project-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                       @if (techIconUrl(tech); as iconUrl) {
-                        <img [src]="iconUrl" [alt]="tech" class="project-filter-option-icon" width="16" height="16" loading="lazy" />
+                        <img [src]="iconUrl" [alt]="tech" class="project-icon" width="16" height="16" loading="lazy" />
                       } @else {
                         <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
                       }
@@ -69,7 +69,7 @@
         @for (tech of selectedTechnologies(); track tech) {
           <span class="project-selected-tag">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" [alt]="tech" class="project-selected-tag-icon" width="16" height="16" loading="lazy" />
+              <img [src]="iconUrl" [alt]="tech" class="project-icon" width="16" height="16" loading="lazy" />
             } @else {
               <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
             }
@@ -106,7 +106,7 @@
                   @for (tag of project.tags; track tag) {
                     <span class="project-tag">
                       @if (techIconUrl(tag); as iconUrl) {
-                        <img [src]="iconUrl" [alt]="tag" class="project-tag-icon" width="16" height="16" loading="lazy" />
+                        <img [src]="iconUrl" [alt]="tag" class="project-icon" width="16" height="16" loading="lazy" />
                       } @else {
                         <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
                       }
@@ -152,7 +152,7 @@
                   @if (project.githubUrl) {
                     <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="project-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
                       @if (techIconUrl('GitHub'); as iconUrl) {
-                        <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="project-link-icon" />
+                        <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="project-icon" />
                       } @else {
                         <portfolio-icon name="Github" size="16" />
                       }

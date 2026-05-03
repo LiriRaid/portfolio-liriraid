@@ -191,7 +191,7 @@
   color: var(--app-search-input-text);
 }
 
-.input.input-default:focus-within omniinbox-icon {
+.input.input-default:focus-within portfolio-icon {
   color: var(--app-search-input-text);
 }
 
@@ -510,7 +510,7 @@
    p-button global overrides — fuera de @layer para ganar
    especificidad sobre los estilos internos de PrimeNG.
    Objetivo: no tener que pasar iconColor="white" / labelClass="text-white!"
-   en cada instancia de portfolio-button / omniinbox-button.
+   en cada instancia de portfolio-button
    ============================================================= */
 
 /* Filled (con color de fondo): texto e iconos SIEMPRE blancos */

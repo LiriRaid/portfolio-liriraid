@@ -8,16 +8,26 @@
 }
 
 .section-inner {
-  max-width: 1280px;
   width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
+/* Header */
+.section-label,
+.contact-title,
+.contact-description,
+.contact-success-title,
+.contact-success-body,
+.contact-error {
+  margin: 0;
+}
+
 .section-label {
+  color: var(--app-text-primary);
   font-size: var(--font-size-caption-1);
   font-weight: 600;
-  color: var(--app-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -26,57 +36,53 @@
 .contact-layout {
   display: grid;
   grid-template-columns: 1fr 480px;
-  gap: 5rem;
   align-items: center;
+  gap: 5rem;
 }
 
-/* Left side */
-.contact-content {
+.contact-content,
+.contact-form,
+.contact-success {
   display: flex;
   flex-direction: column;
+}
+
+.contact-content {
   gap: 1.5rem;
 }
 
 .contact-title {
   color: var(--app-text-color);
-  margin: 0;
   letter-spacing: -0.02em;
 }
 
-.contact-highlight {
+.contact-highlight,
+.contact-success-title {
   color: var(--app-text-primary);
 }
 
 .contact-description {
-  color: var(--app-text-muted);
-  margin: 0;
   max-width: 480px;
+  color: var(--app-text-muted);
 }
 
-/* Social links */
+/* Social */
 .contact-social {
   display: flex;
-  gap: 0.75rem;
   flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-:host ::ng-deep .contact-social-btn.p-button {
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-}
-
-/* Form panel */
+/* Form */
 .contact-form-wrap {
-  background-color: var(--app-panel-bg);
+  padding: 2rem;
   border: 1px solid var(--app-container-border, var(--app-border-color));
   border-radius: 1.25rem;
-  padding: 2rem;
+  background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
 }
 
 .contact-form {
-  display: flex;
-  flex-direction: column;
   gap: 1.25rem;
 }
 
@@ -84,28 +90,19 @@
   color: var(--app-text-subtle);
 }
 
-/* Success / error states */
+/* States */
 .contact-success {
-  display: flex;
-  flex-direction: column;
   gap: 0.5rem;
   padding: 2rem;
   text-align: center;
 }
 
-.contact-success-title {
-  color: var(--app-text-primary);
-  margin: 0;
-}
-
 .contact-success-body {
   color: var(--app-text-muted);
-  margin: 0;
 }
 
 .contact-error {
   color: #f87171;
-  margin: 0;
 }
 
 /* Responsive */

@@ -9,7 +9,7 @@
     </header>
 
     <ol class="experience-timeline" role="list">
-      @for (item of experiences(); track item.company + item.period) {
+      @for (item of experiences; track item.company + item.period) {
         <li class="experience-item">
           <div class="experience-marker" aria-hidden="true">
             <span class="experience-dot" [class.experience-dot--current]="item.current"></span>

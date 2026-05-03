@@ -1,0 +1,17 @@
+:host { display: block; }
+
+/* Desktop: el host tiene ancho propio y se alinea a la derecha con ml-auto del padre */
+:host(.desktop-mode) {
+  width: 100%;
+  max-width: 25rem; /* ajusta si quieres 22/24/28rem */
+}
+
+/* Mobile: el host no ocupa espacio; sus hijos participan directo en el flex del fieldset */
+:host(.mobile-mode) {
+  display: contents; /* 👈 clave */
+}
+
+.sidebar-search-collapsed-btn {
+  width: 40px !important;
+  height: 38px !important;
+}

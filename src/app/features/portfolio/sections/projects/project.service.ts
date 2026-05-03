@@ -6,17 +6,34 @@ import { GithubRepositoryResponse, GithubRepositoryStats } from '@features/portf
 })
 export class GithubRepositoryService {
   private readonly cache = new Map<string, GithubRepositoryStats>();
+  private readonly pendingRequests = new Map<string, Promise<GithubRepositoryStats | null>>();
   private readonly loadingRepos = signal<Set<string>>(new Set());
 
   readonly isLoading = this.loadingRepos.asReadonly();
 
-  async getRepositoryStats(repo: string): Promise<GithubRepositoryStats | null> {
+  getRepositoryStats(repo: string): Promise<GithubRepositoryStats | null> {
     const cachedStats = this.cache.get(repo);
 
     if (cachedStats) {
-      return cachedStats;
+      return Promise.resolve(cachedStats);
     }
 
+    const pendingRequest = this.pendingRequests.get(repo);
+
+    if (pendingRequest) {
+      return pendingRequest;
+    }
+
+    const request = this.fetchRepositoryStats(repo).finally(() => {
+      this.pendingRequests.delete(repo);
+    });
+
+    this.pendingRequests.set(repo, request);
+
+    return request;
+  }
+
+  private async fetchRepositoryStats(repo: string): Promise<GithubRepositoryStats | null> {
     this.setRepoLoading(repo, true);
 
     try {

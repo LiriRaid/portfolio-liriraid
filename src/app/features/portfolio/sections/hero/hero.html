@@ -40,50 +40,21 @@
 
       <div class="hero-card" aria-hidden="true">
         <div class="hero-card-header">
-          <span class="dot dot-red"></span>
-          <span class="dot dot-yellow"></span>
-          <span class="dot dot-green"></span>
+          @for (dot of windowDots; track dot) {
+            <span class="dot" [class]="dot"></span>
+          }
+
           <span class="hero-card-title">portfolio.ts</span>
         </div>
 
         <div class="hero-card-body">
-          <div class="code-line">
-            <span class="code-keyword">export class</span>
-            <span class="code-class"> GabrielCruz</span>
-            <span class="code-punct"> &#123;</span>
-          </div>
-
-          <div class="code-line code-indent">
-            <span class="code-prop">role</span>
-            <span class="code-punct"> = </span>
-            <span class="code-string">'Full Angular Dev'</span><span class="code-punct">;</span>
-          </div>
-
-          <div class="code-line code-indent">
-            <span class="code-prop">focus</span>
-            <span class="code-punct"> = </span>
-            <span class="code-string">'Product &amp; Scale'</span><span class="code-punct">;</span>
-          </div>
-
-          <div class="code-line code-indent">
-            <span class="code-prop">stack</span>
-            <span class="code-punct"> = [</span>
-          </div>
-
-          <div class="code-line code-indent-2"><span class="code-string">'Angular'</span><span class="code-punct">,</span> <span class="code-string"> 'Node.js'</span><span class="code-punct">,</span></div>
-
-          <div class="code-line code-indent-2">
-            <span class="code-string">'Rails'</span><span class="code-punct">,</span>
-            <span class="code-string"> 'PostgreSQL'</span>
-          </div>
-
-          <div class="code-line code-indent">
-            <span class="code-punct">];</span>
-          </div>
-
-          <div class="code-line">
-            <span class="code-punct">&#125;</span>
-          </div>
+          @for (line of codeLines; track $index) {
+            <div class="code-line" [class.code-indent]="line.indent === 1" [class.code-indent-2]="line.indent === 2">
+              @for (token of line.tokens; track $index) {
+                <span [class]="token.className">{{ token.value }}</span>
+              }
+            </div>
+          }
         </div>
       </div>
     </div>

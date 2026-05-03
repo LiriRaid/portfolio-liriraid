@@ -81,18 +81,18 @@
     appearance: textfield;
   }
 
-  input:not(.omniinbox-input-field),
-  textarea:not(.omniinbox-input-field) {
+  input:not(.portfolio-input-field),
+  textarea:not(.portfolio-input-field) {
     box-shadow: none !important; /* ring-0 */
   }
 
-  input:not(.omniinbox-input-field):focus,
-  textarea:not(.omniinbox-input-field):focus {
+  input:not(.portfolio-input-field):focus,
+  textarea:not(.portfolio-input-field):focus {
     outline: none !important;
     box-shadow: none !important;
   }
 
-  omniinbox-input[type],
+  portfolio-input[type],
   p-input[type] {
     border: none !important;
     padding: 0 !important;

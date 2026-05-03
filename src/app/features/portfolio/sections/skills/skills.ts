@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 import { SkillCategory } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
@@ -9,6 +10,7 @@ import { techIconUrl } from '@shared/utils/tech-icons';
   imports: [PortfolioIcon],
   templateUrl: './skills.html',
   styleUrl: './skills.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Skills {
   protected readonly techIconUrl = techIconUrl;
@@ -23,11 +25,7 @@ export class Skills {
     DDD: 'Database',
   };
 
-  protected skillFallbackIcon(skill: string): string {
-    return this.fallbackIcons[skill] ?? 'Code';
-  }
-
-  protected readonly categories = signal<SkillCategory[]>([
+  protected readonly categories: SkillCategory[] = [
     {
       label: 'Frontend',
       icon: 'Globe',
@@ -41,7 +39,7 @@ export class Skills {
     {
       label: 'Base de datos',
       icon: 'Database',
-      skills: ['PostgreSQL', 'Redis', ],
+      skills: ['PostgreSQL', 'Redis'],
     },
     {
       label: 'Herramientas',
@@ -51,14 +49,11 @@ export class Skills {
     {
       label: 'Arquitectura',
       icon: 'Layers',
-      skills: [
-        'Clean Architecture',
-        'Screaming Architecture',
-        'SSR + Hydration',
-        'Lazy Loading',
-        'DRY / SOLID',
-        'DDD',
-      ],
+      skills: ['Clean Architecture', 'Screaming Architecture', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
     },
-  ]);
+  ];
+
+  protected skillFallbackIcon(skill: string): string {
+    return this.fallbackIcons[skill] ?? 'Code';
+  }
 }

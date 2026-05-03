@@ -2,23 +2,25 @@
   <div class="section-inner">
     <header class="section-header">
       <p class="section-label">Tecnologías</p>
-      <h2 id="skills-heading" class="section-title text-tittle-4-bold">
-        Habilidades técnicas
-      </h2>
-      <p class="section-subtitle text-body-1-regular">
-        Herramientas y tecnologías que uso para construir productos robustos y mantenibles.
-      </p>
+
+      <h2 id="skills-heading" class="section-title text-tittle-4-bold">Habilidades técnicas</h2>
+
+      <p class="section-subtitle text-body-1-regular">Herramientas y tecnologías que uso para construir productos robustos y mantenibles.</p>
     </header>
 
     <div class="skills-grid">
-      @for (category of categories(); track category.label) {
-        <div class="skill-category">
-          <div class="skill-category-header">
-            <div class="skill-icon-wrap" aria-hidden="true">
+      @for (category of categories; track category.label) {
+        <article class="skill-category">
+          <header class="skill-category-header">
+            <span class="skill-icon-wrap" aria-hidden="true">
               <portfolio-icon [name]="category.icon" size="18" />
-            </div>
-            <h3 class="skill-category-title text-subtitle-2-bold">{{ category.label }}</h3>
-          </div>
+            </span>
+
+            <h3 class="skill-category-title text-subtitle-2-bold">
+              {{ category.label }}
+            </h3>
+          </header>
+
           <ul class="skill-list" role="list" [attr.aria-label]="'Habilidades de ' + category.label">
             @for (skill of category.skills; track skill) {
               <li class="skill-badge">
@@ -27,11 +29,12 @@
                 } @else {
                   <portfolio-icon [name]="skillFallbackIcon(skill)" size="14" />
                 }
-                {{ skill }}
+
+                <span>{{ skill }}</span>
               </li>
             }
           </ul>
-        </div>
+        </article>
       }
     </div>
   </div>

@@ -1,10 +1,17 @@
-import { Component, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { environment } from '@environments/environment';
+import { SocialLink } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioInput } from '@shared/components/portfolio-input/portfolio-input';
-import { SocialLink } from '@features/portfolio/entities';
-import { environment } from '@environments/environment';
+
+type ContactForm = FormGroup<{
+  name: FormControl<string>;
+  email: FormControl<string>;
+  message: FormControl<string>;
+}>;
 
 @Component({
   selector: 'portfolio-contact',
@@ -12,6 +19,7 @@ import { environment } from '@environments/environment';
   imports: [ReactiveFormsModule, PortfolioButton, PortfolioInput],
   templateUrl: './contact.html',
   styleUrl: './contact.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Contact {
   private readonly platformId = inject(PLATFORM_ID);
@@ -33,10 +41,19 @@ export class Contact {
     },
   ];
 
-  protected readonly form = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    message: new FormControl('', [Validators.required, Validators.minLength(10)]),
+  protected readonly form: ContactForm = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(2)],
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    message: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(10)],
+    }),
   });
 
   protected readonly messageFocused = signal(false);
@@ -49,23 +66,16 @@ export class Contact {
       this.form.markAllAsTouched();
       return;
     }
-    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     this.sending.set(true);
-    this.sent.set(false);
-    this.sendError.set(false);
+    this.resetSubmitState();
 
     try {
-      const { name, email, message } = this.form.getRawValue();
-      const { send } = await import('@emailjs/browser');
-
-      await send(
-        environment.emailjs.serviceId,
-        environment.emailjs.templateId,
-        { from_name: name, from_email: email, message },
-        { publicKey: environment.emailjs.publicKey },
-      );
-
+      await this.sendEmail();
       this.sent.set(true);
       this.form.reset();
     } catch {
@@ -73,5 +83,28 @@ export class Contact {
     } finally {
       this.sending.set(false);
     }
+  }
+
+  private resetSubmitState(): void {
+    this.sent.set(false);
+    this.sendError.set(false);
+  }
+
+  private async sendEmail(): Promise<void> {
+    const { name, email, message } = this.form.getRawValue();
+    const { send } = await import('@emailjs/browser');
+
+    await send(
+      environment.emailjs.serviceId,
+      environment.emailjs.templateId,
+      {
+        from_name: name,
+        from_email: email,
+        message,
+      },
+      {
+        publicKey: environment.emailjs.publicKey,
+      },
+    );
   }
 }

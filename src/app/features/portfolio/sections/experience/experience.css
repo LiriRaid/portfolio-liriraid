@@ -7,49 +7,59 @@
 }
 
 .section-inner {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
+
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  width: 100%;
 }
 
+/* =========================
+   Header
+   ========================= */
+
 .section-header {
+  max-width: 640px;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  max-width: 640px;
 }
 
 .section-label {
+  margin: 0;
+  color: var(--app-text-primary);
   font-size: var(--font-size-caption-1);
   font-weight: 600;
-  color: var(--app-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin: 0;
 }
 
 .section-title,
 .experience-role {
-  color: var(--app-text-color);
   margin: 0;
+  color: var(--app-text-color);
 }
 
 .section-subtitle,
 .experience-company,
 .experience-description,
 .experience-responsibility {
-  color: var(--app-text-muted);
   margin: 0;
+  color: var(--app-text-muted);
 }
 
-.experience-timeline {
-  list-style: none;
+/* =========================
+   Timeline
+   ========================= */
+
+.experience-timeline,
+.experience-responsibilities {
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
 .experience-item {
@@ -61,15 +71,14 @@
 
 .experience-marker {
   position: relative;
+  min-height: 100%;
+  align-self: stretch;
+  padding: 1.5rem 0 0.5rem;
+
   display: flex;
   justify-content: center;
-  align-self: stretch;
-  padding-top: 1.5rem;
-  padding-bottom: 0.5rem;
-  min-height: 100%;
 }
 
-/* Línea degradada, gruesa arriba, fina y opaca abajo */
 .experience-marker::after {
   content: '';
   position: absolute;
@@ -77,43 +86,48 @@
   bottom: 0;
   left: 50%;
   width: 0.7rem;
+
   transform: translateX(-50%);
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--app-text-primary) 55%, transparent) 0%,
-    color-mix(in srgb, var(--app-text-primary) 38%, transparent) 28%,
-    color-mix(in srgb, var(--app-text-primary) 22%, transparent) 62%,
-    transparent 100%
-  );
-  clip-path: polygon(18% 0%, 82% 0%, 50% 100%);
   pointer-events: none;
+
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--app-text-primary) 55%, transparent) 0%, color-mix(in srgb, var(--app-text-primary) 38%, transparent) 28%, color-mix(in srgb, var(--app-text-primary) 22%, transparent) 62%, transparent 100%);
+
+  clip-path: polygon(18% 0%, 82% 0%, 50% 100%);
 }
 
 .experience-dot {
+  z-index: 1;
   width: 0.75rem;
   height: 0.75rem;
+  flex-shrink: 0;
+
+  border: 2px solid var(--app-border-color);
   border-radius: 9999px;
   background-color: var(--app-panel-bg);
-  border: 2px solid var(--app-border-color);
-  flex-shrink: 0;
-  z-index: 1;
 }
 
 .experience-dot--current {
-  background-color: var(--app-text-primary);
   border-color: var(--app-text-primary);
+  background-color: var(--app-text-primary);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--app-text-primary) 18%, transparent);
 }
 
+/* =========================
+   Card
+   ========================= */
+
 .experience-card {
+  padding: 1.5rem;
+
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.5rem;
-  background-color: var(--app-panel-bg);
+
   border: 1px solid var(--app-border-color);
   border-radius: 1rem;
+  background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
+
   transition:
     border-color 0.2s,
     box-shadow 0.2s,
@@ -121,89 +135,100 @@
 }
 
 .experience-card:hover {
+  transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
   box-shadow: var(--shadow-extra-large);
-  transform: translateY(-2px);
 }
 
 .experience-card-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
 .experience-card-meta {
+  min-width: 0;
+  flex: 1;
+
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
-  flex: 1;
-  min-width: 0;
 }
 
 .experience-company {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .experience-current-badge {
+  margin-left: 0.25rem;
   padding: 0.125rem 0.5rem;
+
+  border-radius: 9999px;
   background-color: color-mix(in srgb, var(--app-text-primary) 18%, transparent);
   color: var(--app-text-primary);
-  border-radius: 9999px;
+
   font-size: var(--font-size-caption-2);
   font-weight: 600;
-  margin-left: 0.25rem;
 }
 
 .experience-period-block {
+  flex-shrink: 0;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.125rem;
+
   text-align: right;
-  flex-shrink: 0;
 }
 
 .experience-period,
 .experience-location {
-  color: var(--app-text-subtle);
   margin: 0;
+  color: var(--app-text-subtle);
 }
+
+/* =========================
+   Responsibilities
+   ========================= */
 
 .experience-responsibilities {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
-  padding: 0;
-  margin: 0;
-  list-style: none;
 }
 
 .experience-responsibility {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.625rem;
   align-items: flex-start;
+  gap: 0.625rem;
 }
 
 .experience-responsibility-marker {
   width: 0.375rem;
   height: 0.375rem;
+  margin-top: 0.55rem;
+
   border-radius: 9999px;
   background-color: var(--app-text-primary);
-  margin-top: 0.55rem;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-text-primary) 16%, transparent);
 }
 
+/* =========================
+   Tags
+   ========================= */
+
 .experience-tags {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.625rem;
-  align-items: center;
 }
 
 .experience-tag {
@@ -211,14 +236,17 @@
   align-items: center;
   gap: 0.45rem;
   padding: 0.35rem 0.75rem;
-  background-color: var(--app-panel-muted-bg);
+
   border: 1px solid var(--app-border-color);
   border-radius: 9999px;
+  background-color: var(--app-panel-muted-bg);
   color: var(--app-text-muted);
+
   font-size: var(--font-size-caption-1);
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
+
   transition:
     color 0.2s,
     border-color 0.2s,
@@ -227,10 +255,10 @@
 }
 
 .experience-tag:hover {
+  transform: translateY(-1px);
   color: var(--app-text-primary);
   border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
   background-color: var(--app-accent-soft-bg);
-  transform: translateY(-1px);
 }
 
 .experience-tag-icon {
@@ -240,6 +268,10 @@
   border-radius: 3px;
   object-fit: contain;
 }
+
+/* =========================
+   Responsive
+   ========================= */
 
 @media (max-width: 640px) {
   .section {
