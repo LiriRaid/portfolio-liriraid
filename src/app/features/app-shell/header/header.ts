@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, DestroyRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
 
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
@@ -13,10 +13,10 @@ type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades'
   imports: [PortfolioButton, PortfolioThemeColorPicker],
   templateUrl: './header.html',
   styleUrl: './header.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
-  protected readonly themeService = inject(ThemeService);
-
+  private readonly themeService = inject(ThemeService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -29,14 +29,7 @@ export class Header {
 
   private readonly headerOffset = 96;
 
-  private readonly sectionIds: PortfolioSectionId[] = [
-    'inicio',
-    'experiencia',
-    'proyectos',
-    'habilidades',
-    'sobre-mi',
-    'contacto',
-  ];
+  private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
 
   protected readonly navLinks = [
     { label: 'Inicio', href: '#inicio', sectionId: 'inicio' },
@@ -48,57 +41,21 @@ export class Header {
   ] as const;
 
   constructor() {
-    if (isPlatformBrowser(this.platformId)) {
-      afterNextRender(() => {
-        this.syncActiveSection();
-
-        const desktopMq = window.matchMedia('(min-width: 769px)');
-
-        const onDesktopChange = (event: MediaQueryListEvent): void => {
-          if (event.matches) {
-            this.closeMobileMenu();
-          }
-        };
-
-        const onScrollOrResize = (): void => {
-          this.scheduleActiveSectionSync();
-        };
-
-        const onManualScroll = (): void => {
-          this.unlockProgrammaticScroll();
-        };
-
-        desktopMq.addEventListener('change', onDesktopChange);
-        window.addEventListener('scroll', onScrollOrResize, { passive: true });
-        window.addEventListener('resize', onScrollOrResize);
-        window.addEventListener('wheel', onManualScroll, { passive: true });
-        window.addEventListener('touchstart', onManualScroll, { passive: true });
-
-        this.destroyRef.onDestroy(() => {
-          desktopMq.removeEventListener('change', onDesktopChange);
-          window.removeEventListener('scroll', onScrollOrResize);
-          window.removeEventListener('resize', onScrollOrResize);
-          window.removeEventListener('wheel', onManualScroll);
-          window.removeEventListener('touchstart', onManualScroll);
-
-          if (this.scrollAnimationFrameId !== null) {
-            cancelAnimationFrame(this.scrollAnimationFrameId);
-          }
-
-          if (this.scrollUnlockTimer !== null) {
-            clearTimeout(this.scrollUnlockTimer);
-          }
-        });
-      });
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
+
+    afterNextRender(() => {
+      this.initializeHeaderRuntime();
+    });
   }
 
   protected navLinkClass(sectionId: PortfolioSectionId): string {
-    return this.activeSection() === sectionId ? 'nav-link nav-link--active' : 'nav-link';
+    return this.getLinkClass('nav-link', 'nav-link--active', sectionId);
   }
 
   protected mobileNavLinkClass(sectionId: PortfolioSectionId): string {
-    return this.activeSection() === sectionId ? 'mobile-nav-link mobile-nav-link--active' : 'mobile-nav-link';
+    return this.getLinkClass('mobile-nav-link', 'mobile-nav-link--active', sectionId);
   }
 
   protected onNavLinkClick(event: MouseEvent, href: string, sectionId: PortfolioSectionId): void {
@@ -116,10 +73,7 @@ export class Header {
 
     this.activeSection.set(sectionId);
     this.targetSection = sectionId;
-
-    if (this.scrollUnlockTimer !== null) {
-      clearTimeout(this.scrollUnlockTimer);
-    }
+    this.clearScrollUnlockTimer();
 
     element.scrollIntoView({
       behavior: 'smooth',
@@ -134,6 +88,10 @@ export class Header {
     }, 1200);
   }
 
+  protected toggleThemeMode(): void {
+    this.themeService.toggleMode();
+  }
+
   protected toggleMobileMenu(): void {
     this.mobileMenuOpen.update((open) => !open);
   }
@@ -142,10 +100,49 @@ export class Header {
     this.mobileMenuOpen.set(false);
   }
 
+  private initializeHeaderRuntime(): void {
+    this.syncActiveSection();
+
+    const desktopMq = window.matchMedia('(min-width: 769px)');
+
+    const onDesktopChange = (event: MediaQueryListEvent): void => {
+      if (event.matches) {
+        this.closeMobileMenu();
+      }
+    };
+
+    const onScrollOrResize = (): void => {
+      this.scheduleActiveSectionSync();
+    };
+
+    const onManualScroll = (): void => {
+      this.unlockProgrammaticScroll();
+    };
+
+    desktopMq.addEventListener('change', onDesktopChange);
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
+    window.addEventListener('wheel', onManualScroll, { passive: true });
+    window.addEventListener('touchstart', onManualScroll, { passive: true });
+
+    this.destroyRef.onDestroy(() => {
+      desktopMq.removeEventListener('change', onDesktopChange);
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
+      window.removeEventListener('wheel', onManualScroll);
+      window.removeEventListener('touchstart', onManualScroll);
+
+      this.cancelActiveSectionFrame();
+      this.clearScrollUnlockTimer();
+    });
+  }
+
+  private getLinkClass(baseClass: string, activeClass: string, sectionId: PortfolioSectionId): string {
+    return this.activeSection() === sectionId ? `${baseClass} ${activeClass}` : baseClass;
+  }
+
   private scheduleActiveSectionSync(): void {
-    if (this.scrollAnimationFrameId !== null) {
-      cancelAnimationFrame(this.scrollAnimationFrameId);
-    }
+    this.cancelActiveSectionFrame();
 
     this.scrollAnimationFrameId = requestAnimationFrame(() => {
       this.syncActiveSection();
@@ -155,22 +152,7 @@ export class Header {
 
   private syncActiveSection(): void {
     if (this.targetSection) {
-      const target = document.getElementById(this.targetSection);
-
-      if (!target) {
-        this.unlockProgrammaticScroll();
-        return;
-      }
-
-      const rect = target.getBoundingClientRect();
-      const reachedTarget = Math.abs(rect.top) <= this.headerOffset || rect.top <= this.headerOffset;
-
-      if (!reachedTarget) {
-        return;
-      }
-
-      this.activeSection.set(this.targetSection);
-      this.unlockProgrammaticScroll();
+      this.syncTargetSection();
       return;
     }
 
@@ -181,13 +163,28 @@ export class Header {
     }
   }
 
+  private syncTargetSection(): void {
+    const target = document.getElementById(this.targetSection!);
+
+    if (!target) {
+      this.unlockProgrammaticScroll();
+      return;
+    }
+
+    const rect = target.getBoundingClientRect();
+    const reachedTarget = Math.abs(rect.top) <= this.headerOffset || rect.top <= this.headerOffset;
+
+    if (!reachedTarget) {
+      return;
+    }
+
+    this.activeSection.set(this.targetSection!);
+    this.unlockProgrammaticScroll();
+  }
+
   private unlockProgrammaticScroll(): void {
     this.targetSection = null;
-
-    if (this.scrollUnlockTimer !== null) {
-      clearTimeout(this.scrollUnlockTimer);
-      this.scrollUnlockTimer = null;
-    }
+    this.clearScrollUnlockTimer();
   }
 
   private getCurrentSectionId(): PortfolioSectionId | null {
@@ -204,9 +201,8 @@ export class Header {
       }
 
       const rect = section.getBoundingClientRect();
-      const isPassingHeader = rect.top <= this.headerOffset && rect.bottom > this.headerOffset;
 
-      if (isPassingHeader) {
+      if (rect.top <= this.headerOffset && rect.bottom > this.headerOffset) {
         currentSection = sectionId;
       }
 
@@ -219,5 +215,23 @@ export class Header {
     }
 
     return currentSection;
+  }
+
+  private cancelActiveSectionFrame(): void {
+    if (this.scrollAnimationFrameId === null) {
+      return;
+    }
+
+    cancelAnimationFrame(this.scrollAnimationFrameId);
+    this.scrollAnimationFrameId = null;
+  }
+
+  private clearScrollUnlockTimer(): void {
+    if (this.scrollUnlockTimer === null) {
+      return;
+    }
+
+    clearTimeout(this.scrollUnlockTimer);
+    this.scrollUnlockTimer = null;
   }
 }

@@ -14,7 +14,11 @@
     <div class="header-actions">
       <portfolio-theme-color-picker />
 
-      <portfolio-button variant="text" styleClass="icon-btn" [icon]="themeService.mode() === 'dark' ? 'Sun' : 'Moon'" iconSize="18" [ariaLabel]="themeService.mode() === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'" (onClick)="themeService.toggleMode()" />
+      <span class="theme-toggle-slot">
+        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--dark" icon="Sun" iconSize="18" ariaLabel="Activar modo claro" (onClick)="toggleThemeMode()" />
+
+        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--light" icon="Moon" iconSize="18" ariaLabel="Activar modo oscuro" (onClick)="toggleThemeMode()" />
+      </span>
 
       <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn" [icon]="mobileMenuOpen() ? 'Close' : 'Menu'" iconSize="20" [ariaLabel]="mobileMenuOpen() ? 'Cerrar menú' : 'Abrir menú'" (onClick)="toggleMobileMenu()" />
     </div>

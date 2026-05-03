@@ -14,109 +14,147 @@
 
 .header-inner {
   max-width: 1280px;
+  height: 4rem;
   margin: 0 auto;
   padding: 0 1.5rem;
-  height: 4rem;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
 }
 
-/* Logo */
+/* =========================
+   Logo
+   ========================= */
+
 .header-logo {
   display: flex;
   align-items: baseline;
   gap: 0.05rem;
-  text-decoration: none;
   flex-shrink: 0;
+  text-decoration: none;
 }
 
 .logo-text {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--app-text-color);
   letter-spacing: -0.02em;
-  transition: color 0.2s;
+  color: var(--app-text-color);
+  transition: color 0.2s ease;
 }
 
 .logo-dot {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--app-text-primary);
   line-height: 1;
+  color: var(--app-text-primary);
 }
 
 .header-logo:hover .logo-text {
   color: var(--app-text-primary);
 }
 
-/* Desktop nav */
+/* =========================
+   Desktop nav
+   ========================= */
+
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  flex: 1;
   justify-content: center;
+  flex: 1;
+  gap: 0.25rem;
 }
 
-:host ::ng-deep .nav-link.p-button {
-  min-height: auto;
-  padding: 0.45rem 1rem;
-  border-radius: 0.75rem;
+:host ::ng-deep .nav-link.p-button,
+:host ::ng-deep .mobile-nav-link.p-button {
   background-color: transparent;
   border: none;
   box-shadow: none;
   transition:
     color 0.2s ease,
     background-color 0.2s ease;
+}
+
+:host ::ng-deep .nav-link.p-button {
+  min-height: auto;
+  padding: 0.45rem 1rem;
+  border-radius: 0.75rem;
   white-space: nowrap;
 }
 
-:host ::ng-deep .nav-link.p-button .p-button-label {
-  font-size: var(--font-size-caption-1);
+:host ::ng-deep .mobile-nav-link.p-button {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+}
+
+:host ::ng-deep .nav-link.p-button .p-button-label,
+:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
   font-weight: 600;
   color: var(--app-text-muted);
   transition: color 0.2s ease;
 }
 
+:host ::ng-deep .nav-link.p-button .p-button-label {
+  font-size: var(--font-size-caption-1);
+}
+
+:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
+  font-size: var(--font-size-body-2);
+}
+
 :host ::ng-deep .nav-link.p-button:hover,
-:host ::ng-deep .nav-link--active.p-button {
+:host ::ng-deep .nav-link--active.p-button,
+:host ::ng-deep .mobile-nav-link.p-button:hover,
+:host ::ng-deep .mobile-nav-link--active.p-button {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
 :host ::ng-deep .nav-link.p-button:hover .p-button-label,
-:host ::ng-deep .nav-link--active.p-button .p-button-label {
+:host ::ng-deep .nav-link--active.p-button .p-button-label,
+:host ::ng-deep .mobile-nav-link.p-button:hover .p-button-label,
+:host ::ng-deep .mobile-nav-link--active.p-button .p-button-label {
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .nav-link.p-button:focus-visible {
+:host ::ng-deep .nav-link.p-button:focus-visible,
+:host ::ng-deep .mobile-nav-link.p-button:focus-visible,
+:host ::ng-deep .icon-btn.p-button:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
 }
 
-/* Actions */
+/* =========================
+   Actions
+   ========================= */
+
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   flex-shrink: 0;
+  gap: 0.5rem;
 }
 
 :host ::ng-deep .icon-btn.p-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 2.25rem;
   min-width: 2.25rem;
   height: 2.25rem;
   padding: 0;
-  border-radius: 0.5rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   border: none;
+  border-radius: 0.5rem;
   background-color: transparent;
   color: var(--app-text-muted);
   box-shadow: none;
   overflow: hidden;
+
   transition:
     color 0.2s ease,
     background-color 0.2s ease;
@@ -127,75 +165,79 @@
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .icon-btn.p-button:focus-visible {
-  outline: 2px solid var(--app-text-primary);
-  outline-offset: 2px;
-}
-
 :host ::ng-deep .icon-btn.p-button .p-button-icon {
   margin: 0;
 }
 
-/* Mobile menu button */
+/* =========================
+   Theme toggle SSR-safe
+   ========================= */
+
+.theme-toggle-slot {
+  position: relative;
+  width: 2.25rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .theme-toggle-btn.p-button {
+  position: absolute;
+  inset: 0;
+}
+
+:host ::ng-deep .theme-toggle-btn--dark.p-button {
+  display: none;
+}
+
+:host ::ng-deep .theme-toggle-btn--light.p-button {
+  display: inline-flex;
+}
+
+:host-context(.dark) ::ng-deep .theme-toggle-btn--dark.p-button {
+  display: inline-flex;
+}
+
+:host-context(.dark) ::ng-deep .theme-toggle-btn--light.p-button {
+  display: none;
+}
+
+/* =========================
+   Mobile nav
+   ========================= */
+
 :host ::ng-deep .mobile-menu-btn.p-button {
   display: none;
 }
 
-/* Mobile nav */
 .mobile-nav {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   z-index: 99;
-  border-top: 1px solid var(--app-border-color);
-  border-bottom: 1px solid var(--app-border-color);
+
   padding: 0.75rem 1rem;
+
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+
+  border-top: 1px solid var(--app-border-color);
+  border-bottom: 1px solid var(--app-border-color);
   background-color: color-mix(in srgb, var(--app-panel-bg) 85%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.25);
 }
 
-:host ::ng-deep .mobile-nav-link.p-button {
-  width: 100%;
-  justify-content: flex-start;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-}
+/* =========================
+   Responsive
+   ========================= */
 
-:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
-  font-size: var(--font-size-body-2);
-  font-weight: 600;
-  color: var(--app-text-muted);
-  transition: color 0.2s ease;
-}
-
-:host ::ng-deep .mobile-nav-link.p-button:hover,
-:host ::ng-deep .mobile-nav-link--active.p-button {
-  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
-}
-
-:host ::ng-deep .mobile-nav-link.p-button:hover .p-button-label,
-:host ::ng-deep .mobile-nav-link--active.p-button .p-button-label {
-  color: var(--app-text-color);
-}
-
-:host ::ng-deep .mobile-nav-link.p-button:focus-visible {
-  outline: 2px solid var(--app-text-primary);
-  outline-offset: 2px;
-}
-
-/* Responsive */
 @media (max-width: 1100px) {
   .header-inner {
     gap: 1rem;
