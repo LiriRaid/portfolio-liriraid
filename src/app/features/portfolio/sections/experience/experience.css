@@ -63,8 +63,30 @@
   position: relative;
   display: flex;
   justify-content: center;
+  align-self: stretch;
   padding-top: 1.5rem;
-  height: 100%;
+  padding-bottom: 0.5rem;
+  min-height: 100%;
+}
+
+/* Línea degradada, gruesa arriba, fina y opaca abajo */
+.experience-marker::after {
+  content: '';
+  position: absolute;
+  top: 2.35rem;
+  bottom: 0;
+  left: 50%;
+  width: 0.7rem;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--app-text-primary) 55%, transparent) 0%,
+    color-mix(in srgb, var(--app-text-primary) 38%, transparent) 28%,
+    color-mix(in srgb, var(--app-text-primary) 22%, transparent) 62%,
+    transparent 100%
+  );
+  clip-path: polygon(18% 0%, 82% 0%, 50% 100%);
+  pointer-events: none;
 }
 
 .experience-dot {
@@ -92,7 +114,10 @@
   border: 1px solid var(--app-border-color);
   border-radius: 1rem;
   box-shadow: var(--app-container-shadow);
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
 .experience-card:hover {
@@ -194,7 +219,11 @@
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
-  transition: color 0.2s, border-color 0.2s, background-color 0.2s, transform 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s,
+    transform 0.2s;
 }
 
 .experience-tag:hover {
@@ -224,6 +253,15 @@
   .experience-item {
     grid-template-columns: 1.5rem 1fr;
     gap: 1rem;
+  }
+
+  .experience-marker {
+    padding-top: 1.35rem;
+  }
+
+  .experience-marker::after {
+    top: 2.15rem;
+    width: 0.55rem;
   }
 
   .experience-card {
