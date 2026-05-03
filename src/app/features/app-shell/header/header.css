@@ -67,7 +67,9 @@
   background-color: transparent;
   border: none;
   box-shadow: none;
-  transition: all 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
   white-space: nowrap;
 }
 
@@ -75,14 +77,16 @@
   font-size: var(--font-size-caption-1);
   font-weight: 600;
   color: var(--app-text-muted);
-  transition: color 0.2s;
+  transition: color 0.2s ease;
 }
 
-:host ::ng-deep .nav-link.p-button:hover {
-  background-color: var(--app-accent-soft-bg) !important;
+:host ::ng-deep .nav-link.p-button:hover,
+:host ::ng-deep .nav-link--active.p-button {
+  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .nav-link.p-button:hover .p-button-label {
+:host ::ng-deep .nav-link.p-button:hover .p-button-label,
+:host ::ng-deep .nav-link--active.p-button .p-button-label {
   color: var(--app-text-color);
 }
 
@@ -99,38 +103,45 @@
   flex-shrink: 0;
 }
 
-.icon-btn {
-  display: flex;
+:host ::ng-deep .icon-btn.p-button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 2.25rem;
+  min-width: 2.25rem;
   height: 2.25rem;
+  padding: 0;
   border-radius: 0.5rem;
   border: none;
   background-color: transparent;
   color: var(--app-text-muted);
-  cursor: pointer;
+  box-shadow: none;
+  overflow: hidden;
   transition:
-    color 0.2s,
-    background-color 0.2s;
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.icon-btn:hover {
+:host ::ng-deep .icon-btn.p-button:hover {
   color: var(--app-text-color);
-  background-color: var(--app-accent-soft-bg);
+  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-.icon-btn:focus-visible {
+:host ::ng-deep .icon-btn.p-button:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
 }
 
-/* Mobile menu button - only visible on small screens */
-.mobile-menu-btn {
+:host ::ng-deep .icon-btn.p-button .p-button-icon {
+  margin: 0;
+}
+
+/* Mobile menu button */
+:host ::ng-deep .mobile-menu-btn.p-button {
   display: none;
 }
 
-/* Mobile nav (overlay con blur, no empuja contenido) */
+/* Mobile nav */
 .mobile-nav {
   position: absolute;
   top: 100%;
@@ -157,21 +168,25 @@
   background-color: transparent;
   border: none;
   box-shadow: none;
-  transition: all 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 :host ::ng-deep .mobile-nav-link.p-button .p-button-label {
   font-size: var(--font-size-body-2);
   font-weight: 600;
   color: var(--app-text-muted);
-  transition: color 0.2s;
+  transition: color 0.2s ease;
 }
 
-:host ::ng-deep .mobile-nav-link.p-button:hover {
-  background-color: var(--app-accent-soft-bg) !important;
+:host ::ng-deep .mobile-nav-link.p-button:hover,
+:host ::ng-deep .mobile-nav-link--active.p-button {
+  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .mobile-nav-link.p-button:hover .p-button-label {
+:host ::ng-deep .mobile-nav-link.p-button:hover .p-button-label,
+:host ::ng-deep .mobile-nav-link--active.p-button .p-button-label {
   color: var(--app-text-color);
 }
 
@@ -201,8 +216,8 @@
     display: none;
   }
 
-  .mobile-menu-btn {
-    display: flex;
+  :host ::ng-deep .mobile-menu-btn.p-button {
+    display: inline-flex;
   }
 
   .header-inner {

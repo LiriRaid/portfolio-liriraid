@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, booleanAttribute, computed, input, output } from '@angular/core';
 import { ButtonModule, type ButtonSeverity } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
 
 import { techIconUrl } from '@shared/utils/tech-icons';
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
@@ -8,7 +9,7 @@ import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 @Component({
   selector: 'portfolio-button',
   standalone: true,
-  imports: [CommonModule, ButtonModule, PortfolioIcon],
+  imports: [CommonModule, ButtonModule, Ripple, PortfolioIcon],
   templateUrl: './portfolio-button.html',
   styleUrl: './portfolio-button.css',
   host: {
@@ -26,6 +27,7 @@ export class PortfolioButton {
 
   readonly techIconImgUrl = computed(() => {
     const name = this.techIcon();
+
     return name ? techIconUrl(name) : null;
   });
 
@@ -77,6 +79,7 @@ export class PortfolioButton {
   });
 
   readonly buttonClass = computed(() => this.splitClasses().button);
+
   readonly iconClass = computed(() => `p-button-icon-${this.iconPos()}`);
 
   readonly computedIconClass = computed(() => {

@@ -29,7 +29,7 @@
 </ng-template>
 
 @if (href()) {
-  <a pButton [href]="href()!" [attr.target]="target() || null" [attr.rel]="rel() || null" [severity]="severity()" [outlined]="outlined() || variant() === 'outlined'" [raised]="raised()" [text]="text() || variant() === 'text'" [loading]="loading()" [iconPos]="iconPos()" [attr.aria-label]="ariaLabel() || undefined" [attr.aria-disabled]="disabled()" [attr.tabindex]="disabled() ? -1 : null" [class]="buttonClass()" [class.p-disabled]="disabled()" (click)="handleClick($event)">
+  <a pButton pRipple [href]="href()!" [attr.target]="target() || null" [attr.rel]="rel() || null" [severity]="severity()" [outlined]="outlined() || variant() === 'outlined'" [raised]="raised()" [text]="text() || variant() === 'text'" [loading]="loading()" [iconPos]="iconPos()" [attr.aria-label]="ariaLabel() || undefined" [attr.aria-disabled]="disabled()" [attr.tabindex]="disabled() ? -1 : null" [class]="buttonClass()" [class.p-disabled]="disabled()" (click)="handleClick($event)">
     <ng-container [ngTemplateOutlet]="buttonContent" />
   </a>
 } @else {
