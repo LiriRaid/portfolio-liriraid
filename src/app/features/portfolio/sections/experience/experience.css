@@ -1,106 +1,100 @@
 .experience {
-  --experience-section-padding-y: 5rem;
-  --experience-inner-padding-x: 1.5rem;
-  --experience-inner-gap: 3rem;
-  --experience-header-max-width: 40rem;
+  --e-py: 5rem;
+  --e-px: 1.5rem;
+  --e-inner-gap: 3rem;
+  --e-header-max: 40rem;
 
-  --experience-label-size: var(--font-size-caption-1);
-  --experience-title-size: clamp(2rem, 2.8vw, 2.5rem);
-  --experience-title-line-height: 1.1;
-  --experience-subtitle-size: var(--font-size-body-1);
-  --experience-subtitle-line-height: 1.5;
+  --e-label: var(--font-size-caption-1);
+  --e-title: clamp(2rem, 2.8vw, 2.5rem);
+  --e-title-lh: 1.1;
+  --e-subtitle: var(--font-size-body-1);
+  --e-subtitle-lh: 1.5;
 
-  --experience-timeline-column: 2.5rem;
-  --experience-timeline-gap: 1.5rem;
-  --experience-marker-padding-top: 1.5rem;
-  --experience-line-top: 2.35rem;
-  --experience-line-width: 0.7rem;
-  --experience-dot-size: 0.75rem;
+  --e-timeline-col: 2.5rem;
+  --e-timeline-gap: 1.5rem;
+  --e-marker-pt: 1.5rem;
+  --e-line-top: 2.35rem;
+  --e-line-width: 0.7rem;
+  --e-dot: 0.75rem;
 
-  --experience-card-padding: 1.5rem;
-  --experience-card-gap: 1rem;
-  --experience-card-radius: 1rem;
-  --experience-card-header-gap: 1.5rem;
+  --e-card-p: 1.5rem;
+  --e-card-gap: 1rem;
+  --e-card-radius: 1rem;
+  --e-card-header-gap: 1.5rem;
 
-  --experience-role-size: var(--font-size-subtitle-2, 1.25rem);
-  --experience-company-size: var(--font-size-body-2);
-  --experience-period-size: var(--font-size-caption-1);
-  --experience-location-size: var(--font-size-caption-2);
-  --experience-description-size: var(--font-size-body-2);
-  --experience-responsibility-size: var(--font-size-body-2);
+  --e-role: var(--font-size-subtitle-2, 1.25rem);
+  --e-company: var(--font-size-body-2);
+  --e-period: var(--font-size-caption-1);
+  --e-location: var(--font-size-caption-2);
+  --e-desc: var(--font-size-body-2);
+  --e-resp: var(--font-size-body-2);
 
-  --experience-responsibilities-gap: 0.625rem;
-  --experience-responsibility-gap: 0.625rem;
-  --experience-responsibility-marker-size: 0.375rem;
-  --experience-responsibility-marker-top: 0.55rem;
+  --e-resp-list-gap: 0.625rem;
+  --e-resp-gap: 0.625rem;
+  --e-resp-marker: 0.375rem;
+  --e-resp-marker-top: 0.55rem;
 
-  --experience-tags-gap: 0.625rem;
-  --experience-tag-gap: 0.45rem;
-  --experience-tag-padding-y: 0.35rem;
-  --experience-tag-padding-x: 0.75rem;
-  --experience-tag-size: var(--font-size-caption-1);
-  --experience-tag-icon-size: 16px;
+  --e-tags-gap: 0.625rem;
+  --e-tag-gap: 0.45rem;
+  --e-tag-py: 0.35rem;
+  --e-tag-px: 0.75rem;
+  --e-tag: var(--font-size-caption-1);
+  --e-tag-icon: 16px;
 
   box-sizing: border-box;
 }
 
-/* =========================
-   Text
-   ========================= */
-
+/* Text */
 .experience-label {
-  font-size: var(--experience-label-size);
+  font-size: var(--e-label);
 }
 
 .experience-title {
-  font-size: var(--experience-title-size);
-  line-height: var(--experience-title-line-height);
+  font-size: var(--e-title);
+  line-height: var(--e-title-lh);
 }
 
 .experience-subtitle {
-  font-size: var(--experience-subtitle-size);
-  line-height: var(--experience-subtitle-line-height);
+  font-size: var(--e-subtitle);
+  line-height: var(--e-subtitle-lh);
 }
 
 .experience-role {
-  font-size: var(--experience-role-size);
+  font-size: var(--e-role);
   line-height: 1.2;
 }
 
 .experience-company {
-  font-size: var(--experience-company-size);
+  font-size: var(--e-company);
   line-height: 1.4;
 }
 
 .experience-period {
-  font-size: var(--experience-period-size);
+  font-size: var(--e-period);
 }
 
 .experience-location {
-  font-size: var(--experience-location-size);
+  font-size: var(--e-location);
 }
 
 .experience-description,
 .experience-responsibility {
-  font-size: var(--experience-description-size);
+  font-size: var(--e-desc);
   line-height: 1.5;
 }
 
 .experience-responsibility {
-  font-size: var(--experience-responsibility-size);
+  font-size: var(--e-resp);
 }
 
-/* =========================
-   Timeline
-   ========================= */
-
+/* Timeline */
 .experience-marker::after {
   content: '';
   position: absolute;
-  top: var(--experience-line-top);
+  top: var(--e-line-top);
   bottom: 0;
   left: 50%;
-  width: var(--experience-line-width);
+  width: var(--e-line-width);
   transform: translateX(-50%);
   pointer-events: none;
   background: linear-gradient(to bottom, color-mix(in srgb, var(--app-text-primary) 55%, transparent) 0%, color-mix(in srgb, var(--app-text-primary) 38%, transparent) 28%, color-mix(in srgb, var(--app-text-primary) 22%, transparent) 62%, transparent 100%);
@@ -113,10 +107,7 @@
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--app-text-primary) 18%, transparent);
 }
 
-/* =========================
-   Card
-   ========================= */
-
+/* Card */
 .experience-card {
   transition:
     border-color 0.2s,
@@ -130,166 +121,116 @@
   box-shadow: var(--shadow-extra-large);
 }
 
-.experience-current-badge {
-  margin-left: 0.25rem;
-  background-color: color-mix(in srgb, var(--app-text-primary) 18%, transparent);
-  color: var(--app-text-primary);
-  font-size: var(--font-size-caption-2);
-  font-weight: 600;
-}
-
-/* =========================
-   Responsibilities
-   ========================= */
-
-.experience-responsibility-marker {
-  margin-top: var(--experience-responsibility-marker-top);
-  background-color: var(--app-text-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-text-primary) 16%, transparent);
-}
-
-/* =========================
-   Tags
-   ========================= */
-
-.experience-tag {
-  color: var(--app-text-muted);
-  font-size: var(--experience-tag-size);
-  font-weight: 500;
-  line-height: 1;
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background-color 0.2s,
-    transform 0.2s;
-}
-
-.experience-tag:hover {
-  transform: translateY(-1px);
-  color: var(--app-text-primary);
-  border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
-  background-color: var(--app-accent-soft-bg);
-}
-
-/* =========================
-   769px - 1024px
-   ========================= */
-
+/* 769px - 1024px */
 @media (max-width: 1024px) {
   .experience {
-    --experience-section-padding-y: 4.5rem;
-    --experience-inner-gap: 2.65rem;
+    --e-py: 4.5rem;
+    --e-inner-gap: 2.65rem;
 
-    --experience-label-size: 0.82rem;
-    --experience-title-size: 1.82rem;
-    --experience-title-line-height: 1.08;
-    --experience-subtitle-size: 0.96rem;
-    --experience-subtitle-line-height: 1.45;
+    --e-label: 0.82rem;
+    --e-title: 1.82rem;
+    --e-title-lh: 1.08;
+    --e-subtitle: 0.96rem;
+    --e-subtitle-lh: 1.45;
 
-    --experience-timeline-column: 2.25rem;
-    --experience-timeline-gap: 1.35rem;
-    --experience-line-top: 2.3rem;
-    --experience-line-width: 0.65rem;
+    --e-timeline-col: 2.25rem;
+    --e-timeline-gap: 1.35rem;
+    --e-line-top: 2.3rem;
+    --e-line-width: 0.65rem;
 
-    --experience-card-padding: 1.45rem;
-    --experience-card-gap: 1rem;
-    --experience-card-header-gap: 1.1rem;
+    --e-card-p: 1.45rem;
+    --e-card-gap: 1rem;
+    --e-card-header-gap: 1.1rem;
 
-    --experience-role-size: 1.24rem;
-    --experience-company-size: 0.9rem;
-    --experience-period-size: 0.78rem;
-    --experience-location-size: 0.72rem;
-    --experience-description-size: 0.92rem;
-    --experience-responsibility-size: 0.88rem;
+    --e-role: 1.24rem;
+    --e-company: 0.9rem;
+    --e-period: 0.78rem;
+    --e-location: 0.72rem;
+    --e-desc: 0.92rem;
+    --e-resp: 0.88rem;
 
-    --experience-responsibilities-gap: 0.62rem;
-    --experience-responsibility-gap: 0.6rem;
-    --experience-responsibility-marker-size: 0.36rem;
-    --experience-responsibility-marker-top: 0.52rem;
+    --e-resp-list-gap: 0.62rem;
+    --e-resp-gap: 0.6rem;
+    --e-resp-marker: 0.36rem;
+    --e-resp-marker-top: 0.52rem;
 
-    --experience-tags-gap: 0.55rem;
-    --experience-tag-padding-y: 0.34rem;
-    --experience-tag-padding-x: 0.72rem;
-    --experience-tag-size: 0.76rem;
-    --experience-tag-icon-size: 14px;
+    --e-tags-gap: 0.55rem;
+    --e-tag-py: 0.34rem;
+    --e-tag-px: 0.72rem;
+    --e-tag: 0.76rem;
+    --e-tag-icon: 14px;
   }
 }
 
-/* =========================
-   641px - 768px
-   ========================= */
-
+/* 641px - 768px */
 @media (max-width: 768px) {
   .experience {
-    --experience-section-padding-y: 4.15rem;
-    --experience-inner-gap: 2.35rem;
+    --e-py: 4.15rem;
+    --e-inner-gap: 2.35rem;
 
-    --experience-label-size: 0.78rem;
-    --experience-title-size: 1.5rem;
-    --experience-title-line-height: 1.06;
-    --experience-subtitle-size: 0.9rem;
-    --experience-subtitle-line-height: 1.42;
+    --e-label: 0.78rem;
+    --e-title: 1.5rem;
+    --e-title-lh: 1.06;
+    --e-subtitle: 0.9rem;
+    --e-subtitle-lh: 1.42;
 
-    --experience-timeline-column: 2.05rem;
-    --experience-timeline-gap: 1.2rem;
+    --e-timeline-col: 2.05rem;
+    --e-timeline-gap: 1.2rem;
 
-    --experience-card-padding: 1.32rem;
-    --experience-card-gap: 0.95rem;
+    --e-card-p: 1.32rem;
+    --e-card-gap: 0.95rem;
 
-    --experience-role-size: 1.16rem;
-    --experience-company-size: 0.84rem;
-    --experience-description-size: 0.86rem;
-    --experience-responsibility-size: 0.82rem;
+    --e-role: 1.16rem;
+    --e-company: 0.84rem;
+    --e-desc: 0.86rem;
+    --e-resp: 0.82rem;
 
-    --experience-tag-size: 0.74rem;
+    --e-tag: 0.74rem;
   }
 }
 
-/* =========================
-   481px - 640px
-   ========================= */
-
+/* 481px - 640px */
 @media (max-width: 640px) {
   .experience {
-    --experience-section-padding-y: 2.75rem;
-    --experience-inner-padding-x: 1rem;
-    --experience-inner-gap: 1.7rem;
+    --e-py: 2.75rem;
+    --e-px: 1rem;
+    --e-inner-gap: 1.7rem;
 
-    --experience-label-size: 0.74rem;
-    --experience-title-size: 1.38rem;
-    --experience-title-line-height: 1.05;
-    --experience-subtitle-size: 0.87rem;
-    --experience-subtitle-line-height: 1.42;
+    --e-label: 0.74rem;
+    --e-title: 1.38rem;
+    --e-title-lh: 1.05;
+    --e-subtitle: 0.87rem;
+    --e-subtitle-lh: 1.42;
 
-    --experience-timeline-column: 1.42rem;
-    --experience-timeline-gap: 0.95rem;
-    --experience-marker-padding-top: 1.28rem;
-    --experience-line-top: 2.03rem;
-    --experience-line-width: 0.52rem;
-    --experience-dot-size: 0.67rem;
+    --e-timeline-col: 1.42rem;
+    --e-timeline-gap: 0.95rem;
+    --e-marker-pt: 1.28rem;
+    --e-line-top: 2.03rem;
+    --e-line-width: 0.52rem;
+    --e-dot: 0.67rem;
 
-    --experience-card-padding: 1.1rem;
-    --experience-card-gap: 0.82rem;
-    --experience-card-radius: 0.9rem;
-    --experience-card-header-gap: 0.6rem;
+    --e-card-p: 1.1rem;
+    --e-card-gap: 0.82rem;
+    --e-card-radius: 0.9rem;
+    --e-card-header-gap: 0.6rem;
 
-    --experience-role-size: 1.06rem;
-    --experience-company-size: 0.79rem;
-    --experience-period-size: 0.72rem;
-    --experience-location-size: 0.67rem;
-    --experience-description-size: 0.82rem;
-    --experience-responsibility-size: 0.8rem;
+    --e-role: 1.06rem;
+    --e-company: 0.79rem;
+    --e-period: 0.72rem;
+    --e-location: 0.67rem;
+    --e-desc: 0.82rem;
+    --e-resp: 0.8rem;
 
-    --experience-responsibilities-gap: 0.54rem;
-    --experience-responsibility-gap: 0.54rem;
-    --experience-responsibility-marker-size: 0.32rem;
-    --experience-responsibility-marker-top: 0.47rem;
+    --e-resp-list-gap: 0.54rem;
+    --e-resp-gap: 0.54rem;
+    --e-resp-marker: 0.32rem;
+    --e-resp-marker-top: 0.47rem;
 
-    --experience-tags-gap: 0.44rem;
-    --experience-tag-padding-y: 0.27rem;
-    --experience-tag-padding-x: 0.6rem;
-    --experience-tag-size: 0.72rem;
-    --experience-tag-icon-size: 12.5px;
+    --e-tags-gap: 0.44rem;
+    --e-tag-py: 0.27rem;
+    --e-tag-px: 0.6rem;
+    --e-tag: 0.72rem;
+    --e-tag-icon: 12.5px;
   }
 
   .experience-card-header {
@@ -302,75 +243,69 @@
   }
 }
 
-/* =========================
-   381px - 480px
-   ========================= */
-
+/* 381px - 480px */
 @media (max-width: 480px) {
   .experience {
-    --experience-section-padding-y: 2.1rem;
-    --experience-inner-padding-x: 0.875rem;
-    --experience-inner-gap: 1.32rem;
+    --e-py: 2.1rem;
+    --e-px: 0.875rem;
+    --e-inner-gap: 1.32rem;
 
-    --experience-label-size: 0.69rem;
-    --experience-title-size: 1.25rem;
-    --experience-title-line-height: 1.04;
-    --experience-subtitle-size: 0.8rem;
-    --experience-subtitle-line-height: 1.36;
+    --e-label: 0.69rem;
+    --e-title: 1.25rem;
+    --e-title-lh: 1.04;
+    --e-subtitle: 0.8rem;
+    --e-subtitle-lh: 1.36;
 
-    --experience-timeline-column: 1.12rem;
-    --experience-timeline-gap: 0.68rem;
-    --experience-marker-padding-top: 1.15rem;
-    --experience-line-top: 1.9rem;
-    --experience-line-width: 0.42rem;
-    --experience-dot-size: 0.58rem;
+    --e-timeline-col: 1.12rem;
+    --e-timeline-gap: 0.68rem;
+    --e-marker-pt: 1.15rem;
+    --e-line-top: 1.9rem;
+    --e-line-width: 0.42rem;
+    --e-dot: 0.58rem;
 
-    --experience-card-padding: 0.92rem;
-    --experience-card-gap: 0.68rem;
+    --e-card-p: 0.92rem;
+    --e-card-gap: 0.68rem;
 
-    --experience-role-size: 0.98rem;
-    --experience-company-size: 0.72rem;
-    --experience-period-size: 0.67rem;
-    --experience-location-size: 0.63rem;
-    --experience-description-size: 0.76rem;
-    --experience-responsibility-size: 0.74rem;
+    --e-role: 0.98rem;
+    --e-company: 0.72rem;
+    --e-period: 0.67rem;
+    --e-location: 0.63rem;
+    --e-desc: 0.76rem;
+    --e-resp: 0.74rem;
 
-    --experience-responsibilities-gap: 0.47rem;
-    --experience-responsibility-gap: 0.47rem;
+    --e-resp-list-gap: 0.47rem;
+    --e-resp-gap: 0.47rem;
 
-    --experience-tags-gap: 0.37rem;
-    --experience-tag-padding-y: 0.23rem;
-    --experience-tag-padding-x: 0.52rem;
-    --experience-tag-size: 0.66rem;
-    --experience-tag-icon-size: 11px;
+    --e-tags-gap: 0.37rem;
+    --e-tag-py: 0.23rem;
+    --e-tag-px: 0.52rem;
+    --e-tag: 0.66rem;
+    --e-tag-icon: 11px;
   }
 }
 
-/* =========================
-   <= 380px
-   ========================= */
-
+/* <= 380px */
 @media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
   .experience {
-    --experience-section-padding-y: 1.75rem;
-    --experience-inner-padding-x: 0.75rem;
-    --experience-inner-gap: 1rem;
+    --e-py: 1.75rem;
+    --e-px: 0.75rem;
+    --e-inner-gap: 1rem;
 
-    --experience-label-size: 0.64rem;
-    --experience-title-size: 1.17rem;
-    --experience-title-line-height: 1.035;
-    --experience-subtitle-size: 0.7rem;
-    --experience-subtitle-line-height: 1.32;
+    --e-label: 0.64rem;
+    --e-title: 1.17rem;
+    --e-title-lh: 1.035;
+    --e-subtitle: 0.7rem;
+    --e-subtitle-lh: 1.32;
 
-    --experience-card-padding: 0.75rem;
-    --experience-card-gap: 0.58rem;
+    --e-card-p: 0.75rem;
+    --e-card-gap: 0.58rem;
 
-    --experience-role-size: 0.9rem;
-    --experience-company-size: 0.67rem;
-    --experience-description-size: 0.7rem;
-    --experience-responsibility-size: 0.69rem;
+    --e-role: 0.9rem;
+    --e-company: 0.67rem;
+    --e-desc: 0.7rem;
+    --e-resp: 0.69rem;
 
-    --experience-tag-size: 0.61rem;
-    --experience-tag-icon-size: 10px;
+    --e-tag: 0.61rem;
+    --e-tag-icon: 10px;
   }
 }

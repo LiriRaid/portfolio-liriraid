@@ -1,17 +1,17 @@
-<section id="habilidades" class="skills flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-shell-bg) py-(--skills-section-padding-y)" aria-labelledby="skills-heading">
-  <div class="skills-inner mx-auto flex w-full max-w-7xl flex-col gap-(--skills-section-gap) px-(--skills-section-padding-x)">
-    <header class="skills-header flex max-w-(--skills-header-max-width) flex-col gap-(--skills-header-gap)">
-      <p class="skills-label">Tecnologías</p>
+<section id="habilidades" class="skills flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-shell-bg) py-(--s-py)" aria-labelledby="skills-heading">
+  <div class="skills-inner mx-auto flex w-full max-w-7xl flex-col gap-(--s-section-gap) px-(--s-px)">
+    <header class="skills-header flex max-w-(--s-header-max) flex-col gap-(--s-header-gap)">
+      <p class="skills-label m-0">Tecnologías</p>
 
-      <h2 id="skills-heading" class="skills-title text-tittle-4-bold">Habilidades técnicas</h2>
+      <h2 id="skills-heading" class="skills-title m-0 text-tittle-4-bold">Habilidades técnicas</h2>
 
-      <p class="skills-subtitle text-body-1-regular">Herramientas y tecnologías que uso para construir productos robustos y mantenibles.</p>
+      <p class="skills-subtitle m-0 text-body-1-regular">Herramientas y tecnologías que uso para construir productos robustos y mantenibles.</p>
     </header>
 
-    <div class="skills-grid grid gap-(--skills-grid-gap)">
+    <div class="skills-grid grid gap-(--s-grid-gap)">
       @for (category of categories; track category.label) {
-        <article class="skill-category flex min-w-0 flex-col gap-(--skill-card-gap) rounded-2xl border p-(--skill-card-padding)">
-          <header class="skill-category-header flex items-center gap-(--skill-card-header-gap)">
+        <article class="skill-category flex min-w-0 flex-col gap-(--s-card-gap) rounded-2xl border p-(--s-card-p)">
+          <header class="skill-category-header flex items-center gap-(--s-card-header-gap)">
             <span class="skill-icon-wrap inline-flex shrink-0 items-center justify-center" aria-hidden="true">
               <portfolio-icon [name]="category.icon" size="18" />
             </span>
@@ -21,9 +21,9 @@
             </h3>
           </header>
 
-          <ul class="skill-list m-0 flex list-none flex-wrap gap-(--skill-list-gap) p-0" role="list" [attr.aria-label]="'Habilidades de ' + category.label">
+          <ul class="skill-list m-0 flex list-none flex-wrap gap-(--s-list-gap) p-0" role="list" [attr.aria-label]="'Habilidades de ' + category.label">
             @for (skill of category.skills; track skill) {
-              <li class="skill-badge inline-flex items-center gap-(--skill-badge-gap) whitespace-nowrap rounded-full border px-(--skill-badge-padding-x) py-(--skill-badge-padding-y)">
+              <li class="skill-badge inline-flex items-center gap-(--s-badge-gap) whitespace-nowrap rounded-full border px-(--s-badge-px) py-(--s-badge-py)">
                 @if (techIconUrl(skill); as iconUrl) {
                   <img [src]="iconUrl" [alt]="skill" class="skill-badge-icon shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
                 } @else {

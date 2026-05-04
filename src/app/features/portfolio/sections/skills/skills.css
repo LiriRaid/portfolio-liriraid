@@ -1,54 +1,44 @@
 .skills {
-  --skills-section-padding-y: 5rem;
-  --skills-section-padding-x: 1.5rem;
-  --skills-section-gap: 3.15rem;
+  --s-py: 5rem;
+  --s-px: 1.5rem;
+  --s-section-gap: 3.15rem;
 
-  --skills-header-max-width: 40rem;
-  --skills-header-gap: 0.75rem;
+  --s-header-max: 40rem;
+  --s-header-gap: 0.75rem;
 
-  --skills-label-size: var(--font-size-caption-1);
-  --skills-title-size: clamp(2rem, 2.8vw, 2.5rem);
-  --skills-title-line-height: 1.1;
-  --skills-subtitle-size: var(--font-size-body-1);
-  --skills-subtitle-line-height: var(--line-height-body-1);
+  --s-label-size: var(--font-size-caption-1);
+  --s-title-size: clamp(2rem, 2.8vw, 2.5rem);
+  --s-title-lh: 1.1;
+  --s-subtitle-size: var(--font-size-body-1);
+  --s-subtitle-lh: var(--line-height-body-1);
 
-  --skills-grid-gap: 1.6rem;
+  --s-grid-gap: 1.6rem;
 
-  --skill-card-padding: 1.65rem;
-  --skill-card-gap: 1.1rem;
-  --skill-card-header-gap: 0.8rem;
+  --s-card-p: 1.65rem;
+  --s-card-gap: 1.1rem;
+  --s-card-header-gap: 0.8rem;
 
-  --skill-icon-wrap-size: 2.35rem;
-  --skill-icon-wrap-radius: 0.65rem;
+  --s-icon-size: 2.35rem;
+  --s-icon-radius: 0.65rem;
 
-  --skill-title-size: 1.42rem;
-  --skill-title-line-height: 1.2;
+  --s-card-title-size: 1.42rem;
+  --s-card-title-lh: 1.2;
 
-  --skill-list-gap: 0.55rem;
+  --s-list-gap: 0.55rem;
 
-  --skill-badge-gap: 0.4rem;
-  --skill-badge-padding-y: 0.28rem;
-  --skill-badge-padding-x: 0.82rem;
-  --skill-badge-font-size: 0.82rem;
-  --skill-badge-icon-size: 16px;
+  --s-badge-gap: 0.4rem;
+  --s-badge-py: 0.28rem;
+  --s-badge-px: 0.82rem;
+  --s-badge-size: 0.82rem;
+  --s-badge-icon: 16px;
 
   box-sizing: border-box;
 }
 
-/* =========================
-   Header
-   ========================= */
-
-.skills-label,
-.skills-title,
-.skills-subtitle,
-.skill-category-title {
-  margin: 0;
-}
-
+/* Text */
 .skills-label {
   color: var(--app-text-primary);
-  font-size: var(--skills-label-size);
+  font-size: var(--s-label-size);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -60,33 +50,27 @@
 }
 
 .skills-title {
-  font-size: var(--skills-title-size);
-  line-height: var(--skills-title-line-height);
+  font-size: var(--s-title-size);
+  line-height: var(--s-title-lh);
 }
 
 .skills-subtitle {
   color: var(--app-text-muted);
-  font-size: var(--skills-subtitle-size);
-  line-height: var(--skills-subtitle-line-height);
+  font-size: var(--s-subtitle-size);
+  line-height: var(--s-subtitle-lh);
 }
 
 .skill-category-title {
-  font-size: var(--skill-title-size);
-  line-height: var(--skill-title-line-height);
+  font-size: var(--s-card-title-size);
+  line-height: var(--s-card-title-lh);
 }
 
-/* =========================
-   Grid
-   ========================= */
-
+/* Grid */
 .skills-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* =========================
-   Cards
-   ========================= */
-
+/* Card */
 .skill-category {
   border-color: var(--app-container-border, var(--app-border-color));
   background-color: var(--app-panel-bg);
@@ -98,22 +82,19 @@
 }
 
 .skill-icon-wrap {
-  width: var(--skill-icon-wrap-size);
-  height: var(--skill-icon-wrap-size);
-  border-radius: var(--skill-icon-wrap-radius);
+  width: var(--s-icon-size);
+  height: var(--s-icon-size);
+  border-radius: var(--s-icon-radius);
   background-color: var(--app-badge-soft-bg);
   color: var(--app-text-primary);
 }
 
-/* =========================
-   Badges
-   ========================= */
-
+/* Badge */
 .skill-badge {
   border-color: var(--app-border-color);
   background-color: var(--app-panel-muted-bg);
   color: var(--app-text-muted);
-  font-size: var(--skill-badge-font-size);
+  font-size: var(--s-badge-size);
   font-weight: 500;
   line-height: 1;
   transition:
@@ -128,10 +109,11 @@
 }
 
 .skill-badge-icon {
-  width: var(--skill-badge-icon-size);
-  height: var(--skill-badge-icon-size);
+  width: var(--s-badge-icon);
+  height: var(--s-badge-icon);
 }
 
+/* Hover */
 @media (hover: hover) {
   .skill-category:hover {
     transform: translateY(-2px);
@@ -147,42 +129,39 @@
   }
 }
 
-/* =========================
-   769px - 1024px
-   ========================= */
-
+/* 769px - 1024px */
 @media (max-width: 1024px) {
   .skills {
-    --skills-section-padding-y: 4.15rem;
-    --skills-section-padding-x: 1.5rem;
-    --skills-section-gap: 2.3rem;
+    --s-py: 4.15rem;
+    --s-px: 1.5rem;
+    --s-section-gap: 2.3rem;
 
-    --skills-header-max-width: 38rem;
+    --s-header-max: 38rem;
 
-    --skills-label-size: 0.82rem;
-    --skills-title-size: 1.82rem;
-    --skills-title-line-height: 1.08;
-    --skills-subtitle-size: 0.94rem;
-    --skills-subtitle-line-height: 1.43;
+    --s-label-size: 0.82rem;
+    --s-title-size: 1.82rem;
+    --s-title-lh: 1.08;
+    --s-subtitle-size: 0.94rem;
+    --s-subtitle-lh: 1.43;
 
-    --skills-grid-gap: 1.1rem;
+    --s-grid-gap: 1.1rem;
 
-    --skill-card-padding: 1.15rem;
-    --skill-card-gap: 0.82rem;
-    --skill-card-header-gap: 0.65rem;
+    --s-card-p: 1.15rem;
+    --s-card-gap: 0.82rem;
+    --s-card-header-gap: 0.65rem;
 
-    --skill-icon-wrap-size: 2rem;
-    --skill-icon-wrap-radius: 0.58rem;
+    --s-icon-size: 2rem;
+    --s-icon-radius: 0.58rem;
 
-    --skill-title-size: 1.12rem;
+    --s-card-title-size: 1.12rem;
 
-    --skill-list-gap: 0.42rem;
+    --s-list-gap: 0.42rem;
 
-    --skill-badge-gap: 0.32rem;
-    --skill-badge-padding-y: 0.2rem;
-    --skill-badge-padding-x: 0.6rem;
-    --skill-badge-font-size: 0.73rem;
-    --skill-badge-icon-size: 13.5px;
+    --s-badge-gap: 0.32rem;
+    --s-badge-py: 0.2rem;
+    --s-badge-px: 0.6rem;
+    --s-badge-size: 0.73rem;
+    --s-badge-icon: 13.5px;
   }
 
   .skills-grid {
@@ -190,44 +169,41 @@
   }
 }
 
-/* =========================
-   641px - 768px
-   ========================= */
-
+/* 641px - 768px */
 @media (max-width: 768px) {
   .skills {
-    --skills-section-padding-y: 3.25rem;
-    --skills-section-padding-x: 1.1rem;
-    --skills-section-gap: 1.6rem;
+    --s-py: 3.25rem;
+    --s-px: 1.1rem;
+    --s-section-gap: 1.6rem;
 
-    --skills-header-max-width: 36rem;
-    --skills-header-gap: 0.6rem;
+    --s-header-max: 36rem;
+    --s-header-gap: 0.6rem;
 
-    --skills-label-size: 0.74rem;
-    --skills-title-size: 1.5rem;
-    --skills-title-line-height: 1.06;
-    --skills-subtitle-size: 0.84rem;
-    --skills-subtitle-line-height: 1.4;
+    --s-label-size: 0.74rem;
+    --s-title-size: 1.5rem;
+    --s-title-lh: 1.06;
+    --s-subtitle-size: 0.84rem;
+    --s-subtitle-lh: 1.4;
 
-    --skills-grid-gap: 0.82rem;
+    --s-grid-gap: 0.82rem;
 
-    --skill-card-padding: 0.88rem;
-    --skill-card-gap: 0.64rem;
-    --skill-card-header-gap: 0.52rem;
+    --s-card-p: 0.88rem;
+    --s-card-gap: 0.64rem;
+    --s-card-header-gap: 0.52rem;
 
-    --skill-icon-wrap-size: 1.68rem;
-    --skill-icon-wrap-radius: 0.5rem;
+    --s-icon-size: 1.68rem;
+    --s-icon-radius: 0.5rem;
 
-    --skill-title-size: 0.92rem;
-    --skill-title-line-height: 1.16;
+    --s-card-title-size: 0.92rem;
+    --s-card-title-lh: 1.16;
 
-    --skill-list-gap: 0.34rem;
+    --s-list-gap: 0.34rem;
 
-    --skill-badge-gap: 0.26rem;
-    --skill-badge-padding-y: 0.145rem;
-    --skill-badge-padding-x: 0.48rem;
-    --skill-badge-font-size: 0.64rem;
-    --skill-badge-icon-size: 11px;
+    --s-badge-gap: 0.26rem;
+    --s-badge-py: 0.145rem;
+    --s-badge-px: 0.48rem;
+    --s-badge-size: 0.64rem;
+    --s-badge-icon: 11px;
   }
 
   .skills-grid {
@@ -235,118 +211,109 @@
   }
 }
 
-/* =========================
-   481px - 640px
-   ========================= */
-
+/* 481px - 640px */
 @media (max-width: 640px) {
   .skills {
-    --skills-section-padding-y: 2.65rem;
-    --skills-section-padding-x: 0.95rem;
-    --skills-section-gap: 1.3rem;
+    --s-py: 2.65rem;
+    --s-px: 0.95rem;
+    --s-section-gap: 1.3rem;
 
-    --skills-header-max-width: 32rem;
-    --skills-header-gap: 0.55rem;
+    --s-header-max: 32rem;
+    --s-header-gap: 0.55rem;
 
-    --skills-label-size: 0.7rem;
-    --skills-title-size: 1.38rem;
-    --skills-title-line-height: 1.05;
-    --skills-subtitle-size: 0.78rem;
-    --skills-subtitle-line-height: 1.38;
+    --s-label-size: 0.7rem;
+    --s-title-size: 1.38rem;
+    --s-title-lh: 1.05;
+    --s-subtitle-size: 0.78rem;
+    --s-subtitle-lh: 1.38;
 
-    --skills-grid-gap: 0.72rem;
+    --s-grid-gap: 0.72rem;
 
-    --skill-card-padding: 0.8rem;
-    --skill-card-gap: 0.58rem;
-    --skill-card-header-gap: 0.5rem;
+    --s-card-p: 0.8rem;
+    --s-card-gap: 0.58rem;
+    --s-card-header-gap: 0.5rem;
 
-    --skill-icon-wrap-size: 1.58rem;
-    --skill-icon-wrap-radius: 0.48rem;
+    --s-icon-size: 1.58rem;
+    --s-icon-radius: 0.48rem;
 
-    --skill-title-size: 0.78rem;
+    --s-card-title-size: 0.78rem;
 
-    --skill-list-gap: 0.31rem;
+    --s-list-gap: 0.31rem;
 
-    --skill-badge-gap: 0.24rem;
-    --skill-badge-padding-y: 0.13rem;
-    --skill-badge-padding-x: 0.45rem;
-    --skill-badge-font-size: 0.61rem;
-    --skill-badge-icon-size: 10.5px;
+    --s-badge-gap: 0.24rem;
+    --s-badge-py: 0.13rem;
+    --s-badge-px: 0.45rem;
+    --s-badge-size: 0.61rem;
+    --s-badge-icon: 10.5px;
   }
 }
 
-/* =========================
-   381px - 480px
-   ========================= */
-
+/* 381px - 480px */
 @media (max-width: 480px) {
   .skills {
-    --skills-section-padding-y: 2.2rem;
-    --skills-section-padding-x: 0.82rem;
-    --skills-section-gap: 1.05rem;
+    --s-py: 2.2rem;
+    --s-px: 0.82rem;
+    --s-section-gap: 1.05rem;
 
-    --skills-header-max-width: 100%;
-    --skills-header-gap: 0.5rem;
+    --s-header-max: 100%;
+    --s-header-gap: 0.5rem;
 
-    --skills-label-size: 0.65rem;
-    --skills-title-size: 1.25rem;
-    --skills-title-line-height: 1.04;
-    --skills-subtitle-size: 0.73rem;
-    --skills-subtitle-line-height: 1.34;
+    --s-label-size: 0.65rem;
+    --s-title-size: 1.25rem;
+    --s-title-lh: 1.04;
+    --s-subtitle-size: 0.73rem;
+    --s-subtitle-lh: 1.34;
 
-    --skills-grid-gap: 0.62rem;
+    --s-grid-gap: 0.62rem;
 
-    --skill-card-padding: 0.7rem;
-    --skill-card-gap: 0.52rem;
-    --skill-card-header-gap: 0.44rem;
+    --s-card-p: 0.7rem;
+    --s-card-gap: 0.52rem;
+    --s-card-header-gap: 0.44rem;
 
-    --skill-icon-wrap-size: 1.5rem;
-    --skill-icon-wrap-radius: 0.46rem;
+    --s-icon-size: 1.5rem;
+    --s-icon-radius: 0.46rem;
 
-    --skill-title-size: 0.72rem;
+    --s-card-title-size: 0.72rem;
 
-    --skill-list-gap: 0.28rem;
+    --s-list-gap: 0.28rem;
 
-    --skill-badge-gap: 0.22rem;
-    --skill-badge-padding-y: 0.12rem;
-    --skill-badge-padding-x: 0.4rem;
-    --skill-badge-font-size: 0.58rem;
-    --skill-badge-icon-size: 10px;
+    --s-badge-gap: 0.22rem;
+    --s-badge-py: 0.12rem;
+    --s-badge-px: 0.4rem;
+    --s-badge-size: 0.58rem;
+    --s-badge-icon: 10px;
   }
 }
 
-/* =========================
-   <= 380px
-   ========================= */
-
+/* <= 380px */
 @media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
   .skills {
-    --skills-section-padding-y: 1.95rem;
-    --skills-section-padding-x: 0.74rem;
-    --skills-section-gap: 0.92rem;
+    --s-py: 1.95rem;
+    --s-px: 0.74rem;
+    --s-section-gap: 0.92rem;
 
-    --skills-label-size: 0.635rem;
-    --skills-title-size: 1.17rem;
-    --skills-title-line-height: 1.035;
-    --skills-subtitle-size: 0.7rem;
-    --skills-subtitle-line-height: 1.32;
+    --s-label-size: 0.635rem;
+    --s-title-size: 1.17rem;
+    --s-title-lh: 1.035;
+    --s-subtitle-size: 0.7rem;
+    --s-subtitle-lh: 1.32;
 
-    --skills-grid-gap: 0.58rem;
+    --s-grid-gap: 0.58rem;
 
-    --skill-card-padding: 0.65rem;
-    --skill-card-gap: 0.49rem;
-    --skill-card-header-gap: 0.42rem;
+    --s-card-p: 0.65rem;
+    --s-card-gap: 0.49rem;
+    --s-card-header-gap: 0.42rem;
 
-    --skill-icon-wrap-size: 1.42rem;
+    --s-icon-size: 1.42rem;
 
-    --skill-title-size: 0.68rem;
+    --s-card-title-size: 0.68rem;
 
-    --skill-list-gap: 0.265rem;
+    --s-list-gap: 0.265rem;
 
-    --skill-badge-gap: 0.21rem;
-    --skill-badge-padding-y: 0.11rem;
-    --skill-badge-padding-x: 0.38rem;
-    --skill-badge-font-size: 0.565rem;
-    --skill-badge-icon-size: 9.75px;
+    --s-badge-gap: 0.21rem;
+    --s-badge-py: 0.11rem;
+    --s-badge-px: 0.38rem;
+    --s-badge-size: 0.565rem;
+    --s-badge-icon: 9.75px;
   }
 }

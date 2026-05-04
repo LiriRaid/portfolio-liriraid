@@ -1,4 +1,8 @@
-<section id="inicio" class="hero flex min-h-(--app-section-min-height) flex-col justify-center py-(--h-py)" aria-labelledby="hero-heading">
+<section
+  id="inicio"
+  class="hero flex min-h-(--app-section-min-height) flex-col justify-center py-(--h-py)"
+  aria-labelledby="hero-heading"
+>
   <div class="mx-auto flex w-full max-w-7xl items-center justify-center gap-(--h-inner-gap) px-(--h-px) max-[1024px]:flex-col max-[1024px]:text-center">
     <div class="hero-content flex w-full max-w-200 flex-1 flex-col gap-(--h-content-gap) max-[1024px]:max-w-full max-[1024px]:items-center">
       <div class="inline-flex w-fit items-center gap-(--h-badge-gap) rounded-full border border-(--h-badge-border) bg-(--app-badge-soft-bg) px-(--h-badge-px) py-(--h-badge-py) font-semibold text-(--app-badge-soft-text) text-(length:--h-badge-size)">
@@ -6,25 +10,52 @@
         <span>Desarrollador Full Angular</span>
       </div>
 
-      <h1 id="hero-heading" class="hero-title mx-0 max-w-(--h-title-max) font-extrabold leading-(--h-title-lh) tracking-[-0.03em] text-(--app-text-color) text-(length:--h-title-size)">
+      <h1
+        id="hero-heading"
+        class="hero-title mx-0 max-w-(--h-title-max) font-extrabold leading-(--h-title-lh) tracking-[-0.03em] text-(--app-text-color) text-(length:--h-title-size)"
+      >
         <span class="hero-title-line">Construyo aplicaciones web</span>
         <span class="hero-title-line text-(--app-text-primary)">modernas, escalables</span>
         <span class="hero-title-line">y mantenibles.</span>
       </h1>
 
-      <p class="m-0 max-w-(--h-desc-max) leading-(--h-desc-lh) text-(--app-text-muted) text-(length:--h-desc-size) max-[1024px]:mx-auto max-[1024px]:text-center">Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.</p>
+      <p class="m-0 max-w-(--h-desc-max) leading-(--h-desc-lh) text-(--app-text-muted) text-(length:--h-desc-size) max-[1024px]:mx-auto max-[1024px]:text-center">
+        Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.
+      </p>
 
       <div class="flex flex-wrap gap-(--h-ctas-gap) max-[1024px]:justify-center max-[640px]:mx-auto max-[640px]:w-full max-[640px]:max-w-(--h-ctas-max) max-[640px]:flex-col">
-        <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium max-[640px]:!w-full max-[640px]:!min-h-[2.1rem] max-[640px]:!justify-center max-[640px]:!px-3 max-[640px]:!py-[0.42rem] max-[640px]:!text-[0.77rem] max-[480px]:!min-h-8 max-[480px]:!px-2.75 max-[480px]:!py-1.5 max-[480px]:!text-[0.74rem] max-[380px]:!px-2.5" (onClick)="scrollToExperience()" />
+        <portfolio-button
+          label="Ver experiencia"
+          icon="ArrowRight"
+          iconPos="right"
+          iconSize="16"
+          styleClass="rounded-2xl text-body-2-medium max-[1024px]:!min-h-[2.35rem] max-[1024px]:!px-3.5 max-[1024px]:!py-1.75 max-[1024px]:!text-[0.86rem] max-[640px]:!w-full max-[640px]:!min-h-[2.1rem] max-[640px]:!justify-center max-[640px]:!px-3 max-[640px]:!py-[0.42rem] max-[640px]:!text-[0.77rem] max-[480px]:!min-h-8 max-[480px]:!px-2.75 max-[480px]:!py-1.5 max-[480px]:!text-[0.74rem] max-[380px]:!px-2.5 max-[380px]:!text-[0.7rem]"
+          (onClick)="scrollToExperience()"
+        />
 
-        <portfolio-button label="Descargar CV" icon="Download" iconPos="right" iconSize="16" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium max-[640px]:!w-full max-[640px]:!min-h-[2.1rem] max-[640px]:!justify-center max-[640px]:!px-3 max-[640px]:!py-[0.42rem] max-[640px]:!text-[0.77rem] max-[480px]:!min-h-8 max-[480px]:!px-2.75 max-[480px]:!py-1.5 max-[480px]:!text-[0.74rem] max-[380px]:!px-2.5" (onClick)="downloadCV()" />
+        <portfolio-button
+          label="Descargar CV"
+          icon="Download"
+          iconPos="right"
+          iconSize="16"
+          variant="outlined"
+          styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium max-[1024px]:!min-h-[2.35rem] max-[1024px]:!px-3.5 max-[1024px]:!py-1.75 max-[1024px]:!text-[0.86rem] max-[640px]:!w-full max-[640px]:!min-h-[2.1rem] max-[640px]:!justify-center max-[640px]:!px-3 max-[640px]:!py-[0.42rem] max-[640px]:!text-[0.77rem] max-[480px]:!min-h-8 max-[480px]:!px-2.75 max-[480px]:!py-1.5 max-[480px]:!text-[0.74rem] max-[380px]:!px-2.5 max-[380px]:!text-[0.7rem]"
+          (onClick)="downloadCV()"
+        />
       </div>
 
       <div class="flex flex-wrap gap-(--h-stack-gap) max-[1024px]:justify-center max-[640px]:max-w-(--h-stack-max)" aria-label="Stack tecnológico principal">
         @for (tech of stack; track tech) {
           <span class="inline-flex items-center gap-(--h-tech-gap) rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--h-tech-px) py-(--h-tech-py) font-medium text-(--app-text-color) text-(length:--h-tech-size) transition-colors hover:border-(--h-tech-hover-border) hover:bg-(--app-accent-soft-bg) hover:text-(--app-text-primary)">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" [alt]="tech" class="size-(--h-tech-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+              <img
+                [src]="iconUrl"
+                [alt]="tech"
+                class="size-(--h-tech-icon) shrink-0 rounded-[3px] object-contain"
+                width="16"
+                height="16"
+                loading="lazy"
+              />
             }
 
             {{ tech }}
@@ -35,7 +66,16 @@
 
     <div class="flex w-[clamp(300px,30vw,400px)] shrink-0 flex-col items-center gap-6 max-[1024px]:-order-1 max-[1024px]:w-auto max-[1024px]:gap-0">
       <div class="hero-avatar shrink-0 rounded-full p-1.25">
-        <img class="block size-full rounded-[inherit] bg-(--app-panel-muted-bg) object-cover" src="assets/img/Me.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
+        <img
+          class="block size-full rounded-[inherit] bg-(--app-panel-muted-bg) object-cover"
+          src="assets/img/Me.jpg"
+          alt="Gabriel Leonardo Cruz Flores"
+          width="224"
+          height="224"
+          fetchpriority="high"
+          decoding="async"
+          loading="eager"
+        />
       </div>
 
       <div class="w-full overflow-hidden rounded-2xl border border-(--app-border-color) bg-(--app-panel-bg) font-mono [box-shadow:var(--app-container-shadow)] max-[1024px]:hidden" aria-hidden="true">

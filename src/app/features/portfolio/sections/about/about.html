@@ -1,33 +1,40 @@
-<section id="sobre-mi" class="section" aria-labelledby="about-heading">
-  <div class="section-inner">
-    <div class="about-layout">
-      <div class="about-content">
-        <header class="section-header">
-          <p class="section-label">{{ about.label }}</p>
+<section id="sobre-mi" class="about flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--a-py)" aria-labelledby="about-heading">
+  <div class="about-inner mx-auto w-full max-w-7xl px-(--a-px)">
+    <div class="about-layout grid items-start gap-(--a-layout-gap)">
+      <div class="about-content flex max-w-(--a-content-max) flex-col gap-(--a-content-gap)">
+        <header class="about-header flex flex-col gap-(--a-header-gap)">
+          <p class="about-label m-0">
+            {{ about.label }}
+          </p>
 
-          <h2 id="about-heading" class="section-title text-tittle-4-bold">
+          <h2 id="about-heading" class="about-title m-0 text-tittle-4-bold">
             {{ about.title }}
           </h2>
         </header>
 
-        <div class="about-body">
+        <div class="about-body flex flex-col gap-(--a-body-gap)">
           @for (paragraph of about.paragraphs; track paragraph) {
-            <p class="about-text text-body-1-regular">
+            <p class="about-text m-0 text-body-1-regular">
               {{ paragraph }}
             </p>
           }
         </div>
 
-        <div class="about-cta">
-          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" styleClass="text-body-2-medium" (onClick)="scrollToContact()" />
+        <div class="about-cta flex">
+          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium max-[1024px]:!min-h-[2.35rem] max-[1024px]:!px-3.5 max-[1024px]:!py-1.75 max-[1024px]:!text-[0.86rem] max-[640px]:!min-h-[2.1rem] max-[640px]:!px-3 max-[640px]:!py-[0.42rem] max-[640px]:!text-[0.77rem] max-[480px]:!min-h-8 max-[480px]:!px-2.75 max-[480px]:!py-1.5 max-[480px]:!text-[0.74rem] max-[380px]:!px-2.5 max-[380px]:!text-[0.7rem]" (onClick)="scrollToContact()" />
         </div>
       </div>
 
-      <div class="about-stats" aria-label="Estadísticas profesionales">
+      <div class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
         @for (stat of stats; track stat.label) {
-          <article class="stat-card">
-            <span class="stat-value text-tittle-4-bold">{{ stat.value }}</span>
-            <span class="stat-label text-caption-1-regular">{{ stat.label }}</span>
+          <article class="stat-card flex flex-col gap-(--a-stat-gap) rounded-2xl border p-(--a-stat-p)">
+            <span class="stat-value text-tittle-4-bold">
+              {{ stat.value }}
+            </span>
+
+            <span class="stat-label text-caption-1-regular">
+              {{ stat.label }}
+            </span>
           </article>
         }
       </div>
