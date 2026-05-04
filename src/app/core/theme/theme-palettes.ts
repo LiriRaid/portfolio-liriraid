@@ -60,7 +60,7 @@ export const PRIMARY_COLORS: ThemeColor[] = [
   },
 ];
 
-export const DEFAULT_PRIMARY_COLOR_KEY = 'black';
+export const DEFAULT_PRIMARY_COLOR_KEY = 'orange';
 
 export const SURFACE_COLORS: ThemeColor[] = [
   {

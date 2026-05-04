@@ -24,7 +24,11 @@
                 "input": "src/assets",
                 "output": "assets"
               },
-              "src/favicon.ico"
+              {
+                "glob": "favicon.svg",
+                "input": "src",
+                "output": "."
+              }
             ],
             "styles": ["src/styles.css"],
             "server": "src/main.server.ts",

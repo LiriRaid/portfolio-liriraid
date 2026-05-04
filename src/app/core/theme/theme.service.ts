@@ -13,7 +13,9 @@ export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly rootElement = this.document.documentElement;
-  private readonly faviconSourceUrl = 'favicon.svg';
+  private readonly faviconSourceUrl = '/favicon.svg';
+
+  private readonly emptyFaviconHref = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
 
   private faviconSvgPromise: Promise<string> | null = null;
   private prethemeRemovalScheduled = false;
@@ -135,8 +137,9 @@ export class ThemeService {
         favicon.href = this.createTintedFaviconHref(svg, color);
       })
       .catch(() => {
-        // Mantengo tu comportamiento actual.
-        // this.ensureFaviconLink().href = this.faviconSourceUrl;
+        const favicon = this.ensureFaviconLink();
+        favicon.type = 'image/svg+xml';
+        favicon.href = this.emptyFaviconHref;
       });
   }
 
