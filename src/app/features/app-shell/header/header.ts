@@ -27,8 +27,6 @@ export class Header {
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
 
-  private readonly headerOffset = 96;
-
   private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
 
   protected readonly navLinks = [
@@ -65,20 +63,11 @@ export class Header {
 
     event.preventDefault();
 
-    const element = document.getElementById(sectionId);
-
-    if (!element) {
-      return;
-    }
-
     this.activeSection.set(sectionId);
     this.targetSection = sectionId;
     this.clearScrollUnlockTimer();
 
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    this.scrollToSection(sectionId, 'smooth');
 
     history.replaceState(null, '', `${window.location.pathname}${window.location.search}${href}`);
 
@@ -101,6 +90,13 @@ export class Header {
   }
 
   private initializeHeaderRuntime(): void {
+    const scrollRoot = this.getScrollRoot();
+
+    if (!scrollRoot) {
+      return;
+    }
+
+    this.syncInitialHash();
     this.syncActiveSection();
 
     const desktopMq = window.matchMedia('(min-width: 769px)');
@@ -120,25 +116,78 @@ export class Header {
     };
 
     desktopMq.addEventListener('change', onDesktopChange);
-    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    scrollRoot.addEventListener('scroll', onScrollOrResize, { passive: true });
     window.addEventListener('resize', onScrollOrResize);
-    window.addEventListener('wheel', onManualScroll, { passive: true });
-    window.addEventListener('touchstart', onManualScroll, { passive: true });
+    scrollRoot.addEventListener('wheel', onManualScroll, { passive: true });
+    scrollRoot.addEventListener('touchstart', onManualScroll, { passive: true });
 
     this.destroyRef.onDestroy(() => {
       desktopMq.removeEventListener('change', onDesktopChange);
-      window.removeEventListener('scroll', onScrollOrResize);
+      scrollRoot.removeEventListener('scroll', onScrollOrResize);
       window.removeEventListener('resize', onScrollOrResize);
-      window.removeEventListener('wheel', onManualScroll);
-      window.removeEventListener('touchstart', onManualScroll);
+      scrollRoot.removeEventListener('wheel', onManualScroll);
+      scrollRoot.removeEventListener('touchstart', onManualScroll);
 
       this.cancelActiveSectionFrame();
       this.clearScrollUnlockTimer();
     });
   }
 
+  private syncInitialHash(): void {
+    const hash = window.location.hash.replace('#', '') as PortfolioSectionId;
+
+    if (!this.sectionIds.includes(hash)) {
+      return;
+    }
+
+    this.activeSection.set(hash);
+
+    requestAnimationFrame(() => {
+      this.scrollToSection(hash, 'auto');
+    });
+  }
+
   private getLinkClass(baseClass: string, activeClass: string, sectionId: PortfolioSectionId): string {
     return this.activeSection() === sectionId ? `${baseClass} ${activeClass}` : baseClass;
+  }
+
+  private getScrollRoot(): HTMLElement | null {
+    return document.querySelector<HTMLElement>('.layout-scroll-root');
+  }
+
+  private getHeaderHeight(): number {
+    const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
+    const parsed = Number.parseFloat(value);
+
+    if (!Number.isFinite(parsed)) {
+      return 64;
+    }
+
+    return value.endsWith('rem') ? parsed * this.getRootFontSize() : parsed;
+  }
+
+  private getRootFontSize(): number {
+    return Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  }
+
+  private scrollToSection(sectionId: PortfolioSectionId, behavior: ScrollBehavior): void {
+    const scrollRoot = this.getScrollRoot();
+    const section = document.getElementById(sectionId);
+
+    if (!scrollRoot || !section) {
+      return;
+    }
+
+    const scrollRootRect = scrollRoot.getBoundingClientRect();
+    const sectionRect = section.getBoundingClientRect();
+    const headerHeight = this.getHeaderHeight();
+
+    const top = sectionRect.top - scrollRootRect.top + scrollRoot.scrollTop - headerHeight;
+
+    scrollRoot.scrollTo({
+      top: Math.max(0, Math.round(top)),
+      behavior,
+    });
   }
 
   private scheduleActiveSectionSync(): void {
@@ -164,15 +213,20 @@ export class Header {
   }
 
   private syncTargetSection(): void {
+    const scrollRoot = this.getScrollRoot();
     const target = document.getElementById(this.targetSection!);
 
-    if (!target) {
+    if (!scrollRoot || !target) {
       this.unlockProgrammaticScroll();
       return;
     }
 
-    const rect = target.getBoundingClientRect();
-    const reachedTarget = Math.abs(rect.top) <= this.headerOffset || rect.top <= this.headerOffset;
+    const scrollRootRect = scrollRoot.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const headerHeight = this.getHeaderHeight();
+
+    const targetVisualTop = targetRect.top - scrollRootRect.top;
+    const reachedTarget = Math.abs(targetVisualTop - headerHeight) <= 2 || targetVisualTop <= headerHeight;
 
     if (!reachedTarget) {
       return;
@@ -188,7 +242,16 @@ export class Header {
   }
 
   private getCurrentSectionId(): PortfolioSectionId | null {
-    const viewportMiddle = window.innerHeight * 0.42;
+    const scrollRoot = this.getScrollRoot();
+
+    if (!scrollRoot) {
+      return null;
+    }
+
+    const rootRect = scrollRoot.getBoundingClientRect();
+    const headerHeight = this.getHeaderHeight();
+    const scanLine = rootRect.top + headerHeight + 1;
+    const viewportMiddle = rootRect.top + headerHeight + (rootRect.height - headerHeight) * 0.42;
 
     let currentSection: PortfolioSectionId | null = null;
     let closestDistance = Number.POSITIVE_INFINITY;
@@ -202,13 +265,14 @@ export class Header {
 
       const rect = section.getBoundingClientRect();
 
-      if (rect.top <= this.headerOffset && rect.bottom > this.headerOffset) {
+      if (rect.top <= scanLine && rect.bottom > scanLine) {
         currentSection = sectionId;
+        break;
       }
 
       const distance = Math.abs(rect.top - viewportMiddle);
 
-      if (!currentSection && distance < closestDistance) {
+      if (distance < closestDistance) {
         closestDistance = distance;
         currentSection = sectionId;
       }

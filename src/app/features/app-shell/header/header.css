@@ -3,84 +3,38 @@
   top: 0;
   z-index: 100;
   display: block;
+  height: var(--app-header-height);
+  flex: 0 0 var(--app-header-height);
 }
 
 .header {
-  background-color: color-mix(in srgb, var(--app-panel-bg) 90%, transparent);
+  --header-bg: color-mix(in srgb, var(--app-panel-bg) 90%, transparent);
+  --mobile-nav-bg: color-mix(in srgb, var(--app-panel-bg) 85%, transparent);
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--app-border-color);
-}
-
-.header-inner {
-  max-width: 1280px;
-  height: 4rem;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
 }
 
 /* =========================
-   Logo
+   Buttons base
    ========================= */
 
-.header-logo {
-  display: flex;
-  align-items: baseline;
-  gap: 0.05rem;
-  flex-shrink: 0;
-  text-decoration: none;
-}
-
-.logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--app-text-color);
-  transition: color 0.2s ease;
-}
-
-.logo-dot {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--app-text-primary);
-}
-
-.header-logo:hover .logo-text {
-  color: var(--app-text-primary);
-}
-
-/* =========================
-   Desktop nav
-   ========================= */
-
-.header-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  gap: 0.5rem;
-}
-
-:host ::ng-deep .nav-link.p-button,
-:host ::ng-deep .mobile-nav-link.p-button {
+:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button {
+  border: 0;
   background-color: transparent;
-  border: none;
   box-shadow: none;
   transition:
     color 0.2s ease,
     background-color 0.2s ease;
 }
 
+:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button {
+  border-radius: 0.75rem;
+}
+
 :host ::ng-deep .nav-link.p-button {
   min-height: auto;
   padding: 0.45rem 1rem;
-  border-radius: 0.75rem;
   white-space: nowrap;
 }
 
@@ -88,13 +42,11 @@
   width: 100%;
   justify-content: flex-start;
   padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
 }
 
-:host ::ng-deep .nav-link.p-button .p-button-label,
-:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
-  font-weight: 600;
+:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button .p-button-label {
   color: var(--app-text-muted);
+  font-weight: 600;
   transition: color 0.2s ease;
 }
 
@@ -106,37 +58,19 @@
   font-size: var(--font-size-body-2);
 }
 
-:host ::ng-deep .nav-link.p-button:hover,
-:host ::ng-deep .nav-link--active.p-button,
-:host ::ng-deep .mobile-nav-link.p-button:hover,
-:host ::ng-deep .mobile-nav-link--active.p-button {
+:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active).p-button:hover,
+:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .nav-link.p-button:hover .p-button-label,
-:host ::ng-deep .nav-link--active.p-button .p-button-label,
-:host ::ng-deep .mobile-nav-link.p-button:hover .p-button-label,
-:host ::ng-deep .mobile-nav-link--active.p-button .p-button-label {
+:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active).p-button:hover .p-button-label,
+:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label {
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .nav-link.p-button:focus-visible,
-:host ::ng-deep .mobile-nav-link.p-button:focus-visible,
-:host ::ng-deep .icon-btn.p-button:focus-visible {
-  outline: 2px solid var(--app-text-primary);
-  outline-offset: 2px;
-}
-
 /* =========================
-   Actions
+   Icon buttons
    ========================= */
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  gap: 0.5rem;
-}
 
 :host ::ng-deep .icon-btn.p-button {
   width: 2.25rem;
@@ -148,16 +82,9 @@
   align-items: center;
   justify-content: center;
 
-  border: none;
   border-radius: 0.5rem;
-  background-color: transparent;
   color: var(--app-text-muted);
-  box-shadow: none;
   overflow: hidden;
-
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
 }
 
 :host ::ng-deep .icon-btn.p-button:hover {
@@ -170,19 +97,17 @@
 }
 
 /* =========================
-   Theme toggle SSR-safe
+   Focus
    ========================= */
 
-.theme-toggle-slot {
-  position: relative;
-  width: 2.25rem;
-  min-width: 2.25rem;
-  height: 2.25rem;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button:focus-visible {
+  outline: 2px solid var(--app-text-primary);
+  outline-offset: 2px;
 }
+
+/* =========================
+   Theme toggle SSR-safe
+   ========================= */
 
 :host ::ng-deep .theme-toggle-btn.p-button {
   position: absolute;
@@ -206,63 +131,21 @@
 }
 
 /* =========================
-   Mobile nav
+   Responsive
    ========================= */
 
 :host ::ng-deep .mobile-menu-btn.p-button {
   display: none;
 }
 
-.mobile-nav {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-
-  padding: 0.75rem 1rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-
-  border-top: 1px solid var(--app-border-color);
-  border-bottom: 1px solid var(--app-border-color);
-  background-color: color-mix(in srgb, var(--app-panel-bg) 85%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.25);
-}
-
-/* =========================
-   Responsive
-   ========================= */
-
 @media (max-width: 1100px) {
-  .header-inner {
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  .header-nav {
-    gap: 0.5rem;
-  }
-
   :host ::ng-deep .nav-link.p-button {
-    padding: 0.45rem 0.75rem;
+    padding-inline: 0.75rem;
   }
 }
 
 @media (max-width: 768px) {
-  .header-nav {
-    display: none;
-  }
-
   :host ::ng-deep .mobile-menu-btn.p-button {
     display: inline-flex;
-  }
-
-  .header-inner {
-    padding: 0 1rem;
   }
 }

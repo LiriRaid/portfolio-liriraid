@@ -1,20 +1,20 @@
-<header class="header" role="banner">
-  <div class="header-inner">
-    <a href="#inicio" class="header-logo" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#inicio', 'inicio')">
-      <span class="logo-text">Liriraid</span>
-      <span class="logo-dot" aria-hidden="true">.</span>
+<header class="header relative h-full box-border border-b border-(--app-border-color) bg-(--header-bg) backdrop-blur-md" role="banner">
+  <div class="header-inner mx-auto flex h-full max-w-7xl items-center justify-between gap-8 px-6 max-[1100px]:gap-4 max-[1100px]:px-4">
+    <a href="#inicio" class="header-logo group flex shrink-0 items-baseline gap-[0.05rem] no-underline" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#inicio', 'inicio')">
+      <span class="logo-text text-xl font-bold tracking-[-0.02em] text-(--app-text-color) transition-colors group-hover:text-(--app-text-primary)"> Liriraid </span>
+      <span class="logo-dot text-2xl font-bold leading-none text-(--app-text-primary)" aria-hidden="true">.</span>
     </a>
 
-    <nav class="header-nav" aria-label="Navegación principal">
+    <nav class="header-nav flex flex-1 items-center justify-center gap-2 max-[768px]:hidden" aria-label="Navegación principal">
       @for (link of navLinks; track link.href) {
         <portfolio-button variant="text" [label]="link.label" [href]="link.href" [styleClass]="navLinkClass(link.sectionId)" (onClick)="onNavLinkClick($event, link.href, link.sectionId)" />
       }
     </nav>
 
-    <div class="header-actions">
+    <div class="header-actions flex shrink-0 items-center gap-2">
       <portfolio-theme-color-picker />
 
-      <span class="theme-toggle-slot">
+      <span class="theme-toggle-slot relative inline-flex size-9 min-w-9 items-center justify-center">
         <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--dark" icon="Sun" iconSize="18" ariaLabel="Activar modo claro" (onClick)="toggleThemeMode()" />
 
         <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--light" icon="Moon" iconSize="18" ariaLabel="Activar modo oscuro" (onClick)="toggleThemeMode()" />
@@ -25,7 +25,7 @@
   </div>
 
   @if (mobileMenuOpen()) {
-    <nav class="mobile-nav" aria-label="Navegación móvil">
+    <nav class="mobile-nav absolute left-0 right-0 top-full z-99 flex flex-col gap-1 border-y border-(--app-border-color) bg-(--mobile-nav-bg) px-4 py-3 backdrop-blur-lg [box-shadow:0_8px_24px_-8px_rgba(0,0,0,0.25)]" aria-label="Navegación móvil">
       @for (link of navLinks; track link.href) {
         <portfolio-button variant="text" [label]="link.label" [href]="link.href" [styleClass]="mobileNavLinkClass(link.sectionId)" (onClick)="onNavLinkClick($event, link.href, link.sectionId); closeMobileMenu()" />
       }

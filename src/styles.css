@@ -1,22 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
-@import "tailwindcss-primeui";
-@plugin "@tailwindcss/forms";
+@import 'tailwindcss-primeui';
+@plugin '@tailwindcss/forms';
+
+:root {
+  --app-header-height: 4rem;
+  --app-section-min-height: calc(100dvh - var(--app-header-height));
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
 
 html {
   scroll-behavior: smooth;
 }
 
-/* Compensa el header sticky (4rem) al navegar por anclas */
-section[id] {
-  scroll-margin-top: 4.25rem;
-}
-
 body {
+  margin: 0;
+  overflow: hidden;
   background-color: var(--app-shell-bg);
   color: var(--app-text-color);
-  margin: 0;
 }
 
 button {

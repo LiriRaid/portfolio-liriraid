@@ -1,105 +1,43 @@
 .hero {
-  --hero-padding-y: 5rem;
-  --hero-inner-gap: clamp(2rem, 5vw, 5rem);
-  --hero-inner-padding-x: 1.5rem;
-  --hero-content-gap: 2rem;
+  --h-py: 5rem;
+  --h-px: 1.5rem;
+  --h-inner-gap: clamp(2rem, 5vw, 5rem);
+  --h-content-gap: 2rem;
 
-  --hero-avatar-size: clamp(10rem, 18vw, 15rem);
-  --hero-avatar-ring-size: 8px;
+  --h-avatar: clamp(10rem, 18vw, 15rem);
+  --h-avatar-ring: 8px;
 
-  --hero-badge-gap: 0.5rem;
-  --hero-badge-padding: 0.375rem 0.875rem;
-  --hero-badge-font-size: var(--font-size-caption-1);
+  --h-badge-gap: 0.5rem;
+  --h-badge-py: 0.375rem;
+  --h-badge-px: 0.875rem;
+  --h-badge-size: var(--font-size-caption-1);
+  --h-badge-border: color-mix(in srgb, var(--app-text-primary) 25%, transparent);
 
-  --hero-title-max-width: none;
-  --hero-title-font-size: clamp(var(--font-size-tittle-2), 4.5vw, var(--font-size-tittle-1));
-  --hero-title-line-height: 1.1;
+  --h-title-max: none;
+  --h-title-size: clamp(var(--font-size-tittle-2), 4.5vw, var(--font-size-tittle-1));
+  --h-title-lh: 1.1;
 
-  --hero-description-max-width: 640px;
-  --hero-description-font-size: var(--font-size-body-1);
-  --hero-description-line-height: var(--line-height-body-1);
+  --h-desc-max: 640px;
+  --h-desc-size: var(--font-size-body-1);
+  --h-desc-lh: var(--line-height-body-1);
 
-  --hero-ctas-max-width: none;
-  --hero-ctas-gap: 0.875rem;
-  --hero-button-min-height: initial;
-  --hero-button-padding: initial;
-  --hero-button-font-size: inherit;
-  --hero-button-icon-size: 1rem;
+  --h-ctas-max: none;
+  --h-ctas-gap: 0.875rem;
 
-  --hero-stack-max-width: none;
-  --hero-stack-gap: 0.5rem;
+  --h-stack-max: none;
+  --h-stack-gap: 0.5rem;
 
-  --tech-badge-gap: 0.375rem;
-  --tech-badge-padding: 0.25rem 0.75rem;
-  --tech-badge-font-size: var(--font-size-caption-1);
-  --tech-badge-icon-size: 16px;
-
-  min-height: calc(100dvh - 4rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: var(--hero-padding-y) 0;
-  box-sizing: border-box;
-}
-
-.hero-inner {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 var(--hero-inner-padding-x);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--hero-inner-gap);
+  --h-tech-gap: 0.375rem;
+  --h-tech-py: 0.25rem;
+  --h-tech-px: 0.75rem;
+  --h-tech-size: var(--font-size-caption-1);
+  --h-tech-icon: 16px;
+  --h-tech-hover-border: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
 
   box-sizing: border-box;
 }
 
-.hero-content,
-.hero-visual,
-.hero-card-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.hero-content {
-  width: 100%;
-  max-width: 800px;
-  flex: 1;
-  gap: var(--hero-content-gap);
-}
-
-.hero-badge,
-.tech-badge {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 9999px;
-}
-
-.hero-badge {
-  width: fit-content;
-  gap: var(--hero-badge-gap);
-  padding: var(--hero-badge-padding);
-
-  border: 1px solid color-mix(in srgb, var(--app-text-primary) 25%, transparent);
-  background-color: var(--app-badge-soft-bg);
-  color: var(--app-badge-soft-text);
-
-  font-size: var(--hero-badge-font-size);
-  font-weight: 600;
-}
-
-.hero-title {
-  max-width: var(--hero-title-max-width);
-  margin: 0;
-  color: var(--app-text-color);
-  font-size: var(--hero-title-font-size);
-  font-weight: 800;
-  line-height: var(--hero-title-line-height);
-  letter-spacing: -0.03em;
-}
-
+/* Title */
 .hero-title-line {
   display: inline;
 }
@@ -108,312 +46,109 @@
   content: ' ';
 }
 
-.hero-highlight {
-  color: var(--app-text-primary);
-}
-
-.hero-description {
-  max-width: var(--hero-description-max-width);
-  margin: 0;
-  color: var(--app-text-muted);
-  font-size: var(--hero-description-font-size);
-  line-height: var(--hero-description-line-height);
-}
-
-.hero-ctas,
-.hero-stack {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.hero-ctas {
-  gap: var(--hero-ctas-gap);
-}
-
-.hero-stack {
-  gap: var(--hero-stack-gap);
-}
-
-.tech-badge {
-  gap: var(--tech-badge-gap);
-  padding: var(--tech-badge-padding);
-
-  border: 1px solid var(--app-border-color);
-  background-color: var(--app-panel-muted-bg);
-  color: var(--app-text-color);
-
-  font-size: var(--tech-badge-font-size);
-  font-weight: 500;
-
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background-color 0.2s;
-}
-
-.tech-badge:hover {
-  color: var(--app-text-primary);
-  border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
-  background-color: var(--app-accent-soft-bg);
-}
-
-.tech-badge-icon {
-  width: var(--tech-badge-icon-size);
-  height: var(--tech-badge-icon-size);
-  flex-shrink: 0;
-  border-radius: 3px;
-  object-fit: contain;
-}
-
-.hero-visual {
-  width: clamp(300px, 30vw, 400px);
-  flex-shrink: 0;
-  align-items: center;
-  gap: 1.5rem;
-}
-
+/* Avatar */
 .hero-avatar {
-  width: var(--hero-avatar-size);
-  height: var(--hero-avatar-size);
-  flex-shrink: 0;
-  padding: 5px;
-
-  border-radius: 9999px;
+  width: var(--h-avatar);
+  height: var(--h-avatar);
   background: linear-gradient(135deg, var(--app-text-primary), color-mix(in srgb, var(--app-text-primary) 40%, transparent));
   box-shadow:
     var(--app-container-shadow),
-    0 0 0 var(--hero-avatar-ring-size) color-mix(in srgb, var(--app-text-primary) 12%, transparent);
+    0 0 0 var(--h-avatar-ring) color-mix(in srgb, var(--app-text-primary) 12%, transparent);
 }
 
-.hero-avatar img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border-radius: inherit;
-  background-color: var(--app-panel-muted-bg);
-  object-fit: cover;
-}
-
-.hero-card {
-  width: 100%;
-  overflow: hidden;
-
-  border: 1px solid var(--app-border-color);
-  border-radius: 1rem;
-  background-color: var(--app-panel-bg);
-  box-shadow: var(--app-container-shadow);
-
-  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
-}
-
-.hero-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.75rem 1rem;
-
-  border-bottom: 1px solid var(--app-border-color);
-  background-color: var(--app-panel-muted-bg);
-}
-
-.dot {
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 9999px;
-}
-
-.dot-red {
-  background-color: #ff5f57;
-}
-
-.dot-yellow {
-  background-color: #febc2e;
-}
-
-.dot-green {
-  background-color: #28c840;
-}
-
-.hero-card-title {
-  margin-left: 0.375rem;
-  color: var(--app-text-subtle);
-  font-size: var(--font-size-caption-1);
-}
-
-.hero-card-body {
-  gap: 0.25rem;
-  padding: 1.25rem 1.25rem 1.5rem;
-}
-
-.code-line {
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  white-space: pre;
-}
-
-.code-indent {
-  padding-left: 1.5rem;
-}
-
-.code-indent-2 {
-  padding-left: 3rem;
-}
-
-.code-keyword {
-  color: var(--p-primary-400, #a78bfa);
-}
-
-.code-class {
-  color: var(--p-primary-300, #c4b5fd);
-}
-
-.code-prop {
-  color: #60a5fa;
-}
-
-.code-string {
-  color: #34d399;
-}
-
-.code-punct {
-  color: var(--app-text-subtle);
-}
-
-/* =========================
-   Tablet horizontal: 769px - 1024px
-   ========================= */
-
+/* 769px - 1024px */
 @media (max-width: 1024px) {
   .hero {
-    --hero-padding-y: 3.75rem;
-    --hero-inner-gap: 1.9rem;
-    --hero-content-gap: 1.35rem;
+    --h-py: 3.75rem;
+    --h-inner-gap: 1.9rem;
+    --h-content-gap: 1.35rem;
 
-    --hero-avatar-size: 9.5rem;
-    --hero-avatar-ring-size: 7px;
+    --h-avatar: 9.5rem;
+    --h-avatar-ring: 7px;
 
-    --hero-title-max-width: 42rem;
-    --hero-title-font-size: clamp(2.3rem, 4vw, 3rem);
-    --hero-title-line-height: 1.08;
+    --h-title-max: 42rem;
+    --h-title-size: clamp(2.3rem, 4vw, 3rem);
+    --h-title-lh: 1.08;
 
-    --hero-description-max-width: 39rem;
-    --hero-description-font-size: 1rem;
-    --hero-description-line-height: 1.48;
+    --h-desc-max: 39rem;
+    --h-desc-size: 1rem;
+    --h-desc-lh: 1.48;
 
-    --hero-ctas-gap: 0.75rem;
+    --h-ctas-gap: 0.75rem;
 
-    --hero-stack-max-width: 42rem;
-    --hero-stack-gap: 0.45rem;
-  }
-
-  .hero-inner {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .hero-content {
-    max-width: 100%;
-    align-items: center;
-  }
-
-  .hero-visual {
-    order: -1;
-    width: auto;
-    gap: 0;
-  }
-
-  .hero-card {
-    display: none;
-  }
-
-  .hero-description {
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .hero-stack,
-  .hero-ctas {
-    justify-content: center;
+    --h-stack-max: 42rem;
+    --h-stack-gap: 0.45rem;
   }
 }
 
-/* =========================
-   Tablet vertical: 641px - 768px
-   ========================= */
-
+/* 641px - 768px */
 @media (max-width: 768px) {
   .hero {
-    --hero-padding-y: 3.25rem;
-    --hero-inner-gap: 1.65rem;
-    --hero-content-gap: 1.15rem;
+    --h-py: 3.25rem;
+    --h-inner-gap: 1.65rem;
+    --h-content-gap: 1.15rem;
 
-    --hero-avatar-size: 8.5rem;
-    --hero-avatar-ring-size: 7px;
+    --h-avatar: 8.5rem;
 
-    --hero-title-max-width: 35rem;
-    --hero-title-font-size: clamp(2rem, 4.4vw, 2.45rem);
-    --hero-title-line-height: 1.07;
+    --h-title-max: 35rem;
+    --h-title-size: clamp(2rem, 4.4vw, 2.45rem);
+    --h-title-lh: 1.07;
 
-    --hero-description-max-width: 34rem;
-    --hero-description-font-size: 0.96rem;
-    --hero-description-line-height: 1.45;
+    --h-desc-max: 34rem;
+    --h-desc-size: 0.96rem;
+    --h-desc-lh: 1.45;
 
-    --hero-ctas-gap: 0.65rem;
+    --h-ctas-gap: 0.65rem;
 
-    --hero-stack-max-width: 34rem;
-    --hero-stack-gap: 0.42rem;
+    --h-stack-max: 34rem;
+    --h-stack-gap: 0.42rem;
 
-    --tech-badge-padding: 0.22rem 0.65rem;
-    --tech-badge-font-size: 0.78rem;
-    --tech-badge-icon-size: 15px;
+    --h-tech-py: 0.22rem;
+    --h-tech-px: 0.65rem;
+    --h-tech-size: 0.78rem;
+    --h-tech-icon: 15px;
   }
 }
 
-/* =========================
-   Mobile grande: 481px - 640px
-   ========================= */
-
+/* 481px - 640px */
 @media (max-width: 640px) {
   .hero {
-    --hero-padding-y: 1.75rem;
-    --hero-inner-gap: 1.15rem;
-    --hero-inner-padding-x: 0.65rem;
-    --hero-content-gap: 1rem;
+    --h-py: 1.75rem;
+    --h-px: 0.65rem;
+    --h-inner-gap: 1.15rem;
+    --h-content-gap: 1rem;
 
-    --hero-avatar-size: 7.75rem;
-    --hero-avatar-ring-size: 6px;
+    --h-avatar: 7.75rem;
+    --h-avatar-ring: 6px;
 
-    --hero-badge-gap: 0.375rem;
-    --hero-badge-padding: 0.3rem 0.7rem;
-    --hero-badge-font-size: var(--font-size-caption-2);
+    --h-badge-gap: 0.375rem;
+    --h-badge-py: 0.3rem;
+    --h-badge-px: 0.7rem;
+    --h-badge-size: var(--font-size-caption-2);
 
-    --hero-title-max-width: min(32rem, calc(100vw - 0.5rem));
-    --hero-title-font-size: clamp(1.9rem, 5.65vw, 2.22rem);
-    --hero-title-line-height: 1.07;
+    --h-title-max: min(32rem, calc(100vw - 0.5rem));
+    --h-title-size: clamp(1.9rem, 5.65vw, 2.22rem);
+    --h-title-lh: 1.07;
 
-    --hero-description-max-width: min(28rem, calc(100vw - 1rem));
-    --hero-description-font-size: 0.9rem;
-    --hero-description-line-height: 1.42;
+    --h-desc-max: min(28rem, calc(100vw - 1rem));
+    --h-desc-size: 0.9rem;
+    --h-desc-lh: 1.42;
 
-    --hero-ctas-max-width: min(20rem, calc(100vw - 1.25rem));
-    --hero-ctas-gap: 0.5rem;
-    --hero-button-min-height: 2.1rem;
-    --hero-button-padding: 0.42rem 0.75rem;
-    --hero-button-font-size: 0.77rem;
-    --hero-button-icon-size: 0.85rem;
+    --h-ctas-max: min(20rem, calc(100vw - 1.25rem));
+    --h-ctas-gap: 0.5rem;
 
-    --hero-stack-max-width: min(22rem, calc(100vw - 1.25rem));
-    --hero-stack-gap: 0.36rem;
+    --h-stack-max: min(22rem, calc(100vw - 1.25rem));
+    --h-stack-gap: 0.36rem;
 
-    --tech-badge-gap: 0.3rem;
-    --tech-badge-padding: 0.18rem 0.55rem;
-    --tech-badge-font-size: 0.7rem;
-    --tech-badge-icon-size: 13px;
+    --h-tech-gap: 0.3rem;
+    --h-tech-py: 0.18rem;
+    --h-tech-px: 0.55rem;
+    --h-tech-size: 0.7rem;
+    --h-tech-icon: 13px;
   }
 
   .hero-title {
     width: 100%;
-    max-width: var(--hero-title-max-width);
     margin-inline: auto;
     text-align: center;
   }
@@ -428,100 +163,54 @@
   .hero-title-line:not(:last-child)::after {
     content: '';
   }
-
-  .hero-ctas {
-    width: 100%;
-    max-width: var(--hero-ctas-max-width);
-    margin: 0 auto;
-    flex-direction: column;
-  }
-
-  .hero-stack {
-    max-width: var(--hero-stack-max-width);
-    justify-content: center;
-  }
-
-  :host ::ng-deep .hero-ctas portfolio-button,
-  :host ::ng-deep .hero-ctas .p-button {
-    width: 100%;
-    min-height: var(--hero-button-min-height);
-    justify-content: center;
-  }
-
-  :host ::ng-deep .hero-ctas .p-button {
-    padding: var(--hero-button-padding);
-    font-size: var(--hero-button-font-size);
-  }
-
-  :host ::ng-deep .hero-ctas .p-button-label {
-    font-size: inherit;
-    line-height: 1.1;
-  }
-
-  :host ::ng-deep .hero-ctas .p-button-icon,
-  :host ::ng-deep .hero-ctas portfolio-icon {
-    width: var(--hero-button-icon-size);
-    height: var(--hero-button-icon-size);
-  }
 }
 
-/* =========================
-   Mobile real: 381px - 480px
-   ========================= */
-
+/* 381px - 480px */
 @media (max-width: 480px) {
   .hero {
-    --hero-padding-y: 1rem;
-    --hero-inner-gap: 0.95rem;
-    --hero-inner-padding-x: 0.5rem;
-    --hero-content-gap: 0.85rem;
+    --h-py: 1rem;
+    --h-px: 0.5rem;
+    --h-inner-gap: 0.95rem;
+    --h-content-gap: 0.85rem;
 
-    --hero-avatar-size: 6.9rem;
+    --h-avatar: 6.9rem;
 
-    --hero-title-max-width: min(27rem, calc(100vw - 0.25rem));
-    --hero-title-font-size: clamp(1.5rem, 6.35vw, 1.72rem);
-    --hero-title-line-height: 1.06;
+    --h-title-max: min(27rem, calc(100vw - 0.25rem));
+    --h-title-size: clamp(1.5rem, 6.35vw, 1.72rem);
+    --h-title-lh: 1.06;
 
-    --hero-description-max-width: min(22rem, calc(100vw - 1rem));
-    --hero-description-font-size: 0.8rem;
-    --hero-description-line-height: 1.36;
+    --h-desc-max: min(22rem, calc(100vw - 1rem));
+    --h-desc-size: 0.8rem;
+    --h-desc-lh: 1.36;
 
-    --hero-ctas-max-width: min(19rem, calc(100vw - 1rem));
-    --hero-ctas-gap: 0.45rem;
-    --hero-button-min-height: 2rem;
-    --hero-button-padding: 0.4rem 0.7rem;
-    --hero-button-font-size: 0.74rem;
+    --h-ctas-max: min(19rem, calc(100vw - 1rem));
+    --h-ctas-gap: 0.45rem;
 
-    --hero-stack-max-width: min(19rem, calc(100vw - 1rem));
-    --hero-stack-gap: 0.3rem;
+    --h-stack-max: min(19rem, calc(100vw - 1rem));
+    --h-stack-gap: 0.3rem;
 
-    --tech-badge-padding: 0.16rem 0.48rem;
-    --tech-badge-font-size: 0.66rem;
-    --tech-badge-icon-size: 12px;
+    --h-tech-py: 0.16rem;
+    --h-tech-px: 0.48rem;
+    --h-tech-size: 0.66rem;
+    --h-tech-icon: 12px;
   }
 }
 
-/* =========================
-   Mobile pequeño o poca altura
-   ========================= */
-
+/* <= 380px */
 @media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
   .hero {
-    --hero-padding-y: 0.75rem;
-    --hero-inner-gap: 0.75rem;
-    --hero-content-gap: 0.7rem;
+    --h-py: 0.75rem;
+    --h-inner-gap: 0.75rem;
+    --h-content-gap: 0.7rem;
 
-    --hero-avatar-size: 6rem;
+    --h-avatar: 6rem;
 
-    --hero-title-max-width: min(23rem, calc(100vw - 0.25rem));
-    --hero-title-font-size: clamp(1.28rem, 6vw, 1.48rem);
-    --hero-title-line-height: 1.05;
+    --h-title-max: min(23rem, calc(100vw - 0.25rem));
+    --h-title-size: clamp(1.28rem, 6vw, 1.48rem);
+    --h-title-lh: 1.05;
 
-    --hero-description-max-width: min(18rem, calc(100vw - 0.5rem));
-
-    --hero-description-font-size: 0.72rem;
-    --hero-description-line-height: 1.3;
-
-    --hero-button-padding: 0.4rem 0.55rem;
+    --h-desc-max: min(18rem, calc(100vw - 0.5rem));
+    --h-desc-size: 0.72rem;
+    --h-desc-lh: 1.3;
   }
 }
