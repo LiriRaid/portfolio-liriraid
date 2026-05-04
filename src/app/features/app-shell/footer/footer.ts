@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+
+import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 
 @Component({
   selector: 'portfolio-footer',
   standalone: true,
-  imports: [PortfolioIcon],
+  imports: [PortfolioButton],
   templateUrl: './footer.html',
   styleUrl: './footer.css',
 })

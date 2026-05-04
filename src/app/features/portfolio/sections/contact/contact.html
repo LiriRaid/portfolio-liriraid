@@ -19,28 +19,17 @@
       </div>
 
       <div class="contact-form-wrap">
-        @if (sent()) {
-          <div class="contact-success">
-            <p class="contact-success-title text-subtitle-2-bold">¡Mensaje enviado!</p>
-            <p class="contact-success-body text-body-2-regular">Gracias por escribirme, te responderé pronto.</p>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
+          <portfolio-input formControlName="name" label="Nombre" placeholder="Tu nombre completo" type="text" variant="on" lucideIcon="User" iconPosition="left" />
+
+          <portfolio-input formControlName="email" label="Correo electrónico" placeholder="Ingresa tu correo electrónico" type="email" variant="on" lucideIcon="Email" iconPosition="left" />
+
+          <div class="textarea textarea-default" [class.textarea-focused]="messageFocused()">
+            <textarea formControlName="message" class="contact-textarea text-caption-1-medium" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" (focus)="messageFocused.set(true)" (blur)="messageFocused.set(false)"></textarea>
           </div>
-        } @else {
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
-            <portfolio-input formControlName="name" label="Nombre" placeholder="Tu nombre completo" type="text" variant="on" lucideIcon="User" iconPosition="left" />
 
-            <portfolio-input formControlName="email" label="Correo electrónico" placeholder="Ingresa tu correo electrónico" type="email" variant="on" lucideIcon="Email" iconPosition="left" />
-
-            <div class="textarea textarea-default" [class.textarea-focused]="messageFocused()">
-              <textarea formControlName="message" class="contact-textarea text-caption-1-medium" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" (focus)="messageFocused.set(true)" (blur)="messageFocused.set(false)"></textarea>
-            </div>
-
-            @if (sendError()) {
-              <p class="contact-error text-caption-1-medium">Hubo un error al enviar. Intenta de nuevo.</p>
-            }
-
-            <portfolio-button [label]="sending() ? 'Enviando...' : 'Enviar mensaje'" icon="Send" iconPos="right" styleClass="w-full text-body-2-medium rounded-2xl contact-submit-btn" type="submit" [disabled]="sending()" />
-          </form>
-        }
+          <portfolio-button [label]="sending() ? 'Enviando...' : 'Enviar mensaje'" icon="Send" iconPos="right" styleClass="w-full text-body-2-medium rounded-2xl contact-submit-btn" type="submit" [loading]="sending()" [disabled]="sending()" />
+        </form>
       </div>
     </div>
   </div>

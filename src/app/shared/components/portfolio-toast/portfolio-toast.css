@@ -1,0 +1,192 @@
+:host {
+  display: contents;
+}
+
+/* Solo tamaño/spacing del contenedor. No tocamos los colores de PrimeNG. */
+:host ::ng-deep .p-toast.portfolio-toast-panel {
+  width: min(var(--p-toast-width, 25rem), calc(100vw - 2rem));
+}
+
+:host ::ng-deep .p-toast.portfolio-toast-panel .p-toast-message {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Headless: quitamos padding interno para controlar solo el layout del contenido. */
+:host ::ng-deep .p-toast.portfolio-toast-panel .p-toast-message-content {
+  padding: 0;
+}
+
+/* =========================
+   Content
+========================= */
+
+.portfolio-toast-shell {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+
+.portfolio-toast-main {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) 1.5rem;
+  column-gap: 0.75rem;
+  align-items: start;
+  padding: var(--p-toast-content-padding, 1rem);
+}
+
+.portfolio-toast-icon-wrap {
+  width: 1.25rem;
+  min-width: 1.25rem;
+  height: 100%;
+  min-height: 2.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  color: currentColor;
+  line-height: 1;
+}
+
+.portfolio-toast-icon-wrap portfolio-icon,
+:host ::ng-deep .portfolio-toast-icon-wrap svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  line-height: 1;
+}
+
+.portfolio-toast-icon {
+  color: currentColor;
+}
+
+.portfolio-toast-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.portfolio-toast-title,
+.portfolio-toast-message {
+  margin: 0;
+}
+
+.portfolio-toast-title {
+  color: var(--p-surface-950);
+}
+
+.portfolio-toast-message {
+  color: var(--p-surface-900);
+  overflow-wrap: anywhere;
+}
+
+:host-context(.dark) .portfolio-toast-title,
+:host-context(.dark) .portfolio-toast-message {
+  color: var(--p-surface-0);
+}
+
+.portfolio-toast-message strong {
+  color: inherit;
+  font-weight: 800;
+}
+
+/* =========================
+   Close button usando portfolio-button
+========================= */
+
+:host ::ng-deep .portfolio-toast-close-button.p-button {
+  width: 1.75rem;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  min-height: 1.75rem;
+  padding: 0;
+  align-self: start;
+  border-radius: 9999px;
+  color: currentColor;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  opacity: 0.8;
+}
+
+:host ::ng-deep .portfolio-toast-close-button.p-button:not(:disabled):hover {
+  color: currentColor;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  border-color: transparent;
+  opacity: 1;
+}
+
+:host ::ng-deep .portfolio-toast-close-button.p-button .p-button-icon,
+:host ::ng-deep .portfolio-toast-close-button.p-button portfolio-icon,
+:host ::ng-deep .portfolio-toast-close-button.p-button svg {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  color: currentColor;
+}
+
+/* =========================
+   Actions
+========================= */
+
+.portfolio-toast-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+}
+
+:host ::ng-deep .portfolio-toast-action-button.p-button {
+  min-height: 2rem;
+  border-radius: 0.5rem;
+}
+
+/* =========================
+   Progress
+========================= */
+
+.portfolio-toast-progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: currentColor;
+  transform: scaleX(1);
+  transform-origin: left;
+  animation: portfolio-toast-progress var(--toast-duration, 4000ms) linear forwards;
+  opacity: 0.9;
+}
+
+@keyframes portfolio-toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 480px) {
+  :host ::ng-deep .p-toast.portfolio-toast-panel {
+    width: calc(100vw - 1.5rem);
+  }
+
+  .portfolio-toast-main {
+    padding: 0.9rem;
+  }
+
+  .portfolio-toast-actions {
+    padding: 0 0.9rem 0.9rem;
+  }
+}

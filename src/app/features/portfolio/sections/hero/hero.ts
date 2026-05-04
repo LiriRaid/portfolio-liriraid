@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, PLATFORM_ID, afterNextRender, injec
 
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { AlertService } from '@shared/services/alert.service';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
 type CodeToken = {
@@ -25,6 +26,8 @@ type CodeLine = {
 })
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly alertService = inject(AlertService);
+
   private readonly cvUrl = 'assets/docs/gabriel-cruz-cv.pdf';
   private readonly cvFileName = 'Gabriel-Leonardo-Cruz-Flores-CV.pdf';
 
@@ -135,6 +138,8 @@ export class Hero {
     document.body.appendChild(link);
     link.click();
     link.remove();
+
+    this.alertService.showSuccess('CV descargado', 'Has descargado el CV con éxito.', undefined, 4000, 'top-center');
   }
 
   private resetToHeroOnLoad(): void {

@@ -10,13 +10,21 @@ html {
 
 /* Compensa el header sticky (4rem) al navegar por anclas */
 section[id] {
-  scroll-margin-top: 4rem;
+  scroll-margin-top: 4.25rem;
 }
 
 body {
   background-color: var(--app-shell-bg);
   color: var(--app-text-color);
   margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 @import './styles/theme-styles.css';

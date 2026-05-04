@@ -14,7 +14,7 @@ const MAP: Record<string, string> = {
   'SASS':            `${SKILL}sass`,
   'Tailwind CSS':    `${SKILL}tailwind`,
   'RxJS':            `${SKILL}rxjs`,
-  'Signals':         `assets/svg/angular-logo.svg`, // No hay un ícono específico para Signals, se usa el de Angular como referencia
+  'Signals':         `assets/svg/angular-logo.svg`,
   'Node.js':         `${SKILL}nodejs`,
   'Ruby on Rails':   `${SKILL}rails`,
   'Express':         `${SKILL}express`,

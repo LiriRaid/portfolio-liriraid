@@ -10,11 +10,13 @@
 .section-inner {
   width: 100%;
   max-width: 1280px;
+  min-width: 0;
   margin: 0 auto;
   padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  box-sizing: border-box;
 }
 
 .section-header {
@@ -54,6 +56,7 @@
    ========================= */
 
 .project-toolbar {
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -71,6 +74,7 @@
 .project-filter-container {
   position: relative;
   width: auto;
+  min-width: 0;
   flex-shrink: 0;
 }
 
@@ -209,6 +213,7 @@
 }
 
 .project-filter-category {
+  min-width: 0;
   min-height: 128px;
   padding: 0.875rem;
   display: flex;
@@ -243,6 +248,7 @@
 }
 
 .project-filter-options {
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.625rem;
@@ -255,6 +261,7 @@
 .project-selected-tags,
 .project-tags,
 .project-stats {
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.625rem;
@@ -401,15 +408,21 @@
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.projects-grid > li {
+  min-width: 0;
+}
+
 .project-card {
   position: relative;
+  width: 100%;
+  min-width: 0;
   min-height: 320px;
   height: 100%;
   display: flex;
@@ -448,6 +461,7 @@
 }
 
 .project-card-body {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -463,6 +477,7 @@
    ========================= */
 
 .project-card-github {
+  min-width: 0;
   margin-top: auto;
   display: flex;
   flex-direction: column;
@@ -494,6 +509,7 @@
 }
 
 .project-card-footer {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -557,7 +573,6 @@
   }
 }
 
-/* 1024 hacia abajo: toma todo el ancho disponible y usa 2 columnas */
 @media (max-width: 1024px) {
   ::ng-deep .p-popover.project-filter-panel {
     width: calc(100vw - 2rem);
@@ -578,7 +593,6 @@
   }
 }
 
-/* 768: muestra 4 categorías completas: 2 columnas x 2 filas */
 @media (max-width: 768px) {
   ::ng-deep .p-popover.project-filter-panel {
     width: calc(100vw - 2rem);
@@ -607,31 +621,26 @@
   }
 }
 
-/* 640: muestra 3 categorías completas: 1 columna x 3 filas */
 @media (max-width: 640px) {
   .section {
     padding: 4rem 0;
   }
 
   .section-inner {
-    padding: 0 1rem;
+    max-width: 100%;
+    padding-inline: 1rem;
   }
 
   .project-toolbar {
     align-items: flex-start;
     flex-wrap: wrap;
     column-gap: 1rem;
-    row-gap: 0;
   }
 
   .project-toolbar portfolio-search {
     flex: 0 0 auto;
     max-width: none;
     margin-left: auto;
-  }
-
-  .project-filter-container {
-    width: auto;
   }
 
   .project-filter-bar {
@@ -673,7 +682,7 @@
 
   .project-filter-category-grid,
   .projects-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .project-filter-category {
@@ -686,6 +695,10 @@
     min-height: auto;
   }
 
+  .project-card-body {
+    padding: 1rem;
+  }
+
   .project-title {
     padding-right: 0;
   }
@@ -694,5 +707,34 @@
     position: static;
     width: fit-content;
     margin: 1rem 1rem 0;
+  }
+
+  .project-stats {
+    padding: 1rem;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .project-card-footer {
+    padding: 0.95rem 1rem 1rem;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .section-inner {
+    padding-inline: 0.75rem;
+  }
+
+  .project-card-body {
+    padding: 1rem;
+  }
+
+  .project-stats {
+    padding: 0.875rem 1rem;
+  }
+
+  .project-card-footer {
+    padding-inline: 1rem;
   }
 }

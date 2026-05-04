@@ -1,64 +1,95 @@
-<!doctype html><html lang="es">
-<head>
-  <meta charset="utf-8">
-  <title>Gabriel Cruz</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Portfolio de Gabriel Cruz (Liriraid), Desarrollador Full Angular · TypeScript · Node.js.">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <!-- Bloquea el primer paint con el color guardado (evita flash del color default) -->
-  <script>
-    (function () {
-      try {
-        var PP = {
-          black:   ['#fafafa','#f5f5f5','#e5e5e5','#d4d4d4','#a3a3a3','#737373','#525252','#404040','#262626','#171717','#0a0a0a'],
-          indigo:  ['#eef2ff','#e0e7ff','#c7d2fe','#a5b4fc','#818cf8','#6366f1','#4f46e5','#4338ca','#3730a3','#312e81','#1e1b4b'],
-          blue:    ['#eff6ff','#dbeafe','#bfdbfe','#93c5fd','#60a5fa','#3b82f6','#2563eb','#1d4ed8','#1e40af','#1e3a8a','#172554'],
-          sky:     ['#f0f9ff','#e0f2fe','#bae6fd','#7dd3fc','#38bdf8','#0ea5e9','#0284c7','#0369a1','#075985','#0c4a6e','#082f49'],
-          cyan:    ['#ecfeff','#cffafe','#a5f3fc','#67e8f9','#22d3ee','#06b6d4','#0891b2','#0e7490','#155e75','#164e63','#083344'],
-          teal:    ['#f0fdfa','#ccfbf1','#99f6e4','#5eead4','#2dd4bf','#14b8a6','#0d9488','#0f766e','#115e59','#134e4a','#042f2e'],
-          green:   ['#ecfdf5','#d1fae5','#a7f3d0','#6ee7b7','#34d399','#10b981','#059669','#047857','#065f46','#064e3b','#022c22'],
-          amber:   ['#fffbeb','#fef3c7','#fde68a','#fcd34d','#fbbf24','#f59e0b','#d97706','#b45309','#92400e','#78350f','#451a03'],
-          orange:  ['#fff7ed','#ffedd5','#fed7aa','#fdba74','#fb923c','#f97316','#ea580c','#c2410c','#9a3412','#7c2d12','#431407'],
-          red:     ['#fff1f2','#ffe4e6','#fecdd3','#fda4af','#fb7185','#f43f5e','#e11d48','#be123c','#9f1239','#881337','#4c0519'],
-          hotpink: ['#fdf2f8','#fce7f3','#fbcfe8','#f9a8d4','#f472b6','#ec4899','#db2777','#be185d','#9d174d','#831843','#500724'],
-          pink:    ['#fdf4ff','#fae8ff','#f5d0fe','#f0abfc','#e879f9','#d946ef','#c026d3','#a21caf','#86198f','#701a75','#4a044e'],
-          purple:  ['#f5f3ff','#ede9fe','#ddd6fe','#c4b5fd','#a78bfa','#8b5cf6','#7c3aed','#6d28d9','#5b21b6','#4c1d95','#2e1065']
-        };
-        var SP = {
-          slate:   ['#ffffff','#f8fafc','#f1f5f9','#e2e8f0','#cbd5e1','#94a3b8','#64748b','#475569','#334155','#1e293b','#0f172a','#020617'],
-          gray:    ['#ffffff','#f9fafb','#f3f4f6','#e5e7eb','#d1d5db','#9ca3af','#6b7280','#4b5563','#374151','#1f2937','#111827','#030712'],
-          zinc:    ['#ffffff','#fafafa','#f4f4f5','#e4e4e7','#d4d4d8','#a1a1aa','#71717a','#52525b','#3f3f46','#27272a','#18181b','#09090b'],
-          neutral: ['#ffffff','#fafafa','#f5f5f5','#e5e5e5','#d4d4d4','#a3a3a3','#737373','#525252','#404040','#262626','#171717','#0a0a0a'],
-          stone:   ['#ffffff','#fafaf9','#f5f5f4','#e7e5e4','#d6d3d1','#a8a29e','#78716c','#57534e','#44403c','#292524','#1c1917','#0c0a09'],
-          soho:    ['#ffffff','#ececec','#dedfdf','#c4c4c6','#adaeb0','#97979b','#7f8084','#6a6b70','#55565b','#3f4046','#2c2c34','#16161d'],
-          viva:    ['#ffffff','#f3f3f3','#e7e7e8','#cfd0d0','#b7b8b9','#9fa1a1','#87898a','#6e7173','#565a5b','#3e4244','#262b2c','#0e1315'],
-          ocean:   ['#ffffff','#fbfcfc','#f7f9f8','#eff3f2','#dadedd','#b1b7b6','#828787','#5f7274','#415b61','#29444e','#183240','#0c1920']
-        };
-        var pShades = [50,100,200,300,400,500,600,700,800,900,950];
-        var sShades = [0,50,100,200,300,400,500,600,700,800,900,950];
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Gabriel Cruz</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Portfolio de Gabriel Cruz (Liriraid), Desarrollador Full Angular · TypeScript · Node.js." />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-        var mode = localStorage.getItem('portfolio-theme-mode') || 'dark';
-        var pk   = localStorage.getItem('portfolio-primary-color') || 'black';
-        var sk   = localStorage.getItem('portfolio-surface-color') || 'neutral';
+    <!--
+    Pre-theme para SSR/SSG + hydration.
+    Evita el flash gris/default antes de que Angular + PrimeNG hidraten.
+    Importante: no usamos documentElement.style.setProperty(),
+    usamos un <style> temporal para no bloquear los cambios posteriores.
+  -->
+    <script>
+      (function () {
+        try {
+          var PP = {
+            black: ['#fafafa', '#f5f5f5', '#e5e5e5', '#d4d4d4', '#a3a3a3', '#737373', '#525252', '#404040', '#262626', '#171717', '#0a0a0a'],
+            indigo: ['#eef2ff', '#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1', '#4f46e5', '#4338ca', '#3730a3', '#312e81', '#1e1b4b'],
+            blue: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a', '#172554'],
+            sky: ['#f0f9ff', '#e0f2fe', '#bae6fd', '#7dd3fc', '#38bdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49'],
+            cyan: ['#ecfeff', '#cffafe', '#a5f3fc', '#67e8f9', '#22d3ee', '#06b6d4', '#0891b2', '#0e7490', '#155e75', '#164e63', '#083344'],
+            teal: ['#f0fdfa', '#ccfbf1', '#99f6e4', '#5eead4', '#2dd4bf', '#14b8a6', '#0d9488', '#0f766e', '#115e59', '#134e4a', '#042f2e'],
+            green: ['#ecfdf5', '#d1fae5', '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857', '#065f46', '#064e3b', '#022c22'],
+            amber: ['#fffbeb', '#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e', '#78350f', '#451a03'],
+            orange: ['#fff7ed', '#ffedd5', '#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c', '#9a3412', '#7c2d12', '#431407'],
+            red: ['#fff1f2', '#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#f43f5e', '#e11d48', '#be123c', '#9f1239', '#881337', '#4c0519'],
+            hotpink: ['#fdf2f8', '#fce7f3', '#fbcfe8', '#f9a8d4', '#f472b6', '#ec4899', '#db2777', '#be185d', '#9d174d', '#831843', '#500724'],
+            pink: ['#fdf4ff', '#fae8ff', '#f5d0fe', '#f0abfc', '#e879f9', '#d946ef', '#c026d3', '#a21caf', '#86198f', '#701a75', '#4a044e'],
+            purple: ['#f5f3ff', '#ede9fe', '#ddd6fe', '#c4b5fd', '#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95', '#2e1065'],
+          };
 
-        if (mode === 'dark') document.documentElement.classList.add('dark');
-        document.documentElement.dataset['primaryColor'] = pk;
-        document.documentElement.dataset['surfaceColor']  = sk;
+          var SP = {
+            slate: ['#ffffff', '#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a', '#020617'],
+            gray: ['#ffffff', '#f9fafb', '#f3f4f6', '#e5e7eb', '#d1d5db', '#9ca3af', '#6b7280', '#4b5563', '#374151', '#1f2937', '#111827', '#030712'],
+            zinc: ['#ffffff', '#fafafa', '#f4f4f5', '#e4e4e7', '#d4d4d8', '#a1a1aa', '#71717a', '#52525b', '#3f3f46', '#27272a', '#18181b', '#09090b'],
+            neutral: ['#ffffff', '#fafafa', '#f5f5f5', '#e5e5e5', '#d4d4d4', '#a3a3a3', '#737373', '#525252', '#404040', '#262626', '#171717', '#0a0a0a'],
+            stone: ['#ffffff', '#fafaf9', '#f5f5f4', '#e7e5e4', '#d6d3d1', '#a8a29e', '#78716c', '#57534e', '#44403c', '#292524', '#1c1917', '#0c0a09'],
+            soho: ['#ffffff', '#ececec', '#dedfdf', '#c4c4c6', '#adaeb0', '#97979b', '#7f8084', '#6a6b70', '#55565b', '#3f4046', '#2c2c34', '#16161d'],
+            viva: ['#ffffff', '#f3f3f3', '#e7e7e8', '#cfd0d0', '#b7b8b9', '#9fa1a1', '#87898a', '#6e7173', '#565a5b', '#3e4244', '#262b2c', '#0e1315'],
+            ocean: ['#ffffff', '#fbfcfc', '#f7f9f8', '#eff3f2', '#dadedd', '#b1b7b6', '#828787', '#5f7274', '#415b61', '#29444e', '#183240', '#0c1920'],
+          };
 
-        // Inline styles: el ThemeService los eliminará antes de llamar
-        // updatePrimaryPalette() para no bloquear los cambios posteriores.
-        var r  = document.documentElement;
-        var pp = PP[pk] || PP['black'];
-        var sp = SP[sk] || SP['neutral'];
-        pShades.forEach(function (s, i) { r.style.setProperty('--p-primary-' + s, pp[i]); });
-        r.style.setProperty('--p-primary-color', pp[5]);
-        sShades.forEach(function (s, i) { r.style.setProperty('--p-surface-' + s, sp[i]); });
-      } catch (e) {}
-    })();
-  </script>
-</head>
-<body>
-  <portfolio-root></portfolio-root>
-</body>
+          var pShades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+          var sShades = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+          var mode = localStorage.getItem('portfolio-theme-mode') || 'dark';
+          var pk = localStorage.getItem('portfolio-primary-color') || 'black';
+          var sk = localStorage.getItem('portfolio-surface-color') || 'neutral';
+
+          var root = document.documentElement;
+
+          if (mode === 'dark') {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+
+          root.dataset.primaryColor = pk;
+          root.dataset.surfaceColor = sk;
+
+          var pp = PP[pk] || PP.black;
+          var sp = SP[sk] || SP.neutral;
+
+          var css = ':root{';
+
+          pShades.forEach(function (shade, index) {
+            css += '--p-primary-' + shade + ':' + pp[index] + ';';
+          });
+
+          css += '--p-primary-color:' + pp[5] + ';';
+
+          sShades.forEach(function (shade, index) {
+            css += '--p-surface-' + shade + ':' + sp[index] + ';';
+          });
+
+          css += '}';
+
+          var style = document.createElement('style');
+          style.id = 'portfolio-pretheme';
+          style.textContent = css;
+
+          document.head.appendChild(style);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+
+  <body>
+    <portfolio-root></portfolio-root>
+  </body>
 </html>

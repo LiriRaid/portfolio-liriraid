@@ -6,16 +6,27 @@
     </div>
 
     <div class="footer-links">
-      <a href="https://github.com/liriraid" target="_blank" rel="noopener noreferrer" class="footer-link" aria-label="GitHub de Gabriel Cruz">
-        <img src="https://skillicons.dev/icons?i=github" alt="GitHub" width="18" height="18" loading="lazy" style="border-radius: 3px; vertical-align: middle" />
-        <span>GitHub</span>
-      </a>
-      <a href="#contacto" class="footer-link" aria-label="Ir al formulario de contacto">
-        <portfolio-icon name="Email" size="18" />
-        <span>Contacto</span>
-      </a>
+      <portfolio-button
+        label="GitHub"
+        techIcon="GitHub"
+        href="https://github.com/liriraid"
+        target="_blank"
+        rel="noopener noreferrer"
+        variant="text"
+        ariaLabel="GitHub de Gabriel Cruz"
+        styleClass="footer-link-button text-caption-1-medium"
+      />
+
+      <portfolio-button
+        label="Contacto"
+        icon="Email"
+        href="#contacto"
+        variant="text"
+        ariaLabel="Ir al formulario de contacto"
+        styleClass="footer-link-button text-caption-1-medium"
+      />
     </div>
 
-    <p class="footer-copy">© {{ year }} Gabriel Leonardo Cruz Flores · Hecho con Angular 21 + Tailwind CSS</p>
+    <p class="footer-copy">© {{ year }} Gabriel Leonardo Cruz Flores · Hecho con Angular 21 SSR+Hydratation + PrimeNG + Tailwind CSS 4</p>
   </div>
 </footer>
