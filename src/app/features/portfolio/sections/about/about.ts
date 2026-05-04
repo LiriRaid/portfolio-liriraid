@@ -2,12 +2,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject } from '@angular/core';
 
 import { AboutContent, Stat } from '@features/portfolio/entities';
+import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 
 @Component({
   selector: 'portfolio-about',
   standalone: true,
-  imports: [PortfolioButton],
+  imports: [PortfolioButton, PortfolioIcon],
   templateUrl: './about.html',
   styleUrl: './about.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

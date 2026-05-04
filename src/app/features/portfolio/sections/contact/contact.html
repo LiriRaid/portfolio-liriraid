@@ -1,25 +1,25 @@
-<section id="contacto" class="section" aria-labelledby="contact-heading">
-  <div class="section-inner">
-    <div class="contact-layout">
-      <div class="contact-content">
-        <p class="section-label">Hablemos</p>
+<section id="contacto" class="contact flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-shell-bg) py-(--c-py)" aria-labelledby="contact-heading">
+  <div class="contact-inner mx-auto w-full max-w-7xl px-(--c-px)">
+    <div class="contact-layout grid items-center gap-(--c-layout-gap)">
+      <div class="contact-content flex flex-col gap-(--c-content-gap)">
+        <p class="contact-label m-0">Hablemos</p>
 
-        <h2 id="contact-heading" class="contact-title text-tittle-4-bold">
+        <h2 id="contact-heading" class="contact-title m-0 text-tittle-4-bold">
           ¿Listo para construir<br />
           <span class="contact-highlight">algo juntos</span>?
         </h2>
 
-        <p class="contact-description text-body-1-regular">Estoy abierto a proyectos freelance, colaboraciones técnicas y propuestas donde pueda aportar valor construyendo soluciones web modernas, escalables y bien cuidadas. Si tienes una idea que quieras llevar a producción, me encantaría escucharla.</p>
+        <p class="contact-description m-0 max-w-(--c-desc-max) text-body-1-regular">Estoy abierto a proyectos freelance, colaboraciones técnicas y propuestas donde pueda aportar valor construyendo soluciones web modernas, escalables y bien cuidadas. Si tienes una idea que quieras llevar a producción, me encantaría escucharla.</p>
 
-        <div class="contact-social">
+        <div class="contact-social flex flex-wrap gap-(--c-social-gap)">
           @for (link of socialLinks; track link.label) {
             <portfolio-button [label]="link.label" [techIcon]="link.techIcon" [href]="link.href" [target]="link.target" [rel]="link.rel" variant="outlined" [ariaLabel]="link.label" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" />
           }
         </div>
       </div>
 
-      <div class="contact-form-wrap">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
+      <div class="contact-form-wrap rounded-2xl border p-(--c-form-p)">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form flex flex-col gap-(--c-form-gap)" novalidate>
           <portfolio-input formControlName="name" label="Nombre" placeholder="Tu nombre completo" type="text" variant="on" lucideIcon="User" iconPosition="left" />
 
           <portfolio-input formControlName="email" label="Correo electrónico" placeholder="Ingresa tu correo electrónico" type="email" variant="on" lucideIcon="Email" iconPosition="left" />
@@ -28,7 +28,7 @@
             <textarea formControlName="message" class="contact-textarea text-caption-1-medium" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" (focus)="messageFocused.set(true)" (blur)="messageFocused.set(false)"></textarea>
           </div>
 
-          <portfolio-button [label]="sending() ? 'Enviando...' : 'Enviar mensaje'" icon="Send" iconPos="right" styleClass="w-full text-body-2-medium rounded-2xl contact-submit-btn" type="submit" [loading]="sending()" [disabled]="sending()" />
+          <portfolio-button [label]="sending() ? 'Enviando...' : 'Enviar mensaje'" icon="Send" iconPos="right" iconSize="16" styleClass="w-full text-body-2-medium rounded-2xl contact-submit-btn" type="submit" [loading]="sending()" [disabled]="sending()" />
         </form>
       </div>
     </div>

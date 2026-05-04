@@ -21,19 +21,37 @@
         </div>
 
         <div class="about-cta flex">
-          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium max-[1024px]:!min-h-[2.35rem] max-[1024px]:!px-3.5 max-[1024px]:!py-1.75 max-[1024px]:!text-[0.86rem] max-[640px]:!min-h-[2.1rem] max-[640px]:!px-3 max-[640px]:!py-[0.42rem] max-[640px]:!text-[0.77rem] max-[480px]:!min-h-8 max-[480px]:!px-2.75 max-[480px]:!py-1.5 max-[480px]:!text-[0.74rem] max-[380px]:!px-2.5 max-[380px]:!text-[0.7rem]" (onClick)="scrollToContact()" />
+          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToContact()" />
         </div>
       </div>
 
       <div class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
-        @for (stat of stats; track stat.label) {
-          <article class="stat-card flex flex-col gap-(--a-stat-gap) rounded-2xl border p-(--a-stat-p)">
-            <span class="stat-value text-tittle-4-bold">
-              {{ stat.value }}
-            </span>
+        @for (stat of stats; track stat.label; let i = $index) {
+          <article class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
+            <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">
+              <span class="stat-value text-tittle-4-bold">
+                {{ stat.value }}
+              </span>
 
-            <span class="stat-label text-caption-1-regular">
-              {{ stat.label }}
+              <span class="stat-label text-caption-1-regular">
+                {{ stat.label }}
+              </span>
+            </div>
+
+            <span class="stat-icon inline-flex shrink-0 items-center justify-center" aria-hidden="true">
+              @switch (i) {
+                @case (0) {
+                  <portfolio-icon name="Code" size="16" />
+                }
+
+                @case (1) {
+                  <portfolio-icon name="Github" size="16" />
+                }
+
+                @default {
+                  <portfolio-icon name="ShieldCheck" size="16" />
+                }
+              }
             </span>
           </article>
         }

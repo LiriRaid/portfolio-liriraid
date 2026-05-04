@@ -1,100 +1,154 @@
-.section {
-  min-height: calc(100dvh - 4rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5rem 0;
-  background-color: var(--app-shell-bg);
+.contact {
+  --c-py: 5rem;
+  --c-px: 1.5rem;
+
+  --c-layout-gap: 5rem;
+  --c-form-width: 30rem;
+
+  --c-content-gap: 1.5rem;
+
+  --c-label-size: var(--font-size-caption-1);
+
+  --c-title-size: var(--font-size-tittle-4);
+  --c-title-lh: var(--line-height-tittle-4);
+
+  --c-desc-max: 30rem;
+  --c-desc-size: var(--font-size-body-1);
+  --c-desc-lh: var(--line-height-body-1);
+
+  --c-social-gap: 0.75rem;
+
+  --c-form-p: 2rem;
+  --c-form-gap: 1.25rem;
+  --c-form-radius: 1.25rem;
+
+  --c-input-h: 3.08rem;
+  --c-input-py: 0.68rem;
+  --c-input-pl: 2.62rem;
+  --c-input-pr: 0.95rem;
+  --c-input-size: 0.84rem;
+  --c-input-label-size: 0.88rem;
+  --c-input-icon: 16px;
+
+  --c-textarea-min-h: 8.75rem;
+  --c-textarea-py: 0.85rem;
+  --c-textarea-px: 1rem;
+  --c-textarea-size: var(--font-size-caption-1);
+  --c-textarea-lh: 1.45;
+
+  --c-btn-min-h: initial;
+  --c-btn-py: initial;
+  --c-btn-px: initial;
+  --c-btn-size: inherit;
+  --c-btn-icon: 1rem;
+
+  box-sizing: border-box;
 }
 
-.section-inner {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-/* Header */
-.section-label,
-.contact-title,
-.contact-description,
-.contact-success-title,
-.contact-success-body,
-.contact-error {
-  margin: 0;
-}
-
-.section-label {
+/* Text */
+.contact-label {
   color: var(--app-text-primary);
-  font-size: var(--font-size-caption-1);
+  font-size: var(--c-label-size);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-/* Layout */
-.contact-layout {
-  display: grid;
-  grid-template-columns: 1fr 480px;
-  align-items: center;
-  gap: 5rem;
-}
-
-.contact-content,
-.contact-form,
-.contact-success {
-  display: flex;
-  flex-direction: column;
-}
-
-.contact-content {
-  gap: 1.5rem;
-}
-
 .contact-title {
   color: var(--app-text-color);
+  font-size: var(--c-title-size);
+  line-height: var(--c-title-lh);
   letter-spacing: -0.02em;
 }
 
-.contact-highlight,
-.contact-success-title {
+.contact-highlight {
   color: var(--app-text-primary);
 }
 
 .contact-description {
-  max-width: 480px;
   color: var(--app-text-muted);
+  font-size: var(--c-desc-size);
+  line-height: var(--c-desc-lh);
 }
 
-/* Social */
-.contact-social {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+/* Layout */
+.contact-layout {
+  grid-template-columns: minmax(0, 1fr) var(--c-form-width);
 }
 
 /* Form */
 .contact-form-wrap {
-  padding: 2rem;
-  border: 1px solid var(--app-container-border, var(--app-border-color));
-  border-radius: 1.25rem;
+  border-color: var(--app-container-border, var(--app-border-color));
+  border-radius: var(--c-form-radius);
   background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
 }
 
-.contact-form {
-  gap: 1.25rem;
+.contact-textarea {
+  width: 100%;
+  min-height: var(--c-textarea-min-h);
+  resize: vertical;
+  padding: var(--c-textarea-py) var(--c-textarea-px);
+  color: var(--app-text-color);
+  font-size: var(--c-textarea-size);
+  line-height: var(--c-textarea-lh);
+  background-color: transparent;
+  border: 0;
+  outline: none;
 }
 
 .contact-textarea::placeholder {
   color: var(--app-text-subtle);
 }
 
+/* Contact input overrides */
+:host ::ng-deep .contact-form portfolio-input fieldset {
+  min-height: var(--c-input-h);
+}
+
+:host ::ng-deep .contact-form portfolio-input .portfolio-input-field {
+  min-height: var(--c-input-h);
+  padding-top: var(--c-input-py);
+  padding-bottom: var(--c-input-py);
+  font-size: var(--c-input-size);
+  line-height: 1.2;
+}
+
+:host ::ng-deep .contact-form portfolio-input .portfolio-input-field.pl-10 {
+  padding-left: var(--c-input-pl);
+}
+
+:host ::ng-deep .contact-form portfolio-input .portfolio-input-field.pr-4 {
+  padding-right: var(--c-input-pr);
+}
+
+:host ::ng-deep .contact-form portfolio-input label,
+:host ::ng-deep .contact-form portfolio-input legend span {
+  font-size: var(--c-input-label-size);
+}
+
+:host ::ng-deep .contact-form portfolio-input portfolio-icon {
+  width: var(--c-input-icon);
+  height: var(--c-input-icon);
+}
+
 /* States */
 .contact-success {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  padding: 2rem;
+  padding: var(--c-form-p);
   text-align: center;
+}
+
+.contact-success-title,
+.contact-success-body,
+.contact-error {
+  margin: 0;
+}
+
+.contact-success-title {
+  color: var(--app-text-primary);
 }
 
 .contact-success-body {
@@ -105,24 +159,255 @@
   color: #f87171;
 }
 
-/* Responsive */
+/* 769px - 1024px */
 @media (max-width: 1024px) {
+  .contact {
+    --c-py: 4.15rem;
+    --c-px: 1.5rem;
+
+    --c-layout-gap: 3rem;
+    --c-content-gap: 1.35rem;
+
+    --c-label-size: 0.82rem;
+
+    --c-title-size: 1.82rem;
+    --c-title-lh: 1.08;
+
+    --c-desc-max: 42rem;
+    --c-desc-size: 1.02rem;
+    --c-desc-lh: 1.56;
+
+    --c-social-gap: 0.65rem;
+
+    --c-form-width: 100%;
+    --c-form-p: 1.75rem;
+    --c-form-gap: 1.1rem;
+
+    --c-input-h: 2.98rem;
+    --c-input-py: 0.64rem;
+    --c-input-pl: 2.56rem;
+    --c-input-pr: 0.92rem;
+    --c-input-size: 0.83rem;
+    --c-input-label-size: 0.86rem;
+    --c-input-icon: 15px;
+
+    --c-textarea-min-h: 8rem;
+    --c-textarea-py: 0.8rem;
+    --c-textarea-px: 0.95rem;
+    --c-textarea-size: 0.82rem;
+  }
+
   .contact-layout {
-    grid-template-columns: 1fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
+/* 641px - 768px */
+@media (max-width: 768px) {
+  .contact {
+    --c-py: 3.25rem;
+    --c-px: 1.1rem;
+
+    --c-layout-gap: 2rem;
+    --c-content-gap: 1.15rem;
+
+    --c-label-size: 0.74rem;
+
+    --c-title-size: 1.5rem;
+    --c-title-lh: 1.06;
+
+    --c-desc-max: 36rem;
+    --c-desc-size: 0.92rem;
+    --c-desc-lh: 1.5;
+
+    --c-social-gap: 0.55rem;
+
+    --c-form-p: 1.35rem;
+    --c-form-gap: 1rem;
+    --c-form-radius: 1.1rem;
+
+    --c-input-h: 2.84rem;
+    --c-input-py: 0.6rem;
+    --c-input-pl: 2.46rem;
+    --c-input-pr: 0.88rem;
+    --c-input-size: 0.8rem;
+    --c-input-label-size: 0.84rem;
+    --c-input-icon: 14.5px;
+
+    --c-textarea-min-h: 7.5rem;
+    --c-textarea-py: 0.72rem;
+    --c-textarea-px: 0.85rem;
+    --c-textarea-size: 0.78rem;
+    --c-textarea-lh: 1.42;
+  }
+}
+
+/* 481px - 640px */
 @media (max-width: 640px) {
-  .section {
-    padding: 4rem 0;
+  .contact {
+    --c-py: 2.65rem;
+    --c-px: 0.95rem;
+
+    --c-layout-gap: 1.6rem;
+    --c-content-gap: 1rem;
+
+    --c-label-size: 0.7rem;
+
+    --c-title-size: 1.38rem;
+    --c-title-lh: 1.05;
+
+    --c-desc-max: 100%;
+    --c-desc-size: 0.86rem;
+    --c-desc-lh: 1.48;
+
+    --c-social-gap: 0.5rem;
+
+    --c-form-p: 1rem;
+    --c-form-gap: 0.85rem;
+    --c-form-radius: 1rem;
+
+    --c-input-h: 2.66rem;
+    --c-input-py: 0.54rem;
+    --c-input-pl: 2.34rem;
+    --c-input-pr: 0.84rem;
+    --c-input-size: 0.77rem;
+    --c-input-label-size: 0.8rem;
+    --c-input-icon: 14px;
+
+    --c-textarea-min-h: 7rem;
+    --c-textarea-py: 0.68rem;
+    --c-textarea-px: 0.8rem;
+    --c-textarea-size: 0.74rem;
+    --c-textarea-lh: 1.38;
+
+    --c-btn-min-h: 2.1rem;
+    --c-btn-py: 0.42rem;
+    --c-btn-px: 0.75rem;
+    --c-btn-size: 0.77rem;
+    --c-btn-icon: 0.85rem;
+  }
+}
+
+/* 381px - 480px */
+@media (max-width: 480px) {
+  .contact {
+    --c-py: 2.2rem;
+    --c-px: 0.82rem;
+
+    --c-layout-gap: 1.35rem;
+    --c-content-gap: 0.9rem;
+
+    --c-label-size: 0.65rem;
+
+    --c-title-size: 1.25rem;
+    --c-title-lh: 1.04;
+
+    --c-desc-size: 0.8rem;
+    --c-desc-lh: 1.42;
+
+    --c-social-gap: 0.45rem;
+
+    --c-form-p: 0.85rem;
+    --c-form-gap: 0.78rem;
+    --c-form-radius: 0.9rem;
+
+    --c-input-h: 2.5rem;
+    --c-input-py: 0.48rem;
+    --c-input-pl: 2.22rem;
+    --c-input-pr: 0.8rem;
+    --c-input-size: 0.74rem;
+    --c-input-label-size: 0.76rem;
+    --c-input-icon: 13.5px;
+
+    --c-textarea-min-h: 6.5rem;
+    --c-textarea-py: 0.62rem;
+    --c-textarea-px: 0.72rem;
+    --c-textarea-size: 0.7rem;
+    --c-textarea-lh: 1.34;
+
+    --c-btn-min-h: 2rem;
+    --c-btn-py: 0.4rem;
+    --c-btn-px: 0.7rem;
+    --c-btn-size: 0.74rem;
+  }
+}
+
+/* <= 380px */
+@media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
+  .contact {
+    --c-py: 1.95rem;
+    --c-px: 0.74rem;
+
+    --c-layout-gap: 1.1rem;
+    --c-content-gap: 0.82rem;
+
+    --c-label-size: 0.635rem;
+
+    --c-title-size: 1.17rem;
+    --c-title-lh: 1.035;
+
+    --c-desc-size: 0.76rem;
+    --c-desc-lh: 1.38;
+
+    --c-social-gap: 0.4rem;
+
+    --c-form-p: 0.75rem;
+    --c-form-gap: 0.7rem;
+    --c-form-radius: 0.85rem;
+
+    --c-input-h: 2.38rem;
+    --c-input-py: 0.44rem;
+    --c-input-pl: 2.12rem;
+    --c-input-pr: 0.76rem;
+    --c-input-size: 0.71rem;
+    --c-input-label-size: 0.72rem;
+    --c-input-icon: 13px;
+
+    --c-textarea-min-h: 6rem;
+    --c-textarea-py: 0.58rem;
+    --c-textarea-px: 0.68rem;
+    --c-textarea-size: 0.68rem;
+    --c-textarea-lh: 1.3;
+
+    --c-btn-py: 0.4rem;
+    --c-btn-px: 0.55rem;
+    --c-btn-size: 0.7rem;
+  }
+}
+
+/* Button overrides */
+@media (max-width: 640px) {
+  :host ::ng-deep .contact-social portfolio-button {
+    width: auto;
+    flex: 0 0 auto;
   }
 
-  .section-inner {
-    padding: 0 1rem;
+  :host ::ng-deep .contact-social .p-button {
+    width: auto;
+    min-height: var(--c-btn-min-h);
+    padding: var(--c-btn-py) var(--c-btn-px);
+    font-size: var(--c-btn-size);
   }
 
-  .contact-form-wrap {
-    padding: 1.5rem;
+  :host ::ng-deep .contact-submit-btn {
+    width: 100%;
+    min-height: var(--c-btn-min-h);
+    justify-content: center;
+    padding: var(--c-btn-py) var(--c-btn-px);
+    font-size: var(--c-btn-size);
+  }
+
+  :host ::ng-deep .contact-social .p-button-label,
+  :host ::ng-deep .contact-submit-btn .p-button-label {
+    font-size: inherit;
+    line-height: 1.1;
+  }
+
+  :host ::ng-deep .contact-social .p-button-icon,
+  :host ::ng-deep .contact-submit-btn .p-button-icon,
+  :host ::ng-deep .contact-social portfolio-icon,
+  :host ::ng-deep .contact-submit-btn portfolio-icon {
+    width: var(--c-btn-icon);
+    height: var(--c-btn-icon);
   }
 }
