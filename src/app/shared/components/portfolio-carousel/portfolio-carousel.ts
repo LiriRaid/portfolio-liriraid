@@ -1,7 +1,26 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, DoCheck, ElementRef, PLATFORM_ID, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef, afterNextRender, computed, contentChildren, inject, input, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  DoCheck,
+  ElementRef,
+  PLATFORM_ID,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef,
+  afterNextRender,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import gsap from 'gsap';
 
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
@@ -16,6 +35,7 @@ type ProgressOwner = 'inline' | 'fullscreen';
 type CarouselSnapshot = {
   mode: CarouselMode;
   imagesKey: string;
+  itemsKey: string;
   imagesLength: number;
   cardsLength: number;
   autoPlay: boolean;
@@ -47,6 +67,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   readonly mode = input<CarouselMode>('screenshot');
   readonly images = input<string[]>([]);
+  readonly itemsKey = input<string>('');
   readonly autoPlay = input<boolean>(true);
   readonly autoPlayDuration = input<number>(4000);
 
@@ -93,6 +114,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private progressTween?: gsap.core.Tween;
   private fullscreenProgressTween?: gsap.core.Tween;
   private cardDelayedCall?: gsap.core.Tween;
+  private cardRevealDelayedCalls: gsap.core.Tween[] = [];
 
   private inlineProgressState: ProgressState = {
     index: null,
@@ -121,6 +143,8 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   private resizeObserver?: ResizeObserver;
   private resizeFrame = 0;
+  private cardInitFrame = 0;
+  private cardInitSecondFrame = 0;
   private lastMeasuredCardRootWidth = 0;
 
   private readonly DRAG_THRESHOLD = 50;
@@ -150,6 +174,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.stopProgress();
       this.stopFullscreenProgress();
       this.cardDelayedCall?.kill();
+      this.killCardRevealDelayedCalls();
       this.fullscreenOverlayRef?.dispose();
       this.resizeObserver?.disconnect();
 
@@ -163,6 +188,14 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
       if (this.resizeFrame) {
         cancelAnimationFrame(this.resizeFrame);
+      }
+
+      if (this.cardInitFrame) {
+        cancelAnimationFrame(this.cardInitFrame);
+      }
+
+      if (this.cardInitSecondFrame) {
+        cancelAnimationFrame(this.cardInitSecondFrame);
       }
     });
   }
@@ -209,14 +242,22 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     if (!this.hasSnapshotChanged(snapshot)) return;
 
+    const previousSnapshot = this.lastSnapshot;
+    const previousIndex = this.currentIndex();
     const inlineProgress = this.getInlineProgress(this.currentIndex());
     const fullscreenProgress = this.getFullscreenProgress(this.fullscreenActiveIndex());
+
+    if (snapshot.mode === 'card') {
+      this.prepareCardIndexForSnapshot(previousSnapshot, snapshot, previousIndex);
+    }
 
     this.lastSnapshot = snapshot;
     this.normalizeCurrentIndexes(snapshot);
 
     if (snapshot.mode === 'card') {
-      this.scheduleCardInit();
+      const shouldAnimateCards = previousSnapshot?.mode === 'card' && previousSnapshot.cardsLength > 0 && snapshot.cardsLength > 0;
+
+      this.scheduleCardInit(shouldAnimateCards, previousSnapshot, previousIndex);
       return;
     }
 
@@ -274,7 +315,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       if (Math.abs(width - this.lastMeasuredCardRootWidth) < 1) return;
 
       this.lastMeasuredCardRootWidth = width;
-      this.initCardPositions();
+      this.scheduleCardInit(false);
     });
   }
 
@@ -284,6 +325,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     return {
       mode: this.mode(),
       imagesKey: images.join('|'),
+      itemsKey: this.itemsKey().trim() || this.createCardItemsKey(),
       imagesLength: images.length,
       cardsLength: this.cardItems().length,
       autoPlay: this.autoPlay(),
@@ -291,10 +333,126 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     };
   }
 
+  private createCardItemsKey(): string {
+    return this.cardItems()
+      .map((item, index) => this.cardElementKey(item.elementRef.nativeElement, index))
+      .join('|');
+  }
+
+  private cardElementKey(element: HTMLElement, index: number): string {
+    const explicitKey = element.getAttribute('data-carousel-key');
+
+    if (explicitKey?.trim()) {
+      return explicitKey.trim();
+    }
+
+    const title = element.querySelector<HTMLElement>('.projects-card-title')?.textContent?.trim();
+
+    if (title) {
+      return title;
+    }
+
+    const heading = element.querySelector<HTMLElement>('h1, h2, h3, h4, h5, h6')?.textContent?.trim();
+
+    if (heading) {
+      return heading;
+    }
+
+    const text = element.textContent?.trim().replace(/\s+/g, ' ').slice(0, 120);
+
+    return text || `carousel-item-${index}`;
+  }
+
+  private snapshotKeyParts(snapshot?: CarouselSnapshot): string[] {
+    if (!snapshot?.itemsKey) return [];
+
+    return snapshot.itemsKey
+      .split('|')
+      .map((key) => key.trim())
+      .filter(Boolean);
+  }
+
+  private currentCardKeys(): string[] {
+    const snapshotKeys = this.snapshotKeyParts(this.lastSnapshot);
+
+    if (snapshotKeys.length) {
+      return snapshotKeys;
+    }
+
+    return this.cardItems().map((item, index) => this.cardElementKey(item.elementRef.nativeElement, index));
+  }
+
+  private prepareCardIndexForSnapshot(previousSnapshot: CarouselSnapshot | undefined, snapshot: CarouselSnapshot, previousIndex: number): void {
+    if (!previousSnapshot || previousSnapshot.mode !== 'card') return;
+
+    const previousKeys = this.snapshotKeyParts(previousSnapshot);
+    const nextKeys = this.snapshotKeyParts(snapshot);
+
+    if (!nextKeys.length) {
+      this.currentIndex.set(0);
+      return;
+    }
+
+    const previousActiveKey = previousKeys[previousIndex] ?? null;
+    const isFilteringDown = snapshot.cardsLength < previousSnapshot.cardsLength;
+    const isExpandingBack = snapshot.cardsLength > previousSnapshot.cardsLength;
+
+    if (isFilteringDown) {
+      if (previousActiveKey) {
+        const sameActiveIndex = nextKeys.indexOf(previousActiveKey);
+
+        if (sameActiveIndex !== -1) {
+          this.currentIndex.set(sameActiveIndex);
+          return;
+        }
+      }
+
+      const previousTotal = Math.max(previousSnapshot.cardsLength, 1);
+      const visibleIndexes = [(previousIndex + 1) % previousTotal, (previousIndex - 1 + previousTotal) % previousTotal];
+
+      for (const visibleIndex of visibleIndexes) {
+        const visibleKey = previousKeys[visibleIndex];
+        const nextIndex = visibleKey ? nextKeys.indexOf(visibleKey) : -1;
+
+        if (nextIndex !== -1) {
+          this.currentIndex.set(nextIndex);
+          return;
+        }
+      }
+
+      this.currentIndex.set(0);
+      return;
+    }
+
+    if (isExpandingBack) {
+      this.currentIndex.set(0);
+      return;
+    }
+
+    if (previousActiveKey) {
+      const activeIndexInNext = nextKeys.indexOf(previousActiveKey);
+
+      if (activeIndexInNext !== -1) {
+        this.currentIndex.set(activeIndexInNext);
+        return;
+      }
+    }
+
+    this.currentIndex.set(Math.min(previousIndex, nextKeys.length - 1));
+  }
+
   private hasSnapshotChanged(snapshot: CarouselSnapshot): boolean {
     if (!this.lastSnapshot) return true;
 
-    return this.lastSnapshot.mode !== snapshot.mode || this.lastSnapshot.imagesKey !== snapshot.imagesKey || this.lastSnapshot.imagesLength !== snapshot.imagesLength || this.lastSnapshot.cardsLength !== snapshot.cardsLength || this.lastSnapshot.autoPlay !== snapshot.autoPlay || this.lastSnapshot.autoPlayDuration !== snapshot.autoPlayDuration;
+    return (
+      this.lastSnapshot.mode !== snapshot.mode ||
+      this.lastSnapshot.imagesKey !== snapshot.imagesKey ||
+      this.lastSnapshot.itemsKey !== snapshot.itemsKey ||
+      this.lastSnapshot.imagesLength !== snapshot.imagesLength ||
+      this.lastSnapshot.cardsLength !== snapshot.cardsLength ||
+      this.lastSnapshot.autoPlay !== snapshot.autoPlay ||
+      this.lastSnapshot.autoPlayDuration !== snapshot.autoPlayDuration
+    );
   }
 
   private normalizeCurrentIndexes(snapshot: CarouselSnapshot): void {
@@ -305,6 +463,8 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.closeFullscreen();
       this.stopProgress();
       this.stopFullscreenProgress();
+      this.isAnimating.set(false);
+      this.isFullscreenAnimating.set(false);
       return;
     }
 
@@ -319,14 +479,28 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     }
   }
 
-  private scheduleCardInit(): void {
-    if (this.cardInitScheduled) return;
+  private scheduleCardInit(animate = false, previousSnapshot?: CarouselSnapshot, previousIndex = this.currentIndex()): void {
+    if (!this.isBrowser || this.mode() !== 'card') return;
+
+    if (this.cardInitFrame) {
+      cancelAnimationFrame(this.cardInitFrame);
+      this.cardInitFrame = 0;
+    }
+
+    if (this.cardInitSecondFrame) {
+      cancelAnimationFrame(this.cardInitSecondFrame);
+      this.cardInitSecondFrame = 0;
+    }
 
     this.cardInitScheduled = true;
 
-    queueMicrotask(() => {
+    this.cardInitFrame = requestAnimationFrame(() => {
+      this.cardInitFrame = 0;
       this.cardInitScheduled = false;
-      this.initCardPositions();
+
+      if (this.mode() !== 'card') return;
+
+      this.initCardPositions(animate, previousSnapshot, previousIndex);
     });
   }
 
@@ -397,7 +571,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     if (!this.isBrowser) return;
 
     if (this.mode() === 'card') {
-      this.initCardPositions();
+      this.initCardPositions(false);
       return;
     }
 
@@ -405,17 +579,31 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.pendingInlineProgress = 0;
   }
 
-  private initCardPositions(): void {
+  private initCardPositions(animate = false, previousSnapshot?: CarouselSnapshot, previousIndex = this.currentIndex()): void {
     const items = this.cardItems();
     const total = items.length;
 
-    if (!total) return;
-
     this.stopProgress();
     this.cardDelayedCall?.kill();
+    this.killCardRevealDelayedCalls();
+
+    if (!total) {
+      this.currentIndex.set(0);
+      this.isAnimating.set(false);
+      return;
+    }
+
+    if (this.currentIndex() >= total) {
+      this.currentIndex.set(0);
+    }
 
     const root = this.cardRootElement();
     this.lastMeasuredCardRootWidth = root?.clientWidth || this.hostRef.nativeElement.clientWidth || this.lastMeasuredCardRootWidth;
+
+    if (animate && previousSnapshot?.mode === 'card') {
+      this.animateCardLayout(this.currentIndex(), previousSnapshot, previousIndex);
+      return;
+    }
 
     items.forEach((item, index) => {
       const element = item.elementRef.nativeElement;
@@ -427,6 +615,104 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     });
 
     this.isAnimating.set(false);
+  }
+
+  private animateCardLayout(newIndex: number, previousSnapshot: CarouselSnapshot, previousIndex: number): void {
+    const items = this.cardItems();
+    const total = items.length;
+
+    if (!total) {
+      this.isAnimating.set(false);
+      return;
+    }
+
+    this.cardDelayedCall?.kill();
+    this.killCardRevealDelayedCalls();
+    this.isAnimating.set(true);
+
+    const previousKeys = this.snapshotKeyParts(previousSnapshot);
+    const currentKeys = this.currentCardKeys();
+    const previousPositions = new Map<string, SlidePosition>();
+
+    previousKeys.forEach((key, index) => {
+      previousPositions.set(key, this.resolvePosition(index, previousIndex, previousSnapshot.cardsLength));
+    });
+
+    const sideOffset = this.cardSideOffset();
+    const sideScale = this.cardSideScale();
+    const isExpandingBack = total > previousSnapshot.cardsLength;
+
+    /*
+      Cuando quitamos filtros y vuelven varias cards:
+      - Antes estaba en 0.72 y se sentía tarde.
+      - 0.55 hace que aparezcan cuando la card central ya va como por la mitad.
+    */
+    const revealDelay = isExpandingBack ? this.CARD_DURATION * 0.55 : 0;
+
+    items.forEach((item, index) => {
+      const element = item.elementRef.nativeElement;
+      const key = currentKeys[index] ?? this.cardElementKey(element, index);
+      const targetPosition = this.resolvePosition(index, newIndex, total);
+      const previousPosition = previousPositions.get(key);
+      const existedBefore = previousPosition !== undefined;
+
+      gsap.killTweensOf(element);
+
+      /*
+        Cards nuevas cuando se quita el filtro:
+        NO deben entrar desde un lado.
+        Las dejamos ya en su posición final, invisibles,
+        y luego solo aparecen suavemente.
+      */
+      if (!existedBefore) {
+        this.setCardPositionState(element, targetPosition);
+
+        const targetProps = this.cardPropsWithValues(targetPosition, sideOffset, sideScale);
+        const targetScale = typeof targetProps.scale === 'number' ? targetProps.scale : 1;
+
+        gsap.set(element, {
+          ...targetProps,
+          opacity: 0,
+          scale: targetScale * 0.96,
+          pointerEvents: 'none',
+        });
+
+        const revealCall = gsap.delayedCall(revealDelay, () => {
+          this.setCardPositionState(element, targetPosition);
+
+          gsap.to(element, {
+            ...targetProps,
+            opacity: targetProps.opacity,
+            scale: targetScale,
+            duration: 0.22,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        });
+
+        this.cardRevealDelayedCalls.push(revealCall);
+        return;
+      }
+
+      this.setCardPositionState(element, targetPosition);
+
+      gsap.to(element, {
+        ...this.cardPropsWithValues(targetPosition, sideOffset, sideScale),
+        duration: this.CARD_DURATION,
+        ease: 'power3.inOut',
+        overwrite: 'auto',
+      });
+    });
+
+    this.cardDelayedCall = gsap.delayedCall(this.CARD_DURATION, () => {
+      this.isAnimating.set(false);
+      this.killCardRevealDelayedCalls();
+    });
+  }
+
+  private killCardRevealDelayedCalls(): void {
+    this.cardRevealDelayedCalls.forEach((call) => call.kill());
+    this.cardRevealDelayedCalls = [];
   }
 
   private initScreenshotPositions(progress = 0): void {
@@ -505,6 +791,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   private setCardPositionState(element: HTMLElement, position: SlidePosition): void {
     element.dataset['carouselPosition'] = position;
+    element.style.visibility = 'visible';
   }
 
   private cardRootElement(): HTMLElement | null {
@@ -532,13 +819,6 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     const currentItem = items[this.currentIndex()]?.elementRef.nativeElement;
     const firstItem = items[0]?.elementRef.nativeElement;
 
-    /*
-      Importante:
-      NO usar getBoundingClientRect().width aqui.
-      Ese valor cambia cuando la card esta con scale(0.84),
-      y por eso al navegar a otra card las laterales se salian.
-      offsetWidth mantiene el ancho real sin transform.
-    */
     return currentItem?.offsetWidth || firstItem?.offsetWidth || 0;
   }
 
@@ -573,46 +853,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     const sideScale = this.cardSideScale();
     const hiddenX = this.lastDirection === 'right' ? 180 : -280;
 
-    const props: Record<SlidePosition, gsap.TweenVars> = {
-      center: {
-        xPercent: -50,
-        yPercent: 0,
-        scale: 1,
-        opacity: 1,
-        zIndex: 50,
-        filter: 'blur(0px)',
-        pointerEvents: 'auto',
-      },
-      left: {
-        xPercent: -50 - sideOffset,
-        yPercent: 0,
-        scale: sideScale,
-        opacity: 0.38,
-        zIndex: 20,
-        filter: 'blur(0.2px)',
-        pointerEvents: 'auto',
-      },
-      right: {
-        xPercent: -50 + sideOffset,
-        yPercent: 0,
-        scale: sideScale,
-        opacity: 0.38,
-        zIndex: 20,
-        filter: 'blur(0.2px)',
-        pointerEvents: 'auto',
-      },
-      hidden: {
-        xPercent: hiddenX,
-        yPercent: 0,
-        scale: sideScale,
-        opacity: 0,
-        zIndex: 1,
-        filter: 'blur(0.75px)',
-        pointerEvents: 'none',
-      },
-    };
-
-    return props[position];
+    return this.cardPropsWithValues(position, sideOffset, sideScale, hiddenX);
   }
 
   private animateCards(newIndex: number): void {
@@ -648,9 +889,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     });
   }
 
-  private cardPropsWithValues(position: SlidePosition, sideOffset: number, sideScale: number): gsap.TweenVars {
-    const hiddenX = this.lastDirection === 'right' ? 180 : -280;
-
+  private cardPropsWithValues(position: SlidePosition, sideOffset: number, sideScale: number, hiddenX = this.lastDirection === 'right' ? 180 : -280): gsap.TweenVars {
     const props: Record<SlidePosition, gsap.TweenVars> = {
       center: {
         xPercent: -50,

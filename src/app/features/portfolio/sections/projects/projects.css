@@ -23,6 +23,11 @@
   --p-filter-btn-radius: 0.7rem;
   --p-filter-btn-size: 0.76rem;
 
+  --p-filter-panel-width: min(33rem, calc(100vw - 2rem));
+  --p-filter-panel-max-height: 17.75rem;
+  --p-filter-panel-content-max-height: 17.75rem;
+  --p-filter-layout-max-height: 13.55rem;
+
   --p-filter-category-grid-gap: 0.875rem;
   --p-filter-category-p: 0.875rem;
   --p-filter-category-gap: 0.625rem;
@@ -160,16 +165,20 @@
   --p-popover-border-color: var(--app-border-color);
 
   position: absolute !important;
-  top: calc(100% + 0.5rem) !important;
+  top: calc(100% + 0.15rem) !important;
   left: 0 !important;
   transform: none !important;
 
-  width: min(1320px, calc(100vw - 2rem));
-  max-height: calc(100dvh - 10rem);
+  width: var(--p-filter-panel-width);
+  max-height: var(--p-filter-panel-max-height);
 
-  background: var(--app-panel-bg);
+  background: color-mix(in srgb, var(--app-panel-bg) 96%, transparent);
   border-color: var(--app-border-color);
-  overflow: hidden;
+  border-radius: 0.95rem;
+  overflow: visible;
+  z-index: 90;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
 }
 
 ::ng-deep .p-popover.projects-filter-panel::before,
@@ -178,6 +187,8 @@
   position: absolute;
   bottom: 100%;
   left: 2rem;
+  width: 0;
+  height: 0;
   border: solid transparent;
   pointer-events: none;
 }
@@ -196,12 +207,30 @@
 
 ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
   width: 100%;
-  max-height: calc(100dvh - 12rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  max-height: var(--p-filter-panel-content-max-height);
+  padding: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.projects-filter-panel-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.projects-filter-panel-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding: 0.85rem 0.95rem 0.7rem;
+  border-bottom: 1px solid var(--app-border-color);
 }
 
 .projects-filter-panel-title {
+  color: var(--app-text-color);
   font-size: var(--font-size-caption-1);
   font-weight: 700;
   text-transform: uppercase;
@@ -217,14 +246,125 @@
   font-weight: 700;
 }
 
-/* Filter categories */
-.projects-filter-category-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.projects-filter-panel-clear:hover {
+  color: var(--app-text-primary);
 }
 
-.projects-filter-category {
-  min-height: 128px;
-  border-color: var(--app-border-color);
+/* Filter categories */
+.projects-filter-panel-layout {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 11.35rem minmax(0, 1fr);
+  height: var(--p-filter-layout-max-height);
+  max-height: var(--p-filter-layout-max-height);
+  overflow: hidden;
+}
+
+.projects-filter-category-tabs {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.625rem;
+  border-right: 1px solid var(--app-border-color);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.projects-filter-category-tab {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: var(--app-text-muted);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: left;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.projects-filter-category-tab:hover,
+.projects-filter-category-tab--active {
+  color: var(--app-text-color);
+  border-color: color-mix(in srgb, var(--app-text-primary) 34%, transparent);
+  background-color: var(--app-accent-soft-bg);
+}
+
+.projects-filter-category-tab:hover {
+  transform: translateX(1px);
+}
+
+.projects-filter-category-tab-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 0.45rem;
+  background-color: var(--app-badge-soft-bg);
+  color: var(--app-text-primary);
+}
+
+.projects-filter-category-tab span:not(.projects-filter-category-tab-icon):not(.projects-filter-category-tab-count) {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.projects-filter-category-tab-count {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background-color: var(--app-panel-bg);
+  color: var(--app-text-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.projects-filter-active-category {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.projects-filter-active-category-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--p-filter-category-header-gap);
+}
+
+.projects-filter-active-category-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
 .projects-filter-category-icon {
@@ -236,8 +376,22 @@
 }
 
 .projects-filter-category-title {
+  color: var(--app-text-color);
   font-size: var(--p-filter-category-title);
   font-weight: 700;
+}
+
+.projects-filter-category-subtitle {
+  color: var(--app-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.25;
+}
+
+.projects-filter-options {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--p-filter-options-gap);
 }
 
 /* Shared chips */
@@ -335,20 +489,9 @@
 }
 
 .projects-filter-option {
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  gap: var(--p-chip-gap);
-  min-height: var(--p-chip-min-h);
   padding: 0.4rem 0.62rem;
-  border: 1px solid var(--app-border-color);
-  border-radius: 9999px;
-  background-color: var(--app-panel-bg);
-  color: var(--app-text-color);
   cursor: pointer;
-  white-space: nowrap;
-  font-size: var(--p-chip-size);
-  font-weight: 700;
 }
 
 .projects-stat {
@@ -569,7 +712,8 @@
 .projects-link:focus-visible,
 .projects-selected-tag:focus-within,
 .projects-filter-option:focus-visible,
-.projects-filter-panel-clear:focus-visible {
+.projects-filter-panel-clear:focus-visible,
+.projects-filter-category-tab:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
 }
@@ -593,6 +737,11 @@
     --p-filter-btn-py: 0.36rem;
     --p-filter-btn-px: 0.64rem;
     --p-filter-btn-size: 0.72rem;
+
+    --p-filter-panel-width: min(32.5rem, calc(100vw - 2rem));
+    --p-filter-panel-max-height: 17rem;
+    --p-filter-panel-content-max-height: 17rem;
+    --p-filter-layout-max-height: 12.85rem;
 
     --p-card-width: min(25.5rem, 74vw);
     --p-card-height: 35.8rem;
@@ -625,19 +774,6 @@
     --p-footer-py: 0.55rem;
     --p-footer-px: 0.8rem;
   }
-
-  ::ng-deep .p-popover.projects-filter-panel {
-    width: calc(100vw - 2rem);
-    max-height: calc(100dvh - 8rem);
-  }
-
-  ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
-    max-height: calc(100dvh - 10rem);
-  }
-
-  .projects-filter-category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 /* 641px - 768px */
@@ -659,6 +795,11 @@
     --p-filter-btn-py: 0.34rem;
     --p-filter-btn-px: 0.6rem;
     --p-filter-btn-size: 0.68rem;
+
+    --p-filter-panel-width: min(32rem, calc(100vw - 2rem));
+    --p-filter-panel-max-height: 16.75rem;
+    --p-filter-panel-content-max-height: 16.75rem;
+    --p-filter-layout-max-height: 12.6rem;
 
     --p-card-width: min(22rem, 78vw);
     --p-card-height: 32.3rem;
@@ -692,21 +833,8 @@
     --p-footer-px: 0.67rem;
   }
 
-  ::ng-deep .p-popover.projects-filter-panel {
-    width: calc(100vw - 2rem);
-    max-height: 35.5rem;
-  }
-
-  ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
-    max-height: 33.5rem;
-  }
-
-  .projects-filter-category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .projects-filter-category {
-    min-height: 132px;
+  .projects-filter-panel-layout {
+    grid-template-columns: 11rem minmax(0, 1fr);
   }
 }
 
@@ -724,6 +852,11 @@
     --p-subtitle-lh: 1.32;
 
     --p-filter-bar-gap: 0.5rem;
+
+    --p-filter-panel-width: calc(100vw - 1.5rem);
+    --p-filter-panel-max-height: 17rem;
+    --p-filter-panel-content-max-height: 17rem;
+    --p-filter-layout-max-height: 12.8rem;
 
     --p-card-width: min(19.1rem, 80vw);
     --p-card-height: 28.8rem;
@@ -807,21 +940,12 @@
     font-size: 0.64rem !important;
   }
 
-  ::ng-deep .p-popover.projects-filter-panel {
-    width: calc(100vw - 2rem);
-    max-height: 32.5rem;
+  .projects-filter-panel-layout {
+    grid-template-columns: 10.5rem minmax(0, 1fr);
   }
 
-  ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
-    max-height: 30.5rem;
-  }
-
-  .projects-filter-category-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .projects-filter-category {
-    min-height: 116px;
+  .projects-filter-category-tab {
+    font-size: 0.68rem;
   }
 
   .projects-card-title {
@@ -845,6 +969,11 @@
     --p-title-lh: 1.035;
     --p-subtitle-size: 0.68rem;
     --p-subtitle-lh: 1.3;
+
+    --p-filter-panel-width: calc(100vw - 1.25rem);
+    --p-filter-panel-max-height: 17rem;
+    --p-filter-panel-content-max-height: 17rem;
+    --p-filter-layout-max-height: 12.5rem;
 
     --p-card-width: min(16.65rem, 77vw);
     --p-card-height: 26.25rem;
@@ -880,6 +1009,28 @@
 
   .projects-toolbar {
     column-gap: 0.68rem;
+  }
+
+  .projects-filter-panel-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-filter-category-tabs {
+    flex-direction: row;
+    padding: 0.55rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--app-border-color);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .projects-filter-category-tab {
+    width: auto;
+    min-width: max-content;
+  }
+
+  .projects-filter-active-category {
+    padding: 0.7rem;
   }
 
   :host ::ng-deep .projects-filter-button.p-button {
@@ -918,6 +1069,11 @@
     --p-title-lh: 1.03;
     --p-subtitle-size: 0.64rem;
     --p-subtitle-lh: 1.28;
+
+    --p-filter-panel-width: calc(100vw - 1rem);
+    --p-filter-panel-max-height: 16.5rem;
+    --p-filter-panel-content-max-height: 16.5rem;
+    --p-filter-layout-max-height: 12rem;
 
     --p-card-width: min(15.75rem, 75vw);
     --p-card-height: 25.15rem;

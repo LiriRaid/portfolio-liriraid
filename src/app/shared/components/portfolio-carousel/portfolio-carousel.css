@@ -88,6 +88,12 @@
   user-select: none;
 }
 
+:host ::ng-deep .carousel-item:not([data-carousel-position]) {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 :host ::ng-deep .carousel-item > * {
   width: 100%;
   height: 100%;

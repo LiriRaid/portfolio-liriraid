@@ -118,10 +118,19 @@ export class Projects {
   protected readonly technologyCategories = signal<ProjectTechnologyCategory[]>(TECHNOLOGY_CATEGORIES);
   protected readonly selectedTechnologies = signal<string[]>([]);
 
+  protected readonly activeFilterCategoryLabel = signal<string | null>(TECHNOLOGY_CATEGORIES[0]?.label ?? null);
+
   private readonly selectedTechnologySet = computed(() => new Set(this.selectedTechnologies()));
 
   protected readonly hasSelectedTechnologies = computed(() => this.selectedTechnologies().length > 0);
   protected readonly hasSearchTerm = computed(() => this.searchTerm().length > 0);
+
+  protected readonly activeFilterCategory = computed(() => {
+    const categories = this.technologyCategories();
+    const activeLabel = this.activeFilterCategoryLabel();
+
+    return categories.find((category) => category.label === activeLabel) ?? categories[0] ?? null;
+  });
 
   protected readonly filteredProjects = computed(() => {
     const selected = this.selectedTechnologySet();
@@ -134,6 +143,8 @@ export class Projects {
       return matchesTechnology && matchesSearch;
     });
   });
+
+  protected readonly filteredProjectsKey = computed(() => this.filteredProjects().map((project) => project.title).join('|'));
 
   constructor() {
     const searchSubscription = this.searchControl.valueChanges.subscribe((value) => {
@@ -161,6 +172,10 @@ export class Projects {
         window.removeEventListener('resize', onResize);
       });
     });
+  }
+
+  protected selectFilterCategory(label: string): void {
+    this.activeFilterCategoryLabel.set(label);
   }
 
   protected onSearch(term: string): void {

@@ -19,8 +19,8 @@
         </div>
 
         <p-popover #filterPanel styleClass="projects-filter-panel" [appendTo]="filterPanelContainer">
-          <div class="projects-filter-panel-content flex flex-col gap-4">
-            <div class="projects-filter-panel-header flex items-center justify-between gap-4">
+          <div class="projects-filter-panel-content">
+            <div class="projects-filter-panel-header">
               <p class="projects-filter-panel-title m-0">Tecnologías</p>
 
               @if (hasSelectedTechnologies()) {
@@ -28,20 +28,38 @@
               }
             </div>
 
-            <div class="projects-filter-category-grid grid gap-(--p-filter-category-grid-gap)">
-              @for (category of technologyCategories(); track category.label) {
-                <section class="projects-filter-category flex min-w-0 flex-col gap-(--p-filter-category-gap) rounded-(--p-filter-category-radius) border bg-(--app-panel-muted-bg) p-(--p-filter-category-p)">
-                  <header class="projects-filter-category-header flex items-center gap-(--p-filter-category-header-gap)">
+            <div class="projects-filter-panel-layout">
+              <nav class="projects-filter-category-tabs" aria-label="Categorías de tecnologías">
+                @for (category of technologyCategories(); track category.label) {
+                  <button type="button" class="projects-filter-category-tab" [class.projects-filter-category-tab--active]="activeFilterCategoryLabel() === category.label" (click)="selectFilterCategory(category.label)">
+                    <span class="projects-filter-category-tab-icon" aria-hidden="true">
+                      <portfolio-icon [name]="category.icon" size="14" />
+                    </span>
+
+                    <span>{{ category.label }}</span>
+
+                    <span class="projects-filter-category-tab-count">{{ category.technologies.length }}</span>
+                  </button>
+                }
+              </nav>
+
+              @if (activeFilterCategory(); as category) {
+                <section class="projects-filter-active-category">
+                  <header class="projects-filter-active-category-header">
                     <span class="projects-filter-category-icon inline-flex shrink-0 items-center justify-center" aria-hidden="true">
                       <portfolio-icon [name]="category.icon" size="15" />
                     </span>
 
-                    <h3 class="projects-filter-category-title m-0">
-                      {{ category.label }}
-                    </h3>
+                    <div class="projects-filter-active-category-copy">
+                      <h3 class="projects-filter-category-title m-0">
+                        {{ category.label }}
+                      </h3>
+
+                      <p class="projects-filter-category-subtitle m-0">Selecciona una o varias tecnologías</p>
+                    </div>
                   </header>
 
-                  <div class="projects-filter-options flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
+                  <div class="projects-filter-options">
                     @for (tech of category.technologies; track tech) {
                       <button type="button" class="projects-filter-option" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                         @if (techIconUrl(tech); as iconUrl) {
@@ -89,7 +107,7 @@
     }
 
     @if (filteredProjects().length) {
-      <portfolio-carousel mode="card" [autoPlay]="false" class="projects-carousel">
+      <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="filteredProjectsKey()" class="projects-carousel">
         @for (project of filteredProjects(); track project.title) {
           <div carouselItem class="projects-card-shell">
             <article class="projects-card" [class.projects-card--featured]="project.featured">
