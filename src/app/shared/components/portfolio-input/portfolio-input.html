@@ -1,4 +1,12 @@
-<div class="portfolio-input-wrapper" [ngClass]="{ 'portfolio-input-invalid': hasErrors() }">
+<div
+  class="portfolio-input-wrapper"
+  [ngClass]="{
+    'portfolio-input-invalid': hasErrors(),
+    'portfolio-input-on': variant() === 'on',
+    'portfolio-input-in': variant() === 'in',
+    'portfolio-input-over': variant() === 'over',
+  }"
+>
   <div class="relative w-full">
     @if (!isTagInput()) {
       @if (label() && variant() === 'on') {
@@ -17,10 +25,12 @@
             (blur)="onBlurInput()"
             [attr.inputmode]="type() === 'price' ? 'decimal' : null"
             [attr.placeholder]="placeholderAttr()"
-            [class]="'portfolio-input-field peer w-full bg-transparent border-0 text-caption-1-medium focus:outline-none focus:ring-0 transition-colors duration-180 placeholder:text-transparent placeholder:transition-colors placeholder:duration-180 focus:placeholder:text-(--app-text-subtle) focus:placeholder:delay-100 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
+            [class]="'portfolio-input-field peer w-full bg-transparent border-0 text-caption-1-medium focus:outline-none focus:ring-0 transition-colors duration-180 placeholder:transition-colors placeholder:duration-180 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
             [ngClass]="{
               'text-(--app-control-surface-text)': !isDisabled() && !readonly(),
               'cursor-not-allowed text-(--app-control-disabled-text)': isDisabled() || readonly(),
+              'placeholder:text-transparent': !shouldShowPlaceholder(),
+              'placeholder:text-(--app-text-subtle)': shouldShowPlaceholder(),
             }"
           />
 
@@ -53,7 +63,7 @@
             ></portfolio-icon>
           }
 
-          <label class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-180 z-10" [ngClass]="labelClass()" [style.color]="labelColor()">
+          <label class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-180 z-10" [ngClass]="labelClass()" [style.background]="labelBackground()" [style.color]="labelColor()">
             {{ label() }}
           </label>
         </fieldset>
@@ -69,12 +79,14 @@
             (blur)="onBlurInput()"
             [attr.inputmode]="type() === 'price' ? 'decimal' : null"
             [attr.placeholder]="placeholderAttr()"
-            [class]="'portfolio-input-field peer w-full rounded-lg border text-caption-1-medium focus:outline-none transition-all duration-150 placeholder:text-transparent placeholder:transition-colors placeholder:duration-180 focus:placeholder:text-(--app-text-subtle) focus:placeholder:delay-100 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
+            [class]="'portfolio-input-field peer w-full rounded-lg border text-caption-1-medium focus:outline-none transition-all duration-150 placeholder:transition-colors placeholder:duration-180 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
             [ngClass]="{
               'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-(--app-control-surface-border)': !isDisabled() && !readonly() && !hasErrors(),
               'focus:ring-2 focus:ring-(--app-control-focus-ring)/25 focus:border-(--app-control-focus-ring)': !hasErrors(),
               'cursor-not-allowed bg-(--app-control-disabled-bg) text-(--app-control-disabled-text) border-(--app-control-disabled-border)': isDisabled() || readonly(),
               'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-red-500 focus:ring-2 focus:ring-red-500/25 focus:border-transparent': hasErrors(),
+              'placeholder:text-transparent': !shouldShowPlaceholder(),
+              'placeholder:text-(--app-text-subtle)': shouldShowPlaceholder(),
             }"
           />
 
@@ -151,8 +163,8 @@
           <label
             class="absolute left-3 px-2 select-none pointer-events-none transition-all duration-150 z-10 bg-(--app-panel-bg)"
             [ngClass]="{
-              'top-1/2 -translate-y-1/2 text-caption-1-medium': !hasValue() && !readonly(),
-              '-top-3 translate-y-0 text-caption-1-medium': hasValue() || readonly(),
+              'top-1/2 -translate-y-1/2 text-caption-1-medium': !hasValue() && !readonly() && !hasErrors(),
+              '-top-3 translate-y-0 text-caption-1-medium': hasValue() || readonly() || hasErrors(),
               'text-red-500': hasErrors(),
               'text-(--app-control-disabled-text)': (isDisabled() || readonly()) && !hasErrors(),
               'text-(--app-text-subtle)': !isDisabled() && !readonly() && !hasErrors(),

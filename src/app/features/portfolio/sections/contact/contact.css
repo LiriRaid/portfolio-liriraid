@@ -22,19 +22,17 @@
   --c-form-gap: 1.25rem;
   --c-form-radius: 1.25rem;
 
-  --c-input-h: 3.08rem;
-  --c-input-py: 0.68rem;
-  --c-input-pl: 2.62rem;
-  --c-input-pr: 0.95rem;
-  --c-input-size: 0.84rem;
-  --c-input-label-size: 0.88rem;
+  --c-input-size: var(--font-size-caption-1);
+  --c-input-lh: var(--line-height-caption-1);
+  --c-input-label-size: inherit;
+  --c-input-error-size: 0.75rem;
   --c-input-icon: 16px;
 
   --c-textarea-min-h: 8.75rem;
   --c-textarea-py: 0.85rem;
   --c-textarea-px: 1rem;
-  --c-textarea-size: var(--font-size-caption-1);
-  --c-textarea-lh: 1.45;
+  --c-textarea-size: var(--c-input-size);
+  --c-textarea-lh: var(--c-input-lh);
 
   --c-btn-min-h: initial;
   --c-btn-py: initial;
@@ -99,32 +97,23 @@
 
 .contact-textarea::placeholder {
   color: var(--app-text-subtle);
+  font-size: inherit;
+  line-height: inherit;
 }
 
-/* Contact input overrides */
-:host ::ng-deep .contact-form portfolio-input fieldset {
-  min-height: var(--c-input-h);
-}
-
+/* Contact input typography only */
 :host ::ng-deep .contact-form portfolio-input .portfolio-input-field {
-  min-height: var(--c-input-h);
-  padding-top: var(--c-input-py);
-  padding-bottom: var(--c-input-py);
   font-size: var(--c-input-size);
-  line-height: 1.2;
-}
-
-:host ::ng-deep .contact-form portfolio-input .portfolio-input-field.pl-10 {
-  padding-left: var(--c-input-pl);
-}
-
-:host ::ng-deep .contact-form portfolio-input .portfolio-input-field.pr-4 {
-  padding-right: var(--c-input-pr);
+  line-height: var(--c-input-lh);
 }
 
 :host ::ng-deep .contact-form portfolio-input label,
 :host ::ng-deep .contact-form portfolio-input legend span {
   font-size: var(--c-input-label-size);
+}
+
+:host ::ng-deep .contact-form portfolio-input .portfolio-input-error {
+  font-size: var(--c-input-error-size);
 }
 
 :host ::ng-deep .contact-form portfolio-input portfolio-icon {
@@ -183,18 +172,17 @@
     --c-form-p: 1.75rem;
     --c-form-gap: 1.1rem;
 
-    --c-input-h: 2.98rem;
-    --c-input-py: 0.64rem;
-    --c-input-pl: 2.56rem;
-    --c-input-pr: 0.92rem;
     --c-input-size: 0.83rem;
+    --c-input-lh: 1.35;
     --c-input-label-size: 0.86rem;
+    --c-input-error-size: 0.72rem;
     --c-input-icon: 15px;
 
     --c-textarea-min-h: 8rem;
     --c-textarea-py: 0.8rem;
     --c-textarea-px: 0.95rem;
-    --c-textarea-size: 0.82rem;
+    --c-textarea-size: var(--c-input-size);
+    --c-textarea-lh: var(--c-input-lh);
   }
 
   .contact-layout {
@@ -226,19 +214,17 @@
     --c-form-gap: 1rem;
     --c-form-radius: 1.1rem;
 
-    --c-input-h: 2.84rem;
-    --c-input-py: 0.6rem;
-    --c-input-pl: 2.46rem;
-    --c-input-pr: 0.88rem;
     --c-input-size: 0.8rem;
+    --c-input-lh: 1.34;
     --c-input-label-size: 0.84rem;
+    --c-input-error-size: 0.7rem;
     --c-input-icon: 14.5px;
 
     --c-textarea-min-h: 7.5rem;
     --c-textarea-py: 0.72rem;
     --c-textarea-px: 0.85rem;
-    --c-textarea-size: 0.78rem;
-    --c-textarea-lh: 1.42;
+    --c-textarea-size: var(--c-input-size);
+    --c-textarea-lh: var(--c-input-lh);
   }
 }
 
@@ -266,19 +252,17 @@
     --c-form-gap: 0.85rem;
     --c-form-radius: 1rem;
 
-    --c-input-h: 2.66rem;
-    --c-input-py: 0.54rem;
-    --c-input-pl: 2.34rem;
-    --c-input-pr: 0.84rem;
     --c-input-size: 0.77rem;
+    --c-input-lh: 1.32;
     --c-input-label-size: 0.8rem;
+    --c-input-error-size: 0.68rem;
     --c-input-icon: 14px;
 
     --c-textarea-min-h: 7rem;
     --c-textarea-py: 0.68rem;
     --c-textarea-px: 0.8rem;
-    --c-textarea-size: 0.74rem;
-    --c-textarea-lh: 1.38;
+    --c-textarea-size: var(--c-input-size);
+    --c-textarea-lh: var(--c-input-lh);
 
     --c-btn-min-h: 2.1rem;
     --c-btn-py: 0.42rem;
@@ -311,19 +295,17 @@
     --c-form-gap: 0.78rem;
     --c-form-radius: 0.9rem;
 
-    --c-input-h: 2.5rem;
-    --c-input-py: 0.48rem;
-    --c-input-pl: 2.22rem;
-    --c-input-pr: 0.8rem;
     --c-input-size: 0.74rem;
+    --c-input-lh: 1.3;
     --c-input-label-size: 0.76rem;
+    --c-input-error-size: 0.65rem;
     --c-input-icon: 13.5px;
 
     --c-textarea-min-h: 6.5rem;
     --c-textarea-py: 0.62rem;
     --c-textarea-px: 0.72rem;
-    --c-textarea-size: 0.7rem;
-    --c-textarea-lh: 1.34;
+    --c-textarea-size: var(--c-input-size);
+    --c-textarea-lh: var(--c-input-lh);
 
     --c-btn-min-h: 2rem;
     --c-btn-py: 0.4rem;
@@ -355,19 +337,17 @@
     --c-form-gap: 0.7rem;
     --c-form-radius: 0.85rem;
 
-    --c-input-h: 2.38rem;
-    --c-input-py: 0.44rem;
-    --c-input-pl: 2.12rem;
-    --c-input-pr: 0.76rem;
     --c-input-size: 0.71rem;
+    --c-input-lh: 1.28;
     --c-input-label-size: 0.72rem;
+    --c-input-error-size: 0.62rem;
     --c-input-icon: 13px;
 
     --c-textarea-min-h: 6rem;
     --c-textarea-py: 0.58rem;
     --c-textarea-px: 0.68rem;
-    --c-textarea-size: 0.68rem;
-    --c-textarea-lh: 1.3;
+    --c-textarea-size: var(--c-input-size);
+    --c-textarea-lh: var(--c-input-lh);
 
     --c-btn-py: 0.4rem;
     --c-btn-px: 0.55rem;
