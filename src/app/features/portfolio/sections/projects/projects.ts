@@ -120,6 +120,10 @@ export class Projects {
 
   protected readonly activeFilterCategoryLabel = signal<string | null>(TECHNOLOGY_CATEGORIES[0]?.label ?? null);
 
+  protected readonly displayedProjects = signal<Project[]>(PROJECTS);
+  protected readonly leavingProjectTitles = signal<Set<string>>(new Set());
+  protected readonly activeCarouselProjectTitle = signal(PROJECTS[0]?.title ?? '');
+
   private readonly selectedTechnologySet = computed(() => new Set(this.selectedTechnologies()));
 
   protected readonly hasSelectedTechnologies = computed(() => this.selectedTechnologies().length > 0);
@@ -144,15 +148,28 @@ export class Projects {
     });
   });
 
-  protected readonly filteredProjectsKey = computed(() => this.filteredProjects().map((project) => project.title).join('|'));
+  protected readonly displayedProjectsKey = computed(() => this.displayedProjects().map((project) => project.title).join('|'));
+
+  protected readonly displayedProjectsStateKey = computed(() => {
+    return this.displayedProjects()
+      .map((project) => `${project.title}:${this.isProjectLeaving(project.title) ? 'leaving' : 'active'}`)
+      .join('|');
+  });
+
+  private readonly projectExitDuration = 680;
+  private readonly leavingProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
   constructor() {
     const searchSubscription = this.searchControl.valueChanges.subscribe((value) => {
       this.searchTerm.set(value.trim());
+      this.syncDisplayedProjects();
     });
 
     this.destroyRef.onDestroy(() => {
       searchSubscription.unsubscribe();
+
+      this.leavingProjectTimeouts.forEach((timeout) => clearTimeout(timeout));
+      this.leavingProjectTimeouts.clear();
     });
 
     if (!isPlatformBrowser(this.platformId)) {
@@ -180,22 +197,30 @@ export class Projects {
 
   protected onSearch(term: string): void {
     this.searchTerm.set(term.trim());
+    this.syncDisplayedProjects();
   }
 
   protected toggleTechnology(technology: string): void {
     this.selectedTechnologies.update((current) => (current.includes(technology) ? current.filter((item) => item !== technology) : [...current, technology]));
+    this.syncDisplayedProjects();
   }
 
   protected removeTechnology(technology: string): void {
     this.selectedTechnologies.update((current) => current.filter((item) => item !== technology));
+    this.syncDisplayedProjects();
   }
 
   protected clearFilters(): void {
     this.selectedTechnologies.set([]);
+    this.syncDisplayedProjects();
   }
 
   protected isTechnologySelected(technology: string): boolean {
     return this.selectedTechnologySet().has(technology);
+  }
+
+  protected isProjectLeaving(title: string): boolean {
+    return this.leavingProjectTitles().has(title);
   }
 
   protected techFallbackIcon(technology: string): string {
@@ -216,6 +241,85 @@ export class Projects {
     }
 
     return license.toUpperCase() === 'MIT' ? 'MIT' : license;
+  }
+
+  private syncDisplayedProjects(): void {
+    const nextProjects = this.filteredProjects();
+    const currentDisplayedProjects = this.displayedProjects();
+
+    this.activeCarouselProjectTitle.set(nextProjects[0]?.title ?? '');
+
+    const nextTitles = new Set(nextProjects.map((project) => project.title));
+    const currentTitles = new Set(currentDisplayedProjects.map((project) => project.title));
+
+    const leavingProjects = currentDisplayedProjects.filter((project) => !nextTitles.has(project.title));
+    const enteringProjects = nextProjects.filter((project) => !currentTitles.has(project.title));
+
+    nextProjects.forEach((project) => {
+      const timeout = this.leavingProjectTimeouts.get(project.title);
+
+      if (!timeout) return;
+
+      clearTimeout(timeout);
+      this.leavingProjectTimeouts.delete(project.title);
+    });
+
+    this.leavingProjectTitles.update((current) => {
+      const updated = new Set(current);
+
+      nextProjects.forEach((project) => {
+        updated.delete(project.title);
+      });
+
+      leavingProjects.forEach((project) => {
+        updated.add(project.title);
+      });
+
+      return updated;
+    });
+
+    const hasLeavingProjects = leavingProjects.length > 0;
+
+    if (!hasLeavingProjects) {
+      this.displayedProjects.set(this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects())));
+      return;
+    }
+
+    const mergedProjects = this.sortProjectsByOriginalOrder([...currentDisplayedProjects, ...enteringProjects], this.projects());
+    this.displayedProjects.set(this.replaceProjectReferences(mergedProjects));
+
+    leavingProjects.forEach((project) => {
+      if (this.leavingProjectTimeouts.has(project.title)) return;
+
+      const timeout = setTimeout(() => {
+        this.displayedProjects.update((projects) => projects.filter((item) => item.title !== project.title));
+
+        this.leavingProjectTitles.update((current) => {
+          const updated = new Set(current);
+          updated.delete(project.title);
+          return updated;
+        });
+
+        this.leavingProjectTimeouts.delete(project.title);
+      }, this.projectExitDuration);
+
+      this.leavingProjectTimeouts.set(project.title, timeout);
+    });
+  }
+
+  private replaceProjectReferences(projects: Project[]): Project[] {
+    const projectByTitle = new Map(this.projects().map((project) => [project.title, project]));
+
+    return projects.map((project) => projectByTitle.get(project.title) ?? project);
+  }
+
+  private sortProjectsByOriginalOrder(projects: Project[], originalProjects: Project[]): Project[] {
+    const uniqueProjects = new Map(projects.map((project) => [project.title, project]));
+    const order = new Map(originalProjects.map((project, index) => [project.title, index]));
+
+    return Array.from(uniqueProjects.values()).sort((a, b) => {
+      return (order.get(a.title) ?? 0) - (order.get(b.title) ?? 0);
+    });
   }
 
   private projectMatchesSearch(project: Project, term: string): boolean {
@@ -242,5 +346,7 @@ export class Projects {
         githubStats: statsByRepo.get(project.repo) ?? project.githubStats,
       })),
     );
+
+    this.displayedProjects.set(this.replaceProjectReferences(this.displayedProjects()));
   }
 }

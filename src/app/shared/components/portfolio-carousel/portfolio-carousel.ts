@@ -21,14 +21,12 @@ import {
   input,
   signal,
 } from '@angular/core';
-import gsap from 'gsap';
 
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 import { CarouselItem } from './carousel-item.directive';
+import { CarouselDirection, CarouselItemSceneService, CarouselSlidePosition } from './services/carousel-item-scene.service';
 
 type CarouselMode = 'card' | 'screenshot';
-type SlidePosition = 'center' | 'left' | 'right' | 'hidden';
-type Direction = 'left' | 'right';
 
 type ProgressOwner = 'inline' | 'fullscreen';
 
@@ -36,6 +34,8 @@ type CarouselSnapshot = {
   mode: CarouselMode;
   imagesKey: string;
   itemsKey: string;
+  itemsStateKey: string;
+  activeItemKey: string;
   imagesLength: number;
   cardsLength: number;
   autoPlay: boolean;
@@ -56,6 +56,7 @@ type ProgressState = {
   templateUrl: './portfolio-carousel.html',
   styleUrl: './portfolio-carousel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CarouselItemSceneService],
 })
 export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -64,10 +65,13 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private readonly destroyRef = inject(DestroyRef);
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly carouselScene = inject(CarouselItemSceneService);
 
   readonly mode = input<CarouselMode>('screenshot');
   readonly images = input<string[]>([]);
   readonly itemsKey = input<string>('');
+  readonly itemsStateKey = input<string>('');
+  readonly activeItemKey = input<string>('');
   readonly autoPlay = input<boolean>(true);
   readonly autoPlayDuration = input<number>(4000);
 
@@ -103,18 +107,13 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   private didInit = false;
   private lastSnapshot?: CarouselSnapshot;
-  private lastDirection: Direction = 'right';
+  private lastDirection: CarouselDirection = 'right';
 
   private isDragging = false;
   private wasDragging = false;
   private dragStartX = 0;
   private dragStartTime = 0;
   private touchStartX = 0;
-
-  private progressTween?: gsap.core.Tween;
-  private fullscreenProgressTween?: gsap.core.Tween;
-  private cardDelayedCall?: gsap.core.Tween;
-  private cardRevealDelayedCalls: gsap.core.Tween[] = [];
 
   private inlineProgressState: ProgressState = {
     index: null,
@@ -144,13 +143,10 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private resizeObserver?: ResizeObserver;
   private resizeFrame = 0;
   private cardInitFrame = 0;
-  private cardInitSecondFrame = 0;
   private lastMeasuredCardRootWidth = 0;
 
   private readonly DRAG_THRESHOLD = 50;
   private readonly DRAG_TIME_THRESHOLD = 120;
-  private readonly CARD_DURATION = 0.6;
-  private readonly SLIDE_DURATION = 0.72;
 
   constructor() {
     afterNextRender(() => {
@@ -171,10 +167,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     });
 
     this.destroyRef.onDestroy(() => {
-      this.stopProgress();
-      this.stopFullscreenProgress();
-      this.cardDelayedCall?.kill();
-      this.killCardRevealDelayedCalls();
+      this.carouselScene.destroy();
       this.fullscreenOverlayRef?.dispose();
       this.resizeObserver?.disconnect();
 
@@ -192,10 +185,6 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
       if (this.cardInitFrame) {
         cancelAnimationFrame(this.cardInitFrame);
-      }
-
-      if (this.cardInitSecondFrame) {
-        cancelAnimationFrame(this.cardInitSecondFrame);
       }
     });
   }
@@ -326,6 +315,8 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       mode: this.mode(),
       imagesKey: images.join('|'),
       itemsKey: this.itemsKey().trim() || this.createCardItemsKey(),
+      itemsStateKey: this.itemsStateKey().trim(),
+      activeItemKey: this.activeItemKey().trim(),
       imagesLength: images.length,
       cardsLength: this.cardItems().length,
       autoPlay: this.autoPlay(),
@@ -393,6 +384,17 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       return;
     }
 
+    const forcedActiveKey = snapshot.activeItemKey;
+
+    if (forcedActiveKey) {
+      const forcedActiveIndex = nextKeys.indexOf(forcedActiveKey);
+
+      if (forcedActiveIndex !== -1) {
+        this.currentIndex.set(forcedActiveIndex);
+        return;
+      }
+    }
+
     const previousActiveKey = previousKeys[previousIndex] ?? null;
     const isFilteringDown = snapshot.cardsLength < previousSnapshot.cardsLength;
     const isExpandingBack = snapshot.cardsLength > previousSnapshot.cardsLength;
@@ -448,6 +450,8 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.lastSnapshot.mode !== snapshot.mode ||
       this.lastSnapshot.imagesKey !== snapshot.imagesKey ||
       this.lastSnapshot.itemsKey !== snapshot.itemsKey ||
+      this.lastSnapshot.itemsStateKey !== snapshot.itemsStateKey ||
+      this.lastSnapshot.activeItemKey !== snapshot.activeItemKey ||
       this.lastSnapshot.imagesLength !== snapshot.imagesLength ||
       this.lastSnapshot.cardsLength !== snapshot.cardsLength ||
       this.lastSnapshot.autoPlay !== snapshot.autoPlay ||
@@ -485,11 +489,6 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     if (this.cardInitFrame) {
       cancelAnimationFrame(this.cardInitFrame);
       this.cardInitFrame = 0;
-    }
-
-    if (this.cardInitSecondFrame) {
-      cancelAnimationFrame(this.cardInitSecondFrame);
-      this.cardInitSecondFrame = 0;
     }
 
     this.cardInitScheduled = true;
@@ -581,11 +580,11 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   private initCardPositions(animate = false, previousSnapshot?: CarouselSnapshot, previousIndex = this.currentIndex()): void {
     const items = this.cardItems();
+    const elements = this.cardElements();
     const total = items.length;
 
     this.stopProgress();
-    this.cardDelayedCall?.kill();
-    this.killCardRevealDelayedCalls();
+    this.carouselScene.killCardTweens();
 
     if (!total) {
       this.currentIndex.set(0);
@@ -605,119 +604,47 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       return;
     }
 
-    items.forEach((item, index) => {
-      const element = item.elementRef.nativeElement;
-      const position = this.resolvePosition(index, this.currentIndex(), total);
-
-      gsap.killTweensOf(element);
-      this.setCardPositionState(element, position);
-      gsap.set(element, this.cardProps(position));
+    this.carouselScene.setCardPositions({
+      elements,
+      currentIndex: this.currentIndex(),
+      total,
+      metrics: this.cardMetrics(),
+      resolvePosition: this.resolvePosition,
     });
 
     this.isAnimating.set(false);
   }
 
   private animateCardLayout(newIndex: number, previousSnapshot: CarouselSnapshot, previousIndex: number): void {
-    const items = this.cardItems();
-    const total = items.length;
+    const elements = this.cardElements();
+    const total = elements.length;
 
     if (!total) {
       this.isAnimating.set(false);
       return;
     }
 
-    this.cardDelayedCall?.kill();
-    this.killCardRevealDelayedCalls();
     this.isAnimating.set(true);
 
-    const previousKeys = this.snapshotKeyParts(previousSnapshot);
-    const currentKeys = this.currentCardKeys();
-    const previousPositions = new Map<string, SlidePosition>();
-
-    previousKeys.forEach((key, index) => {
-      previousPositions.set(key, this.resolvePosition(index, previousIndex, previousSnapshot.cardsLength));
+    this.carouselScene.animateCardLayout({
+      elements,
+      currentKeys: this.currentCardKeys(),
+      previousKeys: this.snapshotKeyParts(previousSnapshot),
+      previousIndex,
+      newIndex,
+      previousTotal: previousSnapshot.cardsLength,
+      total,
+      metrics: this.cardMetrics(),
+      resolvePosition: this.resolvePosition,
+      onComplete: () => {
+        this.isAnimating.set(false);
+      },
     });
-
-    const sideOffset = this.cardSideOffset();
-    const sideScale = this.cardSideScale();
-    const isExpandingBack = total > previousSnapshot.cardsLength;
-
-    /*
-      Cuando quitamos filtros y vuelven varias cards:
-      - Antes estaba en 0.72 y se sentía tarde.
-      - 0.55 hace que aparezcan cuando la card central ya va como por la mitad.
-    */
-    const revealDelay = isExpandingBack ? this.CARD_DURATION * 0.55 : 0;
-
-    items.forEach((item, index) => {
-      const element = item.elementRef.nativeElement;
-      const key = currentKeys[index] ?? this.cardElementKey(element, index);
-      const targetPosition = this.resolvePosition(index, newIndex, total);
-      const previousPosition = previousPositions.get(key);
-      const existedBefore = previousPosition !== undefined;
-
-      gsap.killTweensOf(element);
-
-      /*
-        Cards nuevas cuando se quita el filtro:
-        NO deben entrar desde un lado.
-        Las dejamos ya en su posición final, invisibles,
-        y luego solo aparecen suavemente.
-      */
-      if (!existedBefore) {
-        this.setCardPositionState(element, targetPosition);
-
-        const targetProps = this.cardPropsWithValues(targetPosition, sideOffset, sideScale);
-        const targetScale = typeof targetProps.scale === 'number' ? targetProps.scale : 1;
-
-        gsap.set(element, {
-          ...targetProps,
-          opacity: 0,
-          scale: targetScale * 0.96,
-          pointerEvents: 'none',
-        });
-
-        const revealCall = gsap.delayedCall(revealDelay, () => {
-          this.setCardPositionState(element, targetPosition);
-
-          gsap.to(element, {
-            ...targetProps,
-            opacity: targetProps.opacity,
-            scale: targetScale,
-            duration: 0.22,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          });
-        });
-
-        this.cardRevealDelayedCalls.push(revealCall);
-        return;
-      }
-
-      this.setCardPositionState(element, targetPosition);
-
-      gsap.to(element, {
-        ...this.cardPropsWithValues(targetPosition, sideOffset, sideScale),
-        duration: this.CARD_DURATION,
-        ease: 'power3.inOut',
-        overwrite: 'auto',
-      });
-    });
-
-    this.cardDelayedCall = gsap.delayedCall(this.CARD_DURATION, () => {
-      this.isAnimating.set(false);
-      this.killCardRevealDelayedCalls();
-    });
-  }
-
-  private killCardRevealDelayedCalls(): void {
-    this.cardRevealDelayedCalls.forEach((call) => call.kill());
-    this.cardRevealDelayedCalls = [];
   }
 
   private initScreenshotPositions(progress = 0): void {
-    const slides = this.slideRefs?.toArray() ?? [];
-    const fills = this.navFillRefs?.toArray() ?? [];
+    const slides = this.slideElements();
+    const fills = this.navFillElements();
     const activeIndex = this.currentIndex();
     const normalizedProgress = this.normalizeProgress(progress);
 
@@ -728,17 +655,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.stopProgress();
 
-    slides.forEach((ref, index) => {
-      gsap.killTweensOf(ref.nativeElement);
-
-      gsap.set(ref.nativeElement, {
-        xPercent: index === activeIndex ? 0 : 100,
-        zIndex: index === activeIndex ? 10 : 1,
-        opacity: 1,
-      });
-    });
-
-    this.syncNavFills(activeIndex, normalizedProgress);
+    this.carouselScene.setSlidesPositions(slides, fills, activeIndex, normalizedProgress);
 
     if (this.canRunInlineAutoplay()) {
       this.startProgress(activeIndex, normalizedProgress);
@@ -746,8 +663,8 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   private initFullscreenPositions(progress = 0): void {
-    const slides = this.fullscreenSlideRefs?.toArray() ?? [];
-    const fills = this.fullscreenNavFillRefs?.toArray() ?? [];
+    const slides = this.fullscreenSlideElements();
+    const fills = this.fullscreenNavFillElements();
     const activeIndex = this.fullscreenActiveIndex();
     const normalizedProgress = this.normalizeProgress(progress);
 
@@ -758,17 +675,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.stopFullscreenProgress();
 
-    slides.forEach((ref, index) => {
-      gsap.killTweensOf(ref.nativeElement);
-
-      gsap.set(ref.nativeElement, {
-        xPercent: index === activeIndex ? 0 : 100,
-        zIndex: index === activeIndex ? 10 : 1,
-        opacity: 1,
-      });
-    });
-
-    this.syncFullscreenNavFills(activeIndex, normalizedProgress);
+    this.carouselScene.setSlidesPositions(slides, fills, activeIndex, normalizedProgress);
 
     this.fullscreenHydrated = true;
     this.pendingFullscreenProgress = 0;
@@ -780,19 +687,14 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.isFullscreenAnimating.set(false);
   }
 
-  private resolvePosition(index: number, current: number, total: number): SlidePosition {
+  private readonly resolvePosition = (index: number, current: number, total: number): CarouselSlidePosition => {
     if (index === current) return 'center';
     if (total <= 1) return 'hidden';
     if (index === (current - 1 + total) % total) return 'left';
     if (index === (current + 1) % total) return 'right';
 
     return 'hidden';
-  }
-
-  private setCardPositionState(element: HTMLElement, position: SlidePosition): void {
-    element.dataset['carouselPosition'] = position;
-    element.style.visibility = 'visible';
-  }
+  };
 
   private cardRootElement(): HTMLElement | null {
     return this.hostRef.nativeElement.querySelector<HTMLElement>('.carousel-root--card');
@@ -848,88 +750,48 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     return Math.min(Math.max(offset, minOffset), maxOffset);
   }
 
-  private cardProps(position: SlidePosition): gsap.TweenVars {
-    const sideOffset = this.cardSideOffset();
-    const sideScale = this.cardSideScale();
-    const hiddenX = this.lastDirection === 'right' ? 180 : -280;
+  private cardMetrics(): { sideOffset: number; sideScale: number; hiddenX: number } {
+    return {
+      sideOffset: this.cardSideOffset(),
+      sideScale: this.cardSideScale(),
+      hiddenX: this.lastDirection === 'right' ? 180 : -280,
+    };
+  }
 
-    return this.cardPropsWithValues(position, sideOffset, sideScale, hiddenX);
+  private cardElements(): HTMLElement[] {
+    return this.cardItems().map((item) => item.elementRef.nativeElement);
+  }
+
+  private slideElements(): HTMLElement[] {
+    return (this.slideRefs?.toArray() ?? []).map((ref) => ref.nativeElement);
+  }
+
+  private navFillElements(): HTMLElement[] {
+    return (this.navFillRefs?.toArray() ?? []).map((ref) => ref.nativeElement);
+  }
+
+  private fullscreenSlideElements(): HTMLElement[] {
+    return (this.fullscreenSlideRefs?.toArray() ?? []).map((ref) => ref.nativeElement);
+  }
+
+  private fullscreenNavFillElements(): HTMLElement[] {
+    return (this.fullscreenNavFillRefs?.toArray() ?? []).map((ref) => ref.nativeElement);
   }
 
   private animateCards(newIndex: number): void {
-    const items = this.cardItems();
-    const total = items.length;
+    const elements = this.cardElements();
+    const total = elements.length;
 
-    if (!total) {
-      this.isAnimating.set(false);
-      return;
-    }
-
-    this.cardDelayedCall?.kill();
-
-    const sideOffset = this.cardSideOffset();
-    const sideScale = this.cardSideScale();
-
-    items.forEach((item, index) => {
-      const element = item.elementRef.nativeElement;
-      const position = this.resolvePosition(index, newIndex, total);
-
-      this.setCardPositionState(element, position);
-
-      gsap.to(element, {
-        ...this.cardPropsWithValues(position, sideOffset, sideScale),
-        duration: this.CARD_DURATION,
-        ease: 'power3.inOut',
-        overwrite: 'auto',
-      });
+    this.carouselScene.animateCards({
+      elements,
+      newIndex,
+      total,
+      metrics: this.cardMetrics(),
+      resolvePosition: this.resolvePosition,
+      onComplete: () => {
+        this.isAnimating.set(false);
+      },
     });
-
-    this.cardDelayedCall = gsap.delayedCall(this.CARD_DURATION, () => {
-      this.isAnimating.set(false);
-    });
-  }
-
-  private cardPropsWithValues(position: SlidePosition, sideOffset: number, sideScale: number, hiddenX = this.lastDirection === 'right' ? 180 : -280): gsap.TweenVars {
-    const props: Record<SlidePosition, gsap.TweenVars> = {
-      center: {
-        xPercent: -50,
-        yPercent: 0,
-        scale: 1,
-        opacity: 1,
-        zIndex: 50,
-        filter: 'blur(0px)',
-        pointerEvents: 'auto',
-      },
-      left: {
-        xPercent: -50 - sideOffset,
-        yPercent: 0,
-        scale: sideScale,
-        opacity: 0.38,
-        zIndex: 20,
-        filter: 'blur(0.2px)',
-        pointerEvents: 'auto',
-      },
-      right: {
-        xPercent: -50 + sideOffset,
-        yPercent: 0,
-        scale: sideScale,
-        opacity: 0.38,
-        zIndex: 20,
-        filter: 'blur(0.2px)',
-        pointerEvents: 'auto',
-      },
-      hidden: {
-        xPercent: hiddenX,
-        yPercent: 0,
-        scale: sideScale,
-        opacity: 0,
-        zIndex: 1,
-        filter: 'blur(0.75px)',
-        pointerEvents: 'none',
-      },
-    };
-
-    return props[position];
   }
 
   protected onTrackClick(event: MouseEvent): void {
@@ -1007,163 +869,57 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.goTo(index);
   }
 
-  private animateSlides(fromIndex: number, toIndex: number, direction: Direction): void {
-    const slides = this.slideRefs?.toArray() ?? [];
-    const from = slides[fromIndex]?.nativeElement;
-    const to = slides[toIndex]?.nativeElement;
+  private animateSlides(fromIndex: number, toIndex: number, direction: CarouselDirection): void {
+    this.carouselScene.animateSlides({
+      slides: this.slideElements(),
+      fromIndex,
+      toIndex,
+      direction,
+      onMissingElements: () => {
+        this.isAnimating.set(false);
+      },
+      onComplete: () => {
+        this.isAnimating.set(false);
+        this.syncNavFills(toIndex, 0);
 
-    if (!from || !to) {
-      this.isAnimating.set(false);
-      return;
-    }
-
-    gsap.set(to, {
-      xPercent: direction === 'right' ? 100 : -100,
-      zIndex: 20,
-      opacity: 1,
+        if (this.canRunInlineAutoplay()) {
+          this.startProgress(toIndex, 0);
+        }
+      },
     });
-
-    gsap.set(from, {
-      zIndex: 10,
-      opacity: 1,
-    });
-
-    gsap
-      .timeline({
-        onComplete: () => {
-          gsap.set(from, {
-            zIndex: 1,
-            xPercent: direction === 'right' ? -100 : 100,
-          });
-
-          gsap.set(to, {
-            zIndex: 10,
-            xPercent: 0,
-          });
-
-          this.isAnimating.set(false);
-          this.syncNavFills(toIndex, 0);
-
-          if (this.canRunInlineAutoplay()) {
-            this.startProgress(toIndex, 0);
-          }
-        },
-      })
-      .to(
-        from,
-        {
-          xPercent: direction === 'right' ? -100 : 100,
-          duration: this.SLIDE_DURATION,
-          ease: 'power3.inOut',
-        },
-        0,
-      )
-      .to(
-        to,
-        {
-          xPercent: 0,
-          duration: this.SLIDE_DURATION,
-          ease: 'power3.inOut',
-        },
-        0,
-      );
   }
 
-  private animateFullscreenSlides(fromIndex: number, toIndex: number, direction: Direction): void {
-    const slides = this.fullscreenSlideRefs?.toArray() ?? [];
-    const from = slides[fromIndex]?.nativeElement;
-    const to = slides[toIndex]?.nativeElement;
+  private animateFullscreenSlides(fromIndex: number, toIndex: number, direction: CarouselDirection): void {
+    this.carouselScene.animateSlides({
+      slides: this.fullscreenSlideElements(),
+      fromIndex,
+      toIndex,
+      direction,
+      onMissingElements: () => {
+        this.isFullscreenAnimating.set(false);
+      },
+      onComplete: () => {
+        this.isFullscreenAnimating.set(false);
+        this.syncFullscreenNavFills(toIndex, 0);
 
-    if (!from || !to) {
-      this.isFullscreenAnimating.set(false);
-      return;
-    }
-
-    gsap.set(to, {
-      xPercent: direction === 'right' ? 100 : -100,
-      zIndex: 20,
-      opacity: 1,
+        if (this.canRunFullscreenAutoplay()) {
+          this.startFullscreenProgress(toIndex, 0);
+        }
+      },
     });
-
-    gsap.set(from, {
-      zIndex: 10,
-      opacity: 1,
-    });
-
-    gsap
-      .timeline({
-        onComplete: () => {
-          gsap.set(from, {
-            zIndex: 1,
-            xPercent: direction === 'right' ? -100 : 100,
-          });
-
-          gsap.set(to, {
-            zIndex: 10,
-            xPercent: 0,
-          });
-
-          this.isFullscreenAnimating.set(false);
-          this.syncFullscreenNavFills(toIndex, 0);
-
-          if (this.canRunFullscreenAutoplay()) {
-            this.startFullscreenProgress(toIndex, 0);
-          }
-        },
-      })
-      .to(
-        from,
-        {
-          xPercent: direction === 'right' ? -100 : 100,
-          duration: this.SLIDE_DURATION,
-          ease: 'power3.inOut',
-        },
-        0,
-      )
-      .to(
-        to,
-        {
-          xPercent: 0,
-          duration: this.SLIDE_DURATION,
-          ease: 'power3.inOut',
-        },
-        0,
-      );
   }
 
   private syncNavFills(activeIndex: number, activeProgress = 0): void {
-    const fills = this.navFillRefs?.toArray() ?? [];
-    const normalizedProgress = this.normalizeProgress(activeProgress);
-
-    fills.forEach((ref, index) => {
-      gsap.killTweensOf(ref.nativeElement);
-
-      gsap.set(ref.nativeElement, {
-        scaleX: index < activeIndex ? 1 : index === activeIndex ? normalizedProgress : 0,
-      });
-    });
+    this.carouselScene.syncFills(this.navFillElements(), activeIndex, activeProgress);
   }
 
   private syncFullscreenNavFills(activeIndex: number, activeProgress = 0): void {
-    const fills = this.fullscreenNavFillRefs?.toArray() ?? [];
-    const normalizedProgress = this.normalizeProgress(activeProgress);
-
-    fills.forEach((ref, index) => {
-      gsap.killTweensOf(ref.nativeElement);
-
-      gsap.set(ref.nativeElement, {
-        scaleX: index < activeIndex ? 1 : index === activeIndex ? normalizedProgress : 0,
-      });
-    });
+    this.carouselScene.syncFills(this.fullscreenNavFillElements(), activeIndex, activeProgress);
   }
 
   private startProgress(index: number, startProgress = 0): void {
     if (this.mode() !== 'screenshot') return;
 
-    this.stopProgress();
-
-    const fills = this.navFillRefs?.toArray() ?? [];
-    const fill = fills[index]?.nativeElement;
     const normalizedProgress = this.normalizeProgress(startProgress);
 
     this.inlineProgressState = {
@@ -1173,21 +929,11 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       paused: false,
     };
 
-    if (!fill) return;
-
-    gsap.killTweensOf(fill);
-    gsap.set(fill, { scaleX: normalizedProgress });
-
-    if (normalizedProgress >= 0.999) {
-      queueMicrotask(() => this.next());
-      return;
-    }
-
-    this.progressTween = gsap.to(fill, {
-      scaleX: 1,
-      duration: (this.autoPlayDuration() / 1000) * (1 - normalizedProgress),
-      ease: 'none',
-      overwrite: 'auto',
+    this.carouselScene.startProgress('inline', {
+      fills: this.navFillElements(),
+      index,
+      startProgress: normalizedProgress,
+      durationMs: this.autoPlayDuration(),
       onComplete: () => {
         this.next();
       },
@@ -1197,10 +943,6 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private startFullscreenProgress(index: number, startProgress = 0): void {
     if (this.mode() !== 'screenshot') return;
 
-    this.stopFullscreenProgress();
-
-    const fills = this.fullscreenNavFillRefs?.toArray() ?? [];
-    const fill = fills[index]?.nativeElement;
     const normalizedProgress = this.normalizeProgress(startProgress);
 
     this.fullscreenProgressState = {
@@ -1210,21 +952,11 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       paused: false,
     };
 
-    if (!fill) return;
-
-    gsap.killTweensOf(fill);
-    gsap.set(fill, { scaleX: normalizedProgress });
-
-    if (normalizedProgress >= 0.999) {
-      queueMicrotask(() => this.fullscreenNext());
-      return;
-    }
-
-    this.fullscreenProgressTween = gsap.to(fill, {
-      scaleX: 1,
-      duration: (this.autoPlayDuration() / 1000) * (1 - normalizedProgress),
-      ease: 'none',
-      overwrite: 'auto',
+    this.carouselScene.startProgress('fullscreen', {
+      fills: this.fullscreenNavFillElements(),
+      index,
+      startProgress: normalizedProgress,
+      durationMs: this.autoPlayDuration(),
       onComplete: () => {
         this.fullscreenNext();
       },
@@ -1232,13 +964,11 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   private stopProgress(): void {
-    this.progressTween?.kill();
-    this.progressTween = undefined;
+    this.carouselScene.stopProgress('inline');
   }
 
   private stopFullscreenProgress(): void {
-    this.fullscreenProgressTween?.kill();
-    this.fullscreenProgressTween = undefined;
+    this.carouselScene.stopProgress('fullscreen');
   }
 
   private canRunInlineAutoplay(): boolean {
@@ -1290,21 +1020,11 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   private getInlineDomProgress(index: number): number {
-    const fills = this.navFillRefs?.toArray() ?? [];
-    const fill = fills[index]?.nativeElement;
-
-    if (!fill) return 0;
-
-    return this.normalizeProgress(Number(gsap.getProperty(fill, 'scaleX')));
+    return this.carouselScene.getFillProgress(this.navFillElements(), index);
   }
 
   private getFullscreenDomProgress(index: number): number {
-    const fills = this.fullscreenNavFillRefs?.toArray() ?? [];
-    const fill = fills[index]?.nativeElement;
-
-    if (!fill) return 0;
-
-    return this.normalizeProgress(Number(gsap.getProperty(fill, 'scaleX')));
+    return this.carouselScene.getFillProgress(this.fullscreenNavFillElements(), index);
   }
 
   private pauseActiveAutoplay(): void {
@@ -1370,7 +1090,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     return performance.now();
   }
 
-  private navigate(newIndex: number, direction: Direction): void {
+  private navigate(newIndex: number, direction: CarouselDirection): void {
     const total = this.itemsLength();
 
     if (!this.isBrowser || total <= 1 || this.isAnimating()) return;
@@ -1399,7 +1119,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.animateSlides(current, newIndex, direction);
   }
 
-  private navigateFullscreen(newIndex: number, direction: Direction): void {
+  private navigateFullscreen(newIndex: number, direction: CarouselDirection): void {
     const total = this.images().length;
     const current = this.fullscreenActiveIndex();
 

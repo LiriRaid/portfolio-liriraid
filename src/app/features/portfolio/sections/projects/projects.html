@@ -83,7 +83,7 @@
         </p-popover>
       </div>
 
-      <portfolio-search [control]="searchControl" [mobileMode]="true" placeholder="Buscar proyectos..." inputClass="projects-search-input" (searchEnter)="onSearch($event)" />
+      <portfolio-search [control]="searchControl" [mobileMode]="true" placeholder="Buscar proyectos..." (searchEnter)="onSearch($event)" />
     </div>
 
     @if (hasSelectedTechnologies()) {
@@ -106,10 +106,10 @@
       </div>
     }
 
-    @if (filteredProjects().length) {
-      <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="filteredProjectsKey()" class="projects-carousel">
-        @for (project of filteredProjects(); track project.title) {
-          <div carouselItem class="projects-card-shell">
+    @if (displayedProjects().length) {
+      <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="displayedProjectsKey()" [itemsStateKey]="displayedProjectsStateKey()" [activeItemKey]="activeCarouselProjectTitle()" class="projects-carousel">
+        @for (project of displayedProjects(); track project.title) {
+          <div carouselItem class="projects-card-shell" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null">
             <article class="projects-card" [class.projects-card--featured]="project.featured">
               @if (project.featured) {
                 <span class="projects-featured-badge">Destacado</span>

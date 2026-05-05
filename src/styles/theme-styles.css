@@ -182,7 +182,7 @@
   --app-control-disabled-contrast-text: var(--app-text-color);
   --app-search-input-bg: var(--app-panel-bg);
   --app-search-input-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));
-  --app-search-input-text: var(--p-surface-900);
+  --app-search-input-text: var(--p-surface-0);
   --app-search-input-prefix: var(--app-text-muted);
   --app-search-button-bg: var(--p-surface-0);
   --app-search-button-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));

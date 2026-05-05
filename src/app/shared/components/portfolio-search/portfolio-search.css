@@ -20,26 +20,82 @@
 }
 
 .search-mobile-panel {
+  --search-mobile-gap: 0.52rem;
+
   flex-basis: 100%;
   width: 100%;
-  margin-top: 0;
+  min-width: 0;
+
+  display: grid;
+  grid-template-rows: 1fr;
+
+  padding-top: var(--search-mobile-gap);
+  margin: 0;
+
+  overflow: hidden;
+  will-change: grid-template-rows, padding-top, opacity;
+}
+
+.search-mobile-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  transform-origin: top center;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Input interno del search */
-:host ::ng-deep .projects-search-input,
-:host ::ng-deep input {
-  min-height: 2.15rem;
-  height: 2.15rem;
-  padding-inline: 0.75rem;
-  border-radius: 0.7rem;
-  font-size: 0.76rem;
-  line-height: 1.2;
+:host ::ng-deep .input.input-default {
+  width: 100%;
 }
 
-:host ::ng-deep .projects-search-input::placeholder,
+:host ::ng-deep .input.input-default portfolio-icon {
+  color: var(--app-search-input-prefix);
+  opacity: 1;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+:host ::ng-deep .input.input-default:focus-within portfolio-icon {
+  color: var(--app-search-input-prefix);
+  opacity: 1;
+}
+
+:host ::ng-deep .input.input-default input,
+:host ::ng-deep input {
+  --search-input-font-size: 0.875rem;
+
+  color: var(--app-search-input-text) !important;
+  -webkit-text-fill-color: var(--app-search-input-text) !important;
+  caret-color: var(--app-text-primary);
+
+  font-size: var(--search-input-font-size) !important;
+  line-height: 1.143 !important;
+  font-weight: 500;
+
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+:host ::ng-deep .input.input-default input::placeholder,
 :host ::ng-deep input::placeholder {
-  font-size: 0.76rem;
-  line-height: 1.2;
+  color: var(--app-search-input-prefix) !important;
+  -webkit-text-fill-color: var(--app-search-input-prefix) !important;
+  opacity: 0.72;
+
+  font-size: var(--search-input-font-size) !important;
+  line-height: 1.143 !important;
+  font-weight: 500;
+}
+
+:host ::ng-deep .input.input-default:focus-within input::placeholder,
+:host ::ng-deep .input.input-default input:focus::placeholder,
+:host ::ng-deep input:focus::placeholder {
+  color: var(--app-search-input-prefix) !important;
+  -webkit-text-fill-color: var(--app-search-input-prefix) !important;
+  opacity: 0.72;
 }
 
 /* 640px para abajo */
@@ -54,25 +110,19 @@
   }
 
   .search-mobile-panel {
-    flex-basis: 100%;
-    width: 100%;
-    margin-top: -0.38rem;
+    --search-mobile-gap: 0.52rem;
   }
 
-  :host ::ng-deep .projects-search-input,
-  :host ::ng-deep input {
+  :host ::ng-deep .input.input-default {
     min-height: 34px !important;
     height: 34px !important;
     padding-inline: 0.62rem !important;
     border-radius: 0.48rem !important;
-    font-size: 0.64rem !important;
-    line-height: 1.2 !important;
   }
 
-  :host ::ng-deep .projects-search-input::placeholder,
-  :host ::ng-deep input::placeholder {
-    font-size: 0.64rem !important;
-    line-height: 1.2 !important;
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    --search-input-font-size: 0.82rem;
   }
 
   :host ::ng-deep .search-collapsed-btn portfolio-icon,
@@ -95,23 +145,19 @@
   }
 
   .search-mobile-panel {
-    margin-top: -0.42rem;
+    --search-mobile-gap: 0.5rem;
   }
 
-  :host ::ng-deep .projects-search-input,
-  :host ::ng-deep input {
+  :host ::ng-deep .input.input-default {
     min-height: 32px !important;
     height: 32px !important;
     padding-inline: 0.56rem !important;
     border-radius: 0.45rem !important;
-    font-size: 0.76rem !important;
-    line-height: 1.15 !important;
   }
 
-  :host ::ng-deep .projects-search-input::placeholder,
-  :host ::ng-deep input::placeholder {
-    font-size: 0.76rem !important;
-    line-height: 1.15 !important;
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    --search-input-font-size: 0.766rem;
   }
 
   :host ::ng-deep .search-collapsed-btn portfolio-icon,
@@ -134,23 +180,19 @@
   }
 
   .search-mobile-panel {
-    margin-top: -0.46rem;
+    --search-mobile-gap: 0.46rem;
   }
 
-  :host ::ng-deep .projects-search-input,
-  :host ::ng-deep input {
+  :host ::ng-deep .input.input-default {
     min-height: 30px !important;
     height: 30px !important;
     padding-inline: 0.5rem !important;
     border-radius: 0.42rem !important;
-    font-size: 0.66rem !important;
-    line-height: 1.12 !important;
   }
 
-  :host ::ng-deep .projects-search-input::placeholder,
-  :host ::ng-deep input::placeholder {
-    font-size: 0.66rem !important;
-    line-height: 1.12 !important;
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    --search-input-font-size: 0.738rem;
   }
 
   :host ::ng-deep .search-collapsed-btn portfolio-icon,
