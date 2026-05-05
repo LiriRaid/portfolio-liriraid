@@ -167,24 +167,29 @@
     align-items: center;
     gap: 0.625rem;
     color: var(--app-control-surface-text);
-    transition: all 0.2s ease;
-  }
-
-  .input > span.prefix {
-    color: var(--app-search-input-prefix);
-    transition: color 0.2s ease;
+    box-sizing: border-box;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   .input.input-default {
     border: 1px solid var(--app-search-input-border);
     background-color: var(--app-search-input-bg);
     color: var(--app-search-input-text);
-    background-clip: padding-box;
+    background-clip: border-box;
   }
 
   .input.input-default:focus-within {
-    border-color: transparent;
-    box-shadow: inset 0 0 0 2px var(--app-control-focus-ring);
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px var(--app-control-focus-ring);
+  }
+
+  .input > span.prefix {
+    color: var(--app-search-input-prefix);
+    transition: color 0.2s ease;
   }
 
   .input.input-default:focus-within > span.prefix {
