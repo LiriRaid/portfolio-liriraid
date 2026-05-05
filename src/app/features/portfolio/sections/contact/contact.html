@@ -6,7 +6,7 @@
 
         <h2 id="contact-heading" class="contact-title m-0 text-tittle-4-bold">
           ¿Listo para construir<br />
-          <span class="contact-highlight">algo juntos</span>?
+          <span class="text-(--app-text-primary)">algo juntos</span>?
         </h2>
 
         <p class="contact-description m-0 max-w-(--c-desc-max) text-body-1-regular">Estoy abierto a proyectos freelance, colaboraciones técnicas y propuestas donde pueda aportar valor construyendo soluciones web modernas, escalables y bien cuidadas. Si tienes una idea que quieras llevar a producción, me encantaría escucharla.</p>
@@ -25,7 +25,7 @@
           <portfolio-input formControlName="email" label="Correo electrónico" placeholder="Ingresa tu correo electrónico" type="email" variant="on" lucideIcon="Email" iconPosition="left" />
 
           <div class="textarea textarea-default" [class.textarea-focused]="messageFocused()">
-            <textarea formControlName="message" class="contact-textarea text-caption-1-medium" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" (focus)="messageFocused.set(true)" (blur)="messageFocused.set(false)"></textarea>
+            <textarea formControlName="message" class="contact-textarea text-caption-1-medium placeholder:text-(--app-text-subtle)" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" (focus)="messageFocused.set(true)" (blur)="messageFocused.set(false)"></textarea>
           </div>
 
           <portfolio-button [label]="sending() ? 'Enviando...' : 'Enviar mensaje'" icon="Send" iconPos="right" iconSize="16" styleClass="w-full text-body-2-medium rounded-2xl contact-submit-btn" type="submit" [loading]="sending()" [disabled]="sending()" />

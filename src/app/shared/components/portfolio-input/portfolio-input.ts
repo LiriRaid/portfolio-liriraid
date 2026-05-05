@@ -3,7 +3,7 @@ import { Component, DestroyRef, Injector, OnInit, computed, inject, input, outpu
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, ControlValueAccessor, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 
-import { LucideIconName } from '@core/common/lucide-icons';
+import { LucideIconName } from '@core/common/icons/lucide-icons';
 import { createControlValueAccessorProvider } from '@core/forms/control-value-accessor.provider';
 import { PortfolioIcon } from '..';
 

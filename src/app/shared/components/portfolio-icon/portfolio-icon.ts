@@ -1,8 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideDynamicIcon } from '@lucide/angular';
-import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/lucide-icons.provider';
-import { PortfolioIconsSVG } from '@core/common/portfolio-icons';
+import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/icons/lucide-icons.provider';
+import { PortfolioIconsSVG } from '@core/common/icons/portfolio-icons';
 
 @Component({
   selector: 'portfolio-icon',

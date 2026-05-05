@@ -7,7 +7,7 @@ import { LUCIDE_ICONS } from '@lucide/angular';
 import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
-import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/lucide-icons.provider';
+import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/icons/lucide-icons.provider';
 import { createPortfolioAuraPreset } from '@core/theme/portfolio-aura-preset';
 import { getStoredPrimaryColorKey, getStoredSurfaceColorKey } from '@core/theme/theme-preferences.storage';
 import { getPrimaryColor, getSurfaceColor } from '@core/theme/theme-palettes';

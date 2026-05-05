@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
 
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
@@ -19,6 +19,7 @@ export class Header {
   private readonly themeService = inject(ThemeService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   protected readonly mobileMenuOpen = signal(false);
   protected readonly activeSection = signal<PortfolioSectionId>('inicio');
@@ -115,11 +116,23 @@ export class Header {
       this.unlockProgrammaticScroll();
     };
 
+    const onDocumentPointerDown = (event: PointerEvent): void => {
+      this.closeMobileMenuFromOutside(event);
+    };
+
+    const onDocumentKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        this.closeMobileMenu();
+      }
+    };
+
     desktopMq.addEventListener('change', onDesktopChange);
     scrollRoot.addEventListener('scroll', onScrollOrResize, { passive: true });
     window.addEventListener('resize', onScrollOrResize);
     scrollRoot.addEventListener('wheel', onManualScroll, { passive: true });
     scrollRoot.addEventListener('touchstart', onManualScroll, { passive: true });
+    document.addEventListener('pointerdown', onDocumentPointerDown, { capture: true });
+    document.addEventListener('keydown', onDocumentKeyDown);
 
     this.destroyRef.onDestroy(() => {
       desktopMq.removeEventListener('change', onDesktopChange);
@@ -127,10 +140,32 @@ export class Header {
       window.removeEventListener('resize', onScrollOrResize);
       scrollRoot.removeEventListener('wheel', onManualScroll);
       scrollRoot.removeEventListener('touchstart', onManualScroll);
+      document.removeEventListener('pointerdown', onDocumentPointerDown, { capture: true });
+      document.removeEventListener('keydown', onDocumentKeyDown);
 
       this.cancelActiveSectionFrame();
       this.clearScrollUnlockTimer();
     });
+  }
+
+  private closeMobileMenuFromOutside(event: PointerEvent): void {
+    if (!this.mobileMenuOpen()) {
+      return;
+    }
+
+    const target = event.target;
+
+    if (!(target instanceof Node)) {
+      return;
+    }
+
+    const host = this.elementRef.nativeElement;
+
+    if (host.contains(target)) {
+      return;
+    }
+
+    this.closeMobileMenu();
   }
 
   private syncInitialHash(): void {

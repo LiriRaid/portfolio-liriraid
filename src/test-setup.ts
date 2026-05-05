@@ -1,7 +1,7 @@
 import '@angular/compiler';
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 import { LUCIDE_ICONS } from '@lucide/angular';
-import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/lucide-icons.provider';
+import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/icons/lucide-icons.provider';
 
 setupTestBed({
   zoneless: true,
