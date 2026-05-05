@@ -352,7 +352,7 @@
 }
 
 .project-tag {
-  padding: 0.34rem 0.68rem;
+  padding: 0.38rem 0.75rem;
   background-color: var(--app-panel-muted-bg);
   color: var(--app-text-color);
 }
@@ -365,7 +365,7 @@
 }
 
 .project-stat {
-  padding: 0.34rem 0.62rem;
+  padding: 0.35rem 0.65rem;
   background-color: var(--app-panel-muted-bg);
 }
 
@@ -407,8 +407,8 @@
    ========================= */
 
 .projects-carousel {
-  --carousel-card-width: min(27.5rem, 76vw);
-  --carousel-card-height: 43.5rem;
+  --carousel-card-width: min(31.5rem, 82vw);
+  --carousel-card-height: 52rem;
 
   width: 100%;
   max-width: 100%;
@@ -416,6 +416,7 @@
 }
 
 .project-card-shell {
+  width: 100%;
   height: 100%;
   min-height: 0;
 }
@@ -424,7 +425,7 @@
   position: relative;
   width: 100%;
   min-width: 0;
-  min-height: 0;
+  min-height: 320px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -473,49 +474,16 @@
 
 .project-card-body {
   min-width: 0;
-  min-height: 0;
-  flex: 1 1 auto;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
-  gap: 0.82rem;
-  padding: 1.25rem 1.25rem 1rem;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--app-text-primary) 45%, transparent) transparent;
-}
-
-.project-card-body::-webkit-scrollbar {
-  width: 0.35rem;
-}
-
-.project-card-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.project-card-body::-webkit-scrollbar-thumb {
-  border-radius: 9999px;
-  background-color: color-mix(in srgb, var(--app-text-primary) 38%, transparent);
+  gap: 1rem;
+  padding: 1.5rem;
+  overflow: hidden;
 }
 
 .project-title {
   padding-right: 4.5rem;
-}
-
-.project-description {
-  font-size: 0.86rem;
-  line-height: 1.48;
-}
-
-.project-tags {
-  gap: 0.48rem;
-  align-content: flex-start;
-}
-
-.project-tag {
-  min-height: 1.72rem;
-  font-size: 0.72rem;
-  line-height: 1.1;
 }
 
 /* =========================
@@ -525,7 +493,7 @@
 .project-card-github {
   min-width: 0;
   flex: 0 0 auto;
-  margin-top: 0;
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   border-top: 1px solid var(--app-border-color);
@@ -533,16 +501,9 @@
 }
 
 .project-stats {
-  padding: 0.82rem 1.25rem;
+  padding: 1rem 1.5rem;
   flex-wrap: wrap;
   overflow: visible;
-  gap: 0.48rem;
-}
-
-.project-stat {
-  min-height: 1.72rem;
-  font-size: 0.72rem;
-  line-height: 1.1;
 }
 
 .project-stat portfolio-icon {
@@ -565,13 +526,11 @@
 
 .project-card-footer {
   min-width: 0;
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.78rem 1.25rem 0.85rem;
+  padding: 0.95rem 1.5rem 1rem;
   border-top: 1px solid var(--app-border-color);
-  background-color: var(--app-panel-bg);
 }
 
 .project-link {
@@ -618,191 +577,4 @@
 .project-filter-panel-clear:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
-}
-
-/* =========================
-   Responsive
-   ========================= */
-
-@media (max-width: 1280px) {
-  ::ng-deep .p-popover.project-filter-panel {
-    width: min(1180px, calc(100vw - 2rem));
-  }
-}
-
-@media (max-width: 1024px) {
-  ::ng-deep .p-popover.project-filter-panel {
-    width: calc(100vw - 2rem);
-    max-height: calc(100dvh - 8rem);
-  }
-
-  ::ng-deep .p-popover.project-filter-panel .p-popover-content {
-    max-height: calc(100dvh - 10rem);
-  }
-
-  .project-filter-category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .project-filter-category {
-    min-height: 128px;
-  }
-
-  .projects-carousel {
-    --carousel-card-width: min(26rem, 76vw);
-    --carousel-card-height: 44rem;
-  }
-}
-
-@media (max-width: 768px) {
-  ::ng-deep .p-popover.project-filter-panel {
-    width: calc(100vw - 2rem);
-    max-height: 35.5rem;
-  }
-
-  ::ng-deep .p-popover.project-filter-panel .p-popover-content {
-    max-height: 33.5rem;
-  }
-
-  .project-filter-category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .project-filter-category {
-    min-height: 132px;
-    padding: 0.75rem;
-  }
-
-  .project-filter-options {
-    gap: 0.5rem;
-  }
-
-  .project-filter-option {
-    padding: 0.4rem 0.65rem;
-  }
-
-  .projects-carousel {
-    --carousel-card-width: min(24rem, 78vw);
-    --carousel-card-height: 44rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .section {
-    padding: 4rem 0 5rem;
-  }
-
-  .section-inner {
-    max-width: 100%;
-    padding-inline: 1rem;
-  }
-
-  .project-toolbar {
-    align-items: flex-start;
-    flex-wrap: wrap;
-    column-gap: 1rem;
-  }
-
-  .project-toolbar portfolio-search {
-    flex: 0 0 auto;
-    max-width: none;
-    margin-left: auto;
-  }
-
-  .project-filter-bar {
-    gap: 0.5rem;
-  }
-
-  :host ::ng-deep .project-filter-button.p-button {
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 38px !important;
-    min-height: 38px !important;
-    padding: 0 !important;
-    justify-content: center;
-    border-radius: 0.5rem;
-  }
-
-  :host ::ng-deep .project-filter-button.p-button .p-button-label,
-  :host ::ng-deep .project-filter-button.p-button .portfolio-button__badge {
-    display: none;
-  }
-
-  :host ::ng-deep .project-filter-button.p-button :is(.p-button-icon, portfolio-icon) {
-    color: inherit;
-  }
-
-  :host ::ng-deep .project-clear-button.p-button {
-    width: auto;
-    justify-content: center;
-  }
-
-  ::ng-deep .p-popover.project-filter-panel {
-    width: calc(100vw - 2rem);
-    max-height: 32.5rem;
-  }
-
-  ::ng-deep .p-popover.project-filter-panel .p-popover-content {
-    max-height: 30.5rem;
-  }
-
-  .project-filter-category-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .project-filter-category {
-    min-height: 116px;
-    padding: 0.75rem;
-    gap: 0.5rem;
-  }
-
-  .projects-carousel {
-    --carousel-card-width: min(22rem, 82vw);
-    --carousel-card-height: 44rem;
-  }
-
-  .project-card-body {
-    padding: 1rem;
-  }
-
-  .project-title {
-    padding-right: 0;
-  }
-
-  .project-featured-badge {
-    top: 0.55rem;
-    right: 3rem;
-  }
-
-  .project-stats {
-    padding: 1rem;
-  }
-
-  .project-card-footer {
-    padding: 0.95rem 1rem 1rem;
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 420px) {
-  .section-inner {
-    padding-inline: 0.75rem;
-  }
-
-  .projects-carousel {
-    --carousel-card-width: min(20rem, 84vw);
-    --carousel-card-height: 44rem;
-  }
-
-  .project-card-body {
-    padding: 1rem;
-  }
-
-  .project-stats {
-    padding: 0.875rem 1rem;
-  }
-
-  .project-card-footer {
-    padding-inline: 1rem;
-  }
 }

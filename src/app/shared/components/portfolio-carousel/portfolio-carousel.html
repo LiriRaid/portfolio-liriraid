@@ -1,16 +1,16 @@
 @if (mode() === 'card') {
   <div class="carousel-root carousel-root--card">
-    <div class="carousel-track" (click)="onTrackClick($event)" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+    <div class="carousel-track" (click)="onTrackClick($event)" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
       <ng-content select="[carouselItem]"></ng-content>
     </div>
 
     @if (itemsLength() > 1) {
       <button type="button" class="nav-btn nav-btn--prev" (click)="prev(); $event.stopPropagation()" aria-label="Proyecto anterior">
-        <portfolio-icon name="ChevronLeft" size="18" />
+        <portfolio-icon name="ChevronLeft" size="16" />
       </button>
 
       <button type="button" class="nav-btn nav-btn--next" (click)="next(); $event.stopPropagation()" aria-label="Siguiente proyecto">
-        <portfolio-icon name="ChevronRight" size="18" />
+        <portfolio-icon name="ChevronRight" size="16" />
       </button>
 
       <div class="carousel-dots" role="tablist" aria-label="Navegar proyectos">
@@ -23,30 +23,30 @@
 } @else {
   @if (images().length) {
     <div class="carousel-root carousel-root--screenshot">
-      <div class="carousel-slides" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseenter)="onTrackMouseEnter()" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+      <div class="carousel-slides" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
         @for (img of images(); track $index) {
-          <div #slideRef class="carousel-slide" (click)="onSlideClick()" draggable="false">
-            <img [src]="img" [alt]="'Captura ' + ($index + 1)" class="carousel-img" draggable="false" loading="lazy" (dragstart)="$event.preventDefault()" />
+          <div #slideRef class="carousel-slide" (click)="onSlideClick($event)" draggable="false">
+            <img [src]="img" [alt]="'Captura ' + ($index + 1)" class="carousel-img" draggable="false" loading="eager" decoding="async" (dragstart)="$event.preventDefault()" />
           </div>
         }
       </div>
 
-      <button type="button" class="expand-btn" (click)="openFullscreen(currentIndex())" aria-label="Ver en pantalla completa">
+      <button type="button" class="expand-btn" (click)="onExpandClick($event)" aria-label="Ver en pantalla completa">
         <portfolio-icon name="Expand" size="14" />
       </button>
 
       @if (images().length > 1) {
-        <button type="button" class="nav-btn nav-btn--prev" (click)="prev()" aria-label="Imagen anterior">
-          <portfolio-icon name="ChevronLeft" size="18" />
+        <button type="button" class="nav-btn nav-btn--prev" (click)="onScreenshotPrevClick($event)" aria-label="Imagen anterior">
+          <portfolio-icon name="ChevronLeft" size="16" />
         </button>
 
-        <button type="button" class="nav-btn nav-btn--next" (click)="next()" aria-label="Siguiente imagen">
-          <portfolio-icon name="ChevronRight" size="18" />
+        <button type="button" class="nav-btn nav-btn--next" (click)="onScreenshotNextClick($event)" aria-label="Siguiente imagen">
+          <portfolio-icon name="ChevronRight" size="16" />
         </button>
 
         <nav class="slide-nav" aria-label="Navegar imágenes">
           @for (img of images(); track $index) {
-            <button type="button" class="slide-nav-item" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === currentIndex() ? 'true' : null" (click)="goTo($index)">
+            <button type="button" class="slide-nav-item" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === currentIndex() ? 'true' : null" (click)="onScreenshotDotClick($event, $index)">
               <span class="slide-nav-fill" #navFillRef></span>
             </button>
           }
@@ -63,26 +63,42 @@
   }
 }
 
-@if (fullscreenSrc(); as src) {
-  <div class="fullscreen-overlay" role="dialog" aria-modal="true" aria-label="Vista completa" tabindex="-1" (click)="closeFullscreen()" (keydown)="onFullscreenKeydown($event)">
-    <div class="fullscreen-inner" (click)="$event.stopPropagation()">
-      <img [src]="src" alt="Vista completa" class="fullscreen-img" />
+<ng-template #fullscreenTemplate>
+  @if (fullscreenSrc()) {
+    <div class="fullscreen-overlay" role="dialog" aria-modal="true" aria-label="Vista completa" tabindex="-1" (click)="closeFullscreen()" (keydown)="onFullscreenKeydown($event)">
+      <div class="fullscreen-inner" (click)="$event.stopPropagation()">
+        <div class="fullscreen-slides">
+          @for (img of images(); track $index) {
+            <div #fullscreenSlideRef class="fullscreen-slide" draggable="false">
+              <img [src]="img" [alt]="'Vista completa ' + ($index + 1)" class="fullscreen-img" draggable="false" loading="eager" decoding="async" (dragstart)="$event.preventDefault()" />
+            </div>
+          }
+        </div>
 
-      <button type="button" class="fullscreen-close" (click)="closeFullscreen()" aria-label="Cerrar">
-        <portfolio-icon name="Close" size="18" />
-      </button>
-
-      @if (images().length > 1) {
-        <button type="button" class="fullscreen-nav fullscreen-nav--prev" (click)="fullscreenPrev()" aria-label="Anterior">
-          <portfolio-icon name="ChevronLeft" size="22" />
+        <button type="button" class="fullscreen-close" (click)="closeFullscreen()" aria-label="Cerrar">
+          <portfolio-icon name="Close" size="16" />
         </button>
 
-        <button type="button" class="fullscreen-nav fullscreen-nav--next" (click)="fullscreenNext()" aria-label="Siguiente">
-          <portfolio-icon name="ChevronRight" size="22" />
-        </button>
+        @if (images().length > 1) {
+          <button type="button" class="fullscreen-nav fullscreen-nav--prev" (click)="fullscreenPrev()" aria-label="Anterior">
+            <portfolio-icon name="ChevronLeft" size="16" />
+          </button>
 
-        <div class="fullscreen-counter">{{ (fullscreenIndex() ?? 0) + 1 }} / {{ images().length }}</div>
-      }
+          <button type="button" class="fullscreen-nav fullscreen-nav--next" (click)="fullscreenNext()" aria-label="Siguiente">
+            <portfolio-icon name="ChevronRight" size="16" />
+          </button>
+
+          <nav class="fullscreen-slide-nav" aria-label="Navegar imágenes en pantalla completa">
+            @for (img of images(); track $index) {
+              <button type="button" class="fullscreen-slide-nav-item" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === fullscreenActiveIndex() ? 'true' : null" (click)="fullscreenGoTo($index)">
+                <span class="fullscreen-slide-nav-fill" #fullscreenNavFillRef></span>
+              </button>
+            }
+          </nav>
+
+          <div class="fullscreen-counter">{{ fullscreenActiveIndex() + 1 }} / {{ images().length }}</div>
+        }
+      </div>
     </div>
-  </div>
-}
+  }
+</ng-template>

@@ -81,7 +81,7 @@
 /* Stats */
 .stat-card {
   grid-template-columns: minmax(0, 1fr) auto;
-  border-color: var(--app-container-border, var(--app-border-color));
+  border-color: color-mix(in srgb, var(--app-border-color) 55%, var(--app-container-border, transparent));
   border-radius: var(--a-stat-radius);
   background-color: var(--app-panel-bg);
   transition:

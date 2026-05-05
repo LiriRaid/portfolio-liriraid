@@ -1,7 +1,21 @@
 :host {
+  --carousel-control-bg: color-mix(in srgb, #ffffff 88%, transparent);
+  --carousel-control-hover-bg: #ffffff;
+  --carousel-control-color: var(--app-text-color);
+  --carousel-control-border: transparent;
+  --carousel-control-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+
   display: block;
   position: relative;
   width: 100%;
+}
+
+:host-context(.dark) {
+  --carousel-control-bg: color-mix(in srgb, #000000 72%, transparent);
+  --carousel-control-hover-bg: color-mix(in srgb, #000000 86%, transparent);
+  --carousel-control-color: #ffffff;
+  --carousel-control-border: color-mix(in srgb, #ffffff 16%, transparent);
+  --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 /* Root */
@@ -15,8 +29,8 @@
 
 /* Card mode */
 .carousel-root--card {
-  height: var(--carousel-card-height, 49rem);
-  min-height: var(--carousel-card-height, 49rem);
+  height: var(--carousel-card-height, 52rem);
+  min-height: var(--carousel-card-height, 52rem);
   overflow: visible;
   background: transparent;
   border-radius: 0;
@@ -41,9 +55,9 @@
   position: absolute;
   top: 0;
   left: 50%;
-  width: var(--carousel-card-width, min(27.5rem, 76vw));
-  height: var(--carousel-card-height, 49rem);
-  max-height: var(--carousel-card-height, 49rem);
+  width: var(--carousel-card-width, min(31.5rem, 82vw));
+  height: var(--carousel-card-height, 52rem);
+  max-height: var(--carousel-card-height, 52rem);
   transform-origin: center center;
   will-change: transform, opacity, filter;
   user-select: none;
@@ -71,6 +85,8 @@
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .carousel-slides:active {
@@ -85,6 +101,8 @@
   overflow: hidden;
   will-change: transform;
   cursor: pointer;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .carousel-img {
@@ -95,6 +113,8 @@
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Controls */
@@ -102,19 +122,21 @@
 .nav-btn,
 .fullscreen-close,
 .fullscreen-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   padding: 0;
-  border: 0;
+  border: 1px solid var(--carousel-control-border);
   border-radius: 9999px;
-  color: var(--app-text-color);
-  background: color-mix(in srgb, #ffffff 88%, transparent);
+  color: var(--carousel-control-color);
+  background: var(--carousel-control-bg);
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--carousel-control-shadow);
   backdrop-filter: blur(6px);
+  box-sizing: border-box;
+  line-height: 0;
   transition:
     color 0.2s,
+    border-color 0.2s,
     background-color 0.2s,
     transform 0.2s;
 }
@@ -123,8 +145,39 @@
 .nav-btn:hover,
 .fullscreen-close:hover,
 .fullscreen-nav:hover {
-  color: var(--app-text-primary);
-  background: #ffffff;
+  color: var(--carousel-control-color);
+  background: var(--carousel-control-hover-bg);
+}
+
+.expand-btn portfolio-icon,
+.nav-btn portfolio-icon,
+.fullscreen-close portfolio-icon,
+.fullscreen-nav portfolio-icon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+  color: currentColor;
+  flex-shrink: 0;
+}
+
+:host ::ng-deep .expand-btn svg,
+:host ::ng-deep .nav-btn svg,
+:host ::ng-deep .fullscreen-close svg,
+:host ::ng-deep .fullscreen-nav svg {
+  display: block;
+  margin: 0;
+}
+
+.nav-btn--prev portfolio-icon,
+.fullscreen-nav--prev portfolio-icon {
+  transform: translateX(-1px);
+}
+
+.nav-btn--next portfolio-icon,
+.fullscreen-nav--next portfolio-icon {
+  transform: translateX(1px);
 }
 
 .expand-btn {
@@ -178,10 +231,6 @@
   display: flex;
   gap: 0.375rem;
   transform: translateX(-50%);
-}
-
-.carousel-root--screenshot .carousel-dots {
-  bottom: 0.75rem;
 }
 
 .carousel-dot {
@@ -279,42 +328,99 @@
 
 /* Fullscreen */
 .fullscreen-overlay {
+  --carousel-control-bg: color-mix(in srgb, #000000 78%, transparent);
+  --carousel-control-hover-bg: color-mix(in srgb, #000000 90%, transparent);
+  --carousel-control-color: #ffffff;
+  --carousel-control-border: color-mix(in srgb, #ffffff 18%, transparent);
+  --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+
   position: fixed;
   inset: 0;
   z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.82);
-  backdrop-filter: blur(6px);
+  padding: 4rem 1.25rem 3.25rem;
+  background: rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(4px);
   animation: carousel-fade-in 0.2s ease;
 }
 
 .fullscreen-inner {
   position: relative;
-  max-width: 94vw;
-  max-height: 90vh;
+  isolation: isolate;
+  width: min(1200px, calc(100vw - 4rem));
+  aspect-ratio: 16 / 9;
+  max-height: calc(100dvh - 7.5rem);
   overflow: hidden;
-  border-radius: 0.875rem;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  border: 0;
+  border-radius: 1rem;
+  background: var(--app-panel-muted-bg);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  clip-path: inset(0 round 1rem);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: paint;
   animation: carousel-scale-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fullscreen-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  border: 1px solid color-mix(in srgb, #ffffff 18%, transparent);
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #000000 12%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent);
+}
+
+.fullscreen-slides {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: inherit;
+  clip-path: inset(0 round 1rem);
+  background: var(--app-panel-muted-bg);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: paint;
+}
+
+.fullscreen-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .fullscreen-img {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 94vw;
-  max-height: 90vh;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  background: var(--app-panel-muted-bg);
+  user-select: none;
+  -webkit-user-drag: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .fullscreen-close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 100;
+  width: 1.875rem;
+  height: 1.875rem;
 }
 
 .fullscreen-close:hover {
@@ -324,8 +430,9 @@
 .fullscreen-nav {
   position: absolute;
   top: 50%;
-  width: 2.25rem;
-  height: 2.25rem;
+  z-index: 100;
+  width: 1.875rem;
+  height: 1.875rem;
   transform: translateY(-50%);
 }
 
@@ -334,16 +441,51 @@
 }
 
 .fullscreen-nav--prev {
-  left: 0.75rem;
+  left: 1rem;
 }
 
 .fullscreen-nav--next {
-  right: 0.75rem;
+  right: 1rem;
+}
+
+.fullscreen-slide-nav {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.875rem;
+  z-index: 80;
+  display: flex;
+  gap: 0.3125rem;
+}
+
+.fullscreen-slide-nav-item {
+  position: relative;
+  flex: 1;
+  height: 0.1875rem;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: color-mix(in srgb, #ffffff 30%, transparent);
+  cursor: pointer;
+  transform: translateZ(0);
+}
+
+.fullscreen-slide-nav-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+  background: #ffffff;
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
 }
 
 .fullscreen-counter {
   left: 50%;
-  bottom: 0.75rem;
+  bottom: 1.2rem;
+  z-index: 85;
   padding: 0.125rem 0.625rem;
   transform: translateX(-50%);
 }
@@ -361,69 +503,11 @@
 @keyframes carousel-scale-in {
   from {
     opacity: 0;
-    transform: scale(0.88);
+    transform: scale(0.88) translateZ(0);
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .carousel-root--card {
-    height: var(--carousel-card-height, 48rem);
-    min-height: var(--carousel-card-height, 48rem);
-  }
-
-  :host ::ng-deep .carousel-item {
-    width: var(--carousel-card-width, min(25rem, 76vw));
-    height: var(--carousel-card-height, 48rem);
-    max-height: var(--carousel-card-height, 48rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .carousel-root--card {
-    height: var(--carousel-card-height, 47rem);
-    min-height: var(--carousel-card-height, 47rem);
-  }
-
-  :host ::ng-deep .carousel-item {
-    width: var(--carousel-card-width, min(23.5rem, 78vw));
-    height: var(--carousel-card-height, 47rem);
-    max-height: var(--carousel-card-height, 47rem);
-  }
-}
-
-@media (max-width: 640px) {
-  .carousel-root--card {
-    height: var(--carousel-card-height, 46rem);
-    min-height: var(--carousel-card-height, 46rem);
-  }
-
-  :host ::ng-deep .carousel-item {
-    width: var(--carousel-card-width, min(21.75rem, 82vw));
-    height: var(--carousel-card-height, 46rem);
-    max-height: var(--carousel-card-height, 46rem);
-  }
-
-  .nav-btn {
-    width: 1.65rem;
-    height: 1.65rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-root--card {
-    height: var(--carousel-card-height, 45rem);
-    min-height: var(--carousel-card-height, 45rem);
-  }
-
-  :host ::ng-deep .carousel-item {
-    width: var(--carousel-card-width, min(20rem, 84vw));
-    height: var(--carousel-card-height, 45rem);
-    max-height: var(--carousel-card-height, 45rem);
+    transform: scale(1) translateZ(0);
   }
 }
