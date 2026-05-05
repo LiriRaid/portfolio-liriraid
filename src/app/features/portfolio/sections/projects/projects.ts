@@ -27,7 +27,7 @@ const PROJECTS: Project[] = [
   {
     title: 'AgentFlow AI',
     description: 'Orquestador multiagente para desarrollo con IA. Coordina agentes como Claude, Codex, OpenCode y Gemini, delega tareas, monitorea progreso en una TUI y mantiene el proyecto principal limpio mediante un workspace separado.',
-    tags: ['Node.js', 'JavaScript', 'CLI', 'TUI', 'AI Agents', 'Automation', 'NPM', 'Clean Architecture'],
+    tags: ['Node.js', 'JavaScript', 'NPM', 'CLI', 'TUI', 'AI Agents', 'Automation', 'Clean Architecture'],
     repo: 'LiriRaid/agentflow-ai',
     githubUrl: 'https://github.com/LiriRaid/agentflow-ai',
     liveUrl: null,

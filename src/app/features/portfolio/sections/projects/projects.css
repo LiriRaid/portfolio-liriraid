@@ -1,133 +1,161 @@
-.section {
-  min-height: calc(100dvh - 4rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5rem 0 6rem;
-  background-color: var(--app-panel-muted-bg);
-}
+.projects {
+  --p-py: 3.35rem;
+  --p-px: 1.5rem;
+  --p-section-gap: 1.15rem;
 
-.section-inner {
-  width: 100%;
-  max-width: 1280px;
-  min-width: 0;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  --p-header-max: 40rem;
+  --p-header-gap: 0.6rem;
+
+  --p-label-size: 0.8rem;
+  --p-title-size: clamp(1.75rem, 2.45vw, 2.15rem);
+  --p-title-lh: 1.08;
+  --p-subtitle-size: 0.92rem;
+  --p-subtitle-lh: 1.42;
+
+  --p-toolbar-gap: 1rem;
+  --p-search-max: 20rem;
+
+  --p-filter-bar-gap: 0.75rem;
+
+  --p-filter-btn-min-h: 2.15rem;
+  --p-filter-btn-py: 0.4rem;
+  --p-filter-btn-px: 0.7rem;
+  --p-filter-btn-radius: 0.7rem;
+  --p-filter-btn-size: 0.76rem;
+
+  --p-filter-category-grid-gap: 0.875rem;
+  --p-filter-category-p: 0.875rem;
+  --p-filter-category-gap: 0.625rem;
+  --p-filter-category-radius: 0.875rem;
+  --p-filter-category-header-gap: 0.5rem;
+  --p-filter-category-icon: 1.75rem;
+  --p-filter-category-icon-radius: 0.5rem;
+  --p-filter-category-title: var(--font-size-caption-1);
+  --p-filter-options-gap: 0.625rem;
+
+  --p-selected-tags-gap: 0.55rem;
+
+  --p-card-width: min(29rem, 76vw);
+  --p-card-height: 39.8rem;
+  --p-card-radius: 0.95rem;
+
+  --p-card-body-p: 1.08rem;
+  --p-card-body-gap: 0.74rem;
+
+  --p-card-title-size: 1.06rem;
+  --p-card-title-lh: 1.19;
+
+  --p-card-desc-size: 0.8rem;
+  --p-card-desc-lh: 1.42;
+
+  --p-card-tags-gap: 0.4rem;
+
+  --p-chip-gap: 0.4rem;
+  --p-chip-min-h: 1.68rem;
+  --p-chip-py: 0.28rem;
+  --p-chip-px: 0.63rem;
+  --p-chip-size: 0.74rem;
+  --p-chip-icon: 13.5px;
+
+  --p-featured-top: 0.475rem;
+  --p-featured-right: 3.25rem;
+  --p-featured-py: 0.23rem;
+  --p-featured-px: 0.58rem;
+  --p-featured-size: 0.67rem;
+
+  --p-stats-py: 0.68rem;
+  --p-stats-px: 0.96rem;
+
+  --p-footer-py: 0.66rem;
+  --p-footer-px: 0.96rem;
+
+  --carousel-card-width: var(--p-card-width);
+  --carousel-card-height: var(--p-card-height);
+
   box-sizing: border-box;
 }
 
-.section-header {
-  max-width: 640px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.section-label {
-  margin: 0;
+/* Text */
+.projects-label {
   color: var(--app-text-primary);
-  font-size: var(--font-size-caption-1);
+  font-size: var(--p-label-size);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.section-title,
-.project-title,
-.project-filter-panel-title,
-.project-filter-category-title,
-.project-empty-title {
-  margin: 0;
+.projects-title,
+.projects-card-title,
+.projects-filter-panel-title,
+.projects-filter-category-title,
+.projects-empty-title {
   color: var(--app-text-color);
 }
 
-.section-subtitle,
-.project-description,
-.project-empty-description {
-  margin: 0;
+.projects-title {
+  font-size: var(--p-title-size);
+  line-height: var(--p-title-lh);
+}
+
+.projects-subtitle,
+.projects-card-description,
+.projects-empty-description {
   color: var(--app-text-muted);
 }
 
-/* =========================
-   Toolbar
-   ========================= */
-
-.project-toolbar {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  column-gap: 1rem;
-  row-gap: 0;
+.projects-subtitle {
+  font-size: var(--p-subtitle-size);
+  line-height: var(--p-subtitle-lh);
 }
 
-.project-toolbar portfolio-search {
+/* Toolbar */
+.projects-toolbar portfolio-search {
   flex: 1;
-  max-width: 20rem;
+  max-width: var(--p-search-max);
   margin-left: auto;
 }
 
-.project-filter-container {
-  position: relative;
-  width: auto;
-  min-width: 0;
-  flex-shrink: 0;
-}
-
-.project-filter-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-:host ::ng-deep .project-search-input {
+:host ::ng-deep .projects-search-input {
   border-color: var(--app-border-color);
   background-color: var(--app-panel-bg);
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .project-filter-button.p-button,
-:host ::ng-deep .project-clear-button.p-button {
-  min-height: 2.25rem;
-  padding: 0.45rem 0.75rem;
-  border-radius: 0.75rem;
+:host ::ng-deep .projects-filter-button.p-button,
+:host ::ng-deep .projects-clear-button.p-button {
+  min-height: var(--p-filter-btn-min-h);
+  padding: var(--p-filter-btn-py) var(--p-filter-btn-px);
+  border-radius: var(--p-filter-btn-radius);
   border-color: var(--app-border-color);
   background-color: var(--app-panel-bg);
   color: var(--app-text-color);
   box-shadow: none;
+  font-size: var(--p-filter-btn-size);
 }
 
-:host ::ng-deep .project-filter-button.p-button:hover,
-:host ::ng-deep .project-clear-button.p-button:hover {
+:host ::ng-deep .projects-filter-button.p-button:hover,
+:host ::ng-deep .projects-clear-button.p-button:hover {
   border-color: color-mix(in srgb, var(--app-text-primary) 40%, transparent);
   background-color: var(--app-accent-soft-bg);
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .project-filter-button :is(.p-button-label, .p-button-icon, portfolio-icon),
-:host ::ng-deep .project-clear-button :is(.p-button-label, .p-button-icon, portfolio-icon) {
+:host ::ng-deep .projects-filter-button :is(.p-button-label, .p-button-icon, portfolio-icon),
+:host ::ng-deep .projects-clear-button :is(.p-button-label, .p-button-icon, portfolio-icon) {
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .project-filter-button .p-button-label,
-:host ::ng-deep .project-clear-button .p-button-label {
+:host ::ng-deep .projects-filter-button .p-button-label,
+:host ::ng-deep .projects-clear-button .p-button-label {
   font-weight: 700;
 }
 
-:host ::ng-deep .project-filter-button .portfolio-button__badge {
+:host ::ng-deep .projects-filter-button .portfolio-button__badge {
   margin-left: 0.35rem;
 }
 
-/* =========================
-   Popover
-   ========================= */
-
-::ng-deep .p-popover.project-filter-panel {
+/* Popover */
+::ng-deep .p-popover.projects-filter-panel {
   --p-popover-background: var(--app-panel-bg);
   --p-popover-border-color: var(--app-border-color);
 
@@ -144,8 +172,8 @@
   overflow: hidden;
 }
 
-::ng-deep .p-popover.project-filter-panel::before,
-::ng-deep .p-popover.project-filter-panel::after {
+::ng-deep .p-popover.projects-filter-panel::before,
+::ng-deep .p-popover.projects-filter-panel::after {
   content: '';
   position: absolute;
   bottom: 100%;
@@ -154,46 +182,33 @@
   pointer-events: none;
 }
 
-::ng-deep .p-popover.project-filter-panel::before {
+::ng-deep .p-popover.projects-filter-panel::before {
   border-bottom-color: var(--app-border-color);
   border-width: 9px;
   margin-left: -9px;
 }
 
-::ng-deep .p-popover.project-filter-panel::after {
+::ng-deep .p-popover.projects-filter-panel::after {
   border-bottom-color: var(--app-panel-bg);
   border-width: 8px;
   margin-left: -8px;
 }
 
-::ng-deep .p-popover.project-filter-panel .p-popover-content {
+::ng-deep .p-popover.projects-filter-panel .p-popover-content {
   width: 100%;
   max-height: calc(100dvh - 12rem);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 
-.project-filter-panel-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.project-filter-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.project-filter-panel-title {
+.projects-filter-panel-title {
   font-size: var(--font-size-caption-1);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.project-filter-panel-clear {
+.projects-filter-panel-clear {
   border: none;
   background: transparent;
   color: var(--app-text-color);
@@ -202,183 +217,155 @@
   font-weight: 700;
 }
 
-/* =========================
-   Filter categories
-   ========================= */
-
-.project-filter-category-grid {
-  display: grid;
+/* Filter categories */
+.projects-filter-category-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.875rem;
 }
 
-.project-filter-category {
-  min-width: 0;
+.projects-filter-category {
   min-height: 128px;
-  padding: 0.875rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  border: 1px solid var(--app-border-color);
-  border-radius: 0.875rem;
-  background-color: var(--app-panel-muted-bg);
+  border-color: var(--app-border-color);
 }
 
-.project-filter-category-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.project-filter-category-icon {
-  width: 1.75rem;
-  height: 1.75rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border-radius: 0.5rem;
+.projects-filter-category-icon {
+  width: var(--p-filter-category-icon);
+  height: var(--p-filter-category-icon);
+  border-radius: var(--p-filter-category-icon-radius);
   background-color: var(--app-badge-soft-bg);
   color: var(--app-text-primary);
 }
 
-.project-filter-category-title {
-  font-size: var(--font-size-caption-1);
+.projects-filter-category-title {
+  font-size: var(--p-filter-category-title);
   font-weight: 700;
 }
 
-.project-filter-options {
-  min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-}
-
-/* =========================
-   Shared chips
-   ========================= */
-
-.project-selected-tags,
-.project-tags,
-.project-stats {
-  min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-}
-
-.project-selected-tag,
-.project-tag,
-.project-filter-option,
-.project-stat,
-.project-link,
-.project-private {
+/* Shared chips */
+.projects-selected-tag,
+.projects-tag,
+.projects-filter-option,
+.projects-stat,
+.projects-link,
+.projects-private {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: var(--p-chip-gap);
 }
 
-.project-selected-tag,
-.project-tag,
-.project-filter-option,
-.project-stat {
-  min-height: 1.85rem;
+.projects-selected-tag,
+.projects-tag,
+.projects-filter-option,
+.projects-stat {
+  min-height: var(--p-chip-min-h);
   border-radius: 9999px;
   white-space: nowrap;
 }
 
-.project-selected-tag,
-.project-tag,
-.project-filter-option,
-.project-stat,
-.project-empty-state,
-.project-card {
+.projects-selected-tag,
+.projects-tag,
+.projects-filter-option,
+.projects-stat,
+.projects-empty-state,
+.projects-card {
   border: 1px solid var(--app-border-color);
 }
 
-.project-selected-tag,
-.project-tag,
-.project-filter-option,
-.project-stat {
-  font-size: var(--font-size-caption-1);
+.projects-selected-tag,
+.projects-tag,
+.projects-filter-option,
+.projects-stat {
+  font-size: var(--p-chip-size);
   font-weight: 600;
 }
 
-.project-selected-tag,
-.project-filter-option,
-.project-stat {
+.projects-selected-tag,
+.projects-filter-option,
+.projects-stat {
   background-color: var(--app-panel-bg);
   color: var(--app-text-color);
 }
 
-.project-tag,
-.project-stat {
+.projects-tag {
+  background-color: var(--app-panel-muted-bg);
+  color: var(--app-text-color);
+}
+
+.projects-tag,
+.projects-stat {
   transition:
     color 0.2s,
     border-color 0.2s,
     background-color 0.2s;
 }
 
-.project-selected-tag,
-.project-filter-option {
+.projects-selected-tag,
+.projects-filter-option {
   transition:
     border-color 0.2s,
     background-color 0.2s,
     transform 0.2s;
 }
 
-.project-selected-tag:hover,
-.project-filter-option:hover {
+.projects-selected-tag:hover,
+.projects-filter-option:hover {
   transform: translateY(-1px);
 }
 
-.project-selected-tag:hover,
-.project-filter-option:hover,
-.project-filter-option--active {
+.projects-selected-tag:hover,
+.projects-filter-option:hover,
+.projects-filter-option--active {
   border-color: color-mix(in srgb, var(--app-text-primary) 40%, transparent);
   background-color: var(--app-accent-soft-bg);
 }
 
-.project-tag:hover,
-.project-stat:hover {
+.projects-tag:hover,
+.projects-stat:hover {
   color: var(--app-text-primary);
   border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
   background-color: var(--app-accent-soft-bg);
 }
 
-.project-selected-tag {
-  padding: 0.4rem 0.45rem 0.4rem 0.65rem;
+.projects-selected-tag {
+  padding: var(--p-chip-py) 0.45rem var(--p-chip-py) 0.58rem;
   font-weight: 700;
 }
 
-.project-tag {
-  padding: 0.38rem 0.75rem;
-  background-color: var(--app-panel-muted-bg);
-  color: var(--app-text-color);
+.projects-tag {
+  padding: var(--p-chip-py) var(--p-chip-px);
 }
 
-.project-filter-option {
+.projects-filter-option {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  padding: 0.45rem 0.7rem;
+  gap: var(--p-chip-gap);
+  min-height: var(--p-chip-min-h);
+  padding: 0.4rem 0.62rem;
+  border: 1px solid var(--app-border-color);
+  border-radius: 9999px;
+  background-color: var(--app-panel-bg);
+  color: var(--app-text-color);
   cursor: pointer;
+  white-space: nowrap;
+  font-size: var(--p-chip-size);
   font-weight: 700;
 }
 
-.project-stat {
-  padding: 0.35rem 0.65rem;
+.projects-stat {
+  padding: var(--p-chip-py) var(--p-chip-px);
   background-color: var(--app-panel-muted-bg);
 }
 
-.project-selected-tag span,
-.project-selected-tag portfolio-icon,
-.project-filter-option span,
-.project-filter-option portfolio-icon {
+.projects-selected-tag span,
+.projects-selected-tag portfolio-icon,
+.projects-filter-option span,
+.projects-filter-option portfolio-icon {
   color: var(--app-text-color);
 }
 
-.project-selected-tag-remove {
-  width: 1.25rem;
-  height: 1.25rem;
+.projects-selected-tag-remove {
+  width: 1.1rem;
+  height: 1.1rem;
   padding: 0;
   display: inline-flex;
   align-items: center;
@@ -390,48 +377,42 @@
   cursor: pointer;
 }
 
-.project-selected-tag-remove:hover {
+.projects-selected-tag-remove:hover {
   background-color: color-mix(in srgb, var(--app-text-primary) 14%, transparent);
 }
 
-.project-icon {
-  width: 16px;
-  height: 16px;
+.projects-icon {
+  width: var(--p-chip-icon);
+  height: var(--p-chip-icon);
   flex-shrink: 0;
   border-radius: 3px;
   object-fit: contain;
 }
 
-/* =========================
-   Carousel / cards
-   ========================= */
-
+/* Carousel / cards */
 .projects-carousel {
-  --carousel-card-width: min(31.5rem, 82vw);
-  --carousel-card-height: 52rem;
-
   width: 100%;
   max-width: 100%;
-  margin: 0.5rem auto 0;
+  margin: 0 auto;
 }
 
-.project-card-shell {
+.projects-card-shell {
   width: 100%;
   height: 100%;
   min-height: 0;
 }
 
-.project-card {
+.projects-card {
   position: relative;
   width: 100%;
   min-width: 0;
-  min-height: 320px;
+  min-height: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-color: var(--app-container-border, var(--app-border-color));
-  border-radius: 1rem;
+  border-radius: var(--p-card-radius);
   background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
   transition:
@@ -440,57 +421,71 @@
     transform 0.2s;
 }
 
-.project-card:hover {
+.projects-card:hover {
   border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
   box-shadow: var(--shadow-extra-large);
   transform: translateY(-2px);
 }
 
-.project-card--featured {
+.projects-card--featured {
   border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
 }
 
-.project-featured-badge {
+.projects-featured-badge {
   position: absolute;
-  top: 0.55rem;
-  right: 3.25rem;
+  top: var(--p-featured-top);
+  right: var(--p-featured-right);
   z-index: 80;
   width: fit-content;
   max-width: max-content;
-  padding: 0.22rem 0.5rem;
+  padding: var(--p-featured-py) var(--p-featured-px);
   border-radius: 9999px;
   background-color: var(--app-badge-soft-bg);
   color: var(--app-badge-soft-text);
-  font-size: var(--font-size-caption-2);
+  font-size: var(--p-featured-size);
   font-weight: 700;
   line-height: 1;
   pointer-events: none;
 }
 
-.project-card-carousel {
+.projects-card-carousel {
   display: block;
   flex-shrink: 0;
 }
 
-.project-card-body {
+.projects-card-body {
   min-width: 0;
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: var(--p-card-body-gap);
+  padding: var(--p-card-body-p);
   overflow: hidden;
 }
 
-.project-title {
+.projects-card-title {
+  margin: 0;
   padding-right: 4.5rem;
+  font-size: var(--p-card-title-size);
+  line-height: var(--p-card-title-lh);
 }
 
-/* =========================
-   Github block
-   ========================= */
+.projects-card-description {
+  margin: 0;
+  font-size: var(--p-card-desc-size);
+  line-height: var(--p-card-desc-lh);
+}
 
-.project-card-github {
+.projects-tags,
+.projects-stats {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--p-card-tags-gap);
+}
+
+/* Github block */
+.projects-card-github {
   min-width: 0;
   flex: 0 0 auto;
   margin-top: auto;
@@ -500,81 +495,486 @@
   background-color: var(--app-panel-bg);
 }
 
-.project-stats {
-  padding: 1rem 1.5rem;
-  flex-wrap: wrap;
+.projects-stats {
+  padding: var(--p-stats-py) var(--p-stats-px);
   overflow: visible;
 }
 
-.project-stat portfolio-icon {
+.projects-stat portfolio-icon {
   color: var(--app-text-subtle);
 }
 
-.project-stat:hover portfolio-icon {
+.projects-stat:hover portfolio-icon {
   color: var(--app-text-primary);
 }
 
-.project-stat--loading {
+.projects-stat--loading {
   color: var(--app-text-subtle);
 }
 
-:host ::ng-deep .project-stat--stars portfolio-icon svg,
-:host ::ng-deep .project-stat--stars:hover portfolio-icon svg {
+:host ::ng-deep .projects-stat--stars portfolio-icon svg,
+:host ::ng-deep .projects-stat--stars:hover portfolio-icon svg {
   fill: var(--p-yellow-400);
   stroke: var(--p-yellow-500);
 }
 
-.project-card-footer {
+.projects-card-footer {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.95rem 1.5rem 1rem;
+  gap: 0.7rem;
+  padding: var(--p-footer-py) var(--p-footer-px);
   border-top: 1px solid var(--app-border-color);
 }
 
-.project-link {
-  padding: 0.25rem 0.5rem;
+.projects-link {
+  padding: 0.22rem 0.45rem;
   border-radius: 0.375rem;
   color: var(--app-text-color);
   text-decoration: none;
-  font-size: var(--font-size-caption-1);
+  font-size: var(--p-chip-size);
   font-weight: 600;
   transition:
     color 0.2s,
     background-color 0.2s;
 }
 
-.project-link:hover {
+.projects-link:hover {
   color: var(--app-text-primary);
   background-color: var(--app-panel-muted-bg);
 }
 
-.project-private {
+.projects-private {
   color: var(--app-text-subtle);
-  font-size: var(--font-size-caption-1);
+  font-size: var(--p-chip-size);
 }
 
-/* =========================
-   Empty / focus
-   ========================= */
-
-.project-empty-state {
-  padding: 1.5rem;
+/* Empty / focus */
+.projects-empty-state {
+  padding: 1.25rem;
   border-radius: 1rem;
   background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
 }
 
-.project-empty-title {
-  margin-bottom: 0.35rem;
+.projects-empty-title {
+  margin: 0 0 0.35rem;
   font-weight: 700;
 }
 
-.project-link:focus-visible,
-.project-selected-tag:focus-within,
-.project-filter-option:focus-visible,
-.project-filter-panel-clear:focus-visible {
+.projects-empty-description {
+  margin: 0;
+}
+
+.projects-link:focus-visible,
+.projects-selected-tag:focus-within,
+.projects-filter-option:focus-visible,
+.projects-filter-panel-clear:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
+}
+
+/* 769px - 1024px */
+@media (max-width: 1024px) {
+  .projects {
+    --p-py: 3rem;
+    --p-px: 1.35rem;
+    --p-section-gap: 1rem;
+
+    --p-label-size: 0.76rem;
+    --p-title-size: 1.62rem;
+    --p-title-lh: 1.06;
+    --p-subtitle-size: 0.86rem;
+    --p-subtitle-lh: 1.38;
+
+    --p-search-max: 18rem;
+
+    --p-filter-btn-min-h: 2.05rem;
+    --p-filter-btn-py: 0.36rem;
+    --p-filter-btn-px: 0.64rem;
+    --p-filter-btn-size: 0.72rem;
+
+    --p-card-width: min(25.5rem, 74vw);
+    --p-card-height: 35.8rem;
+
+    --p-card-body-p: 0.97rem;
+    --p-card-body-gap: 0.65rem;
+
+    --p-card-title-size: 1.01rem;
+    --p-card-desc-size: 0.76rem;
+    --p-card-desc-lh: 1.35;
+
+    --p-card-tags-gap: 0.32rem;
+
+    --p-chip-gap: 0.34rem;
+    --p-chip-min-h: 1.54rem;
+    --p-chip-py: 0.23rem;
+    --p-chip-px: 0.54rem;
+    --p-chip-size: 0.68rem;
+    --p-chip-icon: 12px;
+
+    --p-featured-top: 0.535rem;
+    --p-featured-right: 3.2rem;
+    --p-featured-py: 0.2rem;
+    --p-featured-px: 0.5rem;
+    --p-featured-size: 0.61rem;
+
+    --p-stats-py: 0.56rem;
+    --p-stats-px: 0.8rem;
+
+    --p-footer-py: 0.55rem;
+    --p-footer-px: 0.8rem;
+  }
+
+  ::ng-deep .p-popover.projects-filter-panel {
+    width: calc(100vw - 2rem);
+    max-height: calc(100dvh - 8rem);
+  }
+
+  ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
+    max-height: calc(100dvh - 10rem);
+  }
+
+  .projects-filter-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 641px - 768px */
+@media (max-width: 768px) {
+  .projects {
+    --p-py: 2.65rem;
+    --p-px: 1rem;
+    --p-section-gap: 0.88rem;
+
+    --p-label-size: 0.7rem;
+    --p-title-size: 1.42rem;
+    --p-title-lh: 1.05;
+    --p-subtitle-size: 0.78rem;
+    --p-subtitle-lh: 1.36;
+
+    --p-search-max: 16rem;
+
+    --p-filter-btn-min-h: 2rem;
+    --p-filter-btn-py: 0.34rem;
+    --p-filter-btn-px: 0.6rem;
+    --p-filter-btn-size: 0.68rem;
+
+    --p-card-width: min(22rem, 78vw);
+    --p-card-height: 32.3rem;
+
+    --p-card-body-p: 0.85rem;
+    --p-card-body-gap: 0.57rem;
+
+    --p-card-title-size: 0.95rem;
+    --p-card-desc-size: 0.7rem;
+    --p-card-desc-lh: 1.33;
+
+    --p-card-tags-gap: 0.28rem;
+
+    --p-chip-gap: 0.28rem;
+    --p-chip-min-h: 1.42rem;
+    --p-chip-py: 0.18rem;
+    --p-chip-px: 0.46rem;
+    --p-chip-size: 0.63rem;
+    --p-chip-icon: 10.8px;
+
+    --p-featured-top: 0.52rem;
+    --p-featured-right: 2.92rem;
+    --p-featured-py: 0.17rem;
+    --p-featured-px: 0.44rem;
+    --p-featured-size: 0.55rem;
+
+    --p-stats-py: 0.49rem;
+    --p-stats-px: 0.67rem;
+
+    --p-footer-py: 0.48rem;
+    --p-footer-px: 0.67rem;
+  }
+
+  ::ng-deep .p-popover.projects-filter-panel {
+    width: calc(100vw - 2rem);
+    max-height: 35.5rem;
+  }
+
+  ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
+    max-height: 33.5rem;
+  }
+
+  .projects-filter-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .projects-filter-category {
+    min-height: 132px;
+  }
+}
+
+/* 481px - 640px */
+@media (max-width: 640px) {
+  .projects {
+    --p-py: 2.35rem;
+    --p-px: 0.9rem;
+    --p-section-gap: 0.78rem;
+
+    --p-label-size: 0.66rem;
+    --p-title-size: 1.28rem;
+    --p-title-lh: 1.04;
+    --p-subtitle-size: 0.72rem;
+    --p-subtitle-lh: 1.32;
+
+    --p-filter-bar-gap: 0.5rem;
+
+    --p-card-width: min(19.1rem, 80vw);
+    --p-card-height: 28.8rem;
+
+    --p-card-radius: 0.85rem;
+    --p-card-body-p: 0.73rem;
+    --p-card-body-gap: 0.49rem;
+
+    --p-card-title-size: 0.87rem;
+    --p-card-desc-size: 0.64rem;
+    --p-card-desc-lh: 1.29;
+
+    --p-card-tags-gap: 0.24rem;
+
+    --p-chip-gap: 0.22rem;
+    --p-chip-min-h: 1.28rem;
+    --p-chip-py: 0.14rem;
+    --p-chip-px: 0.38rem;
+    --p-chip-size: 0.58rem;
+    --p-chip-icon: 9.7px;
+
+    --p-featured-top: 0.463rem;
+    --p-featured-right: 2.72rem;
+    --p-featured-py: 0.15rem;
+    --p-featured-px: 0.4rem;
+    --p-featured-size: 0.52rem;
+
+    --p-stats-py: 0.41rem;
+    --p-stats-px: 0.57rem;
+
+    --p-footer-py: 0.41rem;
+    --p-footer-px: 0.57rem;
+  }
+
+  .projects-toolbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    column-gap: 0.78rem;
+  }
+
+  .projects-toolbar portfolio-search {
+    flex: 0 0 auto;
+    max-width: none;
+    margin-left: auto;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    justify-content: center;
+    border-radius: 0.48rem !important;
+    font-size: 0.64rem !important;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button .p-button-label,
+  :host ::ng-deep .projects-filter-button.p-button .portfolio-button__badge {
+    display: none;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button :is(.p-button-icon, portfolio-icon) {
+    color: inherit;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button portfolio-icon,
+  :host ::ng-deep .projects-filter-button.p-button .p-button-icon,
+  :host ::ng-deep .projects-filter-button.p-button svg {
+    width: 0.9rem !important;
+    height: 0.9rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  :host ::ng-deep .projects-clear-button.p-button {
+    width: auto;
+    min-height: 34px !important;
+    padding: 0.28rem 0.58rem !important;
+    justify-content: center;
+    border-radius: 0.48rem !important;
+    font-size: 0.64rem !important;
+  }
+
+  ::ng-deep .p-popover.projects-filter-panel {
+    width: calc(100vw - 2rem);
+    max-height: 32.5rem;
+  }
+
+  ::ng-deep .p-popover.projects-filter-panel .p-popover-content {
+    max-height: 30.5rem;
+  }
+
+  .projects-filter-category-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .projects-filter-category {
+    min-height: 116px;
+  }
+
+  .projects-card-title {
+    padding-right: 0;
+  }
+
+  .projects-card-footer {
+    flex-wrap: wrap;
+  }
+}
+
+/* 381px - 480px */
+@media (max-width: 480px) {
+  .projects {
+    --p-py: 2rem;
+    --p-px: 0.78rem;
+    --p-section-gap: 0.68rem;
+
+    --p-label-size: 0.62rem;
+    --p-title-size: 1.15rem;
+    --p-title-lh: 1.035;
+    --p-subtitle-size: 0.68rem;
+    --p-subtitle-lh: 1.3;
+
+    --p-card-width: min(16.65rem, 77vw);
+    --p-card-height: 26.25rem;
+
+    --p-card-body-p: 0.63rem;
+    --p-card-body-gap: 0.43rem;
+
+    --p-card-title-size: 0.81rem;
+    --p-card-desc-size: 0.6rem;
+    --p-card-desc-lh: 1.25;
+
+    --p-card-tags-gap: 0.21rem;
+
+    --p-chip-gap: 0.19rem;
+    --p-chip-min-h: 1.18rem;
+    --p-chip-py: 0.11rem;
+    --p-chip-px: 0.32rem;
+    --p-chip-size: 0.55rem;
+    --p-chip-icon: 8.9px;
+
+    --p-featured-top: 0.468rem;
+    --p-featured-right: 2.58rem;
+    --p-featured-py: 0.14rem;
+    --p-featured-px: 0.36rem;
+    --p-featured-size: 0.48rem;
+
+    --p-stats-py: 0.37rem;
+    --p-stats-px: 0.51rem;
+
+    --p-footer-py: 0.37rem;
+    --p-footer-px: 0.51rem;
+  }
+
+  .projects-toolbar {
+    column-gap: 0.68rem;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    border-radius: 0.45rem !important;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button portfolio-icon,
+  :host ::ng-deep .projects-filter-button.p-button .p-button-icon,
+  :host ::ng-deep .projects-filter-button.p-button svg {
+    width: 0.84rem !important;
+    height: 0.84rem !important;
+    font-size: 0.84rem !important;
+  }
+
+  :host ::ng-deep .projects-clear-button.p-button {
+    min-height: 32px !important;
+    padding: 0.24rem 0.52rem !important;
+    border-radius: 0.45rem !important;
+    font-size: 0.6rem !important;
+  }
+}
+
+/* <= 380px */
+@media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
+  .projects {
+    --p-py: 1.75rem;
+    --p-px: 0.7rem;
+    --p-section-gap: 0.58rem;
+
+    --p-label-size: 0.6rem;
+    --p-title-size: 1.08rem;
+    --p-title-lh: 1.03;
+    --p-subtitle-size: 0.64rem;
+    --p-subtitle-lh: 1.28;
+
+    --p-card-width: min(15.75rem, 75vw);
+    --p-card-height: 25.15rem;
+
+    --p-card-body-p: 0.55rem;
+    --p-card-body-gap: 0.37rem;
+
+    --p-card-title-size: 0.76rem;
+    --p-card-desc-size: 0.56rem;
+    --p-card-desc-lh: 1.21;
+
+    --p-card-tags-gap: 0.18rem;
+
+    --p-chip-gap: 0.17rem;
+    --p-chip-min-h: 1.1rem;
+    --p-chip-py: 0.09rem;
+    --p-chip-px: 0.28rem;
+    --p-chip-size: 0.51rem;
+    --p-chip-icon: 8.3px;
+
+    --p-featured-top: 0.469rem;
+    --p-featured-right: 2.44rem;
+    --p-featured-py: 0.13rem;
+    --p-featured-px: 0.34rem;
+    --p-featured-size: 0.46rem;
+
+    --p-stats-py: 0.33rem;
+    --p-stats-px: 0.45rem;
+
+    --p-footer-py: 0.33rem;
+    --p-footer-px: 0.45rem;
+  }
+
+  .projects-toolbar {
+    column-gap: 0.58rem;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button {
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    border-radius: 0.42rem !important;
+  }
+
+  :host ::ng-deep .projects-filter-button.p-button portfolio-icon,
+  :host ::ng-deep .projects-filter-button.p-button .p-button-icon,
+  :host ::ng-deep .projects-filter-button.p-button svg {
+    width: 0.78rem !important;
+    height: 0.78rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  :host ::ng-deep .projects-clear-button.p-button {
+    min-height: 30px !important;
+    padding: 0.22rem 0.48rem !important;
+    border-radius: 0.42rem !important;
+    font-size: 0.56rem !important;
+  }
 }

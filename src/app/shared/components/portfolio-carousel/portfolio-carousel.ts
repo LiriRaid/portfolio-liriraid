@@ -119,6 +119,10 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private inlineRetryFrame = 0;
   private fullscreenRetryFrame = 0;
 
+  private resizeObserver?: ResizeObserver;
+  private resizeFrame = 0;
+  private lastMeasuredCardRootWidth = 0;
+
   private readonly DRAG_THRESHOLD = 50;
   private readonly DRAG_TIME_THRESHOLD = 120;
   private readonly CARD_DURATION = 0.6;
@@ -131,11 +135,14 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.didInit = true;
       this.lastSnapshot = this.createSnapshot();
       this.initPositions();
+      this.initResizeObserver();
 
       document.addEventListener('visibilitychange', this.onVisibilityChange);
+      window.addEventListener('resize', this.onWindowResize, { passive: true });
 
       this.destroyRef.onDestroy(() => {
         document.removeEventListener('visibilitychange', this.onVisibilityChange);
+        window.removeEventListener('resize', this.onWindowResize);
       });
     });
 
@@ -144,6 +151,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.stopFullscreenProgress();
       this.cardDelayedCall?.kill();
       this.fullscreenOverlayRef?.dispose();
+      this.resizeObserver?.disconnect();
 
       if (this.inlineRetryFrame) {
         cancelAnimationFrame(this.inlineRetryFrame);
@@ -151,6 +159,10 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
       if (this.fullscreenRetryFrame) {
         cancelAnimationFrame(this.fullscreenRetryFrame);
+      }
+
+      if (this.resizeFrame) {
+        cancelAnimationFrame(this.resizeFrame);
       }
     });
   }
@@ -227,6 +239,44 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.resumeActiveAutoplay();
   };
+
+  private readonly onWindowResize = (): void => {
+    this.scheduleResponsiveCardRefresh();
+  };
+
+  private initResizeObserver(): void {
+    if (!this.isBrowser || typeof ResizeObserver === 'undefined') return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.scheduleResponsiveCardRefresh();
+    });
+
+    this.resizeObserver.observe(this.hostRef.nativeElement);
+  }
+
+  private scheduleResponsiveCardRefresh(): void {
+    if (!this.isBrowser || this.mode() !== 'card') return;
+
+    if (this.resizeFrame) {
+      cancelAnimationFrame(this.resizeFrame);
+    }
+
+    this.resizeFrame = requestAnimationFrame(() => {
+      this.resizeFrame = 0;
+
+      if (this.mode() !== 'card') return;
+
+      const root = this.cardRootElement();
+      const width = root?.clientWidth || this.hostRef.nativeElement.clientWidth;
+
+      if (!width) return;
+
+      if (Math.abs(width - this.lastMeasuredCardRootWidth) < 1) return;
+
+      this.lastMeasuredCardRootWidth = width;
+      this.initCardPositions();
+    });
+  }
 
   private createSnapshot(): CarouselSnapshot {
     const images = this.images();
@@ -364,6 +414,9 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.stopProgress();
     this.cardDelayedCall?.kill();
 
+    const root = this.cardRootElement();
+    this.lastMeasuredCardRootWidth = root?.clientWidth || this.hostRef.nativeElement.clientWidth || this.lastMeasuredCardRootWidth;
+
     items.forEach((item, index) => {
       const element = item.elementRef.nativeElement;
       const position = this.resolvePosition(index, this.currentIndex(), total);
@@ -454,7 +507,70 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     element.dataset['carouselPosition'] = position;
   }
 
+  private cardRootElement(): HTMLElement | null {
+    return this.hostRef.nativeElement.querySelector<HTMLElement>('.carousel-root--card');
+  }
+
+  private cssNumber(variableName: string, fallback: number): number {
+    if (!this.isBrowser) {
+      return fallback;
+    }
+
+    const rawValue = getComputedStyle(this.hostRef.nativeElement).getPropertyValue(variableName).trim();
+    const value = Number.parseFloat(rawValue);
+
+    return Number.isFinite(value) ? value : fallback;
+  }
+
+  private cardSideScale(): number {
+    return this.cssNumber('--carousel-card-side-scale', 0.84);
+  }
+
+  private cardWidth(): number {
+    const items = this.cardItems();
+
+    const currentItem = items[this.currentIndex()]?.elementRef.nativeElement;
+    const firstItem = items[0]?.elementRef.nativeElement;
+
+    /*
+      Importante:
+      NO usar getBoundingClientRect().width aqui.
+      Ese valor cambia cuando la card esta con scale(0.84),
+      y por eso al navegar a otra card las laterales se salian.
+      offsetWidth mantiene el ancho real sin transform.
+    */
+    return currentItem?.offsetWidth || firstItem?.offsetWidth || 0;
+  }
+
+  private cardSideOffset(): number {
+    if (!this.isBrowser) {
+      return 96;
+    }
+
+    const root = this.cardRootElement();
+
+    const rootWidth = root?.clientWidth || this.hostRef.nativeElement.clientWidth;
+    const cardWidth = this.cardWidth();
+
+    const sideScale = this.cardSideScale();
+    const maxOffset = this.cssNumber('--carousel-card-side-max-offset', 96);
+    const minOffset = this.cssNumber('--carousel-card-side-min-offset', 34);
+    const edgeGap = this.cssNumber('--carousel-card-side-edge-gap', 54);
+
+    if (!rootWidth || !cardWidth) {
+      return maxOffset;
+    }
+
+    const sideCardHalfWidth = (cardWidth * sideScale) / 2;
+    const availableSpaceFromCenterToButton = rootWidth / 2 - edgeGap - sideCardHalfWidth;
+    const offset = (availableSpaceFromCenterToButton / cardWidth) * 100;
+
+    return Math.min(Math.max(offset, minOffset), maxOffset);
+  }
+
   private cardProps(position: SlidePosition): gsap.TweenVars {
+    const sideOffset = this.cardSideOffset();
+    const sideScale = this.cardSideScale();
     const hiddenX = this.lastDirection === 'right' ? 180 : -280;
 
     const props: Record<SlidePosition, gsap.TweenVars> = {
@@ -468,18 +584,18 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
         pointerEvents: 'auto',
       },
       left: {
-        xPercent: -121,
+        xPercent: -50 - sideOffset,
         yPercent: 0,
-        scale: 0.84,
+        scale: sideScale,
         opacity: 0.38,
         zIndex: 20,
         filter: 'blur(0.2px)',
         pointerEvents: 'auto',
       },
       right: {
-        xPercent: 21,
+        xPercent: -50 + sideOffset,
         yPercent: 0,
-        scale: 0.84,
+        scale: sideScale,
         opacity: 0.38,
         zIndex: 20,
         filter: 'blur(0.2px)',
@@ -488,7 +604,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       hidden: {
         xPercent: hiddenX,
         yPercent: 0,
-        scale: 0.84,
+        scale: sideScale,
         opacity: 0,
         zIndex: 1,
         filter: 'blur(0.75px)',
@@ -510,6 +626,9 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.cardDelayedCall?.kill();
 
+    const sideOffset = this.cardSideOffset();
+    const sideScale = this.cardSideScale();
+
     items.forEach((item, index) => {
       const element = item.elementRef.nativeElement;
       const position = this.resolvePosition(index, newIndex, total);
@@ -517,7 +636,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.setCardPositionState(element, position);
 
       gsap.to(element, {
-        ...this.cardProps(position),
+        ...this.cardPropsWithValues(position, sideOffset, sideScale),
         duration: this.CARD_DURATION,
         ease: 'power3.inOut',
         overwrite: 'auto',
@@ -527,6 +646,51 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.cardDelayedCall = gsap.delayedCall(this.CARD_DURATION, () => {
       this.isAnimating.set(false);
     });
+  }
+
+  private cardPropsWithValues(position: SlidePosition, sideOffset: number, sideScale: number): gsap.TweenVars {
+    const hiddenX = this.lastDirection === 'right' ? 180 : -280;
+
+    const props: Record<SlidePosition, gsap.TweenVars> = {
+      center: {
+        xPercent: -50,
+        yPercent: 0,
+        scale: 1,
+        opacity: 1,
+        zIndex: 50,
+        filter: 'blur(0px)',
+        pointerEvents: 'auto',
+      },
+      left: {
+        xPercent: -50 - sideOffset,
+        yPercent: 0,
+        scale: sideScale,
+        opacity: 0.38,
+        zIndex: 20,
+        filter: 'blur(0.2px)',
+        pointerEvents: 'auto',
+      },
+      right: {
+        xPercent: -50 + sideOffset,
+        yPercent: 0,
+        scale: sideScale,
+        opacity: 0.38,
+        zIndex: 20,
+        filter: 'blur(0.2px)',
+        pointerEvents: 'auto',
+      },
+      hidden: {
+        xPercent: hiddenX,
+        yPercent: 0,
+        scale: sideScale,
+        opacity: 0,
+        zIndex: 1,
+        filter: 'blur(0.75px)',
+        pointerEvents: 'none',
+      },
+    };
+
+    return props[position];
   }
 
   protected onTrackClick(event: MouseEvent): void {

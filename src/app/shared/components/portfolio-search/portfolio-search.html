@@ -5,10 +5,10 @@
 } @else {
   @if (!isMobile() || !mobileMode()) {
     <div class="input input-default w-full" [class]="inputClass()">
-  <portfolio-icon name="Search" size="18"></portfolio-icon>
+      <portfolio-icon name="Search" size="18"></portfolio-icon>
 
-  <input class="text-caption-1-medium w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
-</div>
+      <input class="text-caption-1-medium w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
+    </div>
   } @else {
     <button type="button" aria-label="Buscar" class="button-outline border rounded-lg flex items-center justify-center search-collapsed-btn" (click)="toggleMobile()">
       <portfolio-icon name="Search" size="18"></portfolio-icon>
@@ -16,12 +16,11 @@
 
     @if (showMobileInput()) {
       <div class="search-mobile-panel w-full" animate.enter="section-slide-in-out-enter" animate.leave="section-slide-in-out-leave">
-        <div class="search-mobile-panel-inner">
-<div class="input input-default w-full" [class]="inputClass()">
-  <portfolio-icon name="Search" size="18"></portfolio-icon>
+          <div class="input input-default w-full" [class]="inputClass()">
+            <portfolio-icon name="Search" size="18"></portfolio-icon>
 
-  <input class="text-caption-1-medium w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
-</div>        </div>
+            <input class="text-caption-1-medium w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
+          </div>
       </div>
     }
   }

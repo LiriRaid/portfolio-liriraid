@@ -1,51 +1,51 @@
-<section id="proyectos" class="section" aria-labelledby="projects-heading">
-  <div class="section-inner">
-    <header class="section-header">
-      <p class="section-label">Trabajo reciente</p>
+<section id="proyectos" class="projects flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--p-py)" aria-labelledby="projects-heading">
+  <div class="projects-inner mx-auto flex w-full max-w-7xl flex-col gap-(--p-section-gap) px-(--p-px)">
+    <header class="projects-header flex max-w-(--p-header-max) flex-col gap-(--p-header-gap)">
+      <p class="projects-label m-0">Trabajo reciente</p>
 
-      <h2 id="projects-heading" class="section-title text-tittle-4-bold">Proyectos destacados</h2>
+      <h2 id="projects-heading" class="projects-title m-0 text-tittle-4-bold">Proyectos destacados</h2>
 
-      <p class="section-subtitle text-body-1-regular">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
+      <p class="projects-subtitle m-0 text-body-1-regular">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
     </header>
 
-    <div class="project-toolbar">
-      <div class="project-filter-container" #filterPanelContainer>
-        <div class="project-filter-bar">
-          <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="project-filter-button text-caption-1-medium" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
+    <div class="projects-toolbar flex min-w-0 items-center justify-between gap-(--p-toolbar-gap)">
+      <div class="projects-filter-container relative w-auto min-w-0 shrink-0" #filterPanelContainer>
+        <div class="projects-filter-bar flex flex-wrap items-center gap-(--p-filter-bar-gap)">
+          <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="projects-filter-button text-caption-1-medium" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
 
           @if (hasSelectedTechnologies()) {
-            <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="project-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
+            <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="projects-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
           }
         </div>
 
-        <p-popover #filterPanel styleClass="project-filter-panel" [appendTo]="filterPanelContainer">
-          <div class="project-filter-panel-content">
-            <div class="project-filter-panel-header">
-              <p class="project-filter-panel-title">Tecnologías</p>
+        <p-popover #filterPanel styleClass="projects-filter-panel" [appendTo]="filterPanelContainer">
+          <div class="projects-filter-panel-content flex flex-col gap-4">
+            <div class="projects-filter-panel-header flex items-center justify-between gap-4">
+              <p class="projects-filter-panel-title m-0">Tecnologías</p>
 
               @if (hasSelectedTechnologies()) {
-                <button type="button" class="project-filter-panel-clear" (click)="clearFilters()">Limpiar</button>
+                <button type="button" class="projects-filter-panel-clear" (click)="clearFilters()">Limpiar</button>
               }
             </div>
 
-            <div class="project-filter-category-grid">
+            <div class="projects-filter-category-grid grid gap-(--p-filter-category-grid-gap)">
               @for (category of technologyCategories(); track category.label) {
-                <section class="project-filter-category">
-                  <header class="project-filter-category-header">
-                    <span class="project-filter-category-icon" aria-hidden="true">
+                <section class="projects-filter-category flex min-w-0 flex-col gap-(--p-filter-category-gap) rounded-(--p-filter-category-radius) border bg-(--app-panel-muted-bg) p-(--p-filter-category-p)">
+                  <header class="projects-filter-category-header flex items-center gap-(--p-filter-category-header-gap)">
+                    <span class="projects-filter-category-icon inline-flex shrink-0 items-center justify-center" aria-hidden="true">
                       <portfolio-icon [name]="category.icon" size="15" />
                     </span>
 
-                    <h3 class="project-filter-category-title">
+                    <h3 class="projects-filter-category-title m-0">
                       {{ category.label }}
                     </h3>
                   </header>
 
-                  <div class="project-filter-options">
+                  <div class="projects-filter-options flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
                     @for (tech of category.technologies; track tech) {
-                      <button type="button" class="project-filter-option" [class.project-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
+                      <button type="button" class="projects-filter-option" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                         @if (techIconUrl(tech); as iconUrl) {
-                          <img [src]="iconUrl" [alt]="tech" class="project-icon" width="16" height="16" loading="lazy" />
+                          <img [src]="iconUrl" [alt]="tech" class="projects-icon" width="16" height="16" loading="lazy" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
                         }
@@ -65,22 +65,22 @@
         </p-popover>
       </div>
 
-      <portfolio-search [control]="searchControl" [mobileMode]="true" placeholder="Buscar proyectos..." inputClass="project-search-input" (searchEnter)="onSearch($event)" />
+      <portfolio-search [control]="searchControl" [mobileMode]="true" placeholder="Buscar proyectos..." inputClass="projects-search-input" (searchEnter)="onSearch($event)" />
     </div>
 
     @if (hasSelectedTechnologies()) {
-      <div class="project-selected-tags" aria-label="Tecnologías seleccionadas">
+      <div class="projects-selected-tags flex min-w-0 flex-wrap gap-(--p-selected-tags-gap)" aria-label="Tecnologías seleccionadas">
         @for (tech of selectedTechnologies(); track tech) {
-          <span class="project-selected-tag">
+          <span class="projects-selected-tag">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" [alt]="tech" class="project-icon" width="16" height="16" loading="lazy" />
+              <img [src]="iconUrl" [alt]="tech" class="projects-icon" width="16" height="16" loading="lazy" />
             } @else {
               <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
             }
 
             <span>{{ tech }}</span>
 
-            <button type="button" class="project-selected-tag-remove" [attr.aria-label]="'Quitar filtro ' + tech" (click)="removeTechnology(tech)">
+            <button type="button" class="projects-selected-tag-remove" [attr.aria-label]="'Quitar filtro ' + tech" (click)="removeTechnology(tech)">
               <portfolio-icon name="Close" size="13" />
             </button>
           </span>
@@ -91,30 +91,30 @@
     @if (filteredProjects().length) {
       <portfolio-carousel mode="card" [autoPlay]="false" class="projects-carousel">
         @for (project of filteredProjects(); track project.title) {
-          <div carouselItem class="project-card-shell">
-            <article class="project-card" [class.project-card--featured]="project.featured">
+          <div carouselItem class="projects-card-shell">
+            <article class="projects-card" [class.projects-card--featured]="project.featured">
               @if (project.featured) {
-                <span class="project-featured-badge">Destacado</span>
+                <span class="projects-featured-badge">Destacado</span>
               }
 
               @if (project.screenshots?.length) {
-                <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" class="project-card-carousel" />
+                <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" class="projects-card-carousel" />
               }
 
-              <div class="project-card-body">
-                <h3 class="project-title text-subtitle-2-bold">
+              <div class="projects-card-body">
+                <h3 class="projects-card-title text-subtitle-2-bold">
                   {{ project.title }}
                 </h3>
 
-                <p class="project-description text-body-2-regular">
+                <p class="projects-card-description text-body-2-regular">
                   {{ project.description }}
                 </p>
 
-                <div class="project-tags" aria-label="Tecnologías utilizadas">
+                <div class="projects-tags" aria-label="Tecnologías utilizadas">
                   @for (tag of project.tags; track tag) {
-                    <span class="project-tag">
+                    <span class="projects-tag">
                       @if (techIconUrl(tag); as iconUrl) {
-                        <img [src]="iconUrl" [alt]="tag" class="project-icon" width="16" height="16" loading="lazy" />
+                        <img [src]="iconUrl" [alt]="tag" class="projects-icon" width="16" height="16" loading="lazy" />
                       } @else {
                         <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
                       }
@@ -125,42 +125,42 @@
                 </div>
               </div>
 
-              <div class="project-card-github">
-                <div class="project-stats" aria-label="Estadísticas del repositorio">
+              <div class="projects-card-github">
+                <div class="projects-stats" aria-label="Estadísticas del repositorio">
                   @if (project.githubStats) {
-                    <span class="project-stat project-stat--stars">
+                    <span class="projects-stat projects-stat--stars">
                       <portfolio-icon name="Star" size="14" />
                       <span>{{ project.githubStats.stars }}</span>
                     </span>
 
-                    <span class="project-stat">
+                    <span class="projects-stat">
                       <portfolio-icon name="GitFork" size="14" />
                       <span>Fork {{ project.githubStats.forks }}</span>
                     </span>
 
-                    <span class="project-stat">
+                    <span class="projects-stat">
                       <portfolio-icon name="Globe" size="14" />
                       <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
                     </span>
 
                     @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
-                      <span class="project-stat">
+                      <span class="projects-stat">
                         <portfolio-icon name="License" size="14" />
                         <span>{{ formatLicense(project.githubStats.license) }}</span>
                       </span>
                     }
                   } @else if (isRepositoryLoading(project.repo)) {
-                    <span class="project-stat project-stat--loading">Cargando datos de GitHub...</span>
+                    <span class="projects-stat projects-stat--loading">Cargando datos de GitHub...</span>
                   } @else {
-                    <span class="project-stat project-stat--loading">Datos de GitHub no disponibles</span>
+                    <span class="projects-stat projects-stat--loading">Datos de GitHub no disponibles</span>
                   }
                 </div>
 
-                <div class="project-card-footer">
+                <div class="projects-card-footer">
                   @if (project.githubUrl) {
-                    <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="project-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
+                    <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
                       @if (techIconUrl('GitHub'); as iconUrl) {
-                        <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="project-icon" />
+                        <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="projects-icon" />
                       } @else {
                         <portfolio-icon name="Github" size="16" />
                       }
@@ -170,14 +170,14 @@
                   }
 
                   @if (project.liveUrl) {
-                    <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="project-link" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
+                    <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
                       <portfolio-icon name="ExternalLink" size="16" />
                       <span>Demo</span>
                     </a>
                   }
 
                   @if (!project.githubUrl && !project.liveUrl) {
-                    <span class="project-private">
+                    <span class="projects-private">
                       <portfolio-icon name="Lock" size="14" />
                       Proyecto privado
                     </span>
@@ -189,8 +189,8 @@
         }
       </portfolio-carousel>
     } @else {
-      <div class="project-empty-state">
-        <p class="project-empty-title">
+      <div class="projects-empty-state">
+        <p class="projects-empty-title">
           @if (hasSearchTerm()) {
             No encontré proyectos con esa búsqueda.
           } @else {
@@ -198,7 +198,7 @@
           }
         </p>
 
-        <p class="project-empty-description">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
+        <p class="projects-empty-description">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
       </div>
     }
   </div>
