@@ -89,12 +89,16 @@
     }
 
     @if (filteredProjects().length) {
-      <ul class="projects-grid" role="list">
+      <portfolio-carousel mode="card" [autoPlay]="false" class="projects-carousel">
         @for (project of filteredProjects(); track project.title) {
-          <li>
+          <div carouselItem class="project-card-shell">
             <article class="project-card" [class.project-card--featured]="project.featured">
               @if (project.featured) {
                 <span class="project-featured-badge">Destacado</span>
+              }
+
+              @if (project.screenshots?.length) {
+                <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" class="project-card-carousel" />
               }
 
               <div class="project-card-body">
@@ -181,9 +185,9 @@
                 </div>
               </div>
             </article>
-          </li>
+          </div>
         }
-      </ul>
+      </portfolio-carousel>
     } @else {
       <div class="project-empty-state">
         <p class="project-empty-title">

@@ -15,6 +15,7 @@ export interface Project {
   githubUrl: string;
   liveUrl: string | null;
   featured?: boolean;
+  screenshots?: string[];
   githubStats?: ProjectGithubStats;
 }
 
