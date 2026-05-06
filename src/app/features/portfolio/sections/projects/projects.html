@@ -11,7 +11,7 @@
     <div class="projects-toolbar flex min-w-0 items-center justify-between gap-(--p-toolbar-gap)">
       <div class="projects-filter-container relative w-auto min-w-0 shrink-0" #filterPanelContainer>
         <div class="projects-filter-bar flex flex-wrap items-center gap-(--p-filter-bar-gap)">
-          <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="projects-filter-button text-caption-1-medium" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
+          <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="projects-filter-button" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
 
           @if (hasSelectedTechnologies()) {
             <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="projects-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
@@ -106,118 +106,122 @@
       </div>
     }
 
-    @if (displayedProjects().length) {
-      <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="displayedProjectsKey()" [itemsStateKey]="displayedProjectsStateKey()" [activeItemKey]="activeCarouselProjectTitle()" class="projects-carousel">
-        @for (project of displayedProjects(); track project.title) {
-          <div carouselItem class="projects-card-shell" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null">
-            <article class="projects-card" [class.projects-card--featured]="project.featured">
-              @if (project.featured) {
-                <span class="projects-featured-badge">Destacado</span>
-              }
+    <div class="projects-results">
+      @if (showProjectsCarousel()) {
+        <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="displayedProjectsKey()" [itemsStateKey]="displayedProjectsStateKey()" [activeItemKey]="activeCarouselProjectTitle()" class="projects-carousel">
+          @for (project of displayedProjects(); track project.title) {
+            <div carouselItem class="projects-card-shell" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null" [attr.data-project-entering]="isProjectEntering(project.title) ? 'true' : null">
+              <article class="projects-card" [class.projects-card--featured]="project.featured">
+                @if (project.featured) {
+                  <span class="projects-featured-badge">Destacado</span>
+                }
 
-              @if (project.screenshots?.length) {
-                <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" class="projects-card-carousel" />
-              }
+                @if (project.screenshots?.length) {
+                  <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" class="projects-card-carousel" />
+                }
 
-              <div class="projects-card-body">
-                <h3 class="projects-card-title text-subtitle-2-bold">
-                  {{ project.title }}
-                </h3>
+                <div class="projects-card-body">
+                  <h3 class="projects-card-title text-subtitle-2-bold">
+                    {{ project.title }}
+                  </h3>
 
-                <p class="projects-card-description text-body-2-regular">
-                  {{ project.description }}
-                </p>
+                  <p class="projects-card-description text-body-2-regular">
+                    {{ project.description }}
+                  </p>
 
-                <div class="projects-tags" aria-label="Tecnologías utilizadas">
-                  @for (tag of project.tags; track tag) {
-                    <span class="projects-tag">
-                      @if (techIconUrl(tag); as iconUrl) {
-                        <img [src]="iconUrl" [alt]="tag" class="projects-icon" width="16" height="16" loading="lazy" />
-                      } @else {
-                        <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
-                      }
+                  <div class="projects-tags" aria-label="Tecnologías utilizadas">
+                    @for (tag of project.tags; track tag) {
+                      <span class="projects-tag">
+                        @if (techIconUrl(tag); as iconUrl) {
+                          <img [src]="iconUrl" [alt]="tag" class="projects-icon" width="16" height="16" loading="lazy" />
+                        } @else {
+                          <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
+                        }
 
-                      <span>{{ tag }}</span>
-                    </span>
-                  }
-                </div>
-              </div>
-
-              <div class="projects-card-github">
-                <div class="projects-stats" aria-label="Estadísticas del repositorio">
-                  @if (project.githubStats) {
-                    <span class="projects-stat projects-stat--stars">
-                      <portfolio-icon name="Star" size="14" />
-                      <span>{{ project.githubStats.stars }}</span>
-                    </span>
-
-                    <span class="projects-stat">
-                      <portfolio-icon name="GitFork" size="14" />
-                      <span>Fork {{ project.githubStats.forks }}</span>
-                    </span>
-
-                    <span class="projects-stat">
-                      <portfolio-icon name="Globe" size="14" />
-                      <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
-                    </span>
-
-                    @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
-                      <span class="projects-stat">
-                        <portfolio-icon name="License" size="14" />
-                        <span>{{ formatLicense(project.githubStats.license) }}</span>
+                        <span>{{ tag }}</span>
                       </span>
                     }
-                  } @else if (isRepositoryLoading(project.repo)) {
-                    <span class="projects-stat projects-stat--loading">Cargando datos de GitHub...</span>
-                  } @else {
-                    <span class="projects-stat projects-stat--loading">Datos de GitHub no disponibles</span>
-                  }
+                  </div>
                 </div>
 
-                <div class="projects-card-footer">
-                  @if (project.githubUrl) {
-                    <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
-                      @if (techIconUrl('GitHub'); as iconUrl) {
-                        <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="projects-icon" />
-                      } @else {
-                        <portfolio-icon name="Github" size="16" />
+                <div class="projects-card-github">
+                  <div class="projects-stats" aria-label="Estadísticas del repositorio">
+                    @if (project.githubStats) {
+                      <span class="projects-stat projects-stat--stars">
+                        <portfolio-icon name="Star" size="14" />
+                        <span>{{ project.githubStats.stars }}</span>
+                      </span>
+
+                      <span class="projects-stat">
+                        <portfolio-icon name="GitFork" size="14" />
+                        <span>Fork {{ project.githubStats.forks }}</span>
+                      </span>
+
+                      <span class="projects-stat">
+                        <portfolio-icon name="Globe" size="14" />
+                        <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
+                      </span>
+
+                      @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
+                        <span class="projects-stat">
+                          <portfolio-icon name="License" size="14" />
+                          <span>{{ formatLicense(project.githubStats.license) }}</span>
+                        </span>
                       }
+                    } @else if (isRepositoryLoading(project.repo)) {
+                      <span class="projects-stat projects-stat--loading">Cargando datos de GitHub...</span>
+                    } @else {
+                      <span class="projects-stat projects-stat--loading">Datos de GitHub no disponibles</span>
+                    }
+                  </div>
 
-                      <span>GitHub</span>
-                    </a>
-                  }
+                  <div class="projects-card-footer">
+                    @if (project.githubUrl) {
+                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
+                        @if (techIconUrl('GitHub'); as iconUrl) {
+                          <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="projects-icon" />
+                        } @else {
+                          <portfolio-icon name="Github" size="16" />
+                        }
 
-                  @if (project.liveUrl) {
-                    <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
-                      <portfolio-icon name="ExternalLink" size="16" />
-                      <span>Demo</span>
-                    </a>
-                  }
+                        <span>GitHub</span>
+                      </a>
+                    }
 
-                  @if (!project.githubUrl && !project.liveUrl) {
-                    <span class="projects-private">
-                      <portfolio-icon name="Lock" size="14" />
-                      Proyecto privado
-                    </span>
-                  }
+                    @if (project.liveUrl) {
+                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
+                        <portfolio-icon name="ExternalLink" size="16" />
+                        <span>Demo</span>
+                      </a>
+                    }
+
+                    @if (!project.githubUrl && !project.liveUrl) {
+                      <span class="projects-private">
+                        <portfolio-icon name="Lock" size="14" />
+                        Proyecto privado
+                      </span>
+                    }
+                  </div>
                 </div>
-              </div>
-            </article>
-          </div>
-        }
-      </portfolio-carousel>
-    } @else {
-      <div class="projects-empty-state">
-        <p class="projects-empty-title">
-          @if (hasSearchTerm()) {
-            No encontré proyectos con esa búsqueda.
-          } @else {
-            No hay proyectos públicos con estos filtros.
+              </article>
+            </div>
           }
-        </p>
+        </portfolio-carousel>
+      }
 
-        <p class="projects-empty-description">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
-      </div>
-    }
+      @if (showEmptyState()) {
+        <div class="projects-empty-state" animate.enter="projects-empty-state-enter">
+          <p class="projects-empty-title">
+            @if (hasSearchTerm()) {
+              No encontré proyectos con esa búsqueda.
+            } @else {
+              No hay proyectos públicos con estos filtros.
+            }
+          </p>
+
+          <p class="projects-empty-description">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
+        </div>
+      }
+    </div>
   </div>
 </section>

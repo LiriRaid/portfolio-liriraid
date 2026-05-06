@@ -48,7 +48,7 @@ const TECHNOLOGY_CATEGORIES: ProjectTechnologyCategory[] = [
   {
     label: 'Frontend',
     icon: 'Globe',
-    technologies: ['Angular 21', 'AngularJS', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'PrimeNG', 'RxJS', 'Signals'],
+    technologies: ['Angular 21', 'AngularJS', 'Signals', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'PrimeNG', 'RxJS'],
   },
   {
     label: 'Backend',
@@ -68,7 +68,7 @@ const TECHNOLOGY_CATEGORIES: ProjectTechnologyCategory[] = [
   {
     label: 'Arquitectura',
     icon: 'Layers',
-    technologies: ['Clean Architecture', 'Screaming Architecture', 'Feature-first', 'SSR', 'Prerender', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
+    technologies: ['Screaming Architecture', 'Feature-first', 'Clean Architecture', 'Prerender', 'SSR', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
   },
   {
     label: 'IA / Automatización',
@@ -122,6 +122,11 @@ export class Projects {
 
   protected readonly displayedProjects = signal<Project[]>(PROJECTS);
   protected readonly leavingProjectTitles = signal<Set<string>>(new Set());
+  protected readonly enteringProjectTitles = signal<Set<string>>(new Set());
+
+  protected readonly showProjectsCarousel = signal(PROJECTS.length > 0);
+  protected readonly showEmptyState = signal(false);
+
   protected readonly activeCarouselProjectTitle = signal(PROJECTS[0]?.title ?? '');
 
   private readonly selectedTechnologySet = computed(() => new Set(this.selectedTechnologies()));
@@ -148,16 +153,29 @@ export class Projects {
     });
   });
 
-  protected readonly displayedProjectsKey = computed(() => this.displayedProjects().map((project) => project.title).join('|'));
+  protected readonly displayedProjectsKey = computed(() =>
+    this.displayedProjects()
+      .map((project) => project.title)
+      .join('|'),
+  );
 
   protected readonly displayedProjectsStateKey = computed(() => {
     return this.displayedProjects()
-      .map((project) => `${project.title}:${this.isProjectLeaving(project.title) ? 'leaving' : 'active'}`)
+      .map((project) => {
+        const state = this.isProjectLeaving(project.title) ? 'leaving' : this.isProjectEntering(project.title) ? 'entering' : 'active';
+
+        return `${project.title}:${state}`;
+      })
       .join('|');
   });
 
   private readonly projectExitDuration = 680;
+  private readonly projectEnterDuration = 520;
+
   private readonly leavingProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+  private readonly enteringProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
+  private emptyStateTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     const searchSubscription = this.searchControl.valueChanges.subscribe((value) => {
@@ -168,8 +186,13 @@ export class Projects {
     this.destroyRef.onDestroy(() => {
       searchSubscription.unsubscribe();
 
+      this.clearEmptyStateTimer();
+
       this.leavingProjectTimeouts.forEach((timeout) => clearTimeout(timeout));
       this.leavingProjectTimeouts.clear();
+
+      this.enteringProjectTimeouts.forEach((timeout) => clearTimeout(timeout));
+      this.enteringProjectTimeouts.clear();
     });
 
     if (!isPlatformBrowser(this.platformId)) {
@@ -223,6 +246,10 @@ export class Projects {
     return this.leavingProjectTitles().has(title);
   }
 
+  protected isProjectEntering(title: string): boolean {
+    return this.enteringProjectTitles().has(title);
+  }
+
   protected techFallbackIcon(technology: string): string {
     return FALLBACK_ICONS[technology] ?? 'Code';
   }
@@ -249,6 +276,73 @@ export class Projects {
 
     this.activeCarouselProjectTitle.set(nextProjects[0]?.title ?? '');
 
+    if (!nextProjects.length) {
+      this.syncEmptyResults(currentDisplayedProjects);
+      return;
+    }
+
+    this.syncNonEmptyResults(nextProjects, currentDisplayedProjects);
+  }
+
+  private syncEmptyResults(currentDisplayedProjects: Project[]): void {
+    this.clearEmptyStateTimer();
+    this.clearEnteringProjectAnimations();
+
+    this.activeCarouselProjectTitle.set('');
+
+    if (!currentDisplayedProjects.length) {
+      this.displayedProjects.set([]);
+      this.showProjectsCarousel.set(false);
+      this.showEmptyState.set(true);
+      return;
+    }
+
+    this.showProjectsCarousel.set(true);
+    this.showEmptyState.set(false);
+
+    const leavingProjects = currentDisplayedProjects;
+
+    this.leavingProjectTitles.update((current) => {
+      const updated = new Set(current);
+
+      leavingProjects.forEach((project) => {
+        updated.add(project.title);
+      });
+
+      return updated;
+    });
+
+    leavingProjects.forEach((project) => {
+      if (this.leavingProjectTimeouts.has(project.title)) return;
+
+      const timeout = setTimeout(() => {
+        this.displayedProjects.update((projects) => projects.filter((item) => item.title !== project.title));
+
+        this.leavingProjectTitles.update((current) => {
+          const updated = new Set(current);
+          updated.delete(project.title);
+          return updated;
+        });
+
+        this.leavingProjectTimeouts.delete(project.title);
+
+        if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
+          this.showProjectsCarousel.set(false);
+          this.showEmptyState.set(true);
+        }
+      }, this.projectExitDuration);
+
+      this.leavingProjectTimeouts.set(project.title, timeout);
+    });
+  }
+
+  private syncNonEmptyResults(nextProjects: Project[], currentDisplayedProjects: Project[]): void {
+    const wasEmptyVisible = this.showEmptyState() || !this.showProjectsCarousel() || !currentDisplayedProjects.length;
+
+    this.clearEmptyStateTimer();
+    this.showEmptyState.set(false);
+    this.showProjectsCarousel.set(true);
+
     const nextTitles = new Set(nextProjects.map((project) => project.title));
     const currentTitles = new Set(currentDisplayedProjects.map((project) => project.title));
 
@@ -256,11 +350,11 @@ export class Projects {
     const enteringProjects = nextProjects.filter((project) => !currentTitles.has(project.title));
 
     nextProjects.forEach((project) => {
-      const timeout = this.leavingProjectTimeouts.get(project.title);
+      const leavingTimeout = this.leavingProjectTimeouts.get(project.title);
 
-      if (!timeout) return;
+      if (!leavingTimeout) return;
 
-      clearTimeout(timeout);
+      clearTimeout(leavingTimeout);
       this.leavingProjectTimeouts.delete(project.title);
     });
 
@@ -281,12 +375,22 @@ export class Projects {
     const hasLeavingProjects = leavingProjects.length > 0;
 
     if (!hasLeavingProjects) {
-      this.displayedProjects.set(this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects())));
+      const sortedProjects = this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects()));
+      this.displayedProjects.set(sortedProjects);
+
+      if (wasEmptyVisible) {
+        this.markEnteringProjects(sortedProjects);
+      } else {
+        this.markEnteringProjects(enteringProjects);
+      }
+
       return;
     }
 
     const mergedProjects = this.sortProjectsByOriginalOrder([...currentDisplayedProjects, ...enteringProjects], this.projects());
     this.displayedProjects.set(this.replaceProjectReferences(mergedProjects));
+
+    this.markEnteringProjects(enteringProjects);
 
     leavingProjects.forEach((project) => {
       if (this.leavingProjectTimeouts.has(project.title)) return;
@@ -301,10 +405,65 @@ export class Projects {
         });
 
         this.leavingProjectTimeouts.delete(project.title);
+
+        if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
+          this.showProjectsCarousel.set(false);
+          this.showEmptyState.set(true);
+        }
       }, this.projectExitDuration);
 
       this.leavingProjectTimeouts.set(project.title, timeout);
     });
+  }
+
+  private markEnteringProjects(projects: Project[]): void {
+    if (!projects.length) return;
+
+    projects.forEach((project) => {
+      const existingTimeout = this.enteringProjectTimeouts.get(project.title);
+
+      if (existingTimeout) {
+        clearTimeout(existingTimeout);
+        this.enteringProjectTimeouts.delete(project.title);
+      }
+    });
+
+    this.enteringProjectTitles.update((current) => {
+      const updated = new Set(current);
+
+      projects.forEach((project) => {
+        updated.add(project.title);
+      });
+
+      return updated;
+    });
+
+    projects.forEach((project) => {
+      const timeout = setTimeout(() => {
+        this.enteringProjectTitles.update((current) => {
+          const updated = new Set(current);
+          updated.delete(project.title);
+          return updated;
+        });
+
+        this.enteringProjectTimeouts.delete(project.title);
+      }, this.projectEnterDuration);
+
+      this.enteringProjectTimeouts.set(project.title, timeout);
+    });
+  }
+
+  private clearEnteringProjectAnimations(): void {
+    this.enteringProjectTimeouts.forEach((timeout) => clearTimeout(timeout));
+    this.enteringProjectTimeouts.clear();
+    this.enteringProjectTitles.set(new Set());
+  }
+
+  private clearEmptyStateTimer(): void {
+    if (!this.emptyStateTimer) return;
+
+    clearTimeout(this.emptyStateTimer);
+    this.emptyStateTimer = null;
   }
 
   private replaceProjectReferences(projects: Project[]): Project[] {

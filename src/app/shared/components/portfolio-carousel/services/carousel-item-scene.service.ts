@@ -167,7 +167,6 @@ export class CarouselItemSceneService {
         this.animateLeavingCard({
           element,
           fromPosition: previousPosition ?? targetPosition,
-          targetPosition,
           metrics,
         });
 
@@ -338,14 +337,13 @@ export class CarouselItemSceneService {
     return this.normalizeProgress(Number(gsap.getProperty(fill, 'scaleX')));
   }
 
-  private animateLeavingCard(params: { element: HTMLElement; fromPosition: CarouselSlidePosition; targetPosition: CarouselSlidePosition; metrics: CardMetrics }): void {
-    const { element, fromPosition, targetPosition, metrics } = params;
+  private animateLeavingCard(params: { element: HTMLElement; fromPosition: CarouselSlidePosition; metrics: CardMetrics }): void {
+    const { element, fromPosition, metrics } = params;
 
     const fromProps = this.cardProps(fromPosition, metrics);
-    const targetProps = this.cardProps(targetPosition, metrics);
     const fromScale = typeof fromProps.scale === 'number' ? fromProps.scale : 1;
 
-    this.setCardPositionState(element, targetPosition);
+    this.setCardPositionState(element, fromPosition);
 
     gsap.set(element, {
       ...fromProps,
@@ -353,7 +351,6 @@ export class CarouselItemSceneService {
     });
 
     gsap.to(element, {
-      ...targetProps,
       opacity: 0,
       scale: fromScale * 0.88,
       yPercent: 4,

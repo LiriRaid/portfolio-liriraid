@@ -11,12 +11,15 @@
   display: contents;
 }
 
+/* Botón colapsado base.
+   Solo se renderiza en mobile/collapsed, pero queda base en 40x40 como pediste. */
 .search-collapsed-btn {
   width: 40px !important;
   min-width: 40px !important;
-  height: 38px !important;
-  min-height: 38px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   padding: 0 !important;
+  border-radius: 0.55rem !important;
 }
 
 .search-mobile-panel {
@@ -45,8 +48,10 @@
   transform: translateZ(0);
 }
 
-/* Input interno del search */
+/* 1025px+ */
 :host ::ng-deep .input.input-default {
+  min-height: 42px !important;
+  height: 42px !important;
   width: 100%;
 }
 
@@ -98,15 +103,45 @@
   opacity: 0.72;
 }
 
+/* 769px - 1024px */
+@media (max-width: 1024px) and (min-width: 769px) {
+  :host ::ng-deep .input.input-default {
+    min-height: 40px !important;
+    height: 40px !important;
+    padding-inline: 0.8rem !important;
+    border-radius: 0.62rem !important;
+  }
+
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    --search-input-font-size: 0.820rem;
+  }
+}
+
+/* 641px - 768px */
+@media (max-width: 768px) and (min-width: 641px) {
+  :host ::ng-deep .input.input-default {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding-inline: 0.72rem !important;
+    border-radius: 0.58rem !important;
+  }
+
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    --search-input-font-size: 0.766rem;
+  }
+}
+
 /* 640px para abajo */
 @media (max-width: 640px) {
   .search-collapsed-btn {
-    width: 36px !important;
-    min-width: 36px !important;
-    height: 34px !important;
-    min-height: 34px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
     padding: 0 !important;
-    border-radius: 0.48rem !important;
+    border-radius: 0.55rem !important;
   }
 
   .search-mobile-panel {
@@ -114,45 +149,10 @@
   }
 
   :host ::ng-deep .input.input-default {
-    min-height: 34px !important;
-    height: 34px !important;
+    min-height: 36px !important;
+    height: 36px !important;
     padding-inline: 0.62rem !important;
-    border-radius: 0.48rem !important;
-  }
-
-  :host ::ng-deep .input.input-default input,
-  :host ::ng-deep input {
-    --search-input-font-size: 0.82rem;
-  }
-
-  :host ::ng-deep .search-collapsed-btn portfolio-icon,
-  :host ::ng-deep .search-collapsed-btn .p-button-icon,
-  :host ::ng-deep .search-collapsed-btn svg {
-    width: 0.9rem !important;
-    height: 0.9rem !important;
-    font-size: 0.9rem !important;
-  }
-}
-
-/* 480px para abajo */
-@media (max-width: 480px) {
-  .search-collapsed-btn {
-    width: 34px !important;
-    min-width: 34px !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    border-radius: 0.45rem !important;
-  }
-
-  .search-mobile-panel {
-    --search-mobile-gap: 0.5rem;
-  }
-
-  :host ::ng-deep .input.input-default {
-    min-height: 32px !important;
-    height: 32px !important;
-    padding-inline: 0.56rem !important;
-    border-radius: 0.45rem !important;
+    border-radius: 0.5rem !important;
   }
 
   :host ::ng-deep .input.input-default input,
@@ -163,20 +163,55 @@
   :host ::ng-deep .search-collapsed-btn portfolio-icon,
   :host ::ng-deep .search-collapsed-btn .p-button-icon,
   :host ::ng-deep .search-collapsed-btn svg {
-    width: 0.84rem !important;
-    height: 0.84rem !important;
-    font-size: 0.84rem !important;
+    width: 0.95rem !important;
+    height: 0.95rem !important;
+    font-size: 0.95rem !important;
+  }
+}
+
+/* 480px para abajo */
+@media (max-width: 480px) {
+  .search-collapsed-btn {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 0.5rem !important;
+  }
+
+  .search-mobile-panel {
+    --search-mobile-gap: 0.5rem;
+  }
+
+  :host ::ng-deep .input.input-default {
+    min-height: 34px !important;
+    height: 34px !important;
+    padding-inline: 0.56rem !important;
+    border-radius: 0.48rem !important;
+  }
+
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    --search-input-font-size: 0.766rem;
+  }
+
+  :host ::ng-deep .search-collapsed-btn portfolio-icon,
+  :host ::ng-deep .search-collapsed-btn .p-button-icon,
+  :host ::ng-deep .search-collapsed-btn svg {
+    width: 0.88rem !important;
+    height: 0.88rem !important;
+    font-size: 0.88rem !important;
   }
 }
 
 /* 380px para abajo */
 @media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
   .search-collapsed-btn {
-    width: 32px !important;
-    min-width: 32px !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    border-radius: 0.42rem !important;
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 0.46rem !important;
   }
 
   .search-mobile-panel {
@@ -184,8 +219,8 @@
   }
 
   :host ::ng-deep .input.input-default {
-    min-height: 30px !important;
-    height: 30px !important;
+    min-height: 32px !important;
+    height: 32px !important;
     padding-inline: 0.5rem !important;
     border-radius: 0.42rem !important;
   }
@@ -198,8 +233,8 @@
   :host ::ng-deep .search-collapsed-btn portfolio-icon,
   :host ::ng-deep .search-collapsed-btn .p-button-icon,
   :host ::ng-deep .search-collapsed-btn svg {
-    width: 0.78rem !important;
-    height: 0.78rem !important;
-    font-size: 0.78rem !important;
+    width: 0.82rem !important;
+    height: 0.82rem !important;
+    font-size: 0.82rem !important;
   }
 }

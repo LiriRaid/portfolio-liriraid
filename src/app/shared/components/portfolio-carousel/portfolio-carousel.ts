@@ -1,26 +1,7 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  DoCheck,
-  ElementRef,
-  PLATFORM_ID,
-  QueryList,
-  TemplateRef,
-  ViewChild,
-  ViewChildren,
-  ViewContainerRef,
-  afterNextRender,
-  computed,
-  contentChildren,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, DoCheck, ElementRef, PLATFORM_ID, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef, afterNextRender, computed, contentChildren, inject, input, signal } from '@angular/core';
 
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 import { CarouselItem } from './carousel-item.directive';
@@ -446,17 +427,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private hasSnapshotChanged(snapshot: CarouselSnapshot): boolean {
     if (!this.lastSnapshot) return true;
 
-    return (
-      this.lastSnapshot.mode !== snapshot.mode ||
-      this.lastSnapshot.imagesKey !== snapshot.imagesKey ||
-      this.lastSnapshot.itemsKey !== snapshot.itemsKey ||
-      this.lastSnapshot.itemsStateKey !== snapshot.itemsStateKey ||
-      this.lastSnapshot.activeItemKey !== snapshot.activeItemKey ||
-      this.lastSnapshot.imagesLength !== snapshot.imagesLength ||
-      this.lastSnapshot.cardsLength !== snapshot.cardsLength ||
-      this.lastSnapshot.autoPlay !== snapshot.autoPlay ||
-      this.lastSnapshot.autoPlayDuration !== snapshot.autoPlayDuration
-    );
+    return this.lastSnapshot.mode !== snapshot.mode || this.lastSnapshot.imagesKey !== snapshot.imagesKey || this.lastSnapshot.itemsKey !== snapshot.itemsKey || this.lastSnapshot.itemsStateKey !== snapshot.itemsStateKey || this.lastSnapshot.activeItemKey !== snapshot.activeItemKey || this.lastSnapshot.imagesLength !== snapshot.imagesLength || this.lastSnapshot.cardsLength !== snapshot.cardsLength || this.lastSnapshot.autoPlay !== snapshot.autoPlay || this.lastSnapshot.autoPlayDuration !== snapshot.autoPlayDuration;
   }
 
   private normalizeCurrentIndexes(snapshot: CarouselSnapshot): void {

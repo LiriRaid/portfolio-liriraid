@@ -17,13 +17,11 @@
 
   --p-filter-bar-gap: 0.75rem;
 
-  --p-filter-btn-min-h: 2.15rem;
-  --p-filter-btn-py: 0.4rem;
-  --p-filter-btn-px: 0.7rem;
+  --p-filter-btn-min-h: 2.625rem;
   --p-filter-btn-radius: 0.7rem;
-  --p-filter-btn-size: 0.76rem;
+  --p-filter-btn-size: 0.875rem;
 
-  --p-filter-panel-width: min(33rem, calc(100vw - 2rem));
+  --p-filter-panel-width: min(34.5rem, calc(100vw - 2rem));
   --p-filter-panel-max-height: 17.75rem;
   --p-filter-panel-content-max-height: 17.75rem;
   --p-filter-layout-max-height: 13.55rem;
@@ -36,7 +34,7 @@
   --p-filter-category-icon: 1.75rem;
   --p-filter-category-icon-radius: 0.5rem;
   --p-filter-category-title: var(--font-size-caption-1);
-  --p-filter-options-gap: 0.625rem;
+  --p-filter-options-gap: 0.5rem;
 
   --p-selected-tags-gap: 0.55rem;
 
@@ -131,7 +129,6 @@
 :host ::ng-deep .projects-filter-button.p-button,
 :host ::ng-deep .projects-clear-button.p-button {
   min-height: var(--p-filter-btn-min-h);
-  padding: var(--p-filter-btn-py) var(--p-filter-btn-px);
   border-radius: var(--p-filter-btn-radius);
   border-color: var(--app-border-color);
   background-color: var(--app-panel-bg);
@@ -256,7 +253,7 @@
 .projects-filter-panel-layout {
   min-width: 0;
   display: grid;
-  grid-template-columns: 11.35rem minmax(0, 1fr);
+  grid-template-columns: 13.25rem minmax(0, 1fr);
   height: var(--p-filter-layout-max-height);
   max-height: var(--p-filter-layout-max-height);
   overflow: hidden;
@@ -349,7 +346,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  padding: 0.75rem;
+  padding: 0.625rem;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -534,6 +531,12 @@
   object-fit: contain;
 }
 
+/* Results */
+.projects-results {
+  min-width: 0;
+  width: 100%;
+}
+
 /* Carousel / cards */
 .projects-carousel {
   width: 100%;
@@ -545,6 +548,11 @@
   width: 100%;
   height: 100%;
   min-height: 0;
+}
+
+.projects-card-shell[data-project-entering='true'] .projects-card {
+  animation: projects-card-return-enter 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: center center;
 }
 
 .projects-card {
@@ -704,6 +712,12 @@
   border-radius: var(--p-empty-radius);
   background-color: var(--app-panel-bg);
   box-shadow: var(--app-container-shadow);
+  transform-origin: top center;
+  will-change: opacity, transform;
+}
+
+.projects-empty-state-enter {
+  animation: projects-empty-state-enter 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .projects-empty-title {
@@ -743,15 +757,13 @@
 
     --p-search-max: 18rem;
 
-    --p-filter-btn-min-h: 2.05rem;
-    --p-filter-btn-py: 0.36rem;
-    --p-filter-btn-px: 0.64rem;
-    --p-filter-btn-size: 0.72rem;
+    --p-filter-btn-min-h: 2.5rem;
+    --p-filter-btn-size: 0.75rem;
 
-    --p-filter-panel-width: min(32.5rem, calc(100vw - 2rem));
+    --p-filter-panel-width: min(32rem, calc(100vw - 2rem));
     --p-filter-panel-max-height: 17rem;
     --p-filter-panel-content-max-height: 17rem;
-    --p-filter-layout-max-height: 12.85rem;
+    --p-filter-layout-max-height: 13.65rem;
 
     --p-card-width: min(25.5rem, 74vw);
     --p-card-height: 35.8rem;
@@ -808,15 +820,13 @@
 
     --p-search-max: 16rem;
 
-    --p-filter-btn-min-h: 2rem;
-    --p-filter-btn-py: 0.34rem;
-    --p-filter-btn-px: 0.6rem;
-    --p-filter-btn-size: 0.68rem;
+    --p-filter-btn-min-h: 2.375rem;
+    --p-filter-btn-size: 0.75rem;
 
-    --p-filter-panel-width: min(32rem, calc(100vw - 2rem));
-    --p-filter-panel-max-height: 16.75rem;
-    --p-filter-panel-content-max-height: 16.75rem;
-    --p-filter-layout-max-height: 12.6rem;
+    --p-filter-panel-width: min(29.5rem, calc(100vw - (var(--p-px) * 2)));
+    --p-filter-panel-max-height: 16.25rem;
+    --p-filter-panel-content-max-height: 16.25rem;
+    --p-filter-layout-max-height: 11.15rem;
 
     --p-card-width: min(22rem, 78vw);
     --p-card-height: 32.3rem;
@@ -877,10 +887,10 @@
 
     --p-filter-bar-gap: 0.5rem;
 
-    --p-filter-panel-width: calc(100vw - 1.5rem);
-    --p-filter-panel-max-height: 17rem;
-    --p-filter-panel-content-max-height: 17rem;
-    --p-filter-layout-max-height: 12.8rem;
+    --p-filter-panel-width: calc(100vw - (var(--p-px) * 2));
+    --p-filter-panel-max-height: 14.9rem;
+    --p-filter-panel-content-max-height: 14.9rem;
+    --p-filter-layout-max-height: 10.8rem;
 
     --p-card-width: min(19.1rem, 80vw);
     --p-card-height: 28.8rem;
@@ -935,10 +945,10 @@
   }
 
   :host ::ng-deep .projects-filter-button.p-button {
-    width: 36px !important;
-    min-width: 36px !important;
-    height: 34px !important;
-    min-height: 34px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
     padding: 0 !important;
     justify-content: center;
     border-radius: 0.48rem !important;
@@ -975,11 +985,26 @@
   }
 
   .projects-filter-panel-layout {
-    grid-template-columns: 10.5rem minmax(0, 1fr);
+    grid-template-columns: 1fr;
+  }
+
+  .projects-filter-category-tabs {
+    flex-direction: row;
+    padding: 0.55rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--app-border-color);
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .projects-filter-category-tab {
+    width: auto;
+    min-width: max-content;
     font-size: 0.68rem;
+  }
+
+  .projects-filter-active-category {
+    padding: 0.7rem;
   }
 
   .projects-card-title {
@@ -1182,5 +1207,35 @@
     padding: 0.22rem 0.48rem !important;
     border-radius: 0.42rem !important;
     font-size: 0.56rem !important;
+  }
+}
+
+@keyframes projects-card-return-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translate3d(0, 0.4rem, 0);
+    filter: blur(0.8px);
+  }
+
+  65% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes projects-empty-state-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.975) translate3d(0, -0.35rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
   }
 }
