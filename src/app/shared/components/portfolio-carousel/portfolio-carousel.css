@@ -1,3 +1,21 @@
+@property --carousel-card-side-max-offset {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 96px;
+}
+
+@property --carousel-card-side-min-offset {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 34px;
+}
+
+@property --carousel-card-side-edge-gap {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 54px;
+}
+
 :host {
   --carousel-control-bg: color-mix(in srgb, #ffffff 88%, transparent);
   --carousel-control-hover-bg: #ffffff;
@@ -5,32 +23,32 @@
   --carousel-control-border: transparent;
   --carousel-control-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
 
-  --carousel-radius: 0.875rem;
+  --carousel-radius: clamp(0.68rem, 0.57rem + 0.48vw, 0.875rem);
 
-  --carousel-card-side-max-offset: 96;
-  --carousel-card-side-min-offset: 34;
-  --carousel-card-side-edge-gap: 54px;
+  --carousel-card-side-max-offset: clamp(60px, 38.7px + 5.6vw, 96px);
+  --carousel-card-side-min-offset: clamp(20px, 11.74px + 2.17vw, 34px);
+  --carousel-card-side-edge-gap: clamp(10px, 6.83vw - 16px, 54px);
   --carousel-card-side-scale: 0.84;
 
-  --carousel-nav-size: 1.75rem;
-  --carousel-nav-offset: 0.5rem;
+  --carousel-nav-size: clamp(1.3rem, 1.03rem + 1.12vw, 1.75rem);
+  --carousel-nav-offset: clamp(0.34rem, 0.25rem + 0.4vw, 0.5rem);
 
-  --carousel-expand-size: 1.5rem;
-  --carousel-expand-offset: 0.5rem;
+  --carousel-expand-size: clamp(1.14rem, 0.93rem + 0.89vw, 1.5rem);
+  --carousel-expand-offset: clamp(0.34rem, 0.25rem + 0.4vw, 0.5rem);
 
-  --carousel-dot-size: 0.42rem;
-  --carousel-dot-gap: 0.35rem;
-  --carousel-dots-bottom: -1.7rem;
+  --carousel-dot-size: clamp(0.32rem, 0.26rem + 0.25vw, 0.42rem);
+  --carousel-dot-gap: clamp(0.28rem, 0.24rem + 0.17vw, 0.35rem);
+  --carousel-dots-bottom: clamp(-1.7rem, -0.83rem - 1.37vw, -1.15rem);
 
-  --carousel-slide-nav-x: 0.75rem;
-  --carousel-slide-nav-bottom: 0.65rem;
-  --carousel-slide-nav-gap: 0.3rem;
-  --carousel-slide-nav-h: 0.18rem;
+  --carousel-slide-nav-x: clamp(0.45rem, 0.27rem + 0.75vw, 0.75rem);
+  --carousel-slide-nav-bottom: clamp(0.42rem, 0.28rem + 0.57vw, 0.65rem);
+  --carousel-slide-nav-gap: clamp(0.25rem, 0.22rem + 0.12vw, 0.3rem);
+  --carousel-slide-nav-h: clamp(0.16rem, 0.15rem + 0.05vw, 0.18rem);
 
-  --carousel-counter-size: 0.68rem;
-  --carousel-counter-top: 0.5rem;
-  --carousel-counter-right: 0.5rem;
-  --carousel-counter-px: 0.45rem;
+  --carousel-counter-size: clamp(0.54rem, 0.46rem + 0.35vw, 0.68rem);
+  --carousel-counter-top: clamp(0.38rem, 0.31rem + 0.3vw, 0.5rem);
+  --carousel-counter-right: clamp(0.38rem, 0.31rem + 0.3vw, 0.5rem);
+  --carousel-counter-px: clamp(0.36rem, 0.31rem + 0.22vw, 0.45rem);
 
   display: block;
   position: relative;
@@ -46,9 +64,6 @@
 }
 
 .carousel-root {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
   border-radius: var(--carousel-radius);
   background: var(--app-panel-muted-bg);
 }
@@ -59,21 +74,6 @@
   overflow: visible;
   background: transparent;
   border-radius: 0;
-}
-
-.carousel-track {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: inherit;
-  overflow: visible;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.carousel-track:active {
-  cursor: grabbing;
 }
 
 :host ::ng-deep .carousel-item {
@@ -102,49 +102,25 @@
 
 .carousel-root--screenshot {
   aspect-ratio: 16 / 9;
-  overflow: hidden;
   border-radius: var(--carousel-radius);
-  background: var(--app-panel-muted-bg);
 }
 
+.carousel-slide,
+.carousel-img,
+.fullscreen-slide,
+.fullscreen-img,
 .carousel-slides {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
-.carousel-slides:active {
-  cursor: grabbing;
+.carousel-img,
+.fullscreen-img {
+  -webkit-user-drag: none;
 }
 
 .carousel-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   will-change: transform;
-  cursor: pointer;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-.carousel-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
 .expand-btn,
@@ -174,7 +150,6 @@
 .nav-btn:hover,
 .fullscreen-close:hover,
 .fullscreen-nav:hover {
-  color: var(--carousel-control-color);
   background: var(--carousel-control-hover-bg);
 }
 
@@ -251,14 +226,15 @@
   right: 0;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .carousel-root--card > .nav-btn {
+    display: none;
+  }
+}
+
 .carousel-dots {
-  position: absolute;
-  left: 50%;
   bottom: var(--carousel-dots-bottom);
-  z-index: 65;
-  display: flex;
   gap: var(--carousel-dot-gap);
-  transform: translateX(-50%);
 }
 
 .carousel-dot {
@@ -269,10 +245,7 @@
   border-radius: 9999px;
   background: color-mix(in srgb, #ffffff 45%, transparent);
   cursor: pointer;
-  transition:
-    background-color 0.2s,
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .carousel-dot:hover {
@@ -287,12 +260,9 @@
 }
 
 .slide-nav {
-  position: absolute;
   left: var(--carousel-slide-nav-x);
   right: var(--carousel-slide-nav-x);
   bottom: var(--carousel-slide-nav-bottom);
-  z-index: 45;
-  display: flex;
   gap: var(--carousel-slide-nav-gap);
 }
 
@@ -308,7 +278,13 @@
   cursor: pointer;
 }
 
-.slide-nav-fill {
+.fullscreen-slide-nav-item {
+  background: color-mix(in srgb, #ffffff 30%, transparent);
+  transform: translateZ(0);
+}
+
+.slide-nav-fill,
+.fullscreen-slide-nav-fill {
   position: absolute;
   inset: 0;
   display: block;
@@ -318,10 +294,12 @@
   transform-origin: left center;
 }
 
+.fullscreen-slide-nav-fill {
+  will-change: transform;
+}
+
 .carousel-counter,
 .fullscreen-counter {
-  position: absolute;
-  z-index: 45;
   color: #ffffff;
   font-size: var(--carousel-counter-size);
   font-weight: 600;
@@ -337,20 +315,6 @@
   padding: 0.1rem var(--carousel-counter-px);
 }
 
-.carousel-empty {
-  display: flex;
-  aspect-ratio: 16 / 9;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.625rem;
-  border: 2px dashed var(--app-border-color);
-  border-radius: var(--carousel-radius);
-  color: var(--app-text-muted);
-  background: var(--app-panel-muted-bg);
-  font-size: 0.8125rem;
-}
-
 .fullscreen-overlay {
   --carousel-control-bg: color-mix(in srgb, #000000 78%, transparent);
   --carousel-control-hover-bg: color-mix(in srgb, #000000 90%, transparent);
@@ -358,13 +322,6 @@
   --carousel-control-border: color-mix(in srgb, #ffffff 18%, transparent);
   --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 1.25rem 3.25rem;
   background: rgba(0, 0, 0, 0.48);
   backdrop-filter: blur(4px);
   animation: carousel-fade-in 0.2s ease;
@@ -402,260 +359,28 @@
 }
 
 .fullscreen-slides {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
   border-radius: inherit;
   clip-path: inset(0 round 1rem);
   background: var(--app-panel-muted-bg);
-  transform: translateZ(0);
-  backface-visibility: hidden;
   contain: paint;
 }
 
 .fullscreen-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   border-radius: inherit;
   will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-.fullscreen-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: var(--app-panel-muted-bg);
-  user-select: none;
-  -webkit-user-drag: none;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-.fullscreen-close {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 100;
-  width: 1.875rem;
-  height: 1.875rem;
 }
 
 .fullscreen-close:hover {
   transform: scale(1.1);
 }
 
-.fullscreen-nav {
-  position: absolute;
-  top: 50%;
-  z-index: 100;
-  width: 1.875rem;
-  height: 1.875rem;
-  transform: translateY(-50%);
-}
-
 .fullscreen-nav:hover {
   transform: translateY(-50%) scale(1.1);
 }
 
-.fullscreen-nav--prev {
-  left: 1rem;
-}
-
-.fullscreen-nav--next {
-  right: 1rem;
-}
-
-.fullscreen-slide-nav {
-  position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 0.875rem;
-  z-index: 80;
-  display: flex;
-  gap: 0.3125rem;
-}
-
-.fullscreen-slide-nav-item {
-  position: relative;
-  flex: 1;
-  height: 0.1875rem;
-  padding: 0;
-  border: 0;
-  border-radius: 9999px;
-  overflow: hidden;
-  background: color-mix(in srgb, #ffffff 30%, transparent);
-  cursor: pointer;
-  transform: translateZ(0);
-}
-
-.fullscreen-slide-nav-fill {
-  position: absolute;
-  inset: 0;
-  display: block;
-  border-radius: inherit;
-  background: #ffffff;
-  transform: scaleX(0);
-  transform-origin: left center;
-  will-change: transform;
-}
-
-.fullscreen-counter {
-  left: 50%;
-  bottom: 1.2rem;
-  z-index: 85;
-  padding: 0.125rem 0.625rem;
-  transform: translateX(-50%);
-}
-
-/* 769px - 1024px */
-@media (max-width: 1024px) {
-  :host {
-    --carousel-card-side-max-offset: 94;
-    --carousel-card-side-min-offset: 30;
-    --carousel-card-side-edge-gap: 18px;
-
-    --carousel-nav-size: 1.65rem;
-    --carousel-expand-size: 1.42rem;
-    --carousel-dot-size: 0.4rem;
-    --carousel-dots-bottom: -1.6rem;
-  }
-
-  .carousel-root--card > .nav-btn {
-    display: none;
-  }
-}
-
-/* 641px - 768px */
-@media (max-width: 768px) {
-  :host {
-    --carousel-card-side-max-offset: 86;
-    --carousel-card-side-min-offset: 28;
-    --carousel-card-side-edge-gap: 16px;
-
-    --carousel-radius: 0.8rem;
-
-    --carousel-nav-size: 1.55rem;
-    --carousel-nav-offset: 0.42rem;
-
-    --carousel-expand-size: 1.35rem;
-    --carousel-expand-offset: 0.42rem;
-
-    --carousel-dot-size: 0.38rem;
-    --carousel-dot-gap: 0.32rem;
-    --carousel-dots-bottom: -1.5rem;
-
-    --carousel-slide-nav-x: 0.62rem;
-    --carousel-slide-nav-bottom: 0.55rem;
-
-    --carousel-counter-size: 0.62rem;
-    --carousel-counter-top: 0.42rem;
-    --carousel-counter-right: 0.42rem;
-    --carousel-counter-px: 0.4rem;
-  }
-
-  .carousel-root--card > .nav-btn {
-    display: none;
-  }
-}
-
-/* 481px - 640px */
-@media (max-width: 640px) {
-  :host {
-    --carousel-card-side-max-offset: 78;
-    --carousel-card-side-min-offset: 24;
-    --carousel-card-side-edge-gap: 14px;
-
-    --carousel-radius: 0.72rem;
-
-    --carousel-nav-size: 1.48rem;
-    --carousel-nav-offset: 0.38rem;
-
-    --carousel-expand-size: 1.28rem;
-    --carousel-expand-offset: 0.38rem;
-
-    --carousel-dot-size: 0.36rem;
-    --carousel-dot-gap: 0.3rem;
-    --carousel-dots-bottom: -1.38rem;
-
-    --carousel-slide-nav-x: 0.52rem;
-    --carousel-slide-nav-bottom: 0.48rem;
-    --carousel-slide-nav-gap: 0.25rem;
-    --carousel-slide-nav-h: 0.16rem;
-
-    --carousel-counter-size: 0.58rem;
-    --carousel-counter-top: 0.38rem;
-    --carousel-counter-right: 0.38rem;
-    --carousel-counter-px: 0.36rem;
-  }
-
-  .carousel-root--card > .nav-btn {
-    display: none;
-  }
-}
-
-/* 381px - 480px */
-@media (max-width: 480px) {
-  :host {
-    --carousel-card-side-max-offset: 68;
-    --carousel-card-side-min-offset: 22;
-    --carousel-card-side-edge-gap: 12px;
-
-    --carousel-radius: 0.68rem;
-
-    --carousel-nav-size: 1.38rem;
-    --carousel-nav-offset: 0.34rem;
-
-    --carousel-expand-size: 1.2rem;
-    --carousel-expand-offset: 0.34rem;
-
-    --carousel-dot-size: 0.34rem;
-    --carousel-dot-gap: 0.28rem;
-    --carousel-dots-bottom: -1.25rem;
-
-    --carousel-slide-nav-x: 0.45rem;
-    --carousel-slide-nav-bottom: 0.42rem;
-
-    --carousel-counter-size: 0.54rem;
-  }
-
-  .carousel-root--card > .nav-btn {
-    display: none;
-  }
-}
-
-/* <= 380px */
-@media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
-  :host {
-    --carousel-card-side-max-offset: 60;
-    --carousel-card-side-min-offset: 20;
-    --carousel-card-side-edge-gap: 10px;
-
-    --carousel-nav-size: 1.3rem;
-    --carousel-expand-size: 1.14rem;
-    --carousel-dot-size: 0.32rem;
-    --carousel-dots-bottom: -1.15rem;
-  }
-
-  .carousel-root--card > .nav-btn {
-    display: none;
-  }
-}
-
 @keyframes carousel-fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes carousel-scale-in {
@@ -663,7 +388,6 @@
     opacity: 0;
     transform: scale(0.88) translateZ(0);
   }
-
   to {
     opacity: 1;
     transform: scale(1) translateZ(0);

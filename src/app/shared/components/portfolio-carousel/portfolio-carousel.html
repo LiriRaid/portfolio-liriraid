@@ -1,6 +1,6 @@
 @if (mode() === 'card') {
-  <div class="carousel-root carousel-root--card">
-    <div class="carousel-track" (click)="onTrackClick($event)" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+  <div class="carousel-root carousel-root--card relative w-full">
+    <div class="carousel-track relative w-full h-full min-h-[inherit] overflow-visible select-none cursor-grab active:cursor-grabbing" (click)="onTrackClick($event)" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
       <ng-content select="[carouselItem]"></ng-content>
     </div>
 
@@ -13,7 +13,7 @@
         <portfolio-icon name="ChevronRight" size="16" />
       </button>
 
-      <div class="carousel-dots" role="tablist" aria-label="Navegar proyectos">
+      <div class="carousel-dots absolute left-1/2 z-65 flex -translate-x-1/2" role="tablist" aria-label="Navegar proyectos">
         @for (item of cardItems(); track $index) {
           <button type="button" class="carousel-dot" [class.carousel-dot--active]="$index === currentIndex()" role="tab" [attr.aria-selected]="$index === currentIndex()" [attr.aria-label]="'Proyecto ' + ($index + 1)" (click)="goTo($index); $event.stopPropagation()"></button>
         }
@@ -22,11 +22,11 @@
   </div>
 } @else {
   @if (images().length) {
-    <div class="carousel-root carousel-root--screenshot">
-      <div class="carousel-slides" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+    <div class="carousel-root carousel-root--screenshot relative w-full overflow-hidden">
+      <div class="carousel-slides relative w-full h-full overflow-hidden cursor-grab select-none active:cursor-grabbing" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
         @for (img of images(); track $index) {
-          <div #slideRef class="carousel-slide" (click)="onSlideClick($event)" draggable="false">
-            <img [src]="img" [alt]="'Captura ' + ($index + 1)" class="carousel-img" draggable="false" loading="eager" decoding="async" (dragstart)="$event.preventDefault()" />
+          <div #slideRef class="carousel-slide absolute inset-0 w-full h-full overflow-hidden cursor-pointer" (click)="onSlideClick($event)" draggable="false">
+            <img [src]="img" [alt]="'Captura ' + ($index + 1)" class="carousel-img block w-full h-full object-cover pointer-events-none select-none" draggable="false" loading="eager" decoding="async" (dragstart)="$event.preventDefault()" />
           </div>
         }
       </div>
@@ -44,7 +44,7 @@
           <portfolio-icon name="ChevronRight" size="16" />
         </button>
 
-        <nav class="slide-nav" aria-label="Navegar imágenes">
+        <nav class="slide-nav absolute z-45 flex" aria-label="Navegar imágenes">
           @for (img of images(); track $index) {
             <button type="button" class="slide-nav-item" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === currentIndex() ? 'true' : null" (click)="onScreenshotDotClick($event, $index)">
               <span class="slide-nav-fill" #navFillRef></span>
@@ -52,11 +52,11 @@
           }
         </nav>
 
-        <div class="carousel-counter" aria-live="polite" aria-atomic="true">{{ currentIndex() + 1 }} / {{ images().length }}</div>
+        <div class="carousel-counter absolute z-45" aria-live="polite" aria-atomic="true">{{ currentIndex() + 1 }} / {{ images().length }}</div>
       }
     </div>
   } @else {
-    <div class="carousel-empty">
+    <div class="carousel-empty flex aspect-video flex-col items-center justify-center gap-2.5 rounded-(--carousel-radius) border-2 border-dashed border-(--app-border-color) bg-(--app-panel-muted-bg) text-(--app-text-muted) text-[0.8125rem]">
       <portfolio-icon name="Image" size="36" />
       <span>Sin capturas disponibles</span>
     </div>
@@ -65,38 +65,38 @@
 
 <ng-template #fullscreenTemplate>
   @if (fullscreenSrc()) {
-    <div class="fullscreen-overlay" role="dialog" aria-modal="true" aria-label="Vista completa" tabindex="-1" (click)="closeFullscreen()" (keydown)="onFullscreenKeydown($event)">
+    <div class="fullscreen-overlay fixed inset-0 z-99999 flex items-center justify-center px-5 pt-16 pb-13" role="dialog" aria-modal="true" aria-label="Vista completa" tabindex="-1" (click)="closeFullscreen()" (keydown)="onFullscreenKeydown($event)">
       <div class="fullscreen-inner" (click)="$event.stopPropagation()">
-        <div class="fullscreen-slides">
+        <div class="fullscreen-slides absolute inset-0 z-1 overflow-hidden">
           @for (img of images(); track $index) {
-            <div #fullscreenSlideRef class="fullscreen-slide" draggable="false">
-              <img [src]="img" [alt]="'Vista completa ' + ($index + 1)" class="fullscreen-img" draggable="false" loading="eager" decoding="async" (dragstart)="$event.preventDefault()" />
+            <div #fullscreenSlideRef class="fullscreen-slide absolute inset-0 w-full h-full overflow-hidden" draggable="false">
+              <img [src]="img" [alt]="'Vista completa ' + ($index + 1)" class="fullscreen-img block w-full h-full object-contain bg-(--app-panel-muted-bg) select-none" draggable="false" loading="eager" decoding="async" (dragstart)="$event.preventDefault()" />
             </div>
           }
         </div>
 
-        <button type="button" class="fullscreen-close" (click)="closeFullscreen()" aria-label="Cerrar">
+        <button type="button" class="fullscreen-close absolute top-3 right-3 z-100 w-7.5 h-7.5" (click)="closeFullscreen()" aria-label="Cerrar">
           <portfolio-icon name="Close" size="16" />
         </button>
 
         @if (images().length > 1) {
-          <button type="button" class="fullscreen-nav fullscreen-nav--prev" (click)="fullscreenPrev()" aria-label="Anterior">
+          <button type="button" class="fullscreen-nav fullscreen-nav--prev absolute top-1/2 left-4 z-100 w-7.5 h-7.5 -translate-y-1/2" (click)="fullscreenPrev()" aria-label="Anterior">
             <portfolio-icon name="ChevronLeft" size="16" />
           </button>
 
-          <button type="button" class="fullscreen-nav fullscreen-nav--next" (click)="fullscreenNext()" aria-label="Siguiente">
+          <button type="button" class="fullscreen-nav fullscreen-nav--next absolute top-1/2 right-4 z-100 w-7.5 h-7.5 -translate-y-1/2" (click)="fullscreenNext()" aria-label="Siguiente">
             <portfolio-icon name="ChevronRight" size="16" />
           </button>
 
-          <nav class="fullscreen-slide-nav" aria-label="Navegar imágenes en pantalla completa">
+          <nav class="fullscreen-slide-nav absolute left-4 right-4 bottom-3.5 z-80 flex gap-1.25" aria-label="Navegar imágenes en pantalla completa">
             @for (img of images(); track $index) {
-              <button type="button" class="fullscreen-slide-nav-item" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === fullscreenActiveIndex() ? 'true' : null" (click)="fullscreenGoTo($index)">
+              <button type="button" class="fullscreen-slide-nav-item relative flex-1 h-0.75 rounded-full overflow-hidden border-0 p-0 cursor-pointer" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === fullscreenActiveIndex() ? 'true' : null" (click)="fullscreenGoTo($index)">
                 <span class="fullscreen-slide-nav-fill" #fullscreenNavFillRef></span>
               </button>
             }
           </nav>
 
-          <div class="fullscreen-counter">{{ fullscreenActiveIndex() + 1 }} / {{ images().length }}</div>
+          <div class="fullscreen-counter absolute left-1/2 bottom-[1.2rem] z-85 -translate-x-1/2 px-2.5 py-0.5">{{ fullscreenActiveIndex() + 1 }} / {{ images().length }}</div>
         }
       </div>
     </div>

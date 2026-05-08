@@ -7,7 +7,7 @@
     <div class="input input-default w-full" [class]="inputClass()">
       <portfolio-icon name="Search" size="18"></portfolio-icon>
 
-      <input class="w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
+      <input class="text-body-2-medium w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
     </div>
   } @else {
     <button type="button" aria-label="Buscar" class="button-outline border rounded-lg flex items-center justify-center search-collapsed-btn" (click)="toggleMobile()">
@@ -20,7 +20,7 @@
           <div class="input input-default w-full" [class]="inputClass()">
             <portfolio-icon name="Search" size="18"></portfolio-icon>
 
-            <input class="w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
+            <input class="text-body-2-medium w-full" [placeholder]="placeholder()" [formControl]="control()" (keyup)="onKeyup($event)" />
           </div>
         </div>
       </div>
