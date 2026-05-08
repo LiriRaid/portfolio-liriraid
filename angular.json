@@ -35,9 +35,19 @@
                 "output": "."
               },
               {
+                "glob": "sitemap.xml",
+                "input": "src",
+                "output": "."
+              },
+              {
                 "glob": "**/*",
                 "input": "src/.well-known",
                 "output": ".well-known"
+              },
+              {
+                "glob": "serve.json",
+                "input": "src",
+                "output": "."
               }
             ],
             "styles": ["src/styles.css"],
@@ -49,6 +59,7 @@
           },
           "configurations": {
             "production": {
+              "sourceMap": true,
               "budgets": [
                 {
                   "type": "initial",

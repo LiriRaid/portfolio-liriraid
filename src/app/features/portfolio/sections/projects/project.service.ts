@@ -1,18 +1,35 @@
-import { Injectable, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { GithubRepositoryResponse, GithubRepositoryStats } from '@features/portfolio/entities';
+
+const CACHE_KEY = 'portfolio-github-stats';
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hora
+
+interface CachedStats {
+  data: Record<string, GithubRepositoryStats>;
+  timestamp: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class GithubRepositoryService {
-  private readonly cache = new Map<string, GithubRepositoryStats>();
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly memoryCache = new Map<string, GithubRepositoryStats>();
   private readonly pendingRequests = new Map<string, Promise<GithubRepositoryStats | null>>();
   private readonly loadingRepos = signal<Set<string>>(new Set());
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   readonly isLoading = this.loadingRepos.asReadonly();
 
+  constructor() {
+    if (this.isBrowser) {
+      this.loadFromStorage();
+    }
+  }
+
   getRepositoryStats(repo: string): Promise<GithubRepositoryStats | null> {
-    const cachedStats = this.cache.get(repo);
+    const cachedStats = this.memoryCache.get(repo);
 
     if (cachedStats) {
       return Promise.resolve(cachedStats);
@@ -56,7 +73,8 @@ export class GithubRepositoryService {
         license: data.license?.spdx_id ?? data.license?.name ?? null,
       };
 
-      this.cache.set(repo, stats);
+      this.memoryCache.set(repo, stats);
+      this.saveToStorage();
 
       return stats;
     } catch {
@@ -78,5 +96,47 @@ export class GithubRepositoryService {
 
       return next;
     });
+  }
+
+  private loadFromStorage(): void {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+
+      if (!raw) return;
+
+      const cached: CachedStats = JSON.parse(raw);
+
+      if (Date.now() - cached.timestamp > CACHE_TTL_MS) {
+        localStorage.removeItem(CACHE_KEY);
+        return;
+      }
+
+      for (const [repo, stats] of Object.entries(cached.data)) {
+        this.memoryCache.set(repo, stats);
+      }
+    } catch {
+      localStorage.removeItem(CACHE_KEY);
+    }
+  }
+
+  private saveToStorage(): void {
+    if (!this.isBrowser) return;
+
+    try {
+      const data: Record<string, GithubRepositoryStats> = {};
+
+      this.memoryCache.forEach((stats, repo) => {
+        data[repo] = stats;
+      });
+
+      const cached: CachedStats = {
+        data,
+        timestamp: Date.now(),
+      };
+
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+    } catch {
+      // Storage full or unavailable — silently ignore
+    }
   }
 }
