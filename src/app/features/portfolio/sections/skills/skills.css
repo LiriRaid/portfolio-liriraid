@@ -1,36 +1,36 @@
 .skills {
-  --s-py: 5rem;
-  --s-px: 1.5rem;
-  --s-section-gap: 3.15rem;
+  --s-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
+  --s-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
+  --s-section-gap: clamp(0.92rem, -0.3958rem + 5.5404vw, 3.15rem);
 
   --s-header-max: 40rem;
-  --s-header-gap: 0.75rem;
+  --s-header-gap: clamp(0.5rem, 0.3525rem + 0.6211vw, 0.75rem);
 
-  --s-label-size: var(--font-size-caption-1);
-  --s-title-size: clamp(2rem, 2.8vw, 2.5rem);
-  --s-title-lh: 1.1;
-  --s-subtitle-size: var(--font-size-body-1);
-  --s-subtitle-lh: var(--line-height-body-1);
+  --s-label-size: clamp(0.635rem, 0.4934rem + 0.5963vw, 0.875rem);
+  --s-title-size: clamp(1.17rem, 0.3852rem + 3.3043vw, 2.5rem);
+  --s-title-lh: 1.08;
+  --s-subtitle-size: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);
+  --s-subtitle-lh: 1.4;
 
-  --s-grid-gap: 1.6rem;
+  --s-grid-gap: clamp(0.58rem, -0.0219rem + 2.5342vw, 1.6rem);
 
-  --s-card-p: 1.65rem;
-  --s-card-gap: 1.1rem;
-  --s-card-header-gap: 0.8rem;
+  --s-card-p: clamp(0.65rem, 0.0599rem + 2.4845vw, 1.65rem);
+  --s-card-gap: clamp(0.49rem, 0.1301rem + 1.5155vw, 1.1rem);
+  --s-card-header-gap: clamp(0.42rem, 0.1958rem + 0.9441vw, 0.8rem);
 
-  --s-icon-size: 2.35rem;
-  --s-icon-radius: 0.65rem;
+  --s-icon-size: clamp(1.42rem, 0.8712rem + 2.3106vw, 2.35rem);
+  --s-icon-radius: clamp(0.46rem, 0.3479rem + 0.472vw, 0.65rem);
 
-  --s-card-title-size: 1.42rem;
+  --s-card-title-size: clamp(0.68rem, 0.2434rem + 1.8385vw, 1.42rem);
   --s-card-title-lh: 1.2;
 
-  --s-list-gap: 0.55rem;
+  --s-list-gap: clamp(0.265rem, 0.0968rem + 0.7081vw, 0.55rem);
 
-  --s-badge-gap: 0.4rem;
-  --s-badge-py: 0.28rem;
-  --s-badge-px: 0.82rem;
-  --s-badge-size: 0.82rem;
-  --s-badge-icon: 16px;
+  --s-badge-gap: clamp(0.21rem, 0.0979rem + 0.472vw, 0.4rem);
+  --s-badge-py: clamp(0.11rem, 0.0097rem + 0.4224vw, 0.28rem);
+  --s-badge-px: clamp(0.38rem, 0.1204rem + 1.0932vw, 0.82rem);
+  --s-badge-size: clamp(0.565rem, 0.4145rem + 0.6335vw, 0.82rem);
+  --s-badge-icon: clamp(9.75px, 6.06px + 0.9704vw, 16px);
 
   box-sizing: border-box;
 }
@@ -131,39 +131,6 @@
 
 /* 769px - 1024px */
 @media (max-width: 1024px) {
-  .skills {
-    --s-py: 4.15rem;
-    --s-px: 1.5rem;
-    --s-section-gap: 2.3rem;
-
-    --s-header-max: 38rem;
-
-    --s-label-size: 0.82rem;
-    --s-title-size: 1.82rem;
-    --s-title-lh: 1.08;
-    --s-subtitle-size: 0.94rem;
-    --s-subtitle-lh: 1.43;
-
-    --s-grid-gap: 1.1rem;
-
-    --s-card-p: 1.15rem;
-    --s-card-gap: 0.82rem;
-    --s-card-header-gap: 0.65rem;
-
-    --s-icon-size: 2rem;
-    --s-icon-radius: 0.58rem;
-
-    --s-card-title-size: 1.12rem;
-
-    --s-list-gap: 0.42rem;
-
-    --s-badge-gap: 0.32rem;
-    --s-badge-py: 0.2rem;
-    --s-badge-px: 0.6rem;
-    --s-badge-size: 0.73rem;
-    --s-badge-icon: 13.5px;
-  }
-
   .skills-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -171,149 +138,7 @@
 
 /* 641px - 768px */
 @media (max-width: 768px) {
-  .skills {
-    --s-py: 3.25rem;
-    --s-px: 1.1rem;
-    --s-section-gap: 1.6rem;
-
-    --s-header-max: 36rem;
-    --s-header-gap: 0.6rem;
-
-    --s-label-size: 0.74rem;
-    --s-title-size: 1.5rem;
-    --s-title-lh: 1.06;
-    --s-subtitle-size: 0.84rem;
-    --s-subtitle-lh: 1.4;
-
-    --s-grid-gap: 0.82rem;
-
-    --s-card-p: 0.88rem;
-    --s-card-gap: 0.64rem;
-    --s-card-header-gap: 0.52rem;
-
-    --s-icon-size: 1.68rem;
-    --s-icon-radius: 0.5rem;
-
-    --s-card-title-size: 0.92rem;
-    --s-card-title-lh: 1.16;
-
-    --s-list-gap: 0.34rem;
-
-    --s-badge-gap: 0.26rem;
-    --s-badge-py: 0.145rem;
-    --s-badge-px: 0.48rem;
-    --s-badge-size: 0.64rem;
-    --s-badge-icon: 11px;
-  }
-
   .skills-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* 481px - 640px */
-@media (max-width: 640px) {
-  .skills {
-    --s-py: 2.65rem;
-    --s-px: 0.95rem;
-    --s-section-gap: 1.3rem;
-
-    --s-header-max: 32rem;
-    --s-header-gap: 0.55rem;
-
-    --s-label-size: 0.7rem;
-    --s-title-size: 1.38rem;
-    --s-title-lh: 1.05;
-    --s-subtitle-size: 0.78rem;
-    --s-subtitle-lh: 1.38;
-
-    --s-grid-gap: 0.72rem;
-
-    --s-card-p: 0.8rem;
-    --s-card-gap: 0.58rem;
-    --s-card-header-gap: 0.5rem;
-
-    --s-icon-size: 1.58rem;
-    --s-icon-radius: 0.48rem;
-
-    --s-card-title-size: 0.78rem;
-
-    --s-list-gap: 0.31rem;
-
-    --s-badge-gap: 0.24rem;
-    --s-badge-py: 0.13rem;
-    --s-badge-px: 0.45rem;
-    --s-badge-size: 0.61rem;
-    --s-badge-icon: 10.5px;
-  }
-}
-
-/* 381px - 480px */
-@media (max-width: 480px) {
-  .skills {
-    --s-py: 2.2rem;
-    --s-px: 0.82rem;
-    --s-section-gap: 1.05rem;
-
-    --s-header-max: 100%;
-    --s-header-gap: 0.5rem;
-
-    --s-label-size: 0.65rem;
-    --s-title-size: 1.25rem;
-    --s-title-lh: 1.04;
-    --s-subtitle-size: 0.73rem;
-    --s-subtitle-lh: 1.34;
-
-    --s-grid-gap: 0.62rem;
-
-    --s-card-p: 0.7rem;
-    --s-card-gap: 0.52rem;
-    --s-card-header-gap: 0.44rem;
-
-    --s-icon-size: 1.5rem;
-    --s-icon-radius: 0.46rem;
-
-    --s-card-title-size: 0.72rem;
-
-    --s-list-gap: 0.28rem;
-
-    --s-badge-gap: 0.22rem;
-    --s-badge-py: 0.12rem;
-    --s-badge-px: 0.4rem;
-    --s-badge-size: 0.58rem;
-    --s-badge-icon: 10px;
-  }
-}
-
-/* <= 380px */
-@media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
-  .skills {
-    --s-py: 1.95rem;
-    --s-px: 0.74rem;
-    --s-section-gap: 0.92rem;
-
-    --s-label-size: 0.635rem;
-    --s-title-size: 1.17rem;
-    --s-title-lh: 1.035;
-    --s-subtitle-size: 0.7rem;
-    --s-subtitle-lh: 1.32;
-
-    --s-grid-gap: 0.58rem;
-
-    --s-card-p: 0.65rem;
-    --s-card-gap: 0.49rem;
-    --s-card-header-gap: 0.42rem;
-
-    --s-icon-size: 1.42rem;
-
-    --s-card-title-size: 0.68rem;
-
-    --s-list-gap: 0.265rem;
-
-    --s-badge-gap: 0.21rem;
-    --s-badge-py: 0.11rem;
-    --s-badge-px: 0.38rem;
-    --s-badge-size: 0.565rem;
-    --s-badge-icon: 9.75px;
   }
 }

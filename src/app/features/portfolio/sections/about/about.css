@@ -1,46 +1,45 @@
 .about {
-  --a-py: 5rem;
-  --a-px: 1.5rem;
+  --a-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
+  --a-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
 
-  --a-layout-gap: 4rem;
-  --a-content-max: 47.5rem;
-  --a-content-gap: 1.5rem;
+  --a-layout-gap: clamp(1.1rem, -0.6112rem + 7.205vw, 4rem);
+  --a-content-max: clamp(32rem, 22.854rem + 38.5093vw, 47.5rem);
+  --a-content-gap: clamp(0.82rem, 0.4188rem + 1.6894vw, 1.5rem);
 
-  --a-header-gap: 0.5rem;
-  --a-body-gap: 1rem;
+  --a-header-gap: clamp(0.35rem, 0.2615rem + 0.3727vw, 0.5rem);
+  --a-body-gap: clamp(0.62rem, 0.3958rem + 0.9441vw, 1rem);
 
-  --a-label-size: var(--font-size-caption-1);
-  --a-title-size: var(--font-size-tittle-4);
-  --a-title-lh: var(--line-height-tittle-4);
-  --a-text-size: 1.18rem;
-  --a-text-lh: 1.72;
+  --a-label-size: clamp(0.635rem, 0.4934rem + 0.5963vw, 0.875rem);
+  --a-title-size: clamp(1.17rem, 0.6802rem + 2.0621vw, 2rem);
+  --a-title-lh: clamp(1.035rem, 0.9081rem + 0.5342vw, 1.25rem);
+  --a-text-size: clamp(0.76rem, 0.5122rem + 1.0435vw, 1.18rem);
+  --a-text-lh: clamp(1.38rem, 1.1794rem + 0.8447vw, 1.72rem);
 
-  --a-stats-width: 17.5rem;
-  --a-stats-gap: 1rem;
+  --a-stats-width: clamp(16rem, 15.1149rem + 3.7267vw, 17.5rem);
+  --a-stats-gap: clamp(0.52rem, 0.2368rem + 1.1925vw, 1rem);
 
-  --a-stat-p: 1.5rem;
-  --a-stat-gap: 0.25rem;
-  --a-stat-content-gap: 1rem;
-  --a-stat-radius: 1rem;
+  --a-stat-p: clamp(0.68rem, 0.1961rem + 2.0373vw, 1.5rem);
+  --a-stat-gap: clamp(0.18rem, 0.1387rem + 0.1739vw, 0.25rem);
+  --a-stat-content-gap: clamp(0.58rem, 0.3322rem + 1.0435vw, 1rem);
+  --a-stat-radius: clamp(0.7rem, 0.523rem + 0.7453vw, 1rem);
 
-  --a-stat-value-size: var(--font-size-tittle-4);
-  --a-stat-value-lh: var(--line-height-tittle-4);
-  --a-stat-label-size: var(--font-size-caption-1);
-  --a-stat-label-lh: var(--line-height-caption-1);
+  --a-stat-value-size: clamp(1.17rem, 0.6802rem + 2.0621vw, 2rem);
+  --a-stat-value-lh: clamp(1.035rem, 0.9081rem + 0.5342vw, 1.25rem);
+  --a-stat-label-size: clamp(0.635rem, 0.4934rem + 0.5963vw, 0.875rem);
+  --a-stat-label-lh: clamp(1.22rem, 1.0548rem + 0.6957vw, 1.5rem);
 
-  --a-stat-icon-size: 2.15rem;
-  --a-stat-icon-radius: 0.7rem;
+  --a-stat-icon-size: clamp(1.55rem, 1.196rem + 1.4907vw, 2.15rem);
+  --a-stat-icon-radius: clamp(0.5rem, 0.382rem + 0.4969vw, 0.7rem);
 
-  --a-btn-min-h: initial;
-  --a-btn-py: initial;
-  --a-btn-px: initial;
-  --a-btn-size: inherit;
-  --a-btn-icon: 1rem;
+  --a-btn-min-h: clamp(2rem, 1.941rem + 0.2484vw, 2.1rem);
+  --a-btn-py: clamp(0.4rem, 0.3882rem + 0.0497vw, 0.42rem);
+  --a-btn-px: clamp(0.55rem, 0.432rem + 0.4969vw, 0.75rem);
+  --a-btn-size: clamp(0.7rem, 0.6587rem + 0.1739vw, 0.77rem);
+  --a-btn-icon: clamp(0.85rem, 0.7615rem + 0.3727vw, 1rem);
 
   box-sizing: border-box;
 }
 
-/* Text */
 .about-label {
   color: var(--app-text-primary);
   font-size: var(--a-label-size);
@@ -73,12 +72,10 @@
   line-height: var(--a-stat-label-lh);
 }
 
-/* Layout */
 .about-layout {
   grid-template-columns: minmax(0, 1fr) var(--a-stats-width);
 }
 
-/* Stats */
 .stat-card {
   grid-template-columns: minmax(0, 1fr) auto;
   border-color: color-mix(in srgb, var(--app-border-color) 55%, var(--app-container-border, transparent));
@@ -97,7 +94,6 @@
   color: var(--app-text-primary);
 }
 
-/* Hover */
 @media (hover: hover) {
   .stat-card:hover {
     transform: translateY(-2px);
@@ -105,43 +101,7 @@
   }
 }
 
-/* 769px - 1024px */
-@media (max-width: 1024px) {
-  .about {
-    --a-py: 4.15rem;
-    --a-px: 1.5rem;
-
-    --a-layout-gap: 3rem;
-    --a-content-max: 45rem;
-    --a-content-gap: 1.35rem;
-
-    --a-label-size: 0.82rem;
-    --a-title-size: 1.82rem;
-    --a-title-lh: 1.08;
-    --a-text-size: 1.02rem;
-    --a-text-lh: 1.56;
-
-    --a-stats-width: 16rem;
-    --a-stats-gap: 0.9rem;
-
-    --a-stat-p: 1.25rem;
-    --a-stat-content-gap: 0.85rem;
-
-    --a-stat-value-size: 1.82rem;
-    --a-stat-value-lh: 1.08;
-    --a-stat-label-size: 0.82rem;
-
-    --a-stat-icon-size: 2rem;
-    --a-stat-icon-radius: 0.65rem;
-  }
-}
-
-/* <= 900px */
 @media (max-width: 900px) {
-  .about {
-    --a-layout-gap: 2.5rem;
-  }
-
   .about-layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -157,120 +117,7 @@
   }
 }
 
-/* 641px - 768px */
-@media (max-width: 768px) {
-  .about {
-    --a-py: 3.25rem;
-    --a-px: 1.1rem;
-
-    --a-layout-gap: 2rem;
-    --a-content-gap: 1.15rem;
-
-    --a-header-gap: 0.45rem;
-    --a-body-gap: 0.85rem;
-
-    --a-label-size: 0.74rem;
-    --a-title-size: 1.5rem;
-    --a-title-lh: 1.06;
-    --a-text-size: 0.92rem;
-    --a-text-lh: 1.5;
-
-    --a-stats-gap: 0.75rem;
-
-    --a-stat-p: 1rem;
-    --a-stat-gap: 0.2rem;
-    --a-stat-content-gap: 0.75rem;
-    --a-stat-radius: 0.9rem;
-
-    --a-stat-value-size: 1.5rem;
-    --a-stat-value-lh: 1.06;
-    --a-stat-label-size: 0.74rem;
-    --a-stat-label-lh: 1.35;
-
-    --a-stat-icon-size: 1.85rem;
-    --a-stat-icon-radius: 0.58rem;
-  }
-}
-
-/* 481px - 640px */
-@media (max-width: 640px) {
-  .about {
-    --a-py: 2.65rem;
-    --a-px: 0.95rem;
-
-    --a-layout-gap: 1.6rem;
-    --a-content-gap: 1rem;
-
-    --a-header-gap: 0.42rem;
-    --a-body-gap: 0.75rem;
-
-    --a-label-size: 0.7rem;
-    --a-title-size: 1.38rem;
-    --a-title-lh: 1.05;
-    --a-text-size: 0.86rem;
-    --a-text-lh: 1.48;
-
-    --a-stats-gap: 0.65rem;
-
-    --a-stat-p: 0.85rem;
-    --a-stat-content-gap: 0.7rem;
-    --a-stat-radius: 0.8rem;
-
-    --a-stat-value-size: 1.38rem;
-    --a-stat-value-lh: 1.05;
-    --a-stat-label-size: 0.7rem;
-    --a-stat-label-lh: 1.3;
-
-    --a-stat-icon-size: 1.75rem;
-    --a-stat-icon-radius: 0.55rem;
-
-    --a-btn-min-h: 2.1rem;
-    --a-btn-py: 0.42rem;
-    --a-btn-px: 0.75rem;
-    --a-btn-size: 0.77rem;
-    --a-btn-icon: 0.85rem;
-  }
-}
-
-/* 381px - 480px */
 @media (max-width: 480px) {
-  .about {
-    --a-py: 2.2rem;
-    --a-px: 0.82rem;
-
-    --a-layout-gap: 1.35rem;
-    --a-content-gap: 0.9rem;
-
-    --a-header-gap: 0.38rem;
-    --a-body-gap: 0.68rem;
-
-    --a-label-size: 0.65rem;
-    --a-title-size: 1.25rem;
-    --a-title-lh: 1.04;
-    --a-text-size: 0.8rem;
-    --a-text-lh: 1.42;
-
-    --a-stats-gap: 0.58rem;
-
-    --a-stat-p: 0.75rem;
-    --a-stat-gap: 0.18rem;
-    --a-stat-content-gap: 0.65rem;
-    --a-stat-radius: 0.75rem;
-
-    --a-stat-value-size: 1.25rem;
-    --a-stat-value-lh: 1.04;
-    --a-stat-label-size: 0.65rem;
-    --a-stat-label-lh: 1.26;
-
-    --a-stat-icon-size: 1.65rem;
-    --a-stat-icon-radius: 0.5rem;
-
-    --a-btn-min-h: 2rem;
-    --a-btn-py: 0.4rem;
-    --a-btn-px: 0.7rem;
-    --a-btn-size: 0.74rem;
-  }
-
   .about-stats {
     flex-direction: column;
   }
@@ -280,44 +127,6 @@
   }
 }
 
-/* <= 380px */
-@media (max-width: 380px), (max-height: 720px) and (max-width: 480px) {
-  .about {
-    --a-py: 1.95rem;
-    --a-px: 0.74rem;
-
-    --a-layout-gap: 1.1rem;
-    --a-content-gap: 0.82rem;
-
-    --a-header-gap: 0.35rem;
-    --a-body-gap: 0.62rem;
-
-    --a-label-size: 0.635rem;
-    --a-title-size: 1.17rem;
-    --a-title-lh: 1.035;
-    --a-text-size: 0.76rem;
-    --a-text-lh: 1.38;
-
-    --a-stats-gap: 0.52rem;
-
-    --a-stat-p: 0.68rem;
-    --a-stat-content-gap: 0.58rem;
-    --a-stat-radius: 0.7rem;
-
-    --a-stat-value-size: 1.17rem;
-    --a-stat-value-lh: 1.035;
-    --a-stat-label-size: 0.635rem;
-    --a-stat-label-lh: 1.22;
-
-    --a-stat-icon-size: 1.55rem;
-
-    --a-btn-py: 0.4rem;
-    --a-btn-px: 0.55rem;
-    --a-btn-size: 0.7rem;
-  }
-}
-
-/* Button overrides */
 @media (max-width: 640px) {
   :host ::ng-deep .about-cta .p-button {
     min-height: var(--a-btn-min-h);

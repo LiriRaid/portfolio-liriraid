@@ -61,9 +61,9 @@
 
                   <div class="projects-filter-options flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
                     @for (tech of category.technologies; track tech) {
-                      <button type="button" class="projects-filter-option" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
+                      <button type="button" class="projects-filter-option inline-flex min-h-(--p-chip-min-h) items-center justify-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) px-[0.62rem] py-[0.4rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                         @if (techIconUrl(tech); as iconUrl) {
-                          <img [src]="iconUrl" [alt]="tech" class="projects-icon" width="16" height="16" loading="lazy" />
+                          <img [src]="iconUrl" [alt]="tech" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
                         }
@@ -89,9 +89,9 @@
     @if (hasSelectedTechnologies()) {
       <div class="projects-selected-tags flex min-w-0 flex-wrap gap-(--p-selected-tags-gap)" aria-label="Tecnologías seleccionadas">
         @for (tech of selectedTechnologies(); track tech) {
-          <span class="projects-selected-tag">
+          <span class="projects-selected-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) py-(--p-chip-py) pr-[0.45rem] pl-[0.58rem] text-(length:--p-chip-size) font-bold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" [alt]="tech" class="projects-icon" width="16" height="16" loading="lazy" />
+              <img [src]="iconUrl" [alt]="tech" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
             } @else {
               <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
             }
@@ -131,9 +131,9 @@
 
                   <div class="projects-tags flex min-w-0 flex-wrap gap-(--p-card-tags-gap)" aria-label="Tecnologías utilizadas">
                     @for (tag of project.tags; track tag) {
-                      <span class="projects-tag">
+                      <span class="projects-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         @if (techIconUrl(tag); as iconUrl) {
-                          <img [src]="iconUrl" [alt]="tag" class="projects-icon" width="16" height="16" loading="lazy" />
+                          <img [src]="iconUrl" [alt]="tag" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
                         }
@@ -147,39 +147,39 @@
                 <div class="projects-card-github min-w-0 flex flex-col mt-auto shrink-0 border-t border-(--app-border-color) bg-(--app-panel-bg)">
                   <div class="projects-stats flex min-w-0 flex-wrap gap-(--p-card-tags-gap) px-(--p-stats-px) py-(--p-stats-py) overflow-visible" aria-label="Estadísticas del repositorio">
                     @if (project.githubStats) {
-                      <span class="projects-stat projects-stat--stars">
+                      <span class="projects-stat projects-stat--stars inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         <portfolio-icon name="Star" size="14" />
                         <span>{{ project.githubStats.stars }}</span>
                       </span>
 
-                      <span class="projects-stat">
+                      <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         <portfolio-icon name="GitFork" size="14" />
                         <span>Fork {{ project.githubStats.forks }}</span>
                       </span>
 
-                      <span class="projects-stat">
+                      <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         <portfolio-icon name="Globe" size="14" />
                         <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
                       </span>
 
                       @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
-                        <span class="projects-stat">
+                        <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                           <portfolio-icon name="License" size="14" />
                           <span>{{ formatLicense(project.githubStats.license) }}</span>
                         </span>
                       }
                     } @else if (isRepositoryLoading(project.repo)) {
-                      <span class="projects-stat projects-stat--loading">Cargando datos de GitHub...</span>
+                      <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">Cargando datos de GitHub...</span>
                     } @else {
-                      <span class="projects-stat projects-stat--loading">Datos de GitHub no disponibles</span>
+                      <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">Datos de GitHub no disponibles</span>
                     }
                   </div>
 
                   <div class="projects-card-footer flex min-w-0 items-center gap-[0.7rem] px-(--p-footer-px) py-(--p-footer-py) border-t border-(--app-border-color)">
                     @if (project.githubUrl) {
-                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
+                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-[0.375rem] px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
                         @if (techIconUrl('GitHub'); as iconUrl) {
-                          <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="projects-icon" />
+                          <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" />
                         } @else {
                           <portfolio-icon name="Github" size="16" />
                         }
@@ -189,14 +189,14 @@
                     }
 
                     @if (project.liveUrl) {
-                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
+                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-[0.375rem] px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
                         <portfolio-icon name="ExternalLink" size="16" />
                         <span>Demo</span>
                       </a>
                     }
 
                     @if (!project.githubUrl && !project.liveUrl) {
-                      <span class="projects-private">
+                      <span class="projects-private inline-flex items-center gap-(--p-chip-gap) text-(length:--p-chip-size) font-semibold text-(--app-text-subtle)">
                         <portfolio-icon name="Lock" size="14" />
                         Proyecto privado
                       </span>
