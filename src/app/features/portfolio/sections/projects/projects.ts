@@ -22,7 +22,7 @@ const PROJECTS: Project[] = [
     githubUrl: 'https://github.com/LiriRaid/omni-inbox',
     liveUrl: null,
     featured: true,
-    screenshots: ['https://placehold.co/800x450/1e293b/06b6d4?text=OmniInbox+—+Perfil', 'https://placehold.co/800x450/0f172a/7c3aed?text=OmniInbox+—+Login', 'https://placehold.co/800x450/1e293b/94a3b8?text=OmniInbox+—+Inbox'],
+    screenshots: ['assets/img/projects/omniinbox-profile.svg', 'assets/img/projects/omniinbox-login.svg', 'assets/img/projects/omniinbox-inbox.svg'],
   },
   {
     title: 'AgentFlow AI',
@@ -31,7 +31,7 @@ const PROJECTS: Project[] = [
     repo: 'LiriRaid/agentflow-ai',
     githubUrl: 'https://github.com/LiriRaid/agentflow-ai',
     liveUrl: null,
-    screenshots: ['https://placehold.co/800x450/0a0a0a/22c55e?text=AgentFlow+—+TUI', 'https://placehold.co/800x450/111827/f59e0b?text=AgentFlow+—+Orquestador'],
+    screenshots: ['assets/img/projects/agentflow-tui.svg', 'assets/img/projects/agentflow-orchestrator.svg'],
   },
   {
     title: 'Portfolio Liriraid',
@@ -40,7 +40,7 @@ const PROJECTS: Project[] = [
     repo: 'LiriRaid/portfolio-liriraid',
     githubUrl: 'https://github.com/LiriRaid/portfolio-liriraid',
     liveUrl: null,
-    screenshots: ['https://placehold.co/800x450/18181b/a78bfa?text=Portfolio+—+Hero', 'https://placehold.co/800x450/18181b/f472b6?text=Portfolio+—+Projects'],
+    screenshots: ['assets/img/projects/portfolio-hero.svg', 'assets/img/projects/portfolio-projects.svg'],
   },
 ];
 

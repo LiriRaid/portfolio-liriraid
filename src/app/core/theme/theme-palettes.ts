@@ -7,6 +7,10 @@ export interface ThemeColor {
 
 export const PRIMARY_COLORS: ThemeColor[] = [
   {
+    key: 'angular', label: 'Angular', swatch: '#dd0031',
+    palette: { 50:'#fff1f3',100:'#ffe4e8',200:'#ffcbd5',300:'#ff9fb4',400:'#ff6b8d',500:'#f53d67',600:'#eb1f4f',700:'#dd0031',800:'#b8002b',900:'#8f0021',950:'#52000f' }
+  },
+  {
     key: 'black', label: 'Slate', swatch: '#404040',
     palette: { 50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717',950:'#0a0a0a' }
   },
@@ -43,8 +47,8 @@ export const PRIMARY_COLORS: ThemeColor[] = [
     palette: { 50:'#fff7ed',100:'#ffedd5',200:'#fed7aa',300:'#fdba74',400:'#fb923c',500:'#f97316',600:'#ea580c',700:'#c2410c',800:'#9a3412',900:'#7c2d12',950:'#431407' }
   },
   {
-    key: 'red', label: 'Rose', swatch: '#f43f5e',
-    palette: { 50:'#fff1f2',100:'#ffe4e6',200:'#fecdd3',300:'#fda4af',400:'#fb7185',500:'#f43f5e',600:'#e11d48',700:'#be123c',800:'#9f1239',900:'#881337',950:'#4c0519' }
+    key: 'red', label: 'Rose', swatch: '#d94674',
+    palette: { 50:'#fff1f5',100:'#ffe4ec',200:'#fecddd',300:'#fda4c2',400:'#fb72a6',500:'#f04f8b',600:'#d94674',700:'#b8325d',800:'#992c52',900:'#7f2948',950:'#4d1027' }
   },
   {
     key: 'hotpink', label: 'Pink', swatch: '#ec4899',
@@ -60,7 +64,7 @@ export const PRIMARY_COLORS: ThemeColor[] = [
   },
 ];
 
-export const DEFAULT_PRIMARY_COLOR_KEY = 'orange';
+export const DEFAULT_PRIMARY_COLOR_KEY = 'angular';
 
 export const SURFACE_COLORS: ThemeColor[] = [
   {

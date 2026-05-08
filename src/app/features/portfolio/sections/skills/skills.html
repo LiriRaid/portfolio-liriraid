@@ -25,7 +25,7 @@
             @for (skill of category.skills; track skill) {
               <li class="skill-badge inline-flex items-center gap-(--s-badge-gap) whitespace-nowrap rounded-full border px-(--s-badge-px) py-(--s-badge-py)">
                 @if (techIconUrl(skill); as iconUrl) {
-                  <img [src]="iconUrl" [alt]="skill" class="skill-badge-icon shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+                  <img [src]="iconUrl" alt="" aria-hidden="true" class="skill-badge-icon shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
                 } @else {
                   <portfolio-icon [name]="skillFallbackIcon(skill)" size="14" />
                 }

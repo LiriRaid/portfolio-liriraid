@@ -56,9 +56,9 @@
   --app-search-button-hover-text: var(--p-surface-0);
   --app-search-button-active-bg: var(--p-surface-0);
   --app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
-  --app-primary-button-bg: var(--p-primary-600);
-  --app-primary-button-hover-bg: var(--p-primary-500);
-  --app-primary-button-disabled-bg: color-mix(in srgb, var(--p-primary-600) 50%, transparent);
+  --app-primary-button-bg: var(--p-primary-700);
+  --app-primary-button-hover-bg: var(--p-primary-600);
+  --app-primary-button-disabled-bg: color-mix(in srgb, var(--p-primary-700) 50%, transparent);
   --app-primary-button-disabled-text: var(--p-surface-0);
   --app-primary-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
   --app-outline-button-bg: var(--p-surface-0);
@@ -191,9 +191,9 @@
   --app-search-button-hover-text: var(--p-surface-0);
   --app-search-button-active-bg: var(--app-panel-muted-bg);
   --app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
-  --app-primary-button-bg: var(--p-primary-500);
-  --app-primary-button-hover-bg: var(--p-primary-400);
-  --app-primary-button-disabled-bg: color-mix(in srgb, var(--p-primary-500) 50%, transparent);
+  --app-primary-button-bg: var(--p-primary-700);
+  --app-primary-button-hover-bg: var(--p-primary-600);
+  --app-primary-button-disabled-bg: color-mix(in srgb, var(--p-primary-700) 50%, transparent);
   --app-primary-button-disabled-text: var(--p-surface-0);
   --app-primary-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
   --app-outline-button-bg: var(--app-panel-bg);

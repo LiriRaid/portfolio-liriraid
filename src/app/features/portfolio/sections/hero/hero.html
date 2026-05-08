@@ -15,7 +15,7 @@
       <p class="m-0 max-w-(--h-desc-max) leading-(--h-desc-lh) text-(--app-text-muted) text-(length:--h-desc-size) max-[1024px]:mx-auto max-[1024px]:text-center">Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo y experiencia de usuario refinada.</p>
 
       <div class="hero-ctas flex flex-wrap gap-(--h-ctas-gap) max-[1024px]:justify-center max-[640px]:mx-auto max-[640px]:w-full max-[640px]:max-w-(--h-ctas-max) max-[640px]:flex-col">
-        <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
+        <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="hero-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
 
         <portfolio-button label="Descargar CV" icon="Download" iconPos="right" iconSize="16" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
       </div>
@@ -24,7 +24,7 @@
         @for (tech of stack; track tech) {
           <span class="inline-flex items-center gap-(--h-tech-gap) rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--h-tech-px) py-(--h-tech-py) font-medium text-(--app-text-color) text-(length:--h-tech-size) transition-colors hover:border-(--h-tech-hover-border) hover:bg-(--app-accent-soft-bg) hover:text-(--app-text-primary)">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" [alt]="tech" class="size-(--h-tech-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+              <img [src]="iconUrl" alt="" aria-hidden="true" class="size-(--h-tech-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
             }
 
             {{ tech }}
@@ -35,7 +35,7 @@
 
     <div class="flex w-[clamp(300px,30vw,400px)] shrink-0 flex-col items-center gap-6 max-[1024px]:-order-1 max-[1024px]:w-auto max-[1024px]:gap-0">
       <div class="hero-avatar shrink-0 rounded-full p-1.25">
-        <img class="block size-full rounded-[inherit] bg-(--app-panel-muted-bg) object-cover" src="assets/img/Me.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
+        <img class="block size-full rounded-[inherit] bg-(--app-panel-muted-bg) object-cover" src="assets/img/me-hero.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
       </div>
 
       <div class="w-full overflow-hidden rounded-2xl border border-(--app-border-color) bg-(--app-panel-bg) font-mono [box-shadow:var(--app-container-shadow)] max-[1024px]:hidden" aria-hidden="true">

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">AgentFlow - Orquestador</title>
+  <desc id="desc">Placeholder local para el orquestador de AgentFlow.</desc>
+  <rect width="800" height="450" fill="#111827"/>
+  <rect x="38" y="38" width="724" height="374" rx="24" fill="#0f172a" stroke="#1f2937" stroke-width="2"/>
+  <text x="400" y="212" fill="#f59e0b" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" text-anchor="middle">AgentFlow</text>
+  <text x="400" y="270" fill="#e5e7eb" font-family="Segoe UI, Arial, sans-serif" font-size="30" text-anchor="middle">Orquestador</text>
+</svg>

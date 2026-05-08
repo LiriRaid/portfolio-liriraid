@@ -21,7 +21,7 @@
     <meta name="twitter:title" content="Gabriel Cruz · Desarrollador Full Angular" />
     <meta name="twitter:description" content="Portfolio de Gabriel Cruz (Liriraid), desarrollador Full Stack especializado en Angular 21, TypeScript y Node.js." />
 
-    <meta name="theme-color" content="#f97316" />
+    <meta name="theme-color" content="#dd0031" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
 
     <!--
@@ -34,6 +34,7 @@
       (function () {
         try {
           var PP = {
+            angular: ['#fff1f3', '#ffe4e8', '#ffcbd5', '#ff9fb4', '#ff6b8d', '#f53d67', '#eb1f4f', '#dd0031', '#b8002b', '#8f0021', '#52000f'],
             black: ['#fafafa', '#f5f5f5', '#e5e5e5', '#d4d4d4', '#a3a3a3', '#737373', '#525252', '#404040', '#262626', '#171717', '#0a0a0a'],
             indigo: ['#eef2ff', '#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1', '#4f46e5', '#4338ca', '#3730a3', '#312e81', '#1e1b4b'],
             blue: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a', '#172554'],
@@ -43,7 +44,7 @@
             green: ['#ecfdf5', '#d1fae5', '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857', '#065f46', '#064e3b', '#022c22'],
             amber: ['#fffbeb', '#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e', '#78350f', '#451a03'],
             orange: ['#fff7ed', '#ffedd5', '#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c', '#9a3412', '#7c2d12', '#431407'],
-            red: ['#fff1f2', '#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#f43f5e', '#e11d48', '#be123c', '#9f1239', '#881337', '#4c0519'],
+            red: ['#fff1f5', '#ffe4ec', '#fecddd', '#fda4c2', '#fb72a6', '#f04f8b', '#d94674', '#b8325d', '#992c52', '#7f2948', '#4d1027'],
             hotpink: ['#fdf2f8', '#fce7f3', '#fbcfe8', '#f9a8d4', '#f472b6', '#ec4899', '#db2777', '#be185d', '#9d174d', '#831843', '#500724'],
             pink: ['#fdf4ff', '#fae8ff', '#f5d0fe', '#f0abfc', '#e879f9', '#d946ef', '#c026d3', '#a21caf', '#86198f', '#701a75', '#4a044e'],
             purple: ['#f5f3ff', '#ede9fe', '#ddd6fe', '#c4b5fd', '#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95', '#2e1065'],
@@ -64,7 +65,7 @@
           var sShades = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 
           var mode = localStorage.getItem('portfolio-theme-mode') || 'dark';
-          var pk = localStorage.getItem('portfolio-primary-color') || 'black';
+          var pk = localStorage.getItem('portfolio-primary-color') || 'angular';
           var sk = localStorage.getItem('portfolio-surface-color') || 'neutral';
 
           var root = document.documentElement;
@@ -100,6 +101,11 @@
           style.textContent = css;
 
           document.head.appendChild(style);
+
+          var themeMeta = document.querySelector('meta[name="theme-color"]');
+          if (themeMeta) {
+            themeMeta.setAttribute('content', pp[7] || pp[5]);
+          }
         } catch (e) {}
       })();
     </script>

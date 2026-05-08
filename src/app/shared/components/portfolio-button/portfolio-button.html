@@ -1,6 +1,6 @@
 <ng-template #buttonIcon>
   @if (techIconImgUrl(); as imgUrl) {
-    <img pButtonIcon [src]="imgUrl" [alt]="techIcon()!" width="16" height="16" loading="lazy" [ngClass]="computedIconClass()" />
+    <img pButtonIcon [src]="imgUrl" alt="" aria-hidden="true" width="16" height="16" loading="lazy" decoding="async" [ngClass]="computedIconClass()" />
   } @else if (icon(); as iconName) {
     <portfolio-icon pButtonIcon [name]="iconName" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
   }

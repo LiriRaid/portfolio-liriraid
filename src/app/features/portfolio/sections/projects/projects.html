@@ -55,7 +55,7 @@
                         {{ category.label }}
                       </h3>
 
-                      <p class="projects-filter-category-subtitle m-0 text-(--app-text-muted) text-[0.68rem] leading-[1.25]">Selecciona una o varias tecnologías</p>
+                      <p class="projects-filter-category-subtitle m-0 text-(--app-text-muted) text-[0.68rem] leading-tight">Selecciona una o varias tecnologías</p>
                     </div>
                   </header>
 
@@ -63,7 +63,7 @@
                     @for (tech of category.technologies; track tech) {
                       <button type="button" class="projects-filter-option inline-flex min-h-(--p-chip-min-h) items-center justify-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) px-[0.62rem] py-[0.4rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                         @if (techIconUrl(tech); as iconUrl) {
-                          <img [src]="iconUrl" [alt]="tech" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
                         }
@@ -91,7 +91,7 @@
         @for (tech of selectedTechnologies(); track tech) {
           <span class="projects-selected-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) py-(--p-chip-py) pr-[0.45rem] pl-[0.58rem] text-(length:--p-chip-size) font-bold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" [alt]="tech" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+              <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
             } @else {
               <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
             }
@@ -113,7 +113,7 @@
             <div carouselItem class="projects-card-shell w-full h-full min-h-0" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null" [attr.data-project-entering]="isProjectEntering(project.title) ? 'true' : null">
               <article class="projects-card relative w-full min-w-0 min-h-0 h-full flex flex-col overflow-hidden" [class.projects-card--featured]="project.featured">
                 @if (project.featured) {
-                  <span class="projects-featured-badge absolute top-[0.5rem] right-(--p-featured-right) z-[80] w-fit max-w-max rounded-full bg-(--app-badge-soft-bg) text-(--app-badge-soft-text) px-(--p-featured-px) py-(--p-featured-py) text-(length:--p-featured-size) font-bold leading-none pointer-events-none">Destacado</span>
+                  <span class="projects-featured-badge absolute top-2 right-(--p-featured-right) z-80 w-fit max-w-max rounded-full bg-(--app-badge-soft-bg) text-(--app-badge-soft-text) px-(--p-featured-px) py-(--p-featured-py) text-(length:--p-featured-size) font-bold leading-none pointer-events-none">Destacado</span>
                 }
 
                 @if (project.screenshots?.length) {
@@ -121,7 +121,7 @@
                 }
 
                 <div class="projects-card-body min-w-0 flex flex-1 flex-col gap-(--p-card-body-gap) p-(--p-card-body-p) overflow-hidden">
-                  <h3 class="projects-card-title m-0 pr-[4.5rem] text-subtitle-2-bold text-(--app-text-color) text-(length:--p-card-title-size) leading-[1.19]">
+                  <h3 class="projects-card-title m-0 pr-18 text-subtitle-2-bold text-(--app-text-color) text-(length:--p-card-title-size) leading-[1.19]">
                     {{ project.title }}
                   </h3>
 
@@ -133,7 +133,7 @@
                     @for (tag of project.tags; track tag) {
                       <span class="projects-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         @if (techIconUrl(tag); as iconUrl) {
-                          <img [src]="iconUrl" [alt]="tag" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
                         }
@@ -177,9 +177,9 @@
 
                   <div class="projects-card-footer flex min-w-0 items-center gap-[0.7rem] px-(--p-footer-px) py-(--p-footer-py) border-t border-(--app-border-color)">
                     @if (project.githubUrl) {
-                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-[0.375rem] px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
+                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
                         @if (techIconUrl('GitHub'); as iconUrl) {
-                          <img [src]="iconUrl" alt="GitHub" width="16" height="16" loading="lazy" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" />
+                          <img [src]="iconUrl" alt="" aria-hidden="true" width="16" height="16" loading="lazy" decoding="async" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" />
                         } @else {
                           <portfolio-icon name="Github" size="16" />
                         }
@@ -189,7 +189,7 @@
                     }
 
                     @if (project.liveUrl) {
-                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-[0.375rem] px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
+                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
                         <portfolio-icon name="ExternalLink" size="16" />
                         <span>Demo</span>
                       </a>
@@ -211,7 +211,7 @@
 
       @if (showEmptyState()) {
         <div class="projects-empty-state flex min-w-0 flex-col gap-(--p-empty-gap) p-(--p-empty-p) rounded-(--p-empty-radius) bg-(--app-panel-bg) origin-top will-change-[opacity,transform]" animate.enter="projects-empty-state-enter">
-          <p class="projects-empty-title m-0 font-bold text-(--app-text-color) text-(length:--p-empty-title-size) leading-[1.25]">
+          <p class="projects-empty-title m-0 font-bold text-(--app-text-color) text-(length:--p-empty-title-size) leading-tight">
             @if (hasSearchTerm()) {
               No encontré proyectos con esa búsqueda.
             } @else {

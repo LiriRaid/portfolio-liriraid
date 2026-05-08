@@ -16,6 +16,7 @@
           </legend>
 
           <input
+            [id]="resolvedInputId()"
             [type]="inputType()"
             [disabled]="isDisabled()"
             [value]="displayValue()"
@@ -25,6 +26,8 @@
             (blur)="onBlurInput()"
             [attr.inputmode]="type() === 'price' ? 'decimal' : null"
             [attr.placeholder]="placeholderAttr()"
+            [attr.aria-invalid]="hasErrors() ? 'true' : null"
+            [attr.aria-describedby]="describedBy()"
             [class]="'portfolio-input-field peer w-full bg-transparent border-0 text-caption-1-medium focus:outline-none focus:ring-0 transition-colors duration-180 placeholder:transition-colors placeholder:duration-180 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
             [ngClass]="{
               'text-(--app-control-surface-text)': !isDisabled() && !readonly(),
@@ -63,13 +66,14 @@
             ></portfolio-icon>
           }
 
-          <label class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-180 z-10" [ngClass]="labelClass()" [style.background]="labelBackground()" [style.color]="labelColor()">
+          <label [attr.for]="resolvedInputId()" class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-180 z-10" [ngClass]="labelClass()" [style.background]="labelBackground()" [style.color]="labelColor()">
             {{ label() }}
           </label>
         </fieldset>
       } @else {
         <div class="relative w-full">
           <input
+            [id]="resolvedInputId()"
             [type]="inputType()"
             [disabled]="isDisabled()"
             [value]="displayValue()"
@@ -79,6 +83,8 @@
             (blur)="onBlurInput()"
             [attr.inputmode]="type() === 'price' ? 'decimal' : null"
             [attr.placeholder]="placeholderAttr()"
+            [attr.aria-invalid]="hasErrors() ? 'true' : null"
+            [attr.aria-describedby]="describedBy()"
             [class]="'portfolio-input-field peer w-full rounded-lg border text-caption-1-medium focus:outline-none transition-all duration-150 placeholder:transition-colors placeholder:duration-180 ' + inputVerticalClasses() + ' ' + inputPaddingClasses()"
             [ngClass]="{
               'bg-(--app-control-surface-bg) text-(--app-control-surface-text) border-(--app-control-surface-border)': !isDisabled() && !readonly() && !hasErrors(),
@@ -120,7 +126,7 @@
           }
 
           @if (label()) {
-            <label class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-150 z-10" [ngClass]="labelClass()" [style.background]="labelBackground()" [style.color]="labelColor()">
+            <label [attr.for]="resolvedInputId()" class="absolute px-2 leading-none select-none pointer-events-none transition-all duration-150 z-10" [ngClass]="labelClass()" [style.background]="labelBackground()" [style.color]="labelColor()">
               {{ label() }}
             </label>
           }
@@ -155,12 +161,13 @@
           }
 
           @if (!readonly() && !isDisabled()) {
-            <input type="text" [value]="currentTagValue()" [placeholder]="tags().length > 0 || isFocused() ? tagPlaceholder() : ' '" (input)="onInput($event)" (keydown)="onTagKeyDown($event)" (focus)="onFocus()" (blur)="onBlur()" class="outline-none text-caption-1-regular px-2 py-0.5 border-none rounded-md max-w-full flex-[1_0_14.5rem] min-w-40 bg-transparent text-(--app-control-surface-text)" [class.placeholder-transparent]="!isFocused() && tags().length === 0" />
+            <input type="text" [id]="resolvedInputId()" [value]="currentTagValue()" [placeholder]="tags().length > 0 || isFocused() ? tagPlaceholder() : ' '" [attr.aria-invalid]="hasErrors() ? 'true' : null" [attr.aria-describedby]="describedBy()" (input)="onInput($event)" (keydown)="onTagKeyDown($event)" (focus)="onFocus()" (blur)="onBlur()" class="outline-none text-caption-1-regular px-2 py-0.5 border-none rounded-md max-w-full flex-[1_0_14.5rem] min-w-40 bg-transparent text-(--app-control-surface-text)" [class.placeholder-transparent]="!isFocused() && tags().length === 0" />
           }
         </div>
 
         @if (label()) {
           <label
+            [attr.for]="resolvedInputId()"
             class="absolute left-3 px-2 select-none pointer-events-none transition-all duration-150 z-10 bg-(--app-panel-bg)"
             [ngClass]="{
               'top-1/2 -translate-y-1/2 text-caption-1-medium': !hasValue() && !readonly() && !hasErrors(),
@@ -178,7 +185,7 @@
   </div>
 
   @if (hasErrors() && showErrorMessage()) {
-    <small class="portfolio-input-error">
+    <small [id]="errorId()" class="portfolio-input-error">
       {{ errorMessage() }}
     </small>
   }

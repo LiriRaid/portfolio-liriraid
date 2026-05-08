@@ -20,7 +20,10 @@ type PortfolioIconPosition = 'left' | 'right';
   providers: [createControlValueAccessorProvider(PortfolioInput)],
 })
 export class PortfolioInput implements ControlValueAccessor, OnInit {
+  private static nextInputId = 0;
+
   readonly type = input<PortfolioInputType>('text');
+  readonly inputId = input<string>('');
   readonly placeholder = input<string>('');
   readonly label = input<string | undefined>(undefined);
   readonly value = input<string>('');
@@ -57,6 +60,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
   private readonly validationTick = signal(0);
   private placeholderTimer?: ReturnType<typeof setTimeout>;
+  private readonly generatedInputId = `portfolio-input-${PortfolioInput.nextInputId++}`;
 
   private readonly allowedTypes: PortfolioInputType[] = ['text', 'password', 'email', 'number', 'date', 'tel', 'url', 'price'];
   private readonly valueSig = signal<string>('');
@@ -162,6 +166,9 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   });
 
   readonly hasIcon = computed(() => !!this.lucideIcon());
+  readonly resolvedInputId = computed(() => this.inputId().trim() || this.generatedInputId);
+  readonly errorId = computed(() => `${this.resolvedInputId()}-error`);
+  readonly describedBy = computed(() => (this.hasErrors() && this.showErrorMessage() ? this.errorId() : null));
 
   readonly hasLeftIcon = computed(() => {
     return this.hasIcon() && this.iconPosition() === 'left';
