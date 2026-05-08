@@ -25,6 +25,15 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
 
     <!--
+    Fallback inicial de fondo/color para evitar flash blanco antes de que el script pretheme corra.
+    Cubre el caso JS deshabilitado (mantiene dark) y el milisegundo previo al script.
+  -->
+    <style>
+      html { background-color: #0a0a0a; }
+      body { margin: 0; background-color: #0a0a0a; color: #ffffff; }
+    </style>
+
+    <!--
     Pre-theme para SSR/SSG + hydration.
     Evita el flash gris/default antes de que Angular + PrimeNG hidraten.
     Importante: no usamos documentElement.style.setProperty(),
@@ -95,6 +104,13 @@
           });
 
           css += '}';
+
+          // Pintar de inmediato body bg/color con los valores correctos del modo+paleta
+          // para que el primer paint ya esté en el color final (evita flash blanco/light).
+          var shellBg = mode === 'dark' ? sp[11] : sp[3];
+          var textColor = mode === 'dark' ? sp[0] : sp[10];
+          css += 'html{background-color:' + shellBg + ';}';
+          css += 'body{background-color:' + shellBg + ';color:' + textColor + ';}';
 
           var style = document.createElement('style');
           style.id = 'portfolio-pretheme';

@@ -33,6 +33,11 @@
                 "glob": "robots.txt",
                 "input": "src",
                 "output": "."
+              },
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": ".well-known"
               }
             ],
             "styles": ["src/styles.css"],
