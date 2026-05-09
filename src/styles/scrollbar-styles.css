@@ -1,0 +1,19 @@
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--p-primary-600);
+  border-radius: 12px;
+  border: 0.5px solid transparent;
+  background-clip: padding-box;
+}

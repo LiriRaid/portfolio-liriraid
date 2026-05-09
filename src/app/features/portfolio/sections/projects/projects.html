@@ -1,0 +1,231 @@
+<section id="proyectos" class="projects flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--p-py)" aria-labelledby="projects-heading">
+  <div class="projects-inner mx-auto flex w-full max-w-7xl flex-col gap-(--p-section-gap) px-(--p-px)">
+    <header #headerRef class="projects-header flex max-w-(--p-header-max) flex-col gap-(--p-header-gap)">
+      <p class="m-0 font-semibold uppercase tracking-[0.08em] text-(length:--p-label-size) text-(--app-text-primary)">Trabajo reciente</p>
+
+      <h2 id="projects-heading" class="m-0 font-bold text-(--app-text-color) text-(length:--p-title-size) leading-[1.05] tracking-tight">Proyectos destacados</h2>
+
+      <p class="m-0 text-(--app-text-muted) text-(length:--p-subtitle-size) leading-[1.35]">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
+    </header>
+
+    <div #toolbarRef class="projects-toolbar relative z-60 flex min-w-0 items-center justify-between gap-(--p-toolbar-gap)">
+      <div class="projects-filter-container relative w-auto min-w-0 shrink-0" #filterPanelContainer>
+        <div class="projects-filter-bar flex flex-wrap items-center gap-(--p-filter-bar-gap)">
+          <portfolio-button label="Filtrar tecnologías" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="projects-filter-button" ariaLabel="Filtrar proyectos por tecnologías" (onClick)="filterPanel.toggle($event)" />
+
+          @if (hasSelectedTechnologies()) {
+            <portfolio-button label="Limpiar filtros" icon="Close" iconPos="left" variant="outlined" styleClass="projects-clear-button text-caption-1-medium" ariaLabel="Limpiar filtros seleccionados" (onClick)="clearFilters()" />
+          }
+        </div>
+
+        <p-popover #filterPanel styleClass="projects-filter-panel" [appendTo]="filterPanelContainer">
+          <div class="projects-filter-panel-content flex min-w-0 flex-col">
+            <div class="projects-filter-panel-header flex min-w-0 items-center justify-between gap-3.5 px-[0.95rem] pt-[0.85rem] pb-[0.7rem] border-b border-(--app-border-color)">
+              <p class="projects-filter-panel-title m-0 font-bold uppercase tracking-[0.08em] text-(--app-text-color) text-caption-1-bold">Tecnologías</p>
+
+              @if (hasSelectedTechnologies()) {
+                <button type="button" class="projects-filter-panel-clear cursor-pointer border-0 bg-transparent font-bold text-(--app-text-color) text-caption-1-bold" (click)="clearFilters()">Limpiar</button>
+              }
+            </div>
+
+            <div class="projects-filter-panel-layout grid min-w-0 overflow-hidden h-(--p-filter-layout-max-height) max-h-(--p-filter-layout-max-height)">
+              <nav class="projects-filter-category-tabs flex h-full min-h-0 min-w-0 flex-col gap-[0.45rem] p-2.5 border-r border-(--app-border-color) overflow-y-auto overflow-x-hidden overscroll-contain" aria-label="Categorías de tecnologías">
+                @for (category of technologyCategories(); track category.label) {
+                  <button type="button" class="projects-filter-category-tab w-full min-w-0 min-h-[2.15rem] flex items-center gap-2 px-[0.45rem] py-[0.35rem] rounded-[0.65rem] border border-transparent bg-transparent text-(--app-text-muted) cursor-pointer text-[0.72rem] font-bold text-left" [class.projects-filter-category-tab--active]="activeFilterCategoryLabel() === category.label" (click)="selectFilterCategory(category.label)">
+                    <span class="projects-filter-category-tab-icon inline-flex w-[1.45rem] h-[1.45rem] shrink-0 items-center justify-center rounded-[0.45rem] bg-(--app-badge-soft-bg) text-(--app-text-primary)" aria-hidden="true">
+                      <portfolio-icon [name]="category.icon" size="14" />
+                    </span>
+
+                    <span class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {{ category.label }}
+                    </span>
+
+                    <span class="projects-filter-category-tab-count inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-(--app-panel-bg) text-(--app-text-muted) text-[0.62rem] font-extrabold">
+                      {{ category.technologies.length }}
+                    </span>
+                  </button>
+                }
+              </nav>
+
+              @if (activeFilterCategory(); as category) {
+                <section class="projects-filter-active-category flex h-full min-h-0 min-w-0 flex-col gap-[0.85rem] p-2.5 overflow-y-auto overflow-x-hidden overscroll-contain">
+                  <header class="projects-filter-active-category-header flex min-w-0 items-center gap-(--p-filter-category-header-gap)">
+                    <span class="projects-filter-category-icon inline-flex shrink-0 items-center justify-center w-(--p-filter-category-icon) h-(--p-filter-category-icon) rounded-(--p-filter-category-icon-radius) bg-(--app-badge-soft-bg) text-(--app-text-primary)" aria-hidden="true">
+                      <portfolio-icon [name]="category.icon" size="15" />
+                    </span>
+
+                    <div class="projects-filter-active-category-copy flex min-w-0 flex-col gap-[0.15rem]">
+                      <h3 class="projects-filter-category-title m-0 font-bold text-(--app-text-color) text-(length:--p-filter-category-title)">
+                        {{ category.label }}
+                      </h3>
+
+                      <p class="projects-filter-category-subtitle m-0 text-(--app-text-muted) text-[0.68rem] leading-tight">Selecciona una o varias tecnologías</p>
+                    </div>
+                  </header>
+
+                  <div class="projects-filter-options flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
+                    @for (tech of category.technologies; track tech) {
+                      <button type="button" class="projects-filter-option inline-flex min-h-(--p-chip-min-h) items-center justify-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) px-[0.62rem] py-[0.4rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
+                        @if (techIconUrl(tech); as iconUrl) {
+                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
+                        } @else {
+                          <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
+                        }
+
+                        <span>{{ tech }}</span>
+
+                        @if (isTechnologySelected(tech)) {
+                          <portfolio-icon name="Check" size="13" />
+                        }
+                      </button>
+                    }
+                  </div>
+                </section>
+              }
+            </div>
+          </div>
+        </p-popover>
+      </div>
+
+      <portfolio-search [control]="searchControl" [mobileMode]="true" placeholder="Buscar proyectos..." (searchEnter)="onSearch($event)" />
+    </div>
+
+    @if (hasSelectedTechnologies()) {
+      <div class="projects-selected-tags flex min-w-0 flex-wrap gap-(--p-selected-tags-gap)" aria-label="Tecnologías seleccionadas">
+        @for (tech of selectedTechnologies(); track tech) {
+          <span class="projects-selected-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) py-(--p-chip-py) pr-[0.45rem] pl-[0.58rem] text-(length:--p-chip-size) font-bold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200">
+            @if (techIconUrl(tech); as iconUrl) {
+              <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
+            } @else {
+              <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
+            }
+
+            <span>{{ tech }}</span>
+
+            <button type="button" class="projects-selected-tag-remove inline-flex h-[1.1rem] w-[1.1rem] cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-(--app-text-color)" [attr.aria-label]="'Quitar filtro ' + tech" (click)="removeTechnology(tech)">
+              <portfolio-icon name="Close" size="13" />
+            </button>
+          </span>
+        }
+      </div>
+    }
+
+    <div #resultsRef class="projects-results min-w-0 w-full">
+      @if (showProjectsCarousel()) {
+        <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="displayedProjectsKey()" [itemsStateKey]="displayedProjectsStateKey()" [activeItemKey]="activeCarouselProjectTitle()" class="projects-carousel mx-auto block w-full max-w-full">
+          @for (project of displayedProjects(); track project.title) {
+            <div carouselItem class="projects-card-shell w-full h-full min-h-0" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null" [attr.data-project-entering]="isProjectEntering(project.title) ? 'true' : null">
+              <article class="projects-card relative w-full min-w-0 min-h-0 h-full flex flex-col overflow-hidden" [class.projects-card--featured]="project.featured">
+                @if (project.featured) {
+                  <span class="projects-featured-badge absolute top-2 right-(--p-featured-right) z-80 w-fit max-w-max rounded-full bg-(--app-badge-soft-bg) text-(--app-badge-soft-text) px-(--p-featured-px) py-(--p-featured-py) text-(length:--p-featured-size) font-bold leading-none pointer-events-none"> Destacado </span>
+                }
+
+                @if (project.screenshots?.length) {
+                  <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" class="projects-card-carousel block shrink-0" />
+                }
+
+                <div class="projects-card-body min-w-0 flex flex-1 flex-col gap-(--p-card-body-gap) p-(--p-card-body-p) overflow-hidden">
+                  <h3 class="projects-card-title m-0 pr-18 font-bold text-(--app-text-color) text-(length:--p-card-title-size) leading-[1.19]">
+                    {{ project.title }}
+                  </h3>
+
+                  <p class="projects-card-description m-0 text-(--app-text-muted) text-(length:--p-card-desc-size) leading-[1.32]">
+                    {{ project.description }}
+                  </p>
+
+                  <div class="projects-tags flex min-w-0 flex-wrap gap-(--p-card-tags-gap)" aria-label="Tecnologías utilizadas">
+                    @for (tag of project.tags; track tag) {
+                      <span class="projects-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                        @if (techIconUrl(tag); as iconUrl) {
+                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
+                        } @else {
+                          <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
+                        }
+
+                        <span>{{ tag }}</span>
+                      </span>
+                    }
+                  </div>
+                </div>
+
+                <div class="projects-card-github min-w-0 flex flex-col mt-auto shrink-0 border-t border-(--app-border-color) bg-(--app-panel-bg)">
+                  <div class="projects-stats flex min-w-0 flex-wrap gap-(--p-card-tags-gap) px-(--p-stats-px) py-(--p-stats-py) overflow-visible" aria-label="Estadísticas del repositorio">
+                    @if (project.githubStats) {
+                      <span class="projects-stat projects-stat--stars inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                        <portfolio-icon name="Star" size="14" />
+                        <span>{{ project.githubStats.stars }}</span>
+                      </span>
+
+                      <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                        <portfolio-icon name="GitFork" size="14" />
+                        <span>Fork {{ project.githubStats.forks }}</span>
+                      </span>
+
+                      <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                        <portfolio-icon name="Globe" size="14" />
+                        <span>{{ formatVisibility(project.githubStats.visibility) }}</span>
+                      </span>
+
+                      @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
+                        <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                          <portfolio-icon name="License" size="14" />
+                          <span>{{ formatLicense(project.githubStats.license) }}</span>
+                        </span>
+                      }
+                    } @else if (isRepositoryLoading(project.repo)) {
+                      <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200"> Cargando datos de GitHub... </span>
+                    } @else {
+                      <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200"> Datos de GitHub no disponibles </span>
+                    }
+                  </div>
+
+                  <div class="projects-card-footer flex min-w-0 items-center gap-[0.7rem] px-(--p-footer-px) py-(--p-footer-py) border-t border-(--app-border-color)">
+                    @if (project.githubUrl) {
+                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
+                        @if (techIconUrl('GitHub'); as iconUrl) {
+                          <img [src]="iconUrl" alt="" aria-hidden="true" width="16" height="16" loading="lazy" decoding="async" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" />
+                        } @else {
+                          <portfolio-icon name="Github" size="16" />
+                        }
+
+                        <span>GitHub</span>
+                      </a>
+                    }
+
+                    @if (project.liveUrl) {
+                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="'Ver demo en vivo de ' + project.title">
+                        <portfolio-icon name="ExternalLink" size="16" />
+                        <span>Demo</span>
+                      </a>
+                    }
+
+                    @if (!project.githubUrl && !project.liveUrl) {
+                      <span class="projects-private inline-flex items-center gap-(--p-chip-gap) text-(length:--p-chip-size) font-semibold text-(--app-text-subtle)">
+                        <portfolio-icon name="Lock" size="14" />
+                        Proyecto privado
+                      </span>
+                    }
+                  </div>
+                </div>
+              </article>
+            </div>
+          }
+        </portfolio-carousel>
+      }
+
+      @if (showEmptyState()) {
+        <div class="projects-empty-state flex min-w-0 flex-col gap-(--p-empty-gap) p-(--p-empty-p) rounded-(--p-empty-radius) bg-(--app-panel-bg) origin-top will-change-[opacity,transform]" animate.enter="projects-empty-state-enter">
+          <p class="projects-empty-title m-0 font-bold text-(--app-text-color) text-(length:--p-empty-title-size) leading-tight">
+            @if (hasSearchTerm()) {
+              No encontré proyectos con esa búsqueda.
+            } @else {
+              No hay proyectos públicos con estos filtros.
+            }
+          </p>
+
+          <p class="projects-empty-description m-0 text-(--app-text-muted) text-(length:--p-empty-desc-size) leading-[1.32]">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

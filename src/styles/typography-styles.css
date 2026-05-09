@@ -1,0 +1,65 @@
+.text-tittle-4-bold {
+  font-size: var(--font-size-tittle-4);
+  line-height: var(--line-height-tittle-4);
+  font-weight: 700;
+}
+
+.text-subtitle-2-bold {
+  font-size: var(--font-size-subtitle-2);
+  line-height: var(--line-height-subtitle-2);
+  font-weight: 700;
+}
+
+.text-body-1-regular {
+  font-size: var(--font-size-body-1);
+  line-height: var(--line-height-body-1);
+  font-weight: 300;
+}
+
+.text-body-2-medium {
+  font-size: var(--font-size-body-2);
+  line-height: var(--line-height-body-2);
+  font-weight: 500;
+}
+
+.text-body-2-regular {
+  font-size: var(--font-size-body-2);
+  line-height: var(--line-height-body-2);
+  font-weight: 300;
+}
+
+.text-caption-1-bold {
+  font-size: var(--font-size-caption-1);
+  line-height: var(--line-height-caption-1);
+  font-weight: 700;
+}
+
+.text-caption-1-medium {
+  font-size: var(--font-size-caption-1);
+  line-height: var(--line-height-caption-1);
+  font-weight: 500;
+}
+
+.text-caption-1-regular {
+  font-size: var(--font-size-caption-1);
+  line-height: var(--line-height-caption-1);
+  font-weight: 300;
+}
+
+.text-caption-2-bold {
+  font-size: var(--font-size-caption-2);
+  line-height: var(--line-height-caption-2);
+  font-weight: 700;
+}
+
+.text-caption-2-semibold {
+  font-size: var(--font-size-caption-2);
+  line-height: var(--line-height-caption-2);
+  font-weight: 600;
+}
+
+.text-caption-2-regular {
+  font-size: var(--font-size-caption-2);
+  line-height: var(--line-height-caption-2);
+  font-weight: 300;
+}

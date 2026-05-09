@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">OmniInbox - Login</title>
+  <desc id="desc">Placeholder local para la vista de login de OmniInbox.</desc>
+  <rect width="800" height="450" fill="#0f172a"/>
+  <rect x="38" y="38" width="724" height="374" rx="24" fill="#111827" stroke="#312e81" stroke-width="2"/>
+  <text x="400" y="212" fill="#7c3aed" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" text-anchor="middle">OmniInbox</text>
+  <text x="400" y="270" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="30" text-anchor="middle">Login</text>
+</svg>

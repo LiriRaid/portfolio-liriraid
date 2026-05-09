@@ -1,0 +1,100 @@
+:host {
+  display: block;
+}
+
+:host(.desktop-mode) {
+  width: 100%;
+  max-width: 25rem;
+}
+
+:host(.mobile-mode) {
+  display: contents;
+}
+
+/* Botón colapsado: siempre 40x40, sin variantes responsive */
+.search-collapsed-btn {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 !important;
+  border-radius: 0.55rem !important;
+}
+
+.search-mobile-panel {
+  --search-mobile-gap: 0.52rem;
+
+  flex-basis: 100%;
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+  grid-template-rows: 1fr;
+
+  padding-top: var(--search-mobile-gap);
+  margin: 0;
+
+  overflow: hidden;
+  will-change: grid-template-rows, padding-top, opacity;
+}
+
+.search-mobile-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  transform-origin: top center;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Input desktop: 42px de alto, fuente 16px (text-body-2-medium aplicado en el HTML) */
+:host ::ng-deep .input.input-default {
+  min-height: 42px !important;
+  height: 42px !important;
+  width: 100%;
+}
+
+:host ::ng-deep .input.input-default portfolio-icon {
+  color: var(--app-search-input-prefix);
+  opacity: 1;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+:host ::ng-deep .input.input-default:focus-within portfolio-icon {
+  color: var(--app-search-input-prefix);
+  opacity: 1;
+}
+
+:host ::ng-deep .input.input-default input,
+:host ::ng-deep input {
+  color: var(--app-search-input-text) !important;
+  -webkit-text-fill-color: var(--app-search-input-text) !important;
+  caret-color: var(--app-text-primary);
+
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+:host ::ng-deep .input.input-default input::placeholder,
+:host ::ng-deep input::placeholder {
+  color: var(--app-search-input-prefix) !important;
+  -webkit-text-fill-color: var(--app-search-input-prefix) !important;
+  opacity: 0.72;
+}
+
+/* Responsive (<= 640px): input 38px de alto, fuente 14px (caption-1) heredada al placeholder */
+@media (max-width: 640px) {
+  :host ::ng-deep .input.input-default {
+    min-height: 38px !important;
+    height: 38px !important;
+  }
+
+  :host ::ng-deep .input.input-default input,
+  :host ::ng-deep input {
+    font-size: var(--font-size-caption-1) !important;
+    line-height: var(--line-height-caption-1) !important;
+    font-weight: 500;
+  }
+}

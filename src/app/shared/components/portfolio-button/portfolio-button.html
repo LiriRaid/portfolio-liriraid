@@ -1,0 +1,41 @@
+<ng-template #buttonIcon>
+  @if (techIconImgUrl(); as imgUrl) {
+    <img pButtonIcon [src]="imgUrl" alt="" aria-hidden="true" width="16" height="16" loading="lazy" decoding="async" [ngClass]="computedIconClass()" />
+  } @else if (icon(); as iconName) {
+    <portfolio-icon pButtonIcon [name]="iconName" [size]="iconSize()" [color]="iconColor()" [ngClass]="computedIconClass()" />
+  }
+</ng-template>
+
+<ng-template #buttonContent>
+  @if (showIconBefore()) {
+    <ng-container [ngTemplateOutlet]="buttonIcon" />
+  }
+
+  @if (label()) {
+    <span pButtonLabel [ngClass]="computedLabelClass()">
+      {{ label() }}
+    </span>
+  }
+
+  @if (hasBadge()) {
+    <span [ngClass]="computedBadgeClass()">
+      {{ badge() }}
+    </span>
+  }
+
+  @if (showIconAfter()) {
+    <ng-container [ngTemplateOutlet]="buttonIcon" />
+  }
+</ng-template>
+
+@if (href()) {
+  <a pButton pRipple [href]="href()!" [attr.target]="target() || null" [attr.rel]="rel() || null" [severity]="severity()" [outlined]="outlined() || variant() === 'outlined'" [raised]="raised()" [text]="text() || variant() === 'text'" [loading]="loading()" [iconPos]="iconPos()" [attr.aria-label]="ariaLabel() || undefined" [attr.aria-controls]="ariaControls() || undefined" [attr.aria-expanded]="ariaExpanded() === null ? undefined : ariaExpanded()" [attr.aria-disabled]="disabled()" [attr.tabindex]="disabled() ? -1 : null" [class]="buttonClass()" [class.p-disabled]="disabled()" (click)="handleClick($event)">
+    <ng-container [ngTemplateOutlet]="buttonContent" />
+  </a>
+} @else {
+  <p-button [severity]="severity()" [outlined]="outlined()" [raised]="raised()" [text]="text()" [variant]="variant()" [iconPos]="iconPos()" [loading]="loading()" [disabled]="disabled()" [type]="type()" [styleClass]="buttonClass()" [ariaLabel]="ariaLabel() || undefined" [attr.aria-controls]="ariaControls() || undefined" [attr.aria-expanded]="ariaExpanded() === null ? undefined : ariaExpanded()" (onClick)="handleClick($event)">
+    <ng-template pTemplate="content">
+      <ng-container [ngTemplateOutlet]="buttonContent" />
+    </ng-template>
+  </p-button>
+}

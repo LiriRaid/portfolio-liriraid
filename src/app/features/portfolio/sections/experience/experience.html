@@ -1,0 +1,79 @@
+<section id="experiencia" class="experience flex min-h-(--app-section-min-height) flex-col justify-center py-(--e-py)" aria-labelledby="experience-heading">
+  <div class="experience-inner mx-auto flex w-full max-w-7xl flex-col gap-(--e-inner-gap) px-(--e-px)">
+    <header class="experience-header flex max-w-(--e-header-max) flex-col gap-3">
+      <p class="experience-label m-0 font-semibold uppercase tracking-[0.08em] text-(--app-text-primary)">Trayectoria</p>
+
+      <h2 id="experience-heading" class="experience-title m-0 text-(--app-text-color) text-tittle-4-bold">Experiencia laboral</h2>
+
+      <p class="experience-subtitle m-0 text-(--app-text-muted) text-body-1-regular">
+        Roles donde he construido productos reales, tomado decisiones técnicas y crecido como ingeniero.
+      </p>
+    </header>
+
+    <ol class="experience-timeline m-0 list-none p-0" role="list">
+      @for (item of experiences; track item.company + item.period) {
+        <li class="experience-item grid grid-cols-[var(--e-timeline-col)_1fr] items-start gap-(--e-timeline-gap)">
+          <div class="experience-marker relative flex min-h-full self-stretch justify-center pb-2 pt-(--e-marker-pt)" aria-hidden="true">
+            <span #dotRef class="experience-dot z-10 size-(--e-dot) shrink-0 rounded-full border-2 border-(--app-border-color) bg-(--app-panel-bg)" [class.experience-dot--current]="item.current"></span>
+          </div>
+
+          <article class="experience-card flex flex-col gap-(--e-card-gap) rounded-(--e-card-radius) border border-(--app-border-color) bg-(--app-panel-bg) p-(--e-card-p) [box-shadow:var(--app-container-shadow)]">
+            <header class="experience-card-header flex flex-wrap items-start justify-between gap-(--e-card-header-gap)">
+              <div class="experience-card-meta flex min-w-0 flex-1 flex-col gap-1.5">
+                <h3 class="experience-role m-0 text-(--app-text-color) text-subtitle-2-bold">
+                  {{ item.role }}
+                </h3>
+
+                <p class="experience-company m-0 inline-flex flex-wrap items-center gap-2 text-(--app-text-muted) text-body-2-medium">
+                  <portfolio-icon name="Company" size="14" />
+                  <span>{{ item.company }}</span>
+
+                  @if (item.current) {
+                    <span class="ml-1 rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-2 py-0.5 text-(--app-text-primary) text-caption-2-semibold">Actual</span>
+                  }
+                </p>
+              </div>
+
+              <div class="experience-period-block flex shrink-0 flex-col items-end gap-0.5 text-right">
+                <p class="experience-period m-0 text-(--app-text-subtle) text-caption-1-medium">
+                  {{ item.period }}
+                </p>
+
+                @if (item.location) {
+                  <p class="experience-location m-0 text-(--app-text-subtle) text-caption-2-regular">
+                    {{ item.location }}
+                  </p>
+                }
+              </div>
+            </header>
+
+            <p class="experience-description m-0 text-(--app-text-muted) text-body-2-regular">
+              {{ item.description }}
+            </p>
+
+            <ul class="experience-responsibilities m-0 flex list-none flex-col gap-(--e-resp-list-gap) p-0" role="list">
+              @for (responsibility of item.responsibilities; track responsibility) {
+                <li class="experience-responsibility m-0 grid grid-cols-[auto_1fr] items-start gap-(--e-resp-gap) text-(--app-text-muted) text-body-2-regular">
+                  <span class="mt-(--e-resp-marker-top) size-(--e-resp-marker) rounded-full bg-(--app-text-primary) [box-shadow:0_0_0_3px_color-mix(in_srgb,var(--app-text-primary)_16%,transparent)]" aria-hidden="true"></span>
+                  <span>{{ responsibility }}</span>
+                </li>
+              }
+            </ul>
+
+            <div class="experience-tags flex flex-wrap items-center gap-(--e-tags-gap)" aria-label="Tecnologías utilizadas">
+              @for (tech of item.technologies; track tech) {
+                <span class="inline-flex items-center gap-(--e-tag-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--e-tag-px) py-(--e-tag-py) font-medium leading-none text-(--app-text-muted) text-(length:--e-tag) transition-[color,border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--app-text-primary)_35%,transparent)] hover:bg-(--app-accent-soft-bg) hover:text-(--app-text-primary)">
+                  @if (techIconUrl(tech); as iconUrl) {
+                    <img [src]="iconUrl" alt="" aria-hidden="true" class="size-(--e-tag-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
+                  }
+
+                  <span>{{ tech }}</span>
+                </span>
+              }
+            </div>
+          </article>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

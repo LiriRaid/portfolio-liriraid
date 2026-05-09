@@ -1,5 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
-@import "tailwindcss-primeui";
-@plugin "@tailwindcss/forms";
+@import 'tailwindcss-primeui';
+
+:root {
+  --app-header-height: 4rem;
+  --app-section-min-height: calc(100dvh - var(--app-header-height));
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--app-shell-bg);
+  color: var(--app-text-color);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+@import './styles/theme-styles.css';
+@import './styles/components-styles.css';
+@import './styles/carousel-styles.css';
+@import './styles/input-styles.css';
+@import './styles/scrollbar-styles.css';
+@import './styles/text-and-color-styles.css';
+@import './styles/typography-styles.css';
+@import './app/shared/animations/animations.css';
+
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button *,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button::before,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button::after,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button :is(.p-button-icon, portfolio-icon, svg) {
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    fill,
+    stroke,
+    box-shadow,
+    outline-color,
+    text-decoration-color,
+    column-rule-color,
+    -webkit-text-fill-color !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}

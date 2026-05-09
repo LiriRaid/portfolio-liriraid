@@ -1,0 +1,39 @@
+<p-toast key="portfolio-toast" [position]="position()" styleClass="portfolio-toast-panel" [baseZIndex]="9999" [showTransitionOptions]="'350ms ease-out'" [hideTransitionOptions]="'250ms ease-in'">
+  <ng-template #headless let-message let-closeFn="closeFn">
+    <div class="portfolio-toast-shell">
+      <div class="portfolio-toast-main">
+        @if (hasIcon(message)) {
+          <div class="portfolio-toast-icon-wrap">
+            <portfolio-icon [name]="toastIcon(message)" size="24" [spin]="data(message).type === PortfolioToastType.Loading" extraClass="portfolio-toast-icon" />
+          </div>
+        }
+
+        <div class="portfolio-toast-body">
+          <h4 class="portfolio-toast-title text-subtitle-2-bold">
+            {{ message.summary }}
+          </h4>
+
+          <p class="portfolio-toast-message text-caption-1-medium" [innerHTML]="formattedMessage(message.detail || '')"></p>
+        </div>
+
+        @if (!(data(message).persistent && data(message).action)) {
+          <portfolio-button icon="CloseCircle" iconSize="20" variant="text" ariaLabel="Cerrar alerta" styleClass="portfolio-toast-close-button" (onClick)="closeToast($event, closeFn)" />
+        }
+      </div>
+
+      @if (data(message).action; as action) {
+        <div class="portfolio-toast-actions">
+          <portfolio-button [label]="action.label" [severity]="actionSeverity(action)" [variant]="actionVariant(action)" styleClass="portfolio-toast-action-button text-caption-1-medium" (onClick)="executeAction($event, action, closeFn)" />
+
+          @if (action.secondary; as secondaryAction) {
+            <portfolio-button [label]="secondaryAction.label" severity="secondary" variant="outlined" styleClass="portfolio-toast-action-button text-caption-1-medium" (onClick)="executeAction($event, secondaryAction, closeFn)" />
+          }
+        </div>
+      }
+
+      @if (showProgressBar(message)) {
+        <div class="portfolio-toast-progress" [style.--toast-duration]="toastDuration(message)"></div>
+      }
+    </div>
+  </ng-template>
+</p-toast>

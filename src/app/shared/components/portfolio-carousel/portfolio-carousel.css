@@ -1,0 +1,64 @@
+@property --carousel-card-side-max-offset {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 96px;
+}
+
+@property --carousel-card-side-min-offset {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 34px;
+}
+
+@property --carousel-card-side-edge-gap {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 54px;
+}
+
+:host {
+  --carousel-control-bg: color-mix(in srgb, #ffffff 88%, transparent);
+  --carousel-control-hover-bg: #ffffff;
+  --carousel-control-color: var(--app-text-color);
+  --carousel-control-border: transparent;
+  --carousel-control-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+
+  --carousel-radius: clamp(0.68rem, 0.57rem + 0.48vw, 0.875rem);
+
+  --carousel-card-side-max-offset: clamp(60px, 38.7px + 5.6vw, 96px);
+  --carousel-card-side-min-offset: clamp(20px, 11.74px + 2.17vw, 34px);
+  --carousel-card-side-edge-gap: clamp(10px, 6.83vw - 16px, 54px);
+  --carousel-card-side-scale: 0.84;
+
+  --carousel-nav-size: clamp(1.65rem, 1.35rem + 1vw, 2.1rem);
+  --carousel-nav-offset: clamp(0.34rem, 0.25rem + 0.4vw, 0.5rem);
+
+  --carousel-expand-size: clamp(1.6rem, 1.25rem + 1vw, 1.85rem);
+  --carousel-expand-offset: clamp(0.34rem, 0.25rem + 0.4vw, 0.5rem);
+
+  --carousel-dot-size: clamp(0.32rem, 0.26rem + 0.25vw, 0.42rem);
+  --carousel-dot-gap: clamp(0.28rem, 0.24rem + 0.17vw, 0.35rem);
+  --carousel-dots-bottom: clamp(-1.7rem, -0.83rem - 1.37vw, -1.15rem);
+
+  --carousel-slide-nav-x: clamp(0.45rem, 0.27rem + 0.75vw, 0.75rem);
+  --carousel-slide-nav-bottom: clamp(0.42rem, 0.28rem + 0.57vw, 0.65rem);
+  --carousel-slide-nav-gap: clamp(0.25rem, 0.22rem + 0.12vw, 0.3rem);
+  --carousel-slide-nav-h: clamp(0.16rem, 0.15rem + 0.05vw, 0.18rem);
+
+  --carousel-counter-size: clamp(0.54rem, 0.46rem + 0.35vw, 0.68rem);
+  --carousel-counter-top: clamp(0.38rem, 0.31rem + 0.3vw, 0.5rem);
+  --carousel-counter-right: clamp(0.38rem, 0.31rem + 0.3vw, 0.5rem);
+  --carousel-counter-px: clamp(0.36rem, 0.31rem + 0.22vw, 0.45rem);
+
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+:host-context(.dark) {
+  --carousel-control-bg: color-mix(in srgb, #000000 72%, transparent);
+  --carousel-control-hover-bg: color-mix(in srgb, #000000 86%, transparent);
+  --carousel-control-color: #ffffff;
+  --carousel-control-border: color-mix(in srgb, #ffffff 16%, transparent);
+  --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
