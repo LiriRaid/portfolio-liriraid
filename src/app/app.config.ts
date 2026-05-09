@@ -1,8 +1,8 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideClientHydration, withEventReplay, withIncrementalHydration } from '@angular/platform-browser';
 import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+
 import { LUCIDE_ICONS } from '@lucide/angular';
 import { MessageService } from 'primeng/api';
 
@@ -19,8 +19,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withViewTransitions({ skipInitialTransition: true }), withComponentInputBinding()),
-    provideHttpClient(withInterceptors([])),
-    provideClientHydration(withEventReplay()),
+
+    provideClientHydration(withEventReplay(), withIncrementalHydration()),
     providePrimeNG({
       ripple: true,
       theme: {

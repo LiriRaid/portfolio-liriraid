@@ -45,7 +45,9 @@ export class Header {
     }
 
     afterNextRender(() => {
-      this.initializeHeaderRuntime();
+      setTimeout(() => {
+        this.initializeHeaderRuntime();
+      }, 50);
     });
   }
 
