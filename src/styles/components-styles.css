@@ -450,16 +450,21 @@
 
   .projects .p-popover.projects-filter-panel {
     width: var(--p-filter-panel-mobile-width);
+    max-height: var(--p-filter-panel-mobile-max-height);
+  }
+
+  .projects .p-popover.projects-filter-panel .p-popover-content {
+    max-height: var(--p-filter-panel-mobile-content-max-height);
   }
 
   .projects .projects-filter-panel-layout {
     height: auto;
-    max-height: var(--p-filter-layout-max-height);
+    max-height: var(--p-filter-layout-mobile-max-height);
     grid-template-columns: 1fr;
   }
 
   .projects .projects-filter-active-category {
-    max-height: calc(var(--p-filter-layout-max-height) - 4.15rem);
+    max-height: none;
   }
 
   .projects .projects-filter-category-tabs {

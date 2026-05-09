@@ -14,15 +14,33 @@
   --p-filter-btn-radius: 0.7rem;
   --p-filter-btn-size: clamp(0.75rem, 0.68rem + 0.31vw, 0.875rem);
 
-  --p-filter-panel-width: min(clamp(32rem, 20rem + 22.5vw, 34rem), calc(100vw - var(--p-px) * 2));
+  --p-filter-panel-width: min(
+    clamp(32rem, 20rem + 22.5vw, 34rem),
+    calc(100vw - var(--p-px) * 2)
+  );
 
-  --p-filter-panel-mobile-width: min(clamp(34rem, 25rem + 24vw, 42rem), calc(100vw - var(--p-px) * 2));
+  --p-filter-panel-mobile-width: min(
+    clamp(34rem, 25rem + 24vw, 42rem),
+    calc(100vw - var(--p-px) * 2)
+  );
 
-  --p-filter-panel-max-height: min(clamp(16.75rem, 15.9rem + 1.1vw, 17.65rem), calc(100dvh - 7rem));
+  --p-filter-panel-max-height: min(
+    clamp(16.75rem, 15.9rem + 1.1vw, 17.65rem),
+    calc(100dvh - 7rem)
+  );
 
   --p-filter-panel-content-max-height: var(--p-filter-panel-max-height);
 
   --p-filter-layout-max-height: clamp(13.65rem, 13.3rem + 0.42vw, 14rem);
+
+  --p-filter-panel-mobile-max-height: min(
+    clamp(20.5rem, 17.25rem + 8.5vw, 22rem),
+    calc(100dvh - 7rem)
+  );
+
+  --p-filter-panel-mobile-content-max-height: var(--p-filter-panel-mobile-max-height);
+
+  --p-filter-layout-mobile-max-height: clamp(18.75rem, 15.9rem + 7.5vw, 20.75rem);
 
   --p-filter-layout-sidebar: clamp(12.25rem, 11.6rem + 0.8vw, 13rem);
   --p-filter-category-header-gap: 0.5rem;
@@ -46,14 +64,17 @@
   --p-chip-px: clamp(0.28rem, 0.07rem + 0.87vw, 0.63rem);
   --p-chip-size: clamp(0.51rem, 0.37rem + 0.57vw, 0.74rem);
   --p-chip-icon: clamp(8.3px, 5.23px + 0.81vw, 13.5px);
+
   --p-featured-right: clamp(2.44rem, 1.96rem + 2.01vw, 3.25rem);
   --p-featured-py: clamp(0.13rem, 0.07rem + 0.25vw, 0.23rem);
   --p-featured-px: clamp(0.34rem, 0.2rem + 0.6vw, 0.58rem);
   --p-featured-size: clamp(0.46rem, 0.34rem + 0.52vw, 0.67rem);
+
   --p-stats-py: clamp(0.33rem, 0.12rem + 0.87vw, 0.68rem);
   --p-stats-px: clamp(0.45rem, 0.15rem + 1.27vw, 0.96rem);
   --p-footer-py: clamp(0.33rem, 0.13rem + 0.82vw, 0.66rem);
   --p-footer-px: clamp(0.45rem, 0.15rem + 1.27vw, 0.96rem);
+
   --p-empty-p: clamp(0.72rem, 0.41rem + 1.32vw, 1.25rem);
   --p-empty-gap: clamp(0.22rem, 0.14rem + 0.32vw, 0.35rem);
   --p-empty-radius: clamp(0.72rem, 0.55rem + 0.7vw, 1rem);

@@ -167,8 +167,9 @@ portfolio-carousel .carousel-item > * {
   right: 0;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .carousel-root--card > .nav-btn {
+@media (max-width: 1024px) {
+  .carousel-root--card > .nav-btn.nav-btn--prev,
+  .carousel-root--card > .nav-btn.nav-btn--next {
     display: none;
   }
 }
@@ -186,7 +187,10 @@ portfolio-carousel .carousel-item > * {
   border-radius: 9999px;
   background: color-mix(in srgb, #ffffff 45%, transparent);
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .carousel-dot:hover {
@@ -262,7 +266,7 @@ portfolio-carousel .carousel-item > * {
   --carousel-control-color: #ffffff;
   --carousel-control-border: color-mix(in srgb, #ffffff 18%, transparent);
   --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
-  
+
   --carousel-slide-nav-h: clamp(0.16rem, 0.15rem + 0.05vw, 0.18rem);
   --carousel-counter-size: clamp(0.54rem, 0.46rem + 0.35vw, 0.68rem);
 
