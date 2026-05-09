@@ -35,7 +35,10 @@
 
     <div class="flex w-[clamp(300px,30vw,400px)] shrink-0 flex-col items-center gap-6 max-[1024px]:-order-1 max-[1024px]:w-auto max-[1024px]:gap-0">
       <div class="hero-avatar shrink-0 rounded-full p-1.25">
-        <img class="block size-full rounded-[inherit] bg-(--app-panel-muted-bg) object-cover" src="assets/img/me-hero.jpg" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
+        <picture class="block size-full rounded-full">
+          <source srcset="assets/img/me-hero-mobile.webp" media="(max-width: 640px)" />
+          <img class="block size-full rounded-[inherit] bg-(--app-panel-muted-bg) object-cover" src="assets/img/me-hero.webp" alt="Gabriel Leonardo Cruz Flores" width="224" height="224" fetchpriority="high" decoding="async" loading="eager" />
+        </picture>
       </div>
 
       <div class="w-full overflow-hidden rounded-2xl border border-(--app-border-color) bg-(--app-panel-bg) font-mono [box-shadow:var(--app-container-shadow)] max-[1024px]:hidden" aria-hidden="true">

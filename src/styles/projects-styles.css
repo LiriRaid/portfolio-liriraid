@@ -4,12 +4,10 @@
 
 .projects {
   --p-inner-gap: clamp(1rem, -0.1801rem + 4.9689vw, 3rem);
-  --p-header-mb: clamp(1rem, 0.5rem + 2vw, 2rem);
 }
 
 .projects-header {
   max-width: var(--p-header-max);
-  margin-bottom: var(--p-header-mb);
 }
 
 .projects-label {
