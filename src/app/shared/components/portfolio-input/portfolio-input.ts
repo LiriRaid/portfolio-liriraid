@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injector, OnInit, computed, inject, input, output, signal } from '@angular/core';
+import { Component, DestroyRef, Injector, OnInit, computed, inject, input, output, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, ControlValueAccessor, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 
+import { LucideIconName } from '@core/common/icons/lucide-icons';
 import { createControlValueAccessorProvider } from '@core/forms/control-value-accessor.provider';
-import { LucideIconName } from '@core/common/lucide-icons';
 import { PortfolioIcon } from '..';
 
 type PortfolioInputType = 'text' | 'email' | 'password' | 'number' | 'date' | 'tel' | 'url' | 'price';
@@ -19,10 +20,14 @@ type PortfolioIconPosition = 'left' | 'right';
   providers: [createControlValueAccessorProvider(PortfolioInput)],
 })
 export class PortfolioInput implements ControlValueAccessor, OnInit {
+  private static nextInputId = 0;
+
   readonly type = input<PortfolioInputType>('text');
+  readonly inputId = input<string>('');
   readonly placeholder = input<string>('');
   readonly label = input<string | undefined>(undefined);
   readonly value = input<string>('');
+  readonly autocomplete = input<string>('');
 
   readonly isTagInput = input<boolean>(false);
   readonly tagPlaceholder = input<string>('Escribe para agregar un Tag');
@@ -53,8 +58,10 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly isInputFocused = signal(false);
   readonly isPlaceholderVisible = signal(false);
   readonly isPlaceholderFading = signal(false);
+
+  private readonly validationTick = signal(0);
   private placeholderTimer?: ReturnType<typeof setTimeout>;
-  private fadeTimer?: ReturnType<typeof setTimeout>;
+  private readonly generatedInputId = `portfolio-input-${PortfolioInput.nextInputId++}`;
 
   private readonly allowedTypes: PortfolioInputType[] = ['text', 'password', 'email', 'number', 'date', 'tel', 'url', 'price'];
   private readonly valueSig = signal<string>('');
@@ -63,6 +70,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   onTouched: () => void = () => {};
 
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
   private ngControl?: NgControl;
 
   ngOnInit(): void {
@@ -70,19 +78,42 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
     const initial = this.value() ?? '';
     if (initial && !this.isTagInput()) this.valueSig.set(initial);
+
+    const control = this.control;
+
+    control?.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.refreshValidation();
+    });
+
+    control?.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.refreshValidation();
+    });
+
+    control?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.refreshValidation();
+    });
   }
 
   private get control(): AbstractControl | null {
     return this.ngControl?.control ?? null;
   }
 
+  private refreshValidation(): void {
+    this.validationTick.update((value) => value + 1);
+  }
+
   readonly hasErrors = computed(() => {
+    this.validationTick();
+
     const c = this.control;
     if (!c) return false;
+
     return !!(c.invalid && (c.touched || c.dirty));
   });
 
   readonly errorMessage = computed(() => {
+    this.validationTick();
+
     if (!this.hasErrors() || !this.control?.errors) return '';
 
     const errors = this.control.errors;
@@ -90,14 +121,17 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
     if (errors['required']) return `${label} es requerido`;
     if (errors['email']) return 'Ingrese un correo electrónico válido';
+
     if (errors['minlength']) {
       const n = errors['minlength'].requiredLength;
       return `${label} debe tener al menos ${n} caracteres`;
     }
+
     if (errors['maxlength']) {
       const n = errors['maxlength'].requiredLength;
       return `${label} no puede exceder ${n} caracteres`;
     }
+
     if (errors['pattern']) return `${label} tiene un formato inválido`;
 
     return `${label} es inválido`;
@@ -105,17 +139,20 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
   readonly displayValue = computed(() => {
     if (this.isTagInput()) return '';
+
     const raw = this.valueSig();
 
     if (this.type() === 'price') {
       return this.isInputFocused() ? raw : this.formatPrice(raw);
     }
+
     return raw;
   });
 
   readonly inputType = computed(() => {
     const t = this.type();
     if (t === 'price') return 'text';
+
     return this.allowedTypes.includes(t) ? t : 'text';
   });
 
@@ -125,25 +162,35 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
   readonly hasValue = computed(() => {
     if (this.isTagInput()) return this.tags().length > 0;
+
     return !!this.valueSig();
   });
 
   readonly hasIcon = computed(() => !!this.lucideIcon());
+  readonly resolvedInputId = computed(() => this.inputId().trim() || this.generatedInputId);
+  readonly errorId = computed(() => `${this.resolvedInputId()}-error`);
+  readonly describedBy = computed(() => (this.hasErrors() && this.showErrorMessage() ? this.errorId() : null));
 
   readonly hasLeftIcon = computed(() => {
     return this.hasIcon() && this.iconPosition() === 'left';
+  });
+
+  readonly shouldFloat = computed(() => this.hasValue() || this.isInputFocused() || this.hasErrors());
+
+  readonly shouldShowPlaceholder = computed(() => {
+    if (this.isDisabled() || this.readonly()) return false;
+    if (!this.label()) return true;
+
+    return this.isInputFocused() || this.hasErrors();
   });
 
   readonly placeholderAttr = computed(() => {
     const ph = this.placeholder();
     if (!ph) return ' ';
 
-    const variant = this.variant();
-    const hasLabel = !!this.label();
+    if (!this.label()) return ph;
 
-    if (hasLabel) return ph;
-
-    return ph;
+    return this.shouldShowPlaceholder() ? ph : ' ';
   });
 
   readonly inputVerticalClasses = computed(() => {
@@ -159,6 +206,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
           if (this.hasLeftIcon()) return 'pl-12';
           return 'pl-8';
         }
+
         if (this.hasLeftIcon()) return 'pl-10';
         return 'pl-4';
       }
@@ -217,8 +265,6 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
     return 'none';
   });
 
-  readonly shouldFloat = computed(() => this.hasValue() || this.isInputFocused());
-
   readonly legendOffset = computed(() => (this.hasLeftIcon() || this.showCurrencySymbol() ? '2rem' : '0.75rem'));
 
   readonly legendMaxWidth = computed(() => (this.shouldFloat() ? '999px' : '0px'));
@@ -227,13 +273,14 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
   readonly fieldsetClasses = computed(() => ({
     'border-(--app-control-surface-border) bg-(--app-control-surface-bg)': !this.isDisabled() && !this.readonly() && !this.hasErrors(),
-    'focus-within:ring-2 focus-within:ring-(--app-control-focus-ring) focus-within:border-transparent': !this.hasErrors(),
+    'focus-within:ring-2 focus-within:ring-(--app-control-focus-ring)/25 focus-within:border-(--app-control-focus-ring)': !this.hasErrors(),
     'cursor-not-allowed bg-(--app-control-disabled-bg) border-(--app-control-disabled-border)': this.isDisabled() || this.readonly(),
     'bg-(--app-control-surface-bg) border-red-500 focus-within:ring-2 focus-within:ring-red-500/25 focus-within:border-transparent': this.hasErrors(),
   }));
 
   readonly labelBackground = computed(() => {
-    if (this.variant() !== 'on') return 'transparent';
+    if (this.variant() === 'in') return 'transparent';
+
     return this.inputBackground();
   });
 
@@ -242,16 +289,17 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
     if (this.isDisabled()) return 'var(--app-disabled-text)';
     if (this.isInputFocused() || this.isFocused()) return 'var(--p-primary-500)';
     if (this.hasValue()) return 'var(--app-text-muted)';
+
     return 'var(--app-text-subtle)';
   });
 
   readonly labelClass = computed(() => {
-    const cls: { [k: string]: boolean } = {};
+    const cls: Record<string, boolean> = {};
     const leftClass = this.hasLeftIcon() || this.showCurrencySymbol() ? 'left-8' : 'left-3';
-    cls[leftClass] = true;
-
     const shouldFloat = this.shouldFloat();
     const variant = this.variant();
+
+    cls[leftClass] = true;
 
     if (variant === 'in') {
       if (shouldFloat) {
@@ -263,6 +311,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
         cls['-translate-y-1/2'] = true;
         cls['text-caption-1-medium'] = true;
       }
+
       return cls;
     }
 
@@ -276,6 +325,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
         cls['-translate-y-1/2'] = true;
         cls['text-caption-1-medium'] = true;
       }
+
       return cls;
     }
 
@@ -306,6 +356,8 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
       } else {
         this.tags.set([]);
       }
+
+      this.refreshValidation();
       return;
     }
 
@@ -315,10 +367,13 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
     } else {
       this.valueSig.set('');
     }
+
+    this.refreshValidation();
   }
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled.set(isDisabled);
+    this.refreshValidation();
   }
 
   registerOnChange(fn: (value: string | string[]) => void): void {
@@ -332,6 +387,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   onInput(event: Event): void {
     if (this.isTagInput()) {
       this.currentTagValue.set((event.target as HTMLInputElement).value);
+      this.refreshValidation();
       return;
     }
 
@@ -345,12 +401,14 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
     this.valueSig.set(val);
     this.onChange(val);
     this.valueChange.emit(val);
+    this.refreshValidation();
   }
 
   onFocusInput(): void {
     this.isInputFocused.set(true);
     clearTimeout(this.placeholderTimer);
     this.placeholderTimer = setTimeout(() => this.isPlaceholderVisible.set(true), 150);
+    this.refreshValidation();
   }
 
   onBlurInput(): void {
@@ -358,15 +416,18 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
     clearTimeout(this.placeholderTimer);
     this.isPlaceholderVisible.set(false);
     this.onTouched();
+    this.refreshValidation();
   }
 
   onFocus(): void {
     this.isFocused.set(true);
+    this.refreshValidation();
   }
 
   onBlur(): void {
     this.isFocused.set(false);
     this.onTouched();
+    this.refreshValidation();
   }
 
   onTagKeyDown(event: KeyboardEvent): void {
@@ -382,17 +443,21 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
     if (tag && !current.includes(tag)) {
       const next = [...current, tag];
+
       this.tags.set(next);
       this.currentTagValue.set('');
       this.updateTagsValue(next);
+      this.refreshValidation();
     }
   }
 
   removeTag(index: number): void {
     const next = [...this.tags()];
     next.splice(index, 1);
+
     this.tags.set(next);
     this.updateTagsValue(next);
+    this.refreshValidation();
   }
 
   private updateTagsValue(next: string[]): void {
@@ -408,22 +473,27 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
 
   private unformatPrice(input: string): string {
     if (!input) return '';
+
     let s = input.replace(/,/g, '');
     s = s.replace(/[^\d.]/g, '');
+
     const parts = s.split('.');
     if (parts.length > 1) {
       s = parts[0] + '.' + parts.slice(1).join('');
     }
+
     return s;
   }
 
   private formatPrice(raw: string): string {
     if (!raw) return '';
+
     const sign = raw.startsWith('-') ? '-' : '';
     const cleaned = raw.replace(/[^0-9.]/g, '');
     const [intPartRaw, decPartRaw] = cleaned.split('.');
     const intPart = (intPartRaw || '').replace(/^0+(?=\d)/, '');
     const withCommas = (intPart || '0').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
     return sign + (decPartRaw !== undefined && decPartRaw !== '' ? `${withCommas}.${decPartRaw}` : withCommas);
   }
 }

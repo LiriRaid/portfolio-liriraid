@@ -18,6 +18,9 @@ fieldset {
   color: inherit;
 }
 
+.portfolio-input-invalid fieldset {
+  border-color: #e51d21 !important;
+}
 
 .portfolio-input-invalid .portfolio-input-field {
   border-color: #e51d21 !important;
@@ -28,10 +31,9 @@ fieldset {
 }
 
 .portfolio-input-error {
+  display: block;
   color: #e51d21;
   font-size: 0.75rem;
-  line-height: 1.4;
+  line-height: 1.35;
   padding-left: 1.25rem;
-  top: 100%;
-  z-index: 10;
 }

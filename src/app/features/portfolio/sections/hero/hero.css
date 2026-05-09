@@ -1,0 +1,233 @@
+.hero {
+  --h-py: 5rem;
+  --h-px: 1.5rem;
+  --h-inner-gap: clamp(2rem, 5vw, 5rem);
+  --h-content-gap: 2rem;
+
+  --h-avatar: clamp(10rem, 18vw, 15rem);
+  --h-avatar-ring: 8px;
+
+  --h-badge-gap: 0.5rem;
+  --h-badge-py: 0.375rem;
+  --h-badge-px: 0.875rem;
+  --h-badge-size: var(--font-size-caption-1);
+  --h-badge-border: color-mix(in srgb, var(--app-text-primary) 25%, transparent);
+
+  --h-title-max: none;
+  --h-title-size: clamp(var(--font-size-tittle-2), 4.5vw, var(--font-size-tittle-1));
+  --h-title-lh: 1.1;
+
+  --h-desc-max: 640px;
+  --h-desc-size: var(--font-size-body-1);
+  --h-desc-lh: var(--line-height-body-1);
+
+  --h-ctas-max: none;
+  --h-ctas-gap: 0.875rem;
+
+  --h-btn-min-h: initial;
+  --h-btn-py: initial;
+  --h-btn-px: initial;
+  --h-btn-size: inherit;
+  --h-btn-icon: 1rem;
+
+  --h-stack-max: none;
+  --h-stack-gap: 0.5rem;
+
+  --h-tech-gap: 0.375rem;
+  --h-tech-py: 0.25rem;
+  --h-tech-px: 0.75rem;
+  --h-tech-size: var(--font-size-caption-1);
+  --h-tech-icon: 16px;
+  --h-tech-hover-border: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
+
+  box-sizing: border-box;
+}
+
+/* Title */
+.hero-title-line {
+  display: inline;
+}
+
+.hero-title-line:not(:last-child)::after {
+  content: ' ';
+}
+
+/* Avatar */
+.hero-avatar {
+  width: var(--h-avatar);
+  height: var(--h-avatar);
+  background: linear-gradient(135deg, var(--app-text-primary), color-mix(in srgb, var(--app-text-primary) 40%, transparent));
+  box-shadow:
+    var(--app-container-shadow),
+    0 0 0 var(--h-avatar-ring) color-mix(in srgb, var(--app-text-primary) 12%, transparent);
+}
+
+:host ::ng-deep .hero-ctas .hero-primary-cta.p-button {
+  color: #fff !important;
+  background: var(--p-primary-800) !important;
+  border-color: var(--p-primary-800) !important;
+}
+
+:host ::ng-deep .hero-ctas .hero-primary-cta.p-button:not(:disabled):hover {
+  color: #fff !important;
+  background: var(--p-primary-900) !important;
+  border-color: var(--p-primary-900) !important;
+}
+
+:host ::ng-deep .hero-ctas .hero-primary-cta.p-button:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-800) 30%, transparent);
+}
+
+:host ::ng-deep .hero-ctas .hero-primary-cta.p-button .p-button-label,
+:host ::ng-deep .hero-ctas .hero-primary-cta.p-button :is(.p-button-icon, portfolio-icon, portfolio-icon *) {
+  color: #fff !important;
+}
+
+/* Tablet fluid range: removes the old 768/480/380 size jumps */
+@media (max-width: 1024px) {
+  .hero {
+    --h-py: clamp(0.75rem, -1.0155rem + 7.4534vw, 3.75rem);
+    --h-inner-gap: clamp(0.75rem, 0.0714rem + 2.8571vw, 1.9rem);
+    --h-content-gap: clamp(0.7rem, 0.3165rem + 1.6149vw, 1.35rem);
+
+    --h-avatar: clamp(6rem, 3.9348rem + 8.6957vw, 9.5rem);
+    --h-avatar-ring: clamp(0.375rem, 0.3381rem + 0.1553vw, 0.4375rem);
+
+    --h-title-max: min(clamp(23rem, 11.7899rem + 47.2049vw, 42rem), calc(100vw - 1rem));
+    --h-title-lh: 1.08;
+
+    --h-desc-max: min(clamp(18rem, 5.5924rem + 52.1739vw, 39rem), calc(100vw - 1.5rem));
+    --h-desc-size: clamp(0.9rem, 0.841rem + 0.2484vw, 1rem);
+    --h-desc-lh: 1.45;
+
+    --h-ctas-gap: clamp(0.45rem, 0.2727rem + 0.7453vw, 0.75rem);
+
+    --h-stack-gap: clamp(0.3rem, 0.2115rem + 0.3727vw, 0.45rem);
+
+    --h-tech-py: clamp(0.18rem, 0.1387rem + 0.1739vw, 0.25rem);
+    --h-tech-px: clamp(0.55rem, 0.3907rem + 0.6708vw, 0.82rem);
+    --h-tech-size: clamp(0.7rem, 0.5967rem + 0.4348vw, 0.875rem);
+    --h-tech-icon: clamp(0.8125rem, 0.7018rem + 0.4658vw, 1rem);
+  }
+}
+
+/* Mobile structural mode + fluid mobile sizing */
+@media (max-width: 640px) {
+  .hero {
+    --h-py: clamp(0.75rem, -0.7115rem + 6.1538vw, 1.75rem);
+    --h-px: clamp(0.5rem, 0.2808rem + 0.9231vw, 0.65rem);
+    --h-inner-gap: clamp(0.75rem, 0.3846rem + 1.5385vw, 1.15rem);
+    --h-content-gap: clamp(0.7rem, 0.4231rem + 1.2308vw, 1rem);
+
+    --h-avatar: clamp(6rem, 3.4423rem + 10.7692vw, 7.75rem);
+    --h-avatar-ring: 0.375rem;
+
+    --h-badge-gap: 0.375rem;
+    --h-badge-py: 0.3rem;
+    --h-badge-px: 0.7rem;
+    --h-badge-size: var(--font-size-caption-2);
+
+    --h-title-max: min(clamp(23rem, 9.8462rem + 55.3846vw, 32rem), calc(100vw - 0.5rem));
+    --h-title-size: clamp(1.28rem, -0.0938rem + 5.7846vw, 2.22rem);
+    --h-title-lh: 1.07;
+
+    --h-desc-max: min(clamp(18rem, 3.3846rem + 61.5385vw, 28rem), calc(100vw - 0.5rem));
+    --h-desc-size: clamp(0.72rem, 0.4569rem + 1.1077vw, 0.9rem);
+    --h-desc-lh: 1.42;
+
+    --h-ctas-max: min(clamp(19rem, 17.5385rem + 6.1538vw, 20rem), calc(100vw - 1rem));
+    --h-ctas-gap: clamp(0.45rem, 0.3769rem + 0.3077vw, 0.5rem);
+
+    --h-btn-min-h: clamp(2rem, 1.8538rem + 0.6154vw, 2.1rem);
+    --h-btn-py: clamp(0.4rem, 0.3708rem + 0.1231vw, 0.42rem);
+    --h-btn-px: clamp(0.55rem, 0.2577rem + 1.2308vw, 0.75rem);
+    --h-btn-size: clamp(0.7rem, 0.5977rem + 0.4308vw, 0.77rem);
+    --h-btn-icon: 0.85rem;
+
+    --h-stack-max: min(clamp(19rem, 14.6154rem + 18.4615vw, 22rem), calc(100vw - 1rem));
+    --h-stack-gap: clamp(0.3rem, 0.2123rem + 0.3692vw, 0.36rem);
+
+    --h-tech-gap: 0.3rem;
+    --h-tech-py: clamp(0.16rem, 0.1308rem + 0.1231vw, 0.18rem);
+    --h-tech-px: clamp(0.48rem, 0.3777rem + 0.4308vw, 0.55rem);
+    --h-tech-size: clamp(0.66rem, 0.6015rem + 0.2462vw, 0.7rem);
+    --h-tech-icon: clamp(0.75rem, 0.6587rem + 0.3846vw, 0.8125rem);
+  }
+
+  .hero-title {
+    width: 100%;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .hero-title-line {
+    display: block;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .hero-title-line:not(:last-child)::after {
+    content: '';
+  }
+  :host ::ng-deep .hero-ctas portfolio-button,
+  :host ::ng-deep .hero-ctas .p-button {
+    width: 100%;
+  }
+
+  :host ::ng-deep .hero-ctas .p-button {
+    min-height: var(--h-btn-min-h);
+    justify-content: center;
+    padding: var(--h-btn-py) var(--h-btn-px);
+    font-size: var(--h-btn-size);
+  }
+
+  :host ::ng-deep .hero-ctas .p-button-label {
+    font-size: inherit;
+    line-height: 1.1;
+  }
+
+  :host ::ng-deep .hero-ctas .p-button-icon,
+  :host ::ng-deep .hero-ctas portfolio-icon {
+    width: var(--h-btn-icon);
+    height: var(--h-btn-icon);
+  }
+}
+
+/* Syntax Highlighting */
+.code-keyword {
+  color: #0366d6; /* Deeper blue for light mode */
+}
+
+:host-context(.dark) .code-keyword {
+  color: #4daafc; /* Vibrant blue for dark mode */
+}
+
+.code-class {
+  color: var(--app-text-primary);
+  font-weight: 600;
+}
+
+.code-prop {
+  color: #0366d6; /* Deeper blue for properties in light mode */
+}
+
+:host-context(.dark) .code-prop {
+  color: #4daafc; /* Vibrant blue for properties in dark mode */
+}
+
+.code-string {
+  color: #1a8754; /* Visible dark green for light mode */
+}
+
+:host-context(.dark) .code-string {
+  color: #35f39e; /* Neon green for dark mode */
+}
+
+.code-punct {
+  color: #6a737d; /* Muted punctuation for light mode */
+}
+
+:host-context(.dark) .code-punct {
+  color: #d4d4d4; /* Light punctuation for dark mode */
+}

@@ -1,0 +1,160 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: block;
+  height: var(--app-header-height);
+  flex: 0 0 var(--app-header-height);
+}
+
+.header {
+  --header-bg: color-mix(in srgb, var(--app-panel-bg) 90%, transparent);
+  --mobile-nav-bg: color-mix(in srgb, var(--app-panel-bg) 85%, transparent);
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* =========================
+   PrimeNG buttons
+   ========================= */
+
+:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button {
+  border: 0;
+  background-color: transparent;
+  box-shadow: none;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button {
+  border-radius: 0.75rem;
+}
+
+:host ::ng-deep .nav-link.p-button {
+  min-height: auto;
+  padding: 0.45rem 1rem;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .mobile-nav-link.p-button {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+}
+
+:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button .p-button-label {
+  color: var(--app-text-muted);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+:host ::ng-deep .nav-link.p-button .p-button-label {
+  font-size: var(--font-size-caption-1);
+}
+
+:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
+  font-size: var(--font-size-body-2);
+}
+
+:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active).p-button:hover,
+:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button {
+  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
+}
+
+:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active).p-button:hover .p-button-label,
+:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label {
+  color: var(--app-text-color);
+}
+
+/* =========================
+   Icon buttons
+   ========================= */
+
+:host ::ng-deep .icon-btn.p-button {
+  width: 2.25rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  color: var(--app-text-muted);
+  overflow: hidden;
+}
+
+:host ::ng-deep .icon-btn.p-button:hover {
+  color: var(--app-text-color);
+  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
+}
+
+:host ::ng-deep .icon-btn.p-button .p-button-icon {
+  margin: 0;
+}
+
+:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button:focus-visible {
+  outline: 2px solid var(--app-text-primary);
+  outline-offset: 2px;
+}
+
+/* =========================
+   Theme toggle SSR-safe
+   ========================= */
+
+:host ::ng-deep .theme-toggle-btn.p-button,
+:host ::ng-deep .mobile-menu-btn.p-button {
+  position: absolute;
+  inset: 0;
+}
+
+:host ::ng-deep .theme-toggle-btn--dark.p-button,
+:host ::ng-deep .mobile-menu-btn--close.p-button {
+  display: none;
+}
+
+:host ::ng-deep .theme-toggle-btn--light.p-button,
+:host ::ng-deep .mobile-menu-btn--open.p-button {
+  display: inline-flex;
+}
+
+:host-context(.dark) ::ng-deep .theme-toggle-btn--dark.p-button {
+  display: inline-flex;
+}
+
+:host-context(.dark) ::ng-deep .theme-toggle-btn--light.p-button {
+  display: none;
+}
+
+/* =========================
+   Mobile menu SSR-safe
+   ========================= */
+
+:host ::ng-deep .header.mobile-menu-open .mobile-menu-btn--open.p-button {
+  display: none;
+}
+
+:host ::ng-deep .header.mobile-menu-open .mobile-menu-btn--close.p-button {
+  display: inline-flex;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 1100px) {
+  :host ::ng-deep .nav-link.p-button {
+    padding-inline: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-nav {
+    display: none;
+  }
+
+  .mobile-menu-slot {
+    display: inline-flex;
+  }
+}

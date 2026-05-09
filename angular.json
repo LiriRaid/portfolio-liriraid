@@ -24,20 +24,42 @@
                 "input": "src/assets",
                 "output": "assets"
               },
-              "src/favicon.ico"
+              {
+                "glob": "favicon.svg",
+                "input": "src",
+                "output": "."
+              },
+              {
+                "glob": "robots.txt",
+                "input": "src",
+                "output": "."
+              },
+              {
+                "glob": "sitemap.xml",
+                "input": "src",
+                "output": "."
+              },
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": ".well-known"
+              },
+              {
+                "glob": "serve.json",
+                "input": "src",
+                "output": "."
+              }
             ],
             "styles": ["src/styles.css"],
             "server": "src/main.server.ts",
-            "outputMode": "server",
+            "outputMode": "static",
             "security": {
               "allowedHosts": []
-            },
-            "ssr": {
-              "entry": "src/server.ts"
             }
           },
           "configurations": {
             "production": {
+              "sourceMap": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -46,8 +68,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "12kB"
                 }
               ],
               "outputHashing": "all"

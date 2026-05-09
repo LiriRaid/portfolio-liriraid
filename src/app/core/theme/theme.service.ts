@@ -1,20 +1,10 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { updatePrimaryPalette, updateSurfacePalette } from '@primeuix/themes';
-import {
-  DEFAULT_PRIMARY_COLOR_KEY,
-  DEFAULT_SURFACE_COLOR_KEY,
-  getPrimaryColor,
-  getSurfaceColor,
-} from './theme-palettes';
-import {
-  getStoredPrimaryColorKey,
-  getStoredSurfaceColorKey,
-  getStoredThemeMode,
-  setStoredPrimaryColorKey,
-  setStoredSurfaceColorKey,
-  setStoredThemeMode,
-} from './theme-preferences.storage';
+
+import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, getPrimaryColor, getSurfaceColor } from './theme-palettes';
+
+import { getStoredPrimaryColorKey, getStoredSurfaceColorKey, getStoredThemeMode, setStoredPrimaryColorKey, setStoredSurfaceColorKey, setStoredThemeMode } from './theme-preferences.storage';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -23,8 +13,12 @@ export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly rootElement = this.document.documentElement;
-  private readonly faviconSourceUrl = 'favicon.svg';
+  private readonly faviconSourceUrl = '/favicon.svg';
+
+  private readonly emptyFaviconHref = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+
   private faviconSvgPromise: Promise<string> | null = null;
+  private prethemeRemovalScheduled = false;
 
   readonly mode = signal<ThemeMode>('dark');
   readonly primaryColorKey = signal<string>(DEFAULT_PRIMARY_COLOR_KEY);
@@ -34,6 +28,10 @@ export class ThemeService {
     this.initMode();
     this.initColor();
     this.initSurface();
+
+    if (this.isBrowser) {
+      this.schedulePrethemeRemoval();
+    }
   }
 
   // ── Mode ──────────────────────────────────────────────
@@ -51,11 +49,16 @@ export class ThemeService {
 
   applyColor(key: string): void {
     const color = getPrimaryColor(key);
+
     this.primaryColorKey.set(color.key);
     setStoredPrimaryColorKey(color.key);
+
     if (!this.isBrowser) return;
+
     updatePrimaryPalette(color.palette);
+
     this.rootElement.dataset['primaryColor'] = color.key;
+
     this.updateFavicon(color.palette['500']);
   }
 
@@ -63,10 +66,14 @@ export class ThemeService {
 
   applySurface(key: string): void {
     const color = getSurfaceColor(key);
+
     this.surfaceColorKey.set(color.key);
     setStoredSurfaceColorKey(color.key);
+
     if (!this.isBrowser) return;
+
     updateSurfacePalette(color.palette);
+
     this.rootElement.dataset['surfaceColor'] = color.key;
   }
 
@@ -74,9 +81,9 @@ export class ThemeService {
 
   private initMode(): void {
     const saved = getStoredThemeMode();
-    const resolved = saved
-      ? saved
-      : (globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+    const resolved: ThemeMode = saved ? saved : globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
     this.applyMode(resolved, false);
   }
 
@@ -90,14 +97,34 @@ export class ThemeService {
 
   private applyMode(mode: ThemeMode, withTransitionGuard: boolean): void {
     this.mode.set(mode);
+
     if (!this.isBrowser) return;
-    if (withTransitionGuard) this.rootElement.classList.add('theme-switching');
-    this.rootElement.classList.toggle('dark', mode === 'dark');
+
     if (withTransitionGuard) {
-      requestAnimationFrame(() => requestAnimationFrame(() =>
-        this.rootElement.classList.remove('theme-switching')
-      ));
+      this.rootElement.classList.add('theme-switching');
     }
+
+    this.rootElement.classList.toggle('dark', mode === 'dark');
+
+    if (withTransitionGuard) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.rootElement.classList.remove('theme-switching');
+        });
+      });
+    }
+  }
+
+  private schedulePrethemeRemoval(): void {
+    if (this.prethemeRemovalScheduled) return;
+
+    this.prethemeRemovalScheduled = true;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.document.getElementById('portfolio-pretheme')?.remove();
+      });
+    });
   }
 
   private updateFavicon(color: string): void {
@@ -110,14 +137,19 @@ export class ThemeService {
         favicon.href = this.createTintedFaviconHref(svg, color);
       })
       .catch(() => {
-        this.ensureFaviconLink().href = this.faviconSourceUrl;
+        const favicon = this.ensureFaviconLink();
+        favicon.type = 'image/svg+xml';
+        favicon.href = this.emptyFaviconHref;
       });
   }
 
   private loadFaviconSvg(): Promise<string> {
     if (!this.faviconSvgPromise) {
       this.faviconSvgPromise = fetch(this.faviconSourceUrl).then((response) => {
-        if (!response.ok) throw new Error('Could not load favicon SVG.');
+        if (!response.ok) {
+          throw new Error('Could not load favicon SVG.');
+        }
+
         return response.text();
       });
     }
@@ -134,23 +166,23 @@ export class ThemeService {
 </filter>`;
 
     const withFilter = svg.replace('</defs>', `${filter}</defs>`);
-    const withTint = withFilter.replace(
-      '<g id="surface2">',
-      '<g id="surface2" filter="url(#favicon-primary-tint)">',
-    );
+    const withTint = withFilter.replace('<g id="surface2">', '<g id="surface2" filter="url(#favicon-primary-tint)">');
 
     return `data:image/svg+xml,${encodeURIComponent(withTint)}`;
   }
 
   private ensureFaviconLink(): HTMLLinkElement {
     const current = this.document.querySelector<HTMLLinkElement>("link[rel~='icon']");
+
     if (current) return current;
 
     const link = this.document.createElement('link');
     link.rel = 'icon';
     link.type = 'image/svg+xml';
     link.href = this.faviconSourceUrl;
+
     this.document.head.appendChild(link);
+
     return link;
   }
 
