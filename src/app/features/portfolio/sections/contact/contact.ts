@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { environment } from '@environments/environment';
@@ -58,12 +58,7 @@ export class Contact {
     }),
   });
 
-  protected readonly messageFocused = signal(false);
   protected readonly sending = signal(false);
-
-  protected readonly submitDisabled = computed(() => {
-    return this.sending() || this.form.invalid;
-  });
 
   protected async onSubmit(): Promise<void> {
     if (this.form.invalid) {

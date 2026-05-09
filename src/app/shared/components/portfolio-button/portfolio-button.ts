@@ -47,6 +47,8 @@ export class PortfolioButton {
   readonly target = input<string | null | undefined>(null);
   readonly rel = input<string | null | undefined>(null);
   readonly ariaLabel = input<string | null>(null);
+  readonly ariaControls = input<string | null>(null);
+  readonly ariaExpanded = input<boolean | string | null>(null);
 
   readonly styleClass = input<string>('');
   readonly labelClass = input<string>('');

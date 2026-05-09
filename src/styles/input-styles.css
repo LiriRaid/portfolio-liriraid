@@ -1,59 +1,15 @@
-
 @layer base {
   input,
   textarea {
     caret-color: var(--p-primary-600);
   }
 
-  /* checkbox/radio accent color */
-  [type='checkbox'],
-  [type='radio'] {
-    color: var(--p-primary-500) !important;
-  }
-
-  input[type='checkbox'],
-  input[type='radio'] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-
-    background-color: var(--app-checkbox-bg);
-    border-color: var(--app-checkbox-border);
-  }
-
-  input[type='checkbox']:disabled,
-  input[type='radio']:disabled {
-    background-color: var(--app-checkbox-disabled-bg);
-    border-color: var(--app-checkbox-disabled-border);
-  }
-
-  input[type='checkbox']:hover,
-  input[type='radio']:hover {
-    border-color: var(--p-primary-600);
-  }
-
-  input[type='checkbox'] {
-    border-radius: 4px;
-  }
-
-  [type='radio']:checked {
-    background-size: 2rem 2rem;
-  }
-
-  input[type='checkbox']:focus,
-  input[type='radio']:focus {
-    box-shadow: none;
-    outline: none;
-  }
-
-  /* TEXTAREA base (reemplazo del @apply) */
   textarea {
     outline: none !important;
     padding: 1rem;
-
-    border-radius: 0.5rem;         /* rounded-lg */
-    border: 1px solid var(--app-textarea-border);     /* border-[#E0E0E0] */
-    box-shadow: none !important;   /* ring-0 */
+    border-radius: 0.5rem;
+    border: 1px solid var(--app-textarea-border);
+    box-shadow: none !important;
     background-color: var(--app-textarea-bg);
   }
 
@@ -69,7 +25,6 @@
     color: var(--app-control-disabled-text);
   }
 
-  /* quitar spinners number */
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -83,20 +38,12 @@
 
   input:not(.portfolio-input-field),
   textarea:not(.portfolio-input-field) {
-    box-shadow: none !important; /* ring-0 */
+    box-shadow: none !important;
   }
 
   input:not(.portfolio-input-field):focus,
   textarea:not(.portfolio-input-field):focus {
     outline: none !important;
-    box-shadow: none !important;
-  }
-
-  portfolio-input[type],
-  p-input[type] {
-    border: none !important;
-    padding: 0 !important;
-    background: transparent !important;
     box-shadow: none !important;
   }
 }

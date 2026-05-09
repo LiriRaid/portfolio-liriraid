@@ -27,6 +27,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly placeholder = input<string>('');
   readonly label = input<string | undefined>(undefined);
   readonly value = input<string>('');
+  readonly autocomplete = input<string>('');
 
   readonly isTagInput = input<boolean>(false);
   readonly tagPlaceholder = input<string>('Escribe para agregar un Tag');
