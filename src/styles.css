@@ -34,6 +34,7 @@ button:disabled {
 @import './styles/theme-styles.css';
 @import './styles/components-styles.css';
 @import './styles/carousel-styles.css';
+@import './styles/projects-styles.css';
 @import './styles/input-styles.css';
 @import './styles/scrollbar-styles.css';
 @import './styles/text-and-color-styles.css';

@@ -1,6 +1,6 @@
 <section id="experiencia" class="experience flex min-h-(--app-section-min-height) flex-col justify-center py-(--e-py)" aria-labelledby="experience-heading">
   <div class="experience-inner mx-auto flex w-full max-w-7xl flex-col gap-(--e-inner-gap) px-(--e-px)">
-    <header class="experience-header flex max-w-(--e-header-max) flex-col gap-3">
+    <header #headerRef class="experience-header flex max-w-(--e-header-max) flex-col gap-3">
       <p class="experience-label m-0 font-semibold uppercase tracking-[0.08em] text-(--app-text-primary)">Trayectoria</p>
 
       <h2 id="experience-heading" class="experience-title m-0 text-(--app-text-color) text-tittle-4-bold">Experiencia laboral</h2>
@@ -10,7 +10,7 @@
       </p>
     </header>
 
-    <ol class="experience-timeline m-0 list-none p-0" role="list">
+    <ol #timelineRef class="experience-timeline m-0 list-none p-0" role="list">
       @for (item of experiences; track item.company + item.period) {
         <li class="experience-item grid grid-cols-[var(--e-timeline-col)_1fr] items-start gap-(--e-timeline-gap)">
           <div class="experience-marker relative flex min-h-full self-stretch justify-center pb-2 pt-(--e-marker-pt)" aria-hidden="true">

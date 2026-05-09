@@ -6,6 +6,8 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 import { AlertService } from '@shared/services/alert.service';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
+import { HeroService } from './hero.service';
+
 type CodeToken = {
   readonly value: string;
   readonly className: string;
@@ -27,6 +29,7 @@ type CodeLine = {
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly alertService = inject(AlertService);
+  private readonly heroService = inject(HeroService);
 
   private readonly cvUrl = 'assets/docs/gabriel-cruz-cv.pdf';
   private readonly cvFileName = 'Gabriel-Leonardo-Cruz-Flores-CV.pdf';
@@ -111,7 +114,7 @@ export class Hero {
 
     afterNextRender(() => {
       this.resetToHeroOnLoad();
-      this.animateEntrance();
+      this.heroService.animateEntrance();
     });
   }
 
@@ -149,29 +152,5 @@ export class Hero {
 
     history.replaceState(null, '', window.location.pathname + window.location.search);
     window.scrollTo(0, 0);
-  }
-
-  private async animateEntrance(): Promise<void> {
-    const { gsap } = await import('gsap');
-
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    // Stagger for content items (badge, title, desc, buttons, tech stack)
-    tl.fromTo('.hero-content > *', 
-      { opacity: 0, y: 30 }, 
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }
-    )
-    // Avatar animation with a slight bounce
-    .fromTo('.hero-avatar', 
-      { opacity: 0, scale: 0.8, rotation: -8 }, 
-      { opacity: 1, scale: 1, rotation: 0, duration: 0.8, ease: 'back.out(1.5)' }, 
-      "-=0.6"
-    )
-    // Code block slide in
-    .fromTo('.font-mono', 
-      { opacity: 0, x: 40 }, 
-      { opacity: 1, x: 0, duration: 0.8 }, 
-      "-=0.7"
-    );
   }
 }

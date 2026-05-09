@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
+import { gsap } from 'gsap';
 import { FormControl } from '@angular/forms';
 import { Popover } from 'primeng/popover';
-import gsap from 'gsap';
 
 import { Project, ProjectTechnologyCategory } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
@@ -12,7 +12,7 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 import { PortfolioSearch } from '@shared/components/portfolio-search/portfolio-search';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
-import { GithubRepositoryService } from './project.service';
+import { ProjectsService } from './projects.service';
 
 const PROJECTS: Project[] = [
   {
@@ -102,12 +102,15 @@ const FALLBACK_ICONS: Record<string, string> = {
   templateUrl: './projects.html',
   styleUrl: './projects.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block; background-color: var(--app-panel-muted-bg); --p-inner-opacity: 0; --p-inner-visibility: hidden;',
+  },
 })
 export class Projects {
-  private readonly githubRepositoryService = inject(GithubRepositoryService);
+  private readonly projectsService = inject(ProjectsService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @ViewChild('headerRef') private headerRef?: ElementRef<HTMLElement>;
   @ViewChild('toolbarRef') private toolbarRef?: ElementRef<HTMLElement>;
@@ -174,12 +177,8 @@ export class Projects {
       .join('|');
   });
 
-  private readonly projectExitDuration = 680;
-  private readonly projectEnterDuration = 520;
-
   private readonly leavingProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly enteringProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
-
   private emptyStateTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -205,13 +204,32 @@ export class Projects {
     }
 
     afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
-          this.animateEntrance();
-        }
-      }, { threshold: 0.1 });
-      
+      // Lógica de disparo
+      const triggerAnimation = () => {
+        this.projectsService.animateEntrance(this.elementRef, this.headerRef, this.toolbarRef, this.resultsRef);
+        void this.loadGithubStats();
+      };
+
+      // 1. Salto Directo: Si ya estamos en la sección (ej. click en header), animamos YA.
+      const rect = this.elementRef.nativeElement.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        triggerAnimation();
+        return;
+      }
+
+      // 2. Observador para cuando se llega por scroll
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            observer.disconnect();
+            triggerAnimation();
+          }
+        },
+        { threshold: 0.1 },
+      );
+
       observer.observe(this.elementRef.nativeElement);
 
       const onResize = (): void => {
@@ -220,39 +238,10 @@ export class Projects {
 
       window.addEventListener('resize', onResize);
 
-      void this.loadGithubStats();
-
       this.destroyRef.onDestroy(() => {
         window.removeEventListener('resize', onResize);
       });
     });
-  }
-
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    if (this.headerRef?.nativeElement) {
-      tl.fromTo(this.headerRef.nativeElement.children, 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }
-      );
-    }
-
-    if (this.toolbarRef?.nativeElement) {
-      tl.fromTo(this.toolbarRef.nativeElement, 
-        { opacity: 0, y: 20 }, 
-        { opacity: 1, y: 0, duration: 0.6 }, 
-        "-=0.5"
-      );
-    }
-
-    if (this.resultsRef?.nativeElement) {
-      tl.fromTo(this.resultsRef.nativeElement, 
-        { opacity: 0, y: 40, scale: 0.98 }, 
-        { opacity: 1, y: 0, scale: 1, duration: 0.8 }, 
-        "-=0.4"
-      );
-    }
   }
 
   protected selectFilterCategory(label: string): void {
@@ -296,7 +285,7 @@ export class Projects {
   }
 
   protected isRepositoryLoading(repo: string): boolean {
-    return this.githubRepositoryService.isLoading().has(repo);
+    return this.projectsService.isLoading().has(repo);
   }
 
   protected formatVisibility(visibility: string | null | undefined): string {
@@ -317,21 +306,21 @@ export class Projects {
 
     this.activeCarouselProjectTitle.set(nextProjects[0]?.title ?? '');
 
+    // 1. Manejo de estado vacío
     if (!nextProjects.length) {
-      this.syncEmptyResults(currentDisplayedProjects);
+      this.updateStateForEmptyResults(currentDisplayedProjects);
       return;
     }
 
-    this.syncNonEmptyResults(nextProjects, currentDisplayedProjects);
+    // 2. Manejo de actualización de resultados
+    this.updateStateForResults(nextProjects, currentDisplayedProjects);
   }
 
-  private syncEmptyResults(currentDisplayedProjects: Project[]): void {
+  private updateStateForEmptyResults(currentProjects: Project[]): void {
     this.clearEmptyStateTimer();
     this.clearEnteringProjectAnimations();
 
-    this.activeCarouselProjectTitle.set('');
-
-    if (!currentDisplayedProjects.length) {
+    if (!currentProjects.length) {
       this.displayedProjects.set([]);
       this.showProjectsCarousel.set(false);
       this.showEmptyState.set(true);
@@ -341,170 +330,93 @@ export class Projects {
     this.showProjectsCarousel.set(true);
     this.showEmptyState.set(false);
 
-    const leavingProjects = currentDisplayedProjects;
-
-    this.leavingProjectTitles.update((current) => {
-      const updated = new Set(current);
-
-      leavingProjects.forEach((project) => {
-        updated.add(project.title);
-      });
-
-      return updated;
-    });
-
-    leavingProjects.forEach((project) => {
-      if (this.leavingProjectTimeouts.has(project.title)) return;
-
-      const timeout = setTimeout(() => {
-        this.displayedProjects.update((projects) => projects.filter((item) => item.title !== project.title));
-
-        this.leavingProjectTitles.update((current) => {
-          const updated = new Set(current);
-          updated.delete(project.title);
-          return updated;
-        });
-
-        this.leavingProjectTimeouts.delete(project.title);
-
-        if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
-          this.showProjectsCarousel.set(false);
-          this.showEmptyState.set(true);
-        }
-      }, this.projectExitDuration);
-
-      this.leavingProjectTimeouts.set(project.title, timeout);
+    this.markProjectsState(currentProjects, 'leaving', () => {
+      if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
+        this.showProjectsCarousel.set(false);
+        this.showEmptyState.set(true);
+      }
     });
   }
 
-  private syncNonEmptyResults(nextProjects: Project[], currentDisplayedProjects: Project[]): void {
-    const wasEmptyVisible = this.showEmptyState() || !this.showProjectsCarousel() || !currentDisplayedProjects.length;
+  private updateStateForResults(nextProjects: Project[], currentProjects: Project[]): void {
+    const wasEmpty = this.showEmptyState() || !this.showProjectsCarousel() || !currentProjects.length;
 
     this.clearEmptyStateTimer();
     this.showEmptyState.set(false);
     this.showProjectsCarousel.set(true);
 
-    const nextTitles = new Set(nextProjects.map((project) => project.title));
-    const currentTitles = new Set(currentDisplayedProjects.map((project) => project.title));
+    const nextTitles = new Set(nextProjects.map((p) => p.title));
+    const currentTitles = new Set(currentProjects.map((p) => p.title));
 
-    const leavingProjects = currentDisplayedProjects.filter((project) => !nextTitles.has(project.title));
-    const enteringProjects = nextProjects.filter((project) => !currentTitles.has(project.title));
+    const leaving = currentProjects.filter((p) => !nextTitles.has(p.title));
+    const entering = nextProjects.filter((p) => !currentTitles.has(p.title));
 
-    nextProjects.forEach((project) => {
-      const leavingTimeout = this.leavingProjectTimeouts.get(project.title);
-
-      if (!leavingTimeout) return;
-
-      clearTimeout(leavingTimeout);
-      this.leavingProjectTimeouts.delete(project.title);
-    });
-
-    this.leavingProjectTitles.update((current) => {
-      const updated = new Set(current);
-
-      nextProjects.forEach((project) => {
-        updated.delete(project.title);
-      });
-
-      leavingProjects.forEach((project) => {
-        updated.add(project.title);
-      });
-
-      return updated;
-    });
-
-    const hasLeavingProjects = leavingProjects.length > 0;
-
-    if (!hasLeavingProjects) {
-      const sortedProjects = this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects()));
-      this.displayedProjects.set(sortedProjects);
-
-      if (wasEmptyVisible) {
-        this.markEnteringProjects(sortedProjects);
-      } else {
-        this.markEnteringProjects(enteringProjects);
+    // Cancelar salidas si el proyecto vuelve a entrar
+    nextProjects.forEach((p) => {
+      const timeout = this.leavingProjectTimeouts.get(p.title);
+      if (timeout) {
+        clearTimeout(timeout);
+        this.leavingProjectTimeouts.delete(p.title);
       }
+    });
 
+    if (!leaving.length) {
+      const sorted = this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects()));
+      this.displayedProjects.set(sorted);
+      this.markProjectsState(wasEmpty ? sorted : entering, 'entering');
       return;
     }
 
-    const mergedProjects = this.sortProjectsByOriginalOrder([...currentDisplayedProjects, ...enteringProjects], this.projects());
-    this.displayedProjects.set(this.replaceProjectReferences(mergedProjects));
+    const merged = this.sortProjectsByOriginalOrder([...currentProjects, ...entering], this.projects());
+    this.displayedProjects.set(this.replaceProjectReferences(merged));
 
-    this.markEnteringProjects(enteringProjects);
-
-    leavingProjects.forEach((project) => {
-      if (this.leavingProjectTimeouts.has(project.title)) return;
-
-      const timeout = setTimeout(() => {
-        this.displayedProjects.update((projects) => projects.filter((item) => item.title !== project.title));
-
-        this.leavingProjectTitles.update((current) => {
-          const updated = new Set(current);
-          updated.delete(project.title);
-          return updated;
-        });
-
-        this.leavingProjectTimeouts.delete(project.title);
-
-        if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
-          this.showProjectsCarousel.set(false);
-          this.showEmptyState.set(true);
-        }
-      }, this.projectExitDuration);
-
-      this.leavingProjectTimeouts.set(project.title, timeout);
-    });
+    this.markProjectsState(entering, 'entering');
+    this.markProjectsState(leaving, 'leaving');
   }
 
-  private markEnteringProjects(projects: Project[]): void {
+  private markProjectsState(projects: Project[], state: 'entering' | 'leaving', callback?: () => void): void {
     if (!projects.length) return;
 
-    projects.forEach((project) => {
-      const existingTimeout = this.enteringProjectTimeouts.get(project.title);
-
-      if (existingTimeout) {
-        clearTimeout(existingTimeout);
-        this.enteringProjectTimeouts.delete(project.title);
-      }
-    });
-
-    this.enteringProjectTitles.update((current) => {
-      const updated = new Set(current);
-
-      projects.forEach((project) => {
-        updated.add(project.title);
-      });
-
-      return updated;
-    });
+    const signal = state === 'entering' ? this.enteringProjectTitles : this.leavingProjectTitles;
+    const timeouts = state === 'entering' ? this.enteringProjectTimeouts : this.leavingProjectTimeouts;
+    const duration = (state === 'entering' ? this.projectsService.ENTER_DURATION : this.projectsService.EXIT_DURATION) * 1000;
 
     projects.forEach((project) => {
+      const existing = timeouts.get(project.title);
+      if (existing) clearTimeout(existing);
+
+      signal.update((current) => new Set(current).add(project.title));
+
       const timeout = setTimeout(() => {
-        this.enteringProjectTitles.update((current) => {
+        if (state === 'leaving') {
+          this.displayedProjects.update((list) => list.filter((p) => p.title !== project.title));
+        }
+
+        signal.update((current) => {
           const updated = new Set(current);
           updated.delete(project.title);
           return updated;
         });
 
-        this.enteringProjectTimeouts.delete(project.title);
-      }, this.projectEnterDuration);
+        timeouts.delete(project.title);
+        if (callback) callback();
+      }, duration);
 
-      this.enteringProjectTimeouts.set(project.title, timeout);
+      timeouts.set(project.title, timeout);
     });
   }
 
   private clearEnteringProjectAnimations(): void {
-    this.enteringProjectTimeouts.forEach((timeout) => clearTimeout(timeout));
+    this.enteringProjectTimeouts.forEach((t) => clearTimeout(t));
     this.enteringProjectTimeouts.clear();
     this.enteringProjectTitles.set(new Set());
   }
 
   private clearEmptyStateTimer(): void {
-    if (!this.emptyStateTimer) return;
-
-    clearTimeout(this.emptyStateTimer);
-    this.emptyStateTimer = null;
+    if (this.emptyStateTimer) {
+      clearTimeout(this.emptyStateTimer);
+      this.emptyStateTimer = null;
+    }
   }
 
   private replaceProjectReferences(projects: Project[]): Project[] {
@@ -534,7 +446,7 @@ export class Projects {
     const entries = await Promise.all(
       this.projects().map(async (project) => ({
         repo: project.repo,
-        stats: await this.githubRepositoryService.getRepositoryStats(project.repo),
+        stats: await this.projectsService.getRepositoryStats(project.repo),
       })),
     );
 

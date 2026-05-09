@@ -1,11 +1,11 @@
-<section id="proyectos" class="projects flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--p-py)" aria-labelledby="projects-heading">
-  <div class="projects-inner mx-auto flex w-full max-w-7xl flex-col gap-(--p-section-gap) px-(--p-px)">
-    <header #headerRef class="projects-header flex max-w-(--p-header-max) flex-col gap-(--p-header-gap)">
-      <p class="m-0 font-semibold uppercase tracking-[0.08em] text-(length:--p-label-size) text-(--app-text-primary)">Trabajo reciente</p>
+<section id="proyectos" class="projects flex min-h-(--app-section-min-height) flex-col justify-center py-(--p-py)" aria-labelledby="projects-heading">
+  <div class="projects-inner mx-auto flex w-full max-w-7xl flex-col gap-(--p-inner-gap) px-(--p-px)" [style.opacity]="'var(--p-inner-opacity)'" [style.visibility]="'var(--p-inner-visibility)'">
+    <header #headerRef class="projects-header flex flex-col gap-(--p-header-gap)">
+      <p class="projects-label m-0 font-semibold uppercase tracking-[0.08em] text-(--app-text-primary)">Trabajo reciente</p>
 
-      <h2 id="projects-heading" class="m-0 font-bold text-(--app-text-color) text-(length:--p-title-size) leading-[1.05] tracking-tight">Proyectos destacados</h2>
+      <h2 id="projects-heading" class="projects-title m-0 font-bold text-(--app-text-color) tracking-tight">Proyectos destacados</h2>
 
-      <p class="m-0 text-(--app-text-muted) text-(length:--p-subtitle-size) leading-[1.35]">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
+      <p class="projects-subtitle m-0 text-(--app-text-muted)">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
     </header>
 
     <div #toolbarRef class="projects-toolbar relative z-60 flex min-w-0 items-center justify-between gap-(--p-toolbar-gap)">

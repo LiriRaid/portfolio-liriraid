@@ -14,29 +14,17 @@
   --p-filter-btn-radius: 0.7rem;
   --p-filter-btn-size: clamp(0.75rem, 0.68rem + 0.31vw, 0.875rem);
 
-  --p-filter-panel-width: min(
-    clamp(32rem, 20rem + 22.5vw, 34rem),
-    calc(100vw - var(--p-px) * 2)
-  );
+  --p-filter-panel-width: min(clamp(32rem, 20rem + 22.5vw, 34rem), calc(100vw - var(--p-px) * 2));
 
-  --p-filter-panel-mobile-width: min(
-    clamp(34rem, 25rem + 24vw, 42rem),
-    calc(100vw - var(--p-px) * 2)
-  );
+  --p-filter-panel-mobile-width: min(clamp(34rem, 25rem + 24vw, 42rem), calc(100vw - var(--p-px) * 2));
 
-  --p-filter-panel-max-height: min(
-    clamp(16.75rem, 15.9rem + 1.1vw, 17.65rem),
-    calc(100dvh - 7rem)
-  );
+  --p-filter-panel-max-height: min(clamp(16.75rem, 15.9rem + 1.1vw, 17.65rem), calc(100dvh - 7rem));
 
   --p-filter-panel-content-max-height: var(--p-filter-panel-max-height);
 
-  --p-filter-layout-max-height: clamp(13.65rem, 13.3rem + 0.42vw, 14rem);
+  --p-filter-layout-max-height: clamp(13.05rem, 13.3rem + 0.42vw, 13.5rem);
 
-  --p-filter-panel-mobile-max-height: min(
-    clamp(20.5rem, 17.25rem + 8.5vw, 22rem),
-    calc(100dvh - 7rem)
-  );
+  --p-filter-panel-mobile-max-height: min(clamp(20.5rem, 17.25rem + 8.5vw, 22rem), calc(100dvh - 7rem));
 
   --p-filter-panel-mobile-content-max-height: var(--p-filter-panel-mobile-max-height);
 

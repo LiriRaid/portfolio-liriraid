@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal, ElementRef } from '@angular/core';
+import { gsap } from 'gsap';
 import { GithubRepositoryResponse, GithubRepositoryStats } from '@features/portfolio/entities';
 
 const CACHE_KEY = 'portfolio-github-stats';
@@ -13,7 +14,7 @@ interface CachedStats {
 @Injectable({
   providedIn: 'root',
 })
-export class GithubRepositoryService {
+export class ProjectsService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly memoryCache = new Map<string, GithubRepositoryStats>();
   private readonly pendingRequests = new Map<string, Promise<GithubRepositoryStats | null>>();
@@ -138,5 +139,75 @@ export class GithubRepositoryService {
     } catch {
       // Storage full or unavailable — silently ignore
     }
+  }
+
+  // --- ANIMATIONS ---
+
+  readonly EXIT_DURATION = 0.68;
+  readonly ENTER_DURATION = 0.52;
+
+  /**
+   * Animación de entrada ÚNICA y EXCLUSIVA para la sección de Proyectos: "Focus-Reveal".
+   */
+  animateEntrance(hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, toolbarRef?: ElementRef<HTMLElement>, resultsRef?: ElementRef<HTMLElement>): void {
+    if (hostRef?.nativeElement) gsap.killTweensOf(hostRef.nativeElement);
+    if (headerRef?.nativeElement) gsap.killTweensOf(headerRef.nativeElement.children);
+    if (toolbarRef?.nativeElement) gsap.killTweensOf(toolbarRef.nativeElement);
+    if (resultsRef?.nativeElement) gsap.killTweensOf(resultsRef.nativeElement);
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power4.out', force3D: true },
+    });
+
+    if (hostRef?.nativeElement) {
+      tl.set(hostRef.nativeElement, {
+        '--p-inner-opacity': 1,
+        '--p-inner-visibility': 'visible',
+        clearProps: '--p-inner-opacity,--p-inner-visibility',
+      });
+    }
+
+    if (headerRef?.nativeElement) {
+      tl.fromTo(headerRef.nativeElement.children, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.12, clearProps: 'all' });
+    }
+
+    if (toolbarRef?.nativeElement) {
+      tl.fromTo(toolbarRef.nativeElement, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.7, clearProps: 'all' }, '-=0.5');
+    }
+
+    if (resultsRef?.nativeElement) {
+      tl.fromTo(resultsRef.nativeElement, { autoAlpha: 0, y: 40, filter: 'blur(10px)', scale: 0.98 }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: 1.1, clearProps: 'all' }, '-=0.4');
+    }
+  }
+
+  /**
+   * Ejecuta la animación de salida de una tarjeta y notifica al terminar
+   */
+  async animateCardExit(element: HTMLElement): Promise<void> {
+    await gsap.to(element, {
+      opacity: 0,
+      scale: 0.95,
+      y: 20,
+      duration: this.EXIT_DURATION,
+      ease: 'power2.in',
+    });
+  }
+
+  /**
+   * Ejecuta la animación de entrada de una tarjeta
+   */
+  animateCardEntry(element: HTMLElement): void {
+    gsap.fromTo(
+      element,
+      { opacity: 0, scale: 0.95, y: -20 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: this.ENTER_DURATION,
+        ease: 'power4.out',
+        clearProps: 'all',
+      },
+    );
   }
 }

@@ -1,10 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
-import gsap from 'gsap';
 
 import { SkillCategory } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
+
+import { SkillsService } from './skills.service';
 
 @Component({
   selector: 'portfolio-skills',
@@ -17,6 +18,7 @@ import { techIconUrl } from '@shared/utils/tech-icons';
 export class Skills {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly elementRef = inject(ElementRef);
+  private readonly skillsService = inject(SkillsService);
 
   @ViewChild('headerRef') headerRef!: ElementRef<HTMLElement>;
   @ViewChild('gridRef') gridRef!: ElementRef<HTMLElement>;
@@ -68,7 +70,7 @@ export class Skills {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.animateEntrance();
+          this.skillsService.animateEntrance(this.headerRef, this.gridRef);
         }
       }, { threshold: 0.1 });
       
@@ -76,24 +78,7 @@ export class Skills {
     });
   }
 
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    if (this.headerRef?.nativeElement) {
-      tl.fromTo(this.headerRef.nativeElement.children, 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }
-      );
-    }
-
-    if (this.gridRef?.nativeElement) {
-      tl.fromTo(this.gridRef.nativeElement.children, 
-        { opacity: 0, y: 50, scale: 0.9 }, 
-        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15 }, 
-        "-=0.5"
-      );
-    }
-  }
 
   protected skillFallbackIcon(skill: string): string {
     return this.fallbackIcons[skill] ?? 'Code';

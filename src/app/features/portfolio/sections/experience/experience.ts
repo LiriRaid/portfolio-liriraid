@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
 
 import { ExperienceItem } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { techIconUrl } from '@shared/utils/tech-icons';
+
+import { ExperienceService } from './experience.service';
 
 @Component({
   selector: 'portfolio-experience',
@@ -13,6 +16,13 @@ import { techIconUrl } from '@shared/utils/tech-icons';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Experience {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly elementRef = inject(ElementRef);
+  private readonly experienceService = inject(ExperienceService);
+
+  @ViewChild('headerRef') headerRef!: ElementRef<HTMLElement>;
+  @ViewChild('timelineRef') timelineRef!: ElementRef<HTMLElement>;
+
   protected readonly techIconUrl = techIconUrl;
 
   protected readonly experiences: readonly ExperienceItem[] = [
@@ -35,4 +45,19 @@ export class Experience {
       current: true,
     },
   ];
+
+  constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    afterNextRender(() => {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          this.experienceService.animateEntrance(this.headerRef, this.timelineRef);
+        }
+      }, { threshold: 0.1 });
+      
+      observer.observe(this.elementRef.nativeElement);
+    });
+  }
 }

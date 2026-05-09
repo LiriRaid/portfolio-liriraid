@@ -1,10 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
-import gsap from 'gsap';
 
 import { AboutContent, Stat } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
+
+import { AboutService } from './about.service';
 
 @Component({
   selector: 'portfolio-about',
@@ -17,6 +18,7 @@ import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-b
 export class About {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly elementRef = inject(ElementRef);
+  private readonly aboutService = inject(AboutService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('statsRef') statsRef!: ElementRef<HTMLElement>;
@@ -41,7 +43,7 @@ export class About {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.animateEntrance();
+          this.aboutService.animateEntrance(this.contentRef, this.statsRef);
         }
       }, { threshold: 0.1 });
       
@@ -49,24 +51,7 @@ export class About {
     });
   }
 
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-    if (this.contentRef?.nativeElement) {
-      tl.fromTo(this.contentRef.nativeElement.children, 
-        { opacity: 0, x: -30 }, 
-        { opacity: 1, x: 0, duration: 0.6, stagger: 0.15 }
-      );
-    }
-
-    if (this.statsRef?.nativeElement) {
-      tl.fromTo(this.statsRef.nativeElement.children, 
-        { opacity: 0, x: 30 }, 
-        { opacity: 1, x: 0, duration: 0.6, stagger: 0.15 }, 
-        "-=0.4"
-      );
-    }
-  }
 
   protected scrollToContact(): void {
     if (!isPlatformBrowser(this.platformId)) {

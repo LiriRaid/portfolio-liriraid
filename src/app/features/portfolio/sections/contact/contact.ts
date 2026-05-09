@@ -1,13 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import gsap from 'gsap';
 
 import { environment } from '@environments/environment';
 import { SocialLink } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioInput } from '@shared/components/portfolio-input/portfolio-input';
 import { AlertService } from '@shared/services/alert.service';
+
+import { ContactService } from './contact.service';
 
 type ContactForm = FormGroup<{
   name: FormControl<string>;
@@ -27,6 +28,7 @@ export class Contact {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly alertService = inject(AlertService);
   private readonly elementRef = inject(ElementRef);
+  private readonly contactService = inject(ContactService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('formRef') formRef!: ElementRef<HTMLElement>;
@@ -72,7 +74,7 @@ export class Contact {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.animateEntrance();
+          this.contactService.animateEntrance(this.contentRef, this.formRef);
         }
       }, { threshold: 0.1 });
       
@@ -80,24 +82,7 @@ export class Contact {
     });
   }
 
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    if (this.contentRef?.nativeElement) {
-      tl.fromTo(this.contentRef.nativeElement.children, 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }
-      );
-    }
-
-    if (this.formRef?.nativeElement) {
-      tl.fromTo(this.formRef.nativeElement, 
-        { opacity: 0, x: 30, scale: 0.98 }, 
-        { opacity: 1, x: 0, scale: 1, duration: 0.8 }, 
-        "-=0.5"
-      );
-    }
-  }
 
   protected async onSubmit(): Promise<void> {
     if (this.form.invalid) {
