@@ -1,7 +1,7 @@
 <section id="sobre-mi" class="about flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--a-py)" aria-labelledby="about-heading">
   <div class="about-inner mx-auto w-full max-w-7xl px-(--a-px)">
     <div class="about-layout grid items-start gap-(--a-layout-gap)">
-      <div class="about-content flex max-w-(--a-content-max) flex-col gap-(--a-content-gap)">
+      <div #contentRef class="about-content flex max-w-(--a-content-max) flex-col gap-(--a-content-gap)">
         <header class="about-header flex flex-col gap-(--a-header-gap)">
           <p class="about-label m-0">
             {{ about.label }}
@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
+      <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
         @for (stat of stats; track stat.label; let i = $index) {
           <article class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
             <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">

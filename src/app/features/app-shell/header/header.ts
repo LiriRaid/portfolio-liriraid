@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
+import gsap from 'gsap';
 
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
@@ -22,11 +23,13 @@ export class Header {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   protected readonly mobileMenuOpen = signal(false);
+  protected readonly isMobileMenuRendered = signal(false);
   protected readonly activeSection = signal<PortfolioSectionId>('inicio');
 
   private scrollAnimationFrameId: number | null = null;
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
+  private menuAnimation?: gsap.core.Tween;
 
   private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
 
@@ -85,11 +88,64 @@ export class Header {
   }
 
   protected toggleMobileMenu(): void {
-    this.mobileMenuOpen.update((open) => !open);
+    const willOpen = !this.mobileMenuOpen();
+    this.mobileMenuOpen.set(willOpen);
+
+    if (willOpen) {
+      this.isMobileMenuRendered.set(true);
+      setTimeout(() => {
+        const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
+        if (nav) {
+          if (this.menuAnimation) this.menuAnimation.kill();
+          
+          // The element is already clipped to 0 height natively via style attribute
+          // so we only need to animate it to full visibility.
+          this.menuAnimation = gsap.to(nav, {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 0.4,
+            ease: 'power3.inOut',
+            clearProps: 'clipPath'
+          });
+        }
+      });
+    } else {
+      const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
+      if (nav) {
+        if (this.menuAnimation) this.menuAnimation.kill();
+        
+        this.menuAnimation = gsap.to(nav, {
+          clipPath: 'inset(0 0 100% 0)',
+          duration: 0.3,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            this.isMobileMenuRendered.set(false);
+          }
+        });
+      } else {
+        this.isMobileMenuRendered.set(false);
+      }
+    }
   }
 
   protected closeMobileMenu(): void {
+    if (!this.mobileMenuOpen()) return;
     this.mobileMenuOpen.set(false);
+    
+    const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
+    if (nav) {
+      if (this.menuAnimation) this.menuAnimation.kill();
+      
+      this.menuAnimation = gsap.to(nav, {
+        clipPath: 'inset(0 0 100% 0)',
+        duration: 0.3,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          this.isMobileMenuRendered.set(false);
+        }
+      });
+    } else {
+      this.isMobileMenuRendered.set(false);
+    }
   }
 
   private initializeHeaderRuntime(): void {

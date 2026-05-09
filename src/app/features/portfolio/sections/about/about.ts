@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
+import gsap from 'gsap';
 
 import { AboutContent, Stat } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components';
@@ -15,6 +16,10 @@ import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-b
 })
 export class About {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly elementRef = inject(ElementRef);
+
+  @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
+  @ViewChild('statsRef') statsRef!: ElementRef<HTMLElement>;
 
   protected readonly about: AboutContent = {
     label: '¿Quién soy?',
@@ -28,6 +33,40 @@ export class About {
     { value: '2', label: 'Proyectos públicos en GitHub' },
     { value: '100%', label: 'Orientado a producto' },
   ];
+
+  constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    afterNextRender(() => {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          this.animateEntrance();
+        }
+      }, { threshold: 0.1 });
+      
+      observer.observe(this.elementRef.nativeElement);
+    });
+  }
+
+  private animateEntrance(): void {
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+    if (this.contentRef?.nativeElement) {
+      tl.fromTo(this.contentRef.nativeElement.children, 
+        { opacity: 0, x: -30 }, 
+        { opacity: 1, x: 0, duration: 0.6, stagger: 0.15 }
+      );
+    }
+
+    if (this.statsRef?.nativeElement) {
+      tl.fromTo(this.statsRef.nativeElement.children, 
+        { opacity: 0, x: 30 }, 
+        { opacity: 1, x: 0, duration: 0.6, stagger: 0.15 }, 
+        "-=0.4"
+      );
+    }
+  }
 
   protected scrollToContact(): void {
     if (!isPlatformBrowser(this.platformId)) {

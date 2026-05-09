@@ -1,7 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Popover } from 'primeng/popover';
+import gsap from 'gsap';
 
 import { Project, ProjectTechnologyCategory } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
@@ -106,7 +107,11 @@ export class Projects {
   private readonly githubRepositoryService = inject(GithubRepositoryService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly elementRef = inject(ElementRef);
 
+  @ViewChild('headerRef') private headerRef?: ElementRef<HTMLElement>;
+  @ViewChild('toolbarRef') private toolbarRef?: ElementRef<HTMLElement>;
+  @ViewChild('resultsRef') private resultsRef?: ElementRef<HTMLElement>;
   @ViewChild('filterPanel') private filterPanel?: Popover;
 
   protected readonly techIconUrl = techIconUrl;
@@ -200,6 +205,15 @@ export class Projects {
     }
 
     afterNextRender(() => {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          this.animateEntrance();
+        }
+      }, { threshold: 0.1 });
+      
+      observer.observe(this.elementRef.nativeElement);
+
       const onResize = (): void => {
         this.filterPanel?.hide();
       };
@@ -212,6 +226,33 @@ export class Projects {
         window.removeEventListener('resize', onResize);
       });
     });
+  }
+
+  private animateEntrance(): void {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    if (this.headerRef?.nativeElement) {
+      tl.fromTo(this.headerRef.nativeElement.children, 
+        { opacity: 0, y: 30 }, 
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }
+      );
+    }
+
+    if (this.toolbarRef?.nativeElement) {
+      tl.fromTo(this.toolbarRef.nativeElement, 
+        { opacity: 0, y: 20 }, 
+        { opacity: 1, y: 0, duration: 0.6 }, 
+        "-=0.5"
+      );
+    }
+
+    if (this.resultsRef?.nativeElement) {
+      tl.fromTo(this.resultsRef.nativeElement, 
+        { opacity: 0, y: 40, scale: 0.98 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 0.8 }, 
+        "-=0.4"
+      );
+    }
   }
 
   protected selectFilterCategory(label: string): void {

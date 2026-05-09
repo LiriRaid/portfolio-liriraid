@@ -6,7 +6,7 @@
   --s-header-max: 40rem;
   --s-header-gap: clamp(0.5rem, 0.3525rem + 0.6211vw, 0.75rem);
 
-  --s-label-size: clamp(0.635rem, 0.4934rem + 0.5963vw, 0.875rem);
+  --s-label-size: clamp(0.64rem, 0.5013rem + 0.5839vw, 0.875rem);
   --s-title-size: clamp(1.17rem, 0.3852rem + 3.3043vw, 2.5rem);
   --s-title-lh: 1.08;
   --s-subtitle-size: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);

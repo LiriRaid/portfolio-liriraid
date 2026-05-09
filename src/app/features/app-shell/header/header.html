@@ -28,8 +28,8 @@
     </div>
   </div>
 
-  @if (mobileMenuOpen()) {
-    <nav class="mobile-nav absolute left-0 right-0 top-full z-99 flex flex-col gap-1 border-y border-(--app-border-color) bg-(--mobile-nav-bg) px-4 py-3 backdrop-blur-lg [box-shadow:0_8px_24px_-8px_rgba(0,0,0,0.25)]" aria-label="Navegación móvil">
+  @if (isMobileMenuRendered()) {
+    <nav class="mobile-nav absolute left-0 right-0 top-full z-99 flex flex-col gap-1 border-y border-(--app-border-color) bg-(--mobile-nav-bg) px-4 py-3 backdrop-blur-lg [box-shadow:0_8px_24px_-8px_rgba(0,0,0,0.25)]" style="clip-path: inset(0 0 100% 0);" aria-label="Navegación móvil">
       @for (link of navLinks; track link.href) {
         <portfolio-button variant="text" [label]="link.label" [href]="link.href" [styleClass]="mobileNavLinkClass(link.sectionId)" (onClick)="onNavLinkClick($event, link.href, link.sectionId); closeMobileMenu()" />
       }

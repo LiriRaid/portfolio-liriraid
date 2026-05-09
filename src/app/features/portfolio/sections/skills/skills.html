@@ -1,6 +1,6 @@
 <section id="habilidades" class="skills flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-shell-bg) py-(--s-py)" aria-labelledby="skills-heading">
   <div class="skills-inner mx-auto flex w-full max-w-7xl flex-col gap-(--s-section-gap) px-(--s-px)">
-    <header class="skills-header flex max-w-(--s-header-max) flex-col gap-(--s-header-gap)">
+    <header #headerRef class="skills-header flex max-w-(--s-header-max) flex-col gap-(--s-header-gap)">
       <p class="skills-label m-0">Tecnologías</p>
 
       <h2 id="skills-heading" class="skills-title m-0 text-tittle-4-bold">Habilidades técnicas</h2>
@@ -8,7 +8,7 @@
       <p class="skills-subtitle m-0 text-body-1-regular">Herramientas y tecnologías que uso para construir productos robustos y mantenibles.</p>
     </header>
 
-    <div class="skills-grid grid gap-(--s-grid-gap)">
+    <div #gridRef class="skills-grid grid gap-(--s-grid-gap)">
       @for (category of categories; track category.label) {
         <article class="skill-category flex min-w-0 flex-col gap-(--s-card-gap) rounded-2xl border p-(--s-card-p)">
           <header class="skill-category-header flex items-center gap-(--s-card-header-gap)">

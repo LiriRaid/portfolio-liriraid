@@ -14,7 +14,7 @@
       @for (item of experiences; track item.company + item.period) {
         <li class="experience-item grid grid-cols-[var(--e-timeline-col)_1fr] items-start gap-(--e-timeline-gap)">
           <div class="experience-marker relative flex min-h-full self-stretch justify-center pb-2 pt-(--e-marker-pt)" aria-hidden="true">
-            <span class="experience-dot z-10 size-(--e-dot) shrink-0 rounded-full border-2 border-(--app-border-color) bg-(--app-panel-bg)" [class.experience-dot--current]="item.current"></span>
+            <span #dotRef class="experience-dot z-10 size-(--e-dot) shrink-0 rounded-full border-2 border-(--app-border-color) bg-(--app-panel-bg)" [class.experience-dot--current]="item.current"></span>
           </div>
 
           <article class="experience-card flex flex-col gap-(--e-card-gap) rounded-(--e-card-radius) border border-(--app-border-color) bg-(--app-panel-bg) p-(--e-card-p) [box-shadow:var(--app-container-shadow)]">

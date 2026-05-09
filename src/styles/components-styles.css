@@ -259,7 +259,7 @@
   background: color-mix(in srgb, var(--app-panel-bg) 96%, transparent);
   border-color: var(--app-border-color);
   border-radius: 0.95rem;
-  z-index: 90;
+  z-index: 80;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(10px);
 }
@@ -448,8 +448,18 @@
     font-size: 0.62rem !important;
   }
 
+  .projects .p-popover.projects-filter-panel {
+    width: var(--p-filter-panel-mobile-width);
+  }
+
   .projects .projects-filter-panel-layout {
+    height: auto;
+    max-height: var(--p-filter-layout-max-height);
     grid-template-columns: 1fr;
+  }
+
+  .projects .projects-filter-active-category {
+    max-height: calc(var(--p-filter-layout-max-height) - 4.15rem);
   }
 
   .projects .projects-filter-category-tabs {
@@ -463,6 +473,7 @@
   .projects .projects-filter-category-tab {
     width: auto;
     min-width: max-content;
+    flex: 0 0 auto;
     font-size: clamp(0.62rem, 0.55rem + 0.16vw, 0.68rem);
   }
 

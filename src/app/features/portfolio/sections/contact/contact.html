@@ -1,7 +1,7 @@
 <section id="contacto" class="contact flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-shell-bg) py-(--c-py)" aria-labelledby="contact-heading">
   <div class="contact-inner mx-auto w-full max-w-7xl px-(--c-px)">
     <div class="contact-layout grid items-center gap-(--c-layout-gap)">
-      <div class="contact-content flex flex-col gap-(--c-content-gap)">
+      <div #contentRef class="contact-content flex flex-col gap-(--c-content-gap)">
         <p class="contact-label m-0">Hablemos</p>
 
         <h2 id="contact-heading" class="contact-title m-0 text-tittle-4-bold">
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div class="contact-form-wrap rounded-2xl border p-(--c-form-p)">
+      <div #formRef class="contact-form-wrap rounded-2xl border p-(--c-form-p)">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form flex flex-col gap-(--c-form-gap)" novalidate>
           <portfolio-input formControlName="name" label="Nombre" placeholder="Tu nombre completo" type="text" variant="on" lucideIcon="User" iconPosition="left" autocomplete="name" />
 
