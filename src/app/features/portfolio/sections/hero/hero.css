@@ -193,3 +193,41 @@
     height: var(--h-btn-icon);
   }
 }
+
+/* Syntax Highlighting */
+.code-keyword {
+  color: #0366d6; /* Deeper blue for light mode */
+}
+
+:host-context(.dark) .code-keyword {
+  color: #4daafc; /* Vibrant blue for dark mode */
+}
+
+.code-class {
+  color: var(--app-text-primary);
+  font-weight: 600;
+}
+
+.code-prop {
+  color: #0366d6; /* Deeper blue for properties in light mode */
+}
+
+:host-context(.dark) .code-prop {
+  color: #4daafc; /* Vibrant blue for properties in dark mode */
+}
+
+.code-string {
+  color: #1a8754; /* Visible dark green for light mode */
+}
+
+:host-context(.dark) .code-string {
+  color: #35f39e; /* Neon green for dark mode */
+}
+
+.code-punct {
+  color: #6a737d; /* Muted punctuation for light mode */
+}
+
+:host-context(.dark) .code-punct {
+  color: #d4d4d4; /* Light punctuation for dark mode */
+}

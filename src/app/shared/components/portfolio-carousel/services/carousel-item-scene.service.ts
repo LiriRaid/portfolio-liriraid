@@ -53,6 +53,7 @@ type AnimateSlidesParams = {
 
 type StartProgressParams = {
   fills: HTMLElement[];
+  extraFills?: HTMLElement[];
   index: number;
   startProgress: number;
   durationMs: number;
@@ -285,7 +286,7 @@ export class CarouselItemSceneService {
   }
 
   startProgress(owner: ProgressOwner, params: StartProgressParams): void {
-    const { fills, index, startProgress, durationMs, onComplete } = params;
+    const { fills, extraFills, index, startProgress, durationMs, onComplete } = params;
 
     this.stopProgress(owner);
 
@@ -294,15 +295,20 @@ export class CarouselItemSceneService {
 
     if (!fill) return;
 
-    gsap.killTweensOf(fill);
-    gsap.set(fill, { scaleX: normalizedProgress });
+    const targetFills = [fill];
+    if (extraFills && extraFills[index]) {
+      targetFills.push(extraFills[index]);
+    }
+
+    gsap.killTweensOf(targetFills);
+    gsap.set(targetFills, { scaleX: normalizedProgress });
 
     if (normalizedProgress >= 0.999) {
       queueMicrotask(onComplete);
       return;
     }
 
-    const tween = gsap.to(fill, {
+    const tween = gsap.to(targetFills, {
       scaleX: 1,
       duration: (durationMs / 1000) * (1 - normalizedProgress),
       ease: 'none',

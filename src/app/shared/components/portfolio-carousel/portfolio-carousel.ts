@@ -902,6 +902,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.carouselScene.startProgress('inline', {
       fills: this.navFillElements(),
+      extraFills: this.fullscreenNavFillElements(),
       index,
       startProgress: normalizedProgress,
       durationMs: this.autoPlayDuration(),
@@ -925,6 +926,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.carouselScene.startProgress('fullscreen', {
       fills: this.fullscreenNavFillElements(),
+      extraFills: this.navFillElements(),
       index,
       startProgress: normalizedProgress,
       durationMs: this.autoPlayDuration(),
