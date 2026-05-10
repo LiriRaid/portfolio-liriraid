@@ -4,9 +4,17 @@ import { ElementRef, Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ContactService {
-  async animateEntrance(contentRef?: ElementRef<HTMLElement>, formRef?: ElementRef<HTMLElement>): Promise<void> {
+  async animateEntrance(hostRef: ElementRef<HTMLElement>, contentRef?: ElementRef<HTMLElement>, formRef?: ElementRef<HTMLElement>): Promise<void> {
     const { gsap } = await import('gsap');
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    if (hostRef?.nativeElement) {
+      tl.set(hostRef.nativeElement, {
+        '--c-inner-opacity': 1,
+        '--c-inner-visibility': 'visible',
+        clearProps: '--c-inner-opacity,--c-inner-visibility',
+      });
+    }
 
     if (contentRef?.nativeElement) {
       tl.fromTo(contentRef.nativeElement.children, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 });

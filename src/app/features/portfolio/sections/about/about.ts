@@ -14,6 +14,9 @@ import { AboutService } from './about.service';
   templateUrl: './about.html',
   styleUrl: './about.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block; --a-inner-opacity: 0; --a-inner-visibility: hidden;',
+  },
 })
 export class About {
   private readonly platformId = inject(PLATFORM_ID);
@@ -43,7 +46,7 @@ export class About {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.aboutService.animateEntrance(this.contentRef, this.statsRef);
+          this.aboutService.animateEntrance(this.elementRef, this.contentRef, this.statsRef);
         }
       }, { threshold: 0.1 });
       

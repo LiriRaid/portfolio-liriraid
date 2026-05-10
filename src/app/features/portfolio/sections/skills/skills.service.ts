@@ -4,9 +4,17 @@ import { ElementRef, Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SkillsService {
-  async animateEntrance(headerRef?: ElementRef<HTMLElement>, gridRef?: ElementRef<HTMLElement>): Promise<void> {
+  async animateEntrance(hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, gridRef?: ElementRef<HTMLElement>): Promise<void> {
     const { gsap } = await import('gsap');
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    if (hostRef?.nativeElement) {
+      tl.set(hostRef.nativeElement, {
+        '--s-inner-opacity': 1,
+        '--s-inner-visibility': 'visible',
+        clearProps: '--s-inner-opacity,--s-inner-visibility',
+      });
+    }
 
     if (headerRef?.nativeElement) {
       tl.fromTo(headerRef.nativeElement.children, 

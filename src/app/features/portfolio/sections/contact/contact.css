@@ -72,7 +72,7 @@
 .contact-textarea {
   width: 100%;
   min-height: var(--c-textarea-min-h);
-  resize: vertical;
+  resize: none;
   padding: var(--c-textarea-py) var(--c-textarea-px);
   color: var(--app-text-color);
   font-size: var(--c-input-size);
@@ -80,6 +80,22 @@
   background-color: transparent;
   border: 0;
   outline: none;
+}
+
+.textarea {
+  position: relative;
+}
+
+.textarea::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  opacity: 0.3;
+  pointer-events: none;
+  background-image: linear-gradient(135deg, transparent 0, transparent 45%, var(--app-text-muted) 45%, var(--app-text-muted) 55%, transparent 55%, transparent 70%, var(--app-text-muted) 70%, var(--app-text-muted) 80%, transparent 80%, transparent 95%, var(--app-text-muted) 95%);
 }
 
 :host ::ng-deep .contact-form portfolio-input .portfolio-input-field {

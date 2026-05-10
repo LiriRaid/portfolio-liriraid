@@ -23,6 +23,9 @@ type ContactForm = FormGroup<{
   templateUrl: './contact.html',
   styleUrl: './contact.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block; --c-inner-opacity: 0; --c-inner-visibility: hidden;',
+  },
 })
 export class Contact {
   private readonly platformId = inject(PLATFORM_ID);
@@ -74,7 +77,7 @@ export class Contact {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.contactService.animateEntrance(this.contentRef, this.formRef);
+          this.contactService.animateEntrance(this.elementRef, this.contentRef, this.formRef);
         }
       }, { threshold: 0.1 });
       

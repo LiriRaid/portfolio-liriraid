@@ -14,6 +14,9 @@ import { ExperienceService } from './experience.service';
   templateUrl: './experience.html',
   styleUrl: './experience.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block; --e-inner-opacity: 0; --e-inner-visibility: hidden;',
+  },
 })
 export class Experience {
   private readonly platformId = inject(PLATFORM_ID);
@@ -53,7 +56,7 @@ export class Experience {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.experienceService.animateEntrance(this.headerRef, this.timelineRef);
+          this.experienceService.animateEntrance(this.elementRef, this.headerRef, this.timelineRef);
         }
       }, { threshold: 0.1 });
       

@@ -14,6 +14,9 @@ import { SkillsService } from './skills.service';
   templateUrl: './skills.html',
   styleUrl: './skills.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block; --s-inner-opacity: 0; --s-inner-visibility: hidden;',
+  },
 })
 export class Skills {
   private readonly platformId = inject(PLATFORM_ID);
@@ -70,7 +73,7 @@ export class Skills {
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect();
-          this.skillsService.animateEntrance(this.headerRef, this.gridRef);
+          this.skillsService.animateEntrance(this.elementRef, this.headerRef, this.gridRef);
         }
       }, { threshold: 0.1 });
       

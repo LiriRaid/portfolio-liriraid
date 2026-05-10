@@ -4,9 +4,17 @@ import { ElementRef, Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ExperienceService {
-  async animateEntrance(headerRef?: ElementRef<HTMLElement>, timelineRef?: ElementRef<HTMLElement>): Promise<void> {
+  async animateEntrance(hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, timelineRef?: ElementRef<HTMLElement>): Promise<void> {
     const { gsap } = await import('gsap');
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    if (hostRef?.nativeElement) {
+      tl.set(hostRef.nativeElement, {
+        '--e-inner-opacity': 1,
+        '--e-inner-visibility': 'visible',
+        clearProps: '--e-inner-opacity,--e-inner-visibility',
+      });
+    }
 
     if (headerRef?.nativeElement) {
       tl.fromTo(headerRef.nativeElement.children, 
