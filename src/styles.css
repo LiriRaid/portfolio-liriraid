@@ -39,6 +39,7 @@ button:disabled {
 @import './styles/scrollbar-styles.css';
 @import './styles/text-and-color-styles.css';
 @import './styles/typography-styles.css';
+@import './styles/animated-border-styles.css';
 @import './app/shared/animations/animations.css';
 
 :root.theme-switching *,

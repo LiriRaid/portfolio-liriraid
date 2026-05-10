@@ -29,6 +29,10 @@
   --e-desc: clamp(0.7rem, 0.523rem + 0.7453vw, 1rem);
   --e-resp: clamp(0.69rem, 0.5071rem + 0.7702vw, 1rem);
 
+  --e-current-py: clamp(0.12rem, 0.061rem + 0.2484vw, 0.22rem);
+  --e-current-px: clamp(0.42rem, 0.243rem + 0.7453vw, 0.72rem);
+  --e-current-size: clamp(0.55rem, 0.4143rem + 0.5714vw, 0.78rem);
+
   --e-resp-list-gap: clamp(0.47rem, 0.3785rem + 0.3851vw, 0.625rem);
   --e-resp-gap: clamp(0.47rem, 0.3785rem + 0.3851vw, 0.625rem);
   --e-resp-marker: clamp(0.32rem, 0.2875rem + 0.1366vw, 0.375rem);
@@ -102,7 +106,8 @@
 }
 
 @keyframes experience-ping {
-  75%, 100% {
+  75%,
+  100% {
     transform: scale(2.5);
     opacity: 0;
   }
@@ -118,7 +123,7 @@
 .experience-dot--current::before {
   content: '';
   position: absolute;
-  inset: -2px; /* accounts for border */
+  inset: -2px;
   border-radius: inherit;
   background-color: var(--app-text-primary);
   opacity: 0.6;
@@ -130,12 +135,10 @@
 .experience-card {
   transition:
     border-color 0.2s,
-    box-shadow 0.2s,
-    transform 0.2s;
+    box-shadow 0.2s;
 }
 
 .experience-card:hover {
-  transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
   box-shadow: var(--shadow-extra-large);
 }

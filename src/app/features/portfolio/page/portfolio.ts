@@ -5,11 +5,12 @@ import { Projects } from '../sections/projects/projects';
 import { Skills } from '../sections/skills/skills';
 import { About } from '../sections/about/about';
 import { Contact } from '../sections/contact/contact';
+import { PortfolioBackgroundAnimation } from '../components/portfolio-background-animation/portfolio-background-animation';
 
 @Component({
   selector: 'portfolio-page',
   standalone: true,
-  imports: [Hero, Experience, Projects, Skills, About, Contact],
+  imports: [Hero, Experience, Projects, Skills, About, Contact, PortfolioBackgroundAnimation],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })

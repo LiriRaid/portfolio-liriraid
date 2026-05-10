@@ -13,6 +13,7 @@ import { PortfolioSearch } from '@shared/components/portfolio-search/portfolio-s
 import { techIconUrl } from '@shared/utils/tech-icons';
 
 import { ProjectsService } from './projects.service';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-animated-border.directive';
 
 const PROJECTS: Project[] = [
   {
@@ -98,7 +99,7 @@ const FALLBACK_ICONS: Record<string, string> = {
 @Component({
   selector: 'portfolio-projects',
   standalone: true,
-  imports: [Popover, PortfolioButton, PortfolioCarousel, CarouselItem, PortfolioIcon, PortfolioSearch],
+  imports: [Popover, PortfolioButton, PortfolioCarousel, CarouselItem, PortfolioIcon, PortfolioSearch, PortfolioAnimatedBorderDirective],
   templateUrl: './projects.html',
   styleUrl: './projects.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -10,7 +10,7 @@
 
     <div #gridRef class="skills-grid grid gap-(--s-grid-gap)">
       @for (category of categories; track category.label) {
-        <article class="skill-category flex min-w-0 flex-col gap-(--s-card-gap) rounded-2xl border p-(--s-card-p)">
+        <article portfolioAnimatedBorder class="skill-category flex min-w-0 flex-col gap-(--s-card-gap) rounded-2xl border p-(--s-card-p)">
           <header class="skill-category-header flex items-center gap-(--s-card-header-gap)">
             <span class="skill-icon-wrap inline-flex shrink-0 items-center justify-center" aria-hidden="true">
               <portfolio-icon [name]="category.icon" size="18" />

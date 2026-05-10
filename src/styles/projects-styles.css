@@ -163,14 +163,38 @@
     transform 0.2s;
 }
 
-.projects .projects-card:hover {
-  border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
-  box-shadow: var(--shadow-extra-large);
-  transform: translateY(-2px);
+/* Card activa: la que está en el centro del carousel */
+.projects .projects-card--active {
+  border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
 }
 
-.projects .projects-card--featured {
-  border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
+/* Desktop real con mouse: cualquier card puede hacer hover/scale */
+@media (hover: hover) and (pointer: fine) {
+  .projects .projects-card:hover {
+    border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
+    box-shadow: var(--shadow-extra-large);
+    transform: translateY(-2px);
+  }
+}
+
+/* Mobile/touch: evita que el :hover quede pegado después de tocar o arrastrar */
+@media (hover: none), (pointer: coarse) {
+  .projects .projects-card:hover {
+    border-color: var(--app-container-border, var(--app-border-color));
+    box-shadow: var(--app-container-shadow);
+    transform: none;
+  }
+
+  .projects .projects-card--active,
+  .projects .projects-card--active:hover {
+    border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
+  }
+
+  .projects .projects-card:active {
+    border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
+    box-shadow: var(--shadow-extra-large);
+    transform: translateY(-2px);
+  }
 }
 
 .projects .projects-stat portfolio-icon {
@@ -210,6 +234,11 @@
 }
 
 @media (max-width: 640px) {
+  .projects {
+    --p-toolbar-action-size: clamp(36px, calc(24px + 2.5vw), 40px);
+    --p-toolbar-action-icon: clamp(0.82rem, calc(0.58rem + 0.8vw), 0.9rem);
+  }
+
   .projects .projects-toolbar {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -223,10 +252,10 @@
   }
 
   .projects .projects-filter-button.p-button {
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 40px !important;
-    min-height: 40px !important;
+    width: var(--p-toolbar-action-size) !important;
+    min-width: var(--p-toolbar-action-size) !important;
+    height: var(--p-toolbar-action-size) !important;
+    min-height: var(--p-toolbar-action-size) !important;
     padding: 0 !important;
     justify-content: center;
     border-radius: 0.48rem !important;
@@ -238,13 +267,10 @@
     display: none;
   }
 
-  .projects .projects-filter-button.p-button :is(.p-button-icon, .p-button-label, portfolio-icon),
-  .projects .projects-filter-button.p-button portfolio-icon,
-  .projects .projects-filter-button.p-button .p-button-icon,
-  .projects .projects-filter-button.p-button svg {
-    width: 0.9rem !important;
-    height: 0.9rem !important;
-    font-size: 0.9rem !important;
+  .projects .projects-filter-button.p-button :is(.p-button-icon, portfolio-icon, svg) {
+    width: var(--p-toolbar-action-icon) !important;
+    height: var(--p-toolbar-action-icon) !important;
+    font-size: var(--p-toolbar-action-icon) !important;
     color: var(--app-text-color) !important;
     opacity: 1 !important;
     stroke: currentColor !important;

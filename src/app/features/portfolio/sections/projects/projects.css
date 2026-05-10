@@ -39,7 +39,7 @@
   --p-selected-tags-gap: 0.55rem;
 
   --p-card-width: min(76vw, clamp(15.75rem, 8rem + 32.9vw, 29rem));
---p-card-height: clamp(21.5rem, 14.5rem + 35.5vw, 41rem);
+  --p-card-height: clamp(21.5rem, 14.5rem + 35.5vw, 41rem);
   --p-card-radius: clamp(0.85rem, 0.79rem + 0.25vw, 0.95rem);
   --p-card-body-p: clamp(0.4rem, 0.15rem + 1vw, 1.08rem);
   --p-card-body-gap: clamp(0.15rem, 0.1rem + 0.5vw, 0.74rem);

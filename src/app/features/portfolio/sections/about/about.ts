@@ -6,11 +6,12 @@ import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 
 import { AboutService } from './about.service';
+import { PortfolioAnimatedBorderDirective } from '../../../../shared/directives/portfolio-animated-border.directive';
 
 @Component({
   selector: 'portfolio-about',
   standalone: true,
-  imports: [PortfolioButton, PortfolioIcon],
+  imports: [PortfolioButton, PortfolioIcon, PortfolioAnimatedBorderDirective],
   templateUrl: './about.html',
   styleUrl: './about.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +50,7 @@ export class About {
           this.aboutService.animateEntrance(this.elementRef, this.contentRef, this.statsRef);
         }
       }, { threshold: 0.1 });
-      
+
       observer.observe(this.elementRef.nativeElement);
     });
   }

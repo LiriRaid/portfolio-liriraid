@@ -112,10 +112,10 @@
 
     <div #resultsRef class="projects-results min-w-0 w-full">
       @if (showProjectsCarousel()) {
-        <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="displayedProjectsKey()" [itemsStateKey]="displayedProjectsStateKey()" [activeItemKey]="activeCarouselProjectTitle()" class="projects-carousel mx-auto block w-full max-w-full">
+        <portfolio-carousel mode="card" [autoPlay]="false" [itemsKey]="displayedProjectsKey()" [itemsStateKey]="displayedProjectsStateKey()" [activeItemKey]="activeCarouselProjectTitle()" (activeItemChange)="activeCarouselProjectTitle.set($event)" class="projects-carousel mx-auto block w-full max-w-full">
           @for (project of displayedProjects(); track project.title) {
             <div carouselItem class="projects-card-shell w-full h-full min-h-0" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null" [attr.data-project-entering]="isProjectEntering(project.title) ? 'true' : null">
-              <article class="projects-card relative w-full min-w-0 min-h-0 h-full flex flex-col overflow-hidden" [class.projects-card--featured]="project.featured">
+              <article portfolioAnimatedBorder [portfolioAnimatedBorderActive]="activeCarouselProjectTitle() === project.title" class="projects-card relative w-full min-w-0 min-h-0 h-full flex flex-col overflow-hidden" [class.projects-card--featured]="project.featured" [class.projects-card--active]="activeCarouselProjectTitle() === project.title">
                 @if (project.featured) {
                   <span class="projects-featured-badge absolute top-2 right-(--p-featured-right) z-80 w-fit max-w-max rounded-full bg-(--app-badge-soft-bg) text-(--app-badge-soft-text) px-(--p-featured-px) py-(--p-featured-py) text-(length:--p-featured-size) font-bold leading-none pointer-events-none"> Destacado </span>
                 }

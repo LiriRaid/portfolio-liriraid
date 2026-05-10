@@ -1,0 +1,82 @@
+@property --portfolio-border-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --portfolio-border-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.portfolio-animated-border {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.portfolio-animated-border--active {
+  border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color)) !important;
+  box-shadow: var(--shadow-extra-large);
+}
+
+.portfolio-animated-border::before,
+.portfolio-animated-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--portfolio-border-opacity);
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+
+  transition: opacity 0.22s ease;
+}
+
+.portfolio-animated-border::before {
+  z-index: 5;
+  padding: 2px;
+
+  background: conic-gradient(
+    from var(--portfolio-border-angle),
+    transparent 0deg,
+    transparent 220deg,
+    color-mix(in srgb, var(--app-text-primary) 0%, transparent) 245deg,
+    color-mix(in srgb, var(--app-text-primary) 60%, transparent) 270deg,
+    color-mix(in srgb, var(--app-text-primary) 95%, transparent) 288deg,
+    #ffffff 300deg,
+    #ffffff 306deg,
+    color-mix(in srgb, var(--app-text-primary) 95%, transparent) 316deg,
+    color-mix(in srgb, var(--app-text-primary) 45%, transparent) 332deg,
+    color-mix(in srgb, var(--app-text-primary) 0%, transparent) 348deg,
+    transparent 360deg
+  );
+}
+
+.portfolio-animated-border::after {
+  z-index: 4;
+  padding: 5px;
+  filter: blur(9px);
+
+  background: conic-gradient(
+    from var(--portfolio-border-angle),
+    transparent 0deg,
+    transparent 235deg,
+    color-mix(in srgb, var(--app-text-primary) 0%, transparent) 255deg,
+    color-mix(in srgb, var(--app-text-primary) 45%, transparent) 292deg,
+    #ffffff 303deg,
+    color-mix(in srgb, var(--app-text-primary) 42%, transparent) 316deg,
+    color-mix(in srgb, var(--app-text-primary) 0%, transparent) 340deg,
+    transparent 360deg
+  );
+}

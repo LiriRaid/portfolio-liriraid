@@ -1,6 +1,4 @@
-/* =============================================================
-   Portfolio carousel global styles
-   ============================================================= */
+/* Portfolio carousel */
 
 .carousel-root {
   border-radius: var(--carousel-radius);
@@ -137,13 +135,17 @@ portfolio-carousel .carousel-item > * {
   transform: scale(1.1);
 }
 
-.nav-btn {
+.nav-btn,
+.fullscreen-nav {
   position: absolute;
   top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-btn {
   z-index: 65;
   width: var(--carousel-nav-size);
   height: var(--carousel-nav-size);
-  transform: translateY(-50%);
 }
 
 .nav-btn:hover,
@@ -157,6 +159,24 @@ portfolio-carousel .carousel-item > * {
 
 .nav-btn--next {
   right: var(--carousel-nav-offset);
+}
+
+.fullscreen-nav {
+  width: var(--carousel-fullscreen-control-size);
+  height: var(--carousel-fullscreen-control-size);
+}
+
+.fullscreen-close {
+  width: var(--carousel-fullscreen-control-size);
+  height: var(--carousel-fullscreen-control-size);
+}
+
+.fullscreen-close portfolio-icon,
+.fullscreen-nav portfolio-icon,
+.fullscreen-close svg,
+.fullscreen-nav svg {
+  width: var(--carousel-fullscreen-icon-size);
+  height: var(--carousel-fullscreen-icon-size);
 }
 
 .carousel-root--card > .nav-btn--prev {
@@ -266,6 +286,9 @@ portfolio-carousel .carousel-item > * {
   --carousel-control-color: #ffffff;
   --carousel-control-border: color-mix(in srgb, #ffffff 18%, transparent);
   --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+
+  --carousel-fullscreen-control-size: clamp(1.45rem, 1.18rem + 0.9vw, 2rem);
+  --carousel-fullscreen-icon-size: clamp(0.78rem, 0.65rem + 0.42vw, 1rem);
 
   --carousel-slide-nav-h: clamp(0.16rem, 0.15rem + 0.05vw, 0.18rem);
   --carousel-counter-size: clamp(0.54rem, 0.46rem + 0.35vw, 0.68rem);

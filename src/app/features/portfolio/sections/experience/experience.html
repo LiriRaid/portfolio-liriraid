@@ -17,7 +17,7 @@
             <span #dotRef class="experience-dot z-10 size-(--e-dot) shrink-0 rounded-full border-2 border-(--app-border-color) bg-(--app-panel-bg)" [class.experience-dot--current]="item.current"></span>
           </div>
 
-          <article class="experience-card flex flex-col gap-(--e-card-gap) rounded-(--e-card-radius) border border-(--app-border-color) bg-(--app-panel-bg) p-(--e-card-p) [box-shadow:var(--app-container-shadow)]">
+          <article portfolioAnimatedBorder class="experience-card flex flex-col gap-(--e-card-gap) rounded-(--e-card-radius) border border-(--app-border-color) bg-(--app-panel-bg) p-(--e-card-p) [box-shadow:var(--app-container-shadow)]">
             <header class="experience-card-header flex flex-wrap items-start justify-between gap-(--e-card-header-gap)">
               <div class="experience-card-meta flex min-w-0 flex-1 flex-col gap-1.5">
                 <h3 class="experience-role m-0 text-(--app-text-color) text-subtitle-2-bold">
@@ -29,7 +29,7 @@
                   <span>{{ item.company }}</span>
 
                   @if (item.current) {
-                    <span class="ml-1 rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-2 py-0.5 text-(--app-text-primary) text-caption-2-semibold">Actual</span>
+                    <span class="ml-1 rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-(--e-current-px) py-(--e-current-py) font-semibold leading-none text-(--app-text-primary) text-(length:--e-current-size)">Actual</span>
                   }
                 </p>
               </div>

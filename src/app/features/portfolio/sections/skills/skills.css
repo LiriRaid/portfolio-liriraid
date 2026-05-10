@@ -77,8 +77,7 @@
   box-shadow: var(--app-container-shadow);
   transition:
     border-color 0.2s,
-    box-shadow 0.2s,
-    transform 0.2s;
+    box-shadow 0.2s;
 }
 
 .skill-icon-wrap {
@@ -116,7 +115,6 @@
 /* Hover */
 @media (hover: hover) {
   .skill-category:hover {
-    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
     box-shadow: var(--shadow-extra-large);
   }

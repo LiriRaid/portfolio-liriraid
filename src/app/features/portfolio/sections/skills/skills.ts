@@ -6,11 +6,12 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 import { techIconUrl } from '@shared/utils/tech-icons';
 
 import { SkillsService } from './skills.service';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-animated-border.directive';
 
 @Component({
   selector: 'portfolio-skills',
   standalone: true,
-  imports: [PortfolioIcon],
+  imports: [PortfolioIcon, PortfolioAnimatedBorderDirective],
   templateUrl: './skills.html',
   styleUrl: './skills.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +77,7 @@ export class Skills {
           this.skillsService.animateEntrance(this.elementRef, this.headerRef, this.gridRef);
         }
       }, { threshold: 0.1 });
-      
+
       observer.observe(this.elementRef.nativeElement);
     });
   }

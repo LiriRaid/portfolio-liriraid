@@ -1,11 +1,11 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, DoCheck, ElementRef, PLATFORM_ID, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef, afterNextRender, computed, contentChildren, inject, input, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, DoCheck, ElementRef, PLATFORM_ID, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef, afterNextRender, computed, contentChildren, inject, input, output, signal } from '@angular/core';
 
 import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 import { CarouselItem } from './carousel-item.directive';
-import { CarouselDirection, CarouselItemSceneService, CarouselSlidePosition } from './services/carousel-item-scene.service';
+import { CarouselDirection, CarouselItemSceneService, CarouselSlidePosition } from './carousel-item-scene.service';
 
 type CarouselMode = 'card' | 'screenshot';
 
@@ -55,6 +55,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   readonly activeItemKey = input<string>('');
   readonly autoPlay = input<boolean>(true);
   readonly autoPlayDuration = input<number>(4000);
+  readonly activeItemChange = output<string>();
 
   protected readonly currentIndex = signal(0);
   protected readonly fullscreenIndex = signal<number | null>(null);
@@ -584,6 +585,22 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     });
 
     this.isAnimating.set(false);
+    this.emitActiveCardChange();
+  }
+
+  private emitActiveCardChange(): void {
+    if (this.mode() !== 'card') {
+      return;
+    }
+
+    const activeElement = this.cardElements()[this.currentIndex()];
+    const activeKey = activeElement?.dataset['carouselKey'];
+
+    if (!activeKey) {
+      return;
+    }
+
+    this.activeItemChange.emit(activeKey);
   }
 
   private animateCardLayout(newIndex: number, previousSnapshot: CarouselSnapshot, previousIndex: number): void {
@@ -609,6 +626,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       resolvePosition: this.resolvePosition,
       onComplete: () => {
         this.isAnimating.set(false);
+        this.emitActiveCardChange();
       },
     });
   }
@@ -761,6 +779,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       resolvePosition: this.resolvePosition,
       onComplete: () => {
         this.isAnimating.set(false);
+        this.emitActiveCardChange();
       },
     });
   }
@@ -803,6 +822,18 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     return true;
   }
+
+  protected onScreenshotRootInteraction(event: Event): void {
+  if (this.mode() !== 'screenshot') {
+    return;
+  }
+
+  if (!this.canUseScreenshotControls()) {
+    return;
+  }
+
+  event.stopPropagation();
+}
 
   protected onSlideClick(event: MouseEvent): void {
     if (this.isAnimating() || this.wasDragging) {

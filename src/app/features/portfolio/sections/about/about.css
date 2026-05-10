@@ -81,9 +81,7 @@
   border-color: color-mix(in srgb, var(--app-border-color) 55%, var(--app-container-border, transparent));
   border-radius: var(--a-stat-radius);
   background-color: var(--app-panel-bg);
-  transition:
-    border-color 0.2s,
-    transform 0.2s;
+  transition: border-color 0.2s;
 }
 
 .stat-icon {
@@ -96,7 +94,6 @@
 
 @media (hover: hover) {
   .stat-card:hover {
-    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
   }
 }

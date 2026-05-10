@@ -28,12 +28,6 @@
   --c-textarea-py: clamp(0.58rem, 0.4207rem + 0.6708vw, 0.85rem);
   --c-textarea-px: clamp(0.68rem, 0.4912rem + 0.795vw, 1rem);
 
-  --c-btn-min-h: clamp(2rem, 1.941rem + 0.2484vw, 2.1rem);
-  --c-btn-py: clamp(0.4rem, 0.3882rem + 0.0497vw, 0.42rem);
-  --c-btn-px: clamp(0.55rem, 0.432rem + 0.4969vw, 0.75rem);
-  --c-btn-size: clamp(0.7rem, 0.6587rem + 0.1739vw, 0.77rem);
-  --c-btn-icon: clamp(0.85rem, 0.7615rem + 0.3727vw, 1rem);
-
   box-sizing: border-box;
 }
 
@@ -89,8 +83,8 @@
 .textarea::after {
   content: '';
   position: absolute;
-  bottom: 5px;
   right: 5px;
+  bottom: 5px;
   width: 8px;
   height: 8px;
   opacity: 0.3;
@@ -178,11 +172,11 @@
 
 @media (max-width: 640px) {
   .contact {
-    --c-btn-min-h: 2.75rem;
-    --c-btn-py: 0.65rem;
-    --c-btn-px: 0.9rem;
-    --c-btn-size: 0.875rem;
-    --c-btn-icon: 1rem;
+    --c-btn-min-h: clamp(2rem, 1.6346rem + 1.5385vw, 2.25rem);
+    --c-btn-py: clamp(0.42rem, 0.3323rem + 0.3692vw, 0.48rem);
+    --c-btn-px: clamp(0.62rem, 0.4308rem + 0.8vw, 0.75rem);
+    --c-btn-size: clamp(0.72rem, 0.6477rem + 0.3046vw, 0.77rem);
+    --c-btn-icon: clamp(0.82rem, 0.6892rem + 0.5538vw, 0.91rem);
   }
 
   :host ::ng-deep .contact-social portfolio-button {

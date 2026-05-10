@@ -11,7 +11,7 @@
   display: contents;
 }
 
-/* Botón colapsado: siempre 40x40, sin variantes responsive */
+/* Collapsed button */
 .search-collapsed-btn {
   width: 40px !important;
   min-width: 40px !important;
@@ -27,13 +27,10 @@
   flex-basis: 100%;
   width: 100%;
   min-width: 0;
-
   display: grid;
   grid-template-rows: 1fr;
-
   padding-top: var(--search-mobile-gap);
   margin: 0;
-
   overflow: hidden;
   will-change: grid-template-rows, padding-top, opacity;
 }
@@ -47,7 +44,7 @@
   transform: translateZ(0);
 }
 
-/* Input desktop: 42px de alto, fuente 16px (text-body-2-medium aplicado en el HTML) */
+/* Input */
 :host ::ng-deep .input.input-default {
   min-height: 42px !important;
   height: 42px !important;
@@ -72,7 +69,6 @@
   color: var(--app-search-input-text) !important;
   -webkit-text-fill-color: var(--app-search-input-text) !important;
   caret-color: var(--app-text-primary);
-
   min-height: 0 !important;
   height: auto !important;
 }
@@ -84,17 +80,42 @@
   opacity: 0.72;
 }
 
-/* Responsive (<= 640px): input 38px de alto, fuente 14px (caption-1) heredada al placeholder */
+/* Mobile */
 @media (max-width: 640px) {
+  :host {
+    --search-action-size: clamp(36px, calc(24px + 2.5vw), 40px);
+    --search-input-height: clamp(36px, calc(30px + 1.25vw), 38px);
+    --search-input-size: clamp(var(--font-size-caption-2), calc(0.375rem + 1.25vw), var(--font-size-caption-1));
+    --search-icon-size: clamp(16px, calc(10px + 1.25vw), 18px);
+  }
+
+  .search-collapsed-btn {
+    width: var(--search-action-size) !important;
+    min-width: var(--search-action-size) !important;
+    height: var(--search-action-size) !important;
+    min-height: var(--search-action-size) !important;
+  }
+
+  .search-collapsed-btn portfolio-icon,
+  .search-collapsed-btn svg {
+    width: var(--search-icon-size) !important;
+    height: var(--search-icon-size) !important;
+  }
+
   :host ::ng-deep .input.input-default {
-    min-height: 38px !important;
-    height: 38px !important;
+    min-height: var(--search-input-height) !important;
+    height: var(--search-input-height) !important;
   }
 
   :host ::ng-deep .input.input-default input,
   :host ::ng-deep input {
-    font-size: var(--font-size-caption-1) !important;
-    line-height: var(--line-height-caption-1) !important;
+    font-size: var(--search-input-size) !important;
+    line-height: 1.1 !important;
     font-weight: 500;
+  }
+
+  :host ::ng-deep .input.input-default portfolio-icon {
+    width: var(--search-icon-size);
+    height: var(--search-icon-size);
   }
 }

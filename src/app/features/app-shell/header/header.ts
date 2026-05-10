@@ -1,10 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
-import gsap from 'gsap';
 
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
+import { HeaderService } from './header.service';
+import { PortfolioBackgroundAnimationService } from '@features/portfolio/components/portfolio-background-animation/portfolio-background-animation.service';
 
 type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades' | 'sobre-mi' | 'contacto';
 
@@ -12,12 +13,15 @@ type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades'
   selector: 'portfolio-header',
   standalone: true,
   imports: [PortfolioButton, PortfolioThemeColorPicker],
+  providers: [HeaderService],
   templateUrl: './header.html',
   styleUrl: './header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
   private readonly themeService = inject(ThemeService);
+  private readonly headerService = inject(HeaderService);
+  private readonly backgroundAnimationService = inject(PortfolioBackgroundAnimationService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -25,11 +29,12 @@ export class Header {
   protected readonly mobileMenuOpen = signal(false);
   protected readonly isMobileMenuRendered = signal(false);
   protected readonly activeSection = signal<PortfolioSectionId>('inicio');
+  protected readonly isFloating = signal(false);
+  protected readonly backgroundAnimationEnabled = this.backgroundAnimationService.enabled;
 
   private scrollAnimationFrameId: number | null = null;
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
-  private menuAnimation?: gsap.core.Tween;
 
   private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
 
@@ -62,6 +67,14 @@ export class Header {
     return this.getLinkClass('mobile-nav-link', 'mobile-nav-link--active', sectionId);
   }
 
+  protected backgroundAnimationButtonClass(): string {
+    return this.backgroundAnimationEnabled() ? 'icon-btn background-animation-btn background-animation-btn--active' : 'icon-btn background-animation-btn';
+  }
+
+  protected toggleBackgroundAnimation(): void {
+    this.backgroundAnimationService.toggle();
+  }
+
   protected onNavLinkClick(event: MouseEvent, href: string, sectionId: PortfolioSectionId): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -89,63 +102,43 @@ export class Header {
 
   protected toggleMobileMenu(): void {
     const willOpen = !this.mobileMenuOpen();
-    this.mobileMenuOpen.set(willOpen);
 
     if (willOpen) {
-      this.isMobileMenuRendered.set(true);
-      setTimeout(() => {
-        const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
-        if (nav) {
-          if (this.menuAnimation) this.menuAnimation.kill();
-          
-          // The element is already clipped to 0 height natively via style attribute
-          // so we only need to animate it to full visibility.
-          this.menuAnimation = gsap.to(nav, {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 0.4,
-            ease: 'power3.inOut',
-            clearProps: 'clipPath'
-          });
-        }
-      });
-    } else {
-      const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
-      if (nav) {
-        if (this.menuAnimation) this.menuAnimation.kill();
-        
-        this.menuAnimation = gsap.to(nav, {
-          clipPath: 'inset(0 0 100% 0)',
-          duration: 0.3,
-          ease: 'power2.inOut',
-          onComplete: () => {
-            this.isMobileMenuRendered.set(false);
-          }
-        });
-      } else {
-        this.isMobileMenuRendered.set(false);
-      }
+      this.openMobileMenu();
+      return;
     }
+
+    this.closeMobileMenu();
   }
 
   protected closeMobileMenu(): void {
     if (!this.mobileMenuOpen()) return;
+
     this.mobileMenuOpen.set(false);
-    
-    const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
-    if (nav) {
-      if (this.menuAnimation) this.menuAnimation.kill();
-      
-      this.menuAnimation = gsap.to(nav, {
-        clipPath: 'inset(0 0 100% 0)',
-        duration: 0.3,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          this.isMobileMenuRendered.set(false);
-        }
-      });
-    } else {
+
+    const nav = this.getMobileNavElement();
+
+    if (!nav) {
       this.isMobileMenuRendered.set(false);
+      return;
     }
+
+    this.headerService.closeMobileMenu(nav, () => {
+      this.isMobileMenuRendered.set(false);
+    });
+  }
+
+  private openMobileMenu(): void {
+    this.mobileMenuOpen.set(true);
+    this.isMobileMenuRendered.set(true);
+
+    setTimeout(() => {
+      const nav = this.getMobileNavElement();
+
+      if (!nav) return;
+
+      this.headerService.openMobileMenu(nav);
+    });
   }
 
   private initializeHeaderRuntime(): void {
@@ -157,6 +150,7 @@ export class Header {
 
     this.syncInitialHash();
     this.syncActiveSection();
+    this.scheduleHeaderMorph(scrollRoot.scrollTop);
 
     const desktopMq = window.matchMedia('(min-width: 769px)');
 
@@ -164,10 +158,13 @@ export class Header {
       if (event.matches) {
         this.closeMobileMenu();
       }
+
+      this.scheduleHeaderMorph(scrollRoot.scrollTop);
     };
 
     const onScrollOrResize = (): void => {
       this.scheduleActiveSectionSync();
+      this.scheduleHeaderMorph(scrollRoot.scrollTop);
     };
 
     const onManualScroll = (): void => {
@@ -203,6 +200,28 @@ export class Header {
 
       this.cancelActiveSectionFrame();
       this.clearScrollUnlockTimer();
+      this.headerService.destroy();
+    });
+  }
+
+  private scheduleHeaderMorph(scrollTop: number): void {
+    const header = this.getHeaderElement();
+
+    if (!header) {
+      return;
+    }
+
+    this.headerService.scheduleHeaderMorph({
+      header,
+      scrollTop,
+      hostWidth: this.elementRef.nativeElement.clientWidth,
+      headerHeight: this.getHeaderHeight(),
+      isMobile: window.innerWidth <= 768,
+      onFloatingChange: (floating) => {
+        if (this.isFloating() !== floating) {
+          this.isFloating.set(floating);
+        }
+      },
     });
   }
 
@@ -242,6 +261,14 @@ export class Header {
 
   private getLinkClass(baseClass: string, activeClass: string, sectionId: PortfolioSectionId): string {
     return this.activeSection() === sectionId ? `${baseClass} ${activeClass}` : baseClass;
+  }
+
+  private getHeaderElement(): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>('.header');
+  }
+
+  private getMobileNavElement(): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>('.mobile-nav');
   }
 
   private getScrollRoot(): HTMLElement | null {

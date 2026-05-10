@@ -6,11 +6,12 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 import { techIconUrl } from '@shared/utils/tech-icons';
 
 import { ExperienceService } from './experience.service';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-animated-border.directive';
 
 @Component({
   selector: 'portfolio-experience',
   standalone: true,
-  imports: [PortfolioIcon],
+  imports: [PortfolioIcon, PortfolioAnimatedBorderDirective],
   templateUrl: './experience.html',
   styleUrl: './experience.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,7 +60,7 @@ export class Experience {
           this.experienceService.animateEntrance(this.elementRef, this.headerRef, this.timelineRef);
         }
       }, { threshold: 0.1 });
-      
+
       observer.observe(this.elementRef.nativeElement);
     });
   }

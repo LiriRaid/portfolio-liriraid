@@ -27,7 +27,7 @@
 
       <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
         @for (stat of stats; track stat.label; let i = $index) {
-          <article class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
+          <article portfolioAnimatedBorder class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
             <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">
               <span class="stat-value text-tittle-4-bold">
                 {{ stat.value }}
