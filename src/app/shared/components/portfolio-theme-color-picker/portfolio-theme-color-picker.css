@@ -2,33 +2,6 @@
   display: inline-flex;
 }
 
-/* =========================
-   Trigger
-   ========================= */
-
-:host ::ng-deep .picker-trigger.p-button {
-  width: 2.25rem;
-  height: 2.25rem;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
-  padding: 0;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border: none;
-  border-radius: 0.5rem;
-  background-color: transparent;
-  color: var(--app-text-muted);
-  box-shadow: none;
-  overflow: hidden;
-
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-}
-
 :host ::ng-deep .picker-trigger.p-button .p-button-label {
   display: none;
 }
@@ -41,17 +14,6 @@
   border-radius: inherit;
 }
 
-:host ::ng-deep .picker-trigger.p-button :is(.p-button-icon, portfolio-icon, svg),
-:host ::ng-deep .picker-trigger.p-button portfolio-icon * {
-  color: inherit;
-  stroke: currentColor;
-}
-
-/* =========================
-   Estados
-   ========================= */
-
-:host ::ng-deep .picker-trigger.p-button:hover,
 :host ::ng-deep .picker-trigger.p-button.picker-trigger--active {
   color: var(--app-text-color);
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
@@ -61,9 +23,9 @@
 :host ::ng-deep .picker-trigger.p-button:focus-visible,
 :host ::ng-deep .picker-trigger.p-button.p-focus,
 :host ::ng-deep .picker-trigger.p-button[data-p-focused='true'] {
-  background-color: transparent !important;
   color: var(--app-text-muted) !important;
   border-color: transparent !important;
+  background-color: transparent !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -76,10 +38,6 @@
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
   box-shadow: none !important;
 }
-
-/* =========================
-   Popover
-   ========================= */
 
 ::ng-deep .p-popover.color-picker-panel {
   --p-popover-background: var(--p-surface-0);
@@ -112,10 +70,6 @@
   background: var(--p-surface-900);
   border-color: var(--p-surface-700);
 }
-
-/* =========================
-   Contenido
-   ========================= */
 
 .color-picker-content,
 .color-picker-section {
@@ -156,15 +110,12 @@
   width: 22px;
   height: 22px;
   padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 50%;
   border: 2px solid transparent;
+  border-radius: 50%;
   cursor: pointer;
-
   transition:
     transform 0.15s ease,
     border-color 0.15s ease;
@@ -183,7 +134,7 @@
 .color-swatch .check {
   color: white;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }

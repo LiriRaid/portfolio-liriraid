@@ -8,11 +8,12 @@ import { PortfolioAnimatedBorderDirective } from '@shared/directives';
 import { ABOUT_CONTENT, ABOUT_STATS } from './mocks';
 import { AboutService } from './about.service';
 import { PortfolioSectionRevealService } from '@shared/services';
+import { GithubStatsComponent } from './ui/github-stats/github-stats';
 
 @Component({
   selector: 'portfolio-about',
   standalone: true,
-  imports: [PortfolioButton, PortfolioIcon, PortfolioAnimatedBorderDirective],
+  imports: [PortfolioButton, PortfolioIcon, PortfolioAnimatedBorderDirective, GithubStatsComponent],
   templateUrl: './about.html',
   styleUrl: './about.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

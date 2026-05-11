@@ -12,20 +12,20 @@
     </nav>
 
     <div class="flex shrink-0 items-center gap-(--header-actions-gap)">
-      <portfolio-button variant="text" icon="Sparkles" iconSize="18" [styleClass]="backgroundAnimationButtonClass()" [ariaLabel]="backgroundAnimationEnabled() ? 'Desactivar animación de fondo' : 'Activar animación de fondo'" (onClick)="toggleBackgroundAnimation()" />
+      <portfolio-button variant="text" icon="Sparkles" iconSize="16" [styleClass]="backgroundAnimationButtonClass()" [ariaLabel]="backgroundAnimationEnabled() ? 'Desactivar animación de fondo' : 'Activar animación de fondo'" (onClick)="toggleBackgroundAnimation()" />
 
       <portfolio-theme-color-picker />
 
-      <span class="theme-toggle-slot relative inline-flex size-(--header-icon-slot) min-w-(--header-icon-slot) items-center justify-center">
-        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--dark" icon="Sun" iconSize="18" ariaLabel="Activar modo claro" (onClick)="toggleThemeMode()" />
+      <span class="theme-toggle-slot relative inline-flex size-(--header-action-size) min-w-(--header-action-size) items-center justify-center">
+        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--dark" icon="Sun" iconSize="16" ariaLabel="Activar modo claro" (onClick)="toggleThemeMode()" />
 
-        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--light" icon="Moon" iconSize="18" ariaLabel="Activar modo oscuro" (onClick)="toggleThemeMode()" />
+        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--light" icon="Moon" iconSize="16" ariaLabel="Activar modo oscuro" (onClick)="toggleThemeMode()" />
       </span>
 
-      <span class="mobile-menu-slot relative hidden size-(--header-icon-slot) min-w-(--header-icon-slot) items-center justify-center">
-        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--open" icon="Menu" iconSize="20" ariaLabel="Abrir menú" (onClick)="toggleMobileMenu()" />
+      <span class="mobile-menu-slot relative hidden size-(--header-action-size) min-w-(--header-action-size) items-center justify-center">
+        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--open" icon="Menu" iconSize="16" ariaLabel="Abrir menú" (onClick)="toggleMobileMenu()" />
 
-        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--close" icon="Close" iconSize="20" ariaLabel="Cerrar menú" (onClick)="toggleMobileMenu()" />
+        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--close" icon="Close" iconSize="16" ariaLabel="Cerrar menú" (onClick)="toggleMobileMenu()" />
       </span>
     </div>
   </div>

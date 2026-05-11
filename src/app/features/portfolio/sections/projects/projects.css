@@ -2,11 +2,20 @@
   --p-py: clamp(1.75rem, 0.81rem + 3.97vw, 3.35rem);
   --p-px: clamp(0.7rem, 0.23rem + 1.99vw, 1.5rem);
   --p-section-gap: clamp(0.58rem, 0.24rem + 1.42vw, 1.15rem);
+
+  --p-inner-gap: clamp(1rem, -0.1801rem + 4.9689vw, 3rem);
   --p-header-max: 40rem;
   --p-header-gap: 0.6rem;
-  --p-label-size: clamp(0.64rem, 0.5013rem + 0.5839vw, 0.875rem);
-  --p-title-size: clamp(1.17rem, 0.3852rem + 3.3043vw, 2.5rem);
-  --p-subtitle-size: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);
+
+  --font-size-caption-2: clamp(0.64rem, 0.5013rem + 0.5839vw, 0.875rem);
+  --line-height-caption-2: 1.2;
+
+  --font-size-tittle-4: clamp(1.17rem, 0.3852rem + 3.3043vw, 2.5rem);
+  --line-height-tittle-4: 1.1;
+
+  --font-size-body-1: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);
+  --line-height-body-1: 1.5;
+
   --p-toolbar-gap: 1rem;
   --p-search-max: clamp(16rem, 13.64rem + 9.94vw, 20rem);
   --p-filter-bar-gap: clamp(0.5rem, 0.35rem + 0.62vw, 0.75rem);
@@ -15,19 +24,12 @@
   --p-filter-btn-size: clamp(0.75rem, 0.68rem + 0.31vw, 0.875rem);
 
   --p-filter-panel-width: min(clamp(32rem, 20rem + 22.5vw, 34rem), calc(100vw - var(--p-px) * 2));
-
   --p-filter-panel-mobile-width: min(clamp(34rem, 25rem + 24vw, 42rem), calc(100vw - var(--p-px) * 2));
-
   --p-filter-panel-max-height: min(clamp(16.75rem, 15.9rem + 1.1vw, 17.65rem), calc(100dvh - 7rem));
-
   --p-filter-panel-content-max-height: var(--p-filter-panel-max-height);
-
   --p-filter-layout-max-height: clamp(13.05rem, 13.3rem + 0.42vw, 13.5rem);
-
   --p-filter-panel-mobile-max-height: min(clamp(20.5rem, 17.25rem + 8.5vw, 22rem), calc(100dvh - 7rem));
-
   --p-filter-panel-mobile-content-max-height: var(--p-filter-panel-mobile-max-height);
-
   --p-filter-layout-mobile-max-height: clamp(18.75rem, 15.9rem + 7.5vw, 20.75rem);
 
   --p-filter-layout-sidebar: clamp(12.25rem, 11.6rem + 0.8vw, 13rem);
@@ -46,12 +48,16 @@
   --p-card-title-size: clamp(0.65rem, 0.45rem + 1vw, 1.25rem);
   --p-card-desc-size: clamp(0.5rem, 0.35rem + 0.7vw, 0.875rem);
   --p-card-tags-gap: clamp(0.12rem, 0.05rem + 0.4vw, 0.4rem);
+
   --p-chip-gap: clamp(0.17rem, 0.03rem + 0.57vw, 0.4rem);
   --p-chip-min-h: clamp(1.1rem, 0.76rem + 1.44vw, 1.68rem);
-  --p-chip-py: clamp(0.09rem, -0.02rem + 0.47vw, 0.28rem);
-  --p-chip-px: clamp(0.28rem, 0.07rem + 0.87vw, 0.63rem);
-  --p-chip-size: clamp(0.48rem, 0.35rem + 0.5vw, 0.74rem);
-  --p-chip-icon: clamp(8.3px, 5.23px + 0.81vw, 13.5px);
+
+  /* Desktop: 4px vertical / 10px horizontal. Mobile baja con clamp. */
+  --p-chip-py: clamp(0.09rem, 0.0359rem + 0.2278vw, 0.25rem);
+  --p-chip-px: clamp(0.28rem, 0.1634rem + 0.491vw, 0.625rem);
+
+  --p-chip-size: clamp(0.48rem, 0.34rem + 0.58vw, 0.75rem);
+  --p-chip-icon: clamp(8.3px, 5.23px + 0.81vw, 14px);
 
   --p-featured-right: clamp(2.44rem, 1.96rem + 2.01vw, 3.25rem);
   --p-featured-py: clamp(0.13rem, 0.07rem + 0.25vw, 0.23rem);

@@ -12,6 +12,5 @@ export const ABOUT_CONTENT: IAboutContent = {
 
 export const ABOUT_STATS: readonly IStat[] = [
   { value: '2+', label: 'Años de experiencia' },
-  { value: '2', label: 'Proyectos públicos en GitHub' },
   { value: '100%', label: 'Orientado a producto' },
 ];

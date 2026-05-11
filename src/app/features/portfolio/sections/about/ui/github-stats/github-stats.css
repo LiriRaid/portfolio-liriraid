@@ -1,0 +1,195 @@
+:host {
+  display: block;
+}
+
+.github-card {
+  --font-size-subtitle-2: clamp(0.94rem, 0.7568rem + 0.7714vw, 1.25rem);
+  --line-height-subtitle-2: clamp(1.1rem, 0.9229rem + 0.7453vw, 1.4rem);
+
+  --font-size-caption-1: clamp(0.72rem, 0.6307rem + 0.2808vw, 0.875rem);
+  --line-height-caption-1: clamp(0.95rem, 0.7779rem + 0.5411vw, 1.25rem);
+
+  --font-size-caption-2: clamp(0.62rem, 0.5451rem + 0.2356vw, 0.75rem);
+  --line-height-caption-2: clamp(0.82rem, 0.7162rem + 0.3261vw, 1rem);
+
+  --gh-p: var(--a-stat-p, clamp(0.82rem, 0.6356rem + 0.5797vw, 1.125rem));
+  --gh-section-gap: clamp(0.62rem, 0.4932rem + 0.3986vw, 0.84rem);
+  --gh-header-gap: clamp(0.58rem, 0.477rem + 0.3237vw, 0.76rem);
+  --gh-title-gap: clamp(0.14rem, 0.1054rem + 0.1087vw, 0.2rem);
+  --gh-metrics-gap: clamp(0.38rem, 0.2993rem + 0.2536vw, 0.52rem);
+  --gh-language-gap: clamp(0.38rem, 0.2993rem + 0.2536vw, 0.52rem);
+  --gh-language-row-gap: clamp(0.32rem, 0.274rem + 0.1449vw, 0.4rem);
+  --gh-language-icon-gap: clamp(0.24rem, 0.1996rem + 0.1268vw, 0.31rem);
+  --gh-primary-gap: clamp(0.26rem, 0.2139rem + 0.1449vw, 0.34rem);
+
+  --gh-metric-radius: var(--a-stat-radius, clamp(0.7rem, 0.523rem + 0.7453vw, 1rem));
+  --gh-box-p: clamp(0.625rem, 0.4167rem + 0.3704vw, 0.75rem);
+
+  --gh-icon-size: var(--a-stat-icon-size, clamp(1.55rem, 1.196rem + 1.4907vw, 2.15rem));
+  --gh-icon-radius: var(--a-stat-icon-radius, clamp(0.5rem, 0.382rem + 0.4969vw, 0.7rem));
+
+  --gh-metric-icon-size: clamp(0.7rem, 0.5229rem + 0.7453vw, 1rem);
+  --gh-language-icon-size: clamp(0.7rem, 0.5229rem + 0.7453vw, 1rem);
+  --gh-bar-height: clamp(0.32rem, 0.2969rem + 0.0725vw, 0.36rem);
+
+  border-color: color-mix(in srgb, var(--app-border-color) 55%, var(--app-container-border, transparent));
+  background: radial-gradient(circle at 85% 0%, color-mix(in srgb, var(--app-text-primary) 9%, transparent), transparent 34%), linear-gradient(135deg, color-mix(in srgb, var(--app-panel-bg) 98%, var(--app-text-primary)), var(--app-panel-bg));
+  transition: border-color 0.2s;
+}
+
+.github-eyebrow {
+  color: var(--app-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.github-title {
+  color: var(--app-text-color);
+  letter-spacing: -0.02em;
+}
+
+.github-strong {
+  color: var(--app-text-color);
+}
+
+.github-muted {
+  color: var(--app-text-subtle);
+}
+
+.github-icon {
+  background-color: color-mix(in srgb, var(--app-text-primary) 14%, var(--app-panel-bg));
+  color: var(--app-text-primary);
+  line-height: 0;
+}
+
+.github-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.github-box {
+  border-color: color-mix(in srgb, var(--app-border-color) 64%, transparent);
+  background-color: color-mix(in srgb, var(--app-shell-bg) 40%, transparent);
+}
+
+.github-primary {
+  grid-column: 1 / -1;
+  gap: var(--gh-primary-gap);
+}
+
+.github-language {
+  grid-template-columns: minmax(5.6rem, 0.72fr) minmax(0, 1fr) auto;
+}
+
+.github-language-name {
+  overflow: hidden;
+  color: var(--app-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.github-language-track {
+  position: relative;
+  overflow: hidden;
+  height: var(--gh-bar-height);
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--app-border-color) 55%, transparent);
+}
+
+.github-language-fill {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--app-text-primary), color-mix(in srgb, var(--app-text-primary) 55%, var(--app-text-color)));
+}
+
+.github-language--loading :is(.github-language-name, .github-language-track, .github-language-percent) {
+  min-height: var(--gh-bar-height);
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--app-border-color) 55%, transparent);
+}
+
+.github-language-icon {
+  width: var(--gh-language-icon-size);
+  height: var(--gh-language-icon-size);
+  min-width: var(--gh-language-icon-size);
+  min-height: var(--gh-language-icon-size);
+  flex: 0 0 var(--gh-language-icon-size);
+}
+
+.github-metric-icon {
+  width: var(--gh-metric-icon-size);
+  height: var(--gh-metric-icon-size);
+  min-width: var(--gh-metric-icon-size);
+  min-height: var(--gh-metric-icon-size);
+  flex: 0 0 var(--gh-metric-icon-size);
+  color: var(--app-text-subtle);
+  line-height: 0;
+}
+
+:host ::ng-deep .github-metric-icon :is(svg, .lucide) {
+  width: var(--gh-metric-icon-size) !important;
+  height: var(--gh-metric-icon-size) !important;
+  min-width: var(--gh-metric-icon-size) !important;
+  min-height: var(--gh-metric-icon-size) !important;
+}
+
+.github-box--stars .github-metric-icon {
+  color: var(--p-yellow-500, #eab308);
+}
+
+:host ::ng-deep .github-box--stars .github-metric-icon svg {
+  fill: var(--p-yellow-400, #facc15);
+  stroke: var(--p-yellow-500, #eab308);
+}
+
+@media (hover: hover) {
+  .github-card:hover {
+    border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
+  }
+}
+
+@media (max-width: 900px) {
+  .github-card {
+    --font-size-subtitle-2: clamp(0.94rem, 0.8474rem + 0.3952vw, 1.03rem);
+    --line-height-subtitle-2: clamp(1.1rem, 1.0074rem + 0.3952vw, 1.19rem);
+
+    --font-size-caption-1: clamp(0.62rem, 0.5686rem + 0.2193vw, 0.67rem);
+    --line-height-caption-1: clamp(0.82rem, 0.748rem + 0.3069vw, 0.89rem);
+
+    --font-size-caption-2: clamp(0.54rem, 0.4886rem + 0.2193vw, 0.59rem);
+    --line-height-caption-2: clamp(0.72rem, 0.648rem + 0.3069vw, 0.79rem);
+
+    --gh-section-gap: clamp(0.52rem, 0.4386rem + 0.3474vw, 0.6rem);
+    --gh-header-gap: 0.48rem;
+    --gh-title-gap: 0.12rem;
+    --gh-metrics-gap: clamp(0.3rem, 0.2593rem + 0.1737vw, 0.34rem);
+    --gh-language-gap: clamp(0.34rem, 0.2993rem + 0.1737vw, 0.38rem);
+    --gh-language-row-gap: clamp(0.3rem, 0.2593rem + 0.1737vw, 0.34rem);
+    --gh-language-icon-gap: 0.22rem;
+    --gh-primary-gap: clamp(0.26rem, 0.1983rem + 0.2632vw, 0.32rem);
+    --gh-box-p: clamp(0.38rem, 0.1964rem + 0.7619vw, 0.625rem);
+    --gh-metric-icon-size: clamp(0.66rem, 0.6091rem + 0.2171vw, 0.71rem);
+    --gh-language-icon-size: clamp(0.66rem, 0.6091rem + 0.2171vw, 0.71rem);
+    --gh-bar-height: clamp(0.3rem, 0.2796rem + 0.0868vw, 0.32rem);
+  }
+
+  .github-summary {
+    grid-template-columns: repeat(3, minmax(0, 0.78fr)) minmax(5.1rem, 1.5fr);
+  }
+
+  .github-primary {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .github-eyebrow {
+    letter-spacing: 0.065em;
+  }
+
+  .github-language {
+    grid-template-columns: minmax(4.25rem, 0.72fr) minmax(0, 1fr) auto;
+  }
+}

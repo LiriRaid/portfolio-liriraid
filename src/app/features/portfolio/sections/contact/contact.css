@@ -1,25 +1,35 @@
 .contact {
   --c-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
   --c-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
+
   --c-layout-gap: clamp(1.1rem, -1.2012rem + 9.6894vw, 5rem);
   --c-form-width: 30rem;
   --c-content-gap: clamp(0.82rem, 0.4188rem + 1.6894vw, 1.5rem);
 
-  --c-label-size: clamp(0.635rem, 0.4934rem + 0.5963vw, 0.875rem);
-  --c-title-size: clamp(1.17rem, 0.6802rem + 2.0621vw, 2rem);
-  --c-title-lh: 1.08;
-  --c-desc-max: 30rem;
-  --c-desc-size: clamp(0.76rem, 0.5446rem + 0.9068vw, 1.125rem);
-  --c-desc-lh: clamp(1.38rem, 1.1617rem + 0.9193vw, 1.75rem);
+  --font-size-caption-2: clamp(0.64rem, 0.5013rem + 0.5839vw, 0.875rem);
+  --line-height-caption-2: 1rem;
 
+  --font-size-tittle-4: clamp(1.17rem, 0.3852rem + 3.3043vw, 2.5rem);
+  --line-height-tittle-4: 1.08;
+
+  --font-size-body-1: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);
+  --line-height-body-1: 1.5;
+
+  --font-size-body-2: clamp(0.7rem, 0.523rem + 0.7453vw, 1rem);
+  --line-height-body-2: 1.5;
+
+  --font-size-caption-1: clamp(0.71rem, 0.6126rem + 0.4099vw, 0.875rem);
+  --line-height-caption-1: clamp(1.28rem, 1.1502rem + 0.5466vw, 1.5rem);
+
+  --c-desc-max: 30rem;
   --c-social-gap: clamp(0.4rem, 0.1935rem + 0.8696vw, 0.75rem);
 
   --c-form-p: clamp(1rem, 0.4099rem + 2.4845vw, 2rem);
   --c-form-gap: clamp(0.7rem, 0.3755rem + 1.3665vw, 1.25rem);
   --c-form-radius: clamp(0.85rem, 0.614rem + 0.9938vw, 1.25rem);
 
-  --c-input-size: clamp(0.71rem, 0.6126rem + 0.4099vw, 0.875rem);
-  --c-input-lh: clamp(1.28rem, 1.1502rem + 0.5466vw, 1.5rem);
+  --c-input-size: var(--font-size-caption-1);
+  --c-input-lh: var(--line-height-caption-1);
   --c-input-label-size: clamp(0.72rem, 0.6285rem + 0.3851vw, 0.875rem);
   --c-input-error-size: clamp(0.62rem, 0.5433rem + 0.323vw, 0.75rem);
   --c-input-icon: clamp(13px, 11.23px + 0.4658vw, 16px);
@@ -28,28 +38,25 @@
   --c-textarea-py: clamp(0.58rem, 0.4207rem + 0.6708vw, 0.85rem);
   --c-textarea-px: clamp(0.68rem, 0.4912rem + 0.795vw, 1rem);
 
+  --c-btn-min-h: 46px;
+  --c-btn-icon: 1rem;
+
   box-sizing: border-box;
 }
 
 .contact-label {
   color: var(--app-text-primary);
-  font-size: var(--c-label-size);
-  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .contact-title {
   color: var(--app-text-color);
-  font-size: var(--c-title-size);
-  line-height: var(--c-title-lh);
   letter-spacing: -0.02em;
 }
 
 .contact-description {
   color: var(--app-text-muted);
-  font-size: var(--c-desc-size);
-  line-height: var(--c-desc-lh);
 }
 
 .contact-layout {
@@ -69,8 +76,6 @@
   resize: none;
   padding: var(--c-textarea-py) var(--c-textarea-px);
   color: var(--app-text-color);
-  font-size: var(--c-input-size);
-  line-height: var(--c-input-lh);
   background-color: transparent;
   border: 0;
   outline: none;
@@ -108,6 +113,10 @@
 :host ::ng-deep .contact-form portfolio-input portfolio-icon {
   width: var(--c-input-icon);
   height: var(--c-input-icon);
+}
+
+:host ::ng-deep :is(.contact-social .p-button, .contact-submit-btn) {
+  min-height: var(--c-btn-min-h);
 }
 
 :host ::ng-deep .contact-submit-btn.p-button {
@@ -172,22 +181,16 @@
 
 @media (max-width: 640px) {
   .contact {
-    --c-btn-min-h: clamp(2rem, 1.6346rem + 1.5385vw, 2.25rem);
-    --c-btn-py: clamp(0.42rem, 0.3323rem + 0.3692vw, 0.48rem);
-    --c-btn-px: clamp(0.62rem, 0.4308rem + 0.8vw, 0.75rem);
-    --c-btn-size: clamp(0.72rem, 0.6477rem + 0.3046vw, 0.77rem);
-    --c-btn-icon: clamp(0.82rem, 0.6892rem + 0.5538vw, 0.91rem);
+    --c-btn-min-h: clamp(2rem, 1.941rem + 0.2484vw, 2.1rem);
+    --c-btn-py: clamp(0.4rem, 0.3882rem + 0.0497vw, 0.42rem);
+    --c-btn-px: clamp(0.55rem, 0.432rem + 0.4969vw, 0.75rem);
+    --c-btn-size: clamp(0.7rem, 0.6587rem + 0.1739vw, 0.77rem);
+    --c-btn-icon: clamp(0.85rem, 0.7615rem + 0.3727vw, 1rem);
   }
 
   :host ::ng-deep .contact-social portfolio-button {
     width: auto;
     flex: 0 0 auto;
-  }
-
-  :host ::ng-deep :is(.contact-social .p-button, .contact-submit-btn) {
-    min-height: var(--c-btn-min-h);
-    padding: var(--c-btn-py) var(--c-btn-px);
-    font-size: var(--c-btn-size);
   }
 
   :host ::ng-deep .contact-social .p-button {
@@ -197,6 +200,11 @@
   :host ::ng-deep .contact-submit-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  :host ::ng-deep :is(.contact-social .p-button, .contact-submit-btn) {
+    padding: var(--c-btn-py) var(--c-btn-px);
+    font-size: var(--c-btn-size);
   }
 
   :host ::ng-deep :is(.contact-social .p-button-label, .contact-submit-btn .p-button-label) {

@@ -5,7 +5,7 @@ export const HERO_CV_FILE: IHeroCvFile = {
   fileName: 'Gabriel-Leonardo-Cruz-Flores-CV.pdf',
 };
 
-export const HERO_STACK = ['Angular', 'TypeScript', 'HTML', 'CSS', 'SASS', 'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS'] as const;
+export const HERO_STACK = ['Angular', 'TypeScript', 'HTML', 'CSS', 'SCSS', 'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS'] as const;
 
 export const HERO_WINDOW_DOTS: readonly IHeroWindowDot[] = [{ className: 'hero-window-dot--red' }, { className: 'hero-window-dot--yellow' }, { className: 'hero-window-dot--green' }];
 

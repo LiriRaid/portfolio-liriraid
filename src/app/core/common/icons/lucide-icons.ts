@@ -65,7 +65,7 @@ const PortfolioLucideIcons = {
   ExternalLink: LucideExternalLink,
   Filter: LucideListFilter,
   Folder: LucideFolderInput,
-  Github: LucideGitBranch,
+  GitBranch: LucideGitBranch,
   GitFork: LucideGitFork,
   Globe: LucideGlobe,
   Home: LucideHouse,

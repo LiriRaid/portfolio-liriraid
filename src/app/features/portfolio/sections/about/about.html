@@ -3,7 +3,7 @@
     <div class="about-layout grid items-start gap-(--a-layout-gap)">
       <div #contentRef class="about-content flex max-w-(--a-content-max) flex-col gap-(--a-content-gap)">
         <header class="about-header flex flex-col gap-(--a-header-gap)">
-          <p class="about-label m-0">
+          <p class="about-label m-0 text-caption-2-bold">
             {{ about.label }}
           </p>
 
@@ -29,7 +29,7 @@
         @for (stat of stats; track stat.label; let i = $index) {
           <article portfolioAnimatedBorder class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
             <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">
-              <span class="stat-value text-tittle-4-bold">
+              <span class="stat-value text-subtitle-2-bold">
                 {{ stat.value }}
               </span>
 
@@ -38,14 +38,10 @@
               </span>
             </div>
 
-            <span class="stat-icon inline-flex shrink-0 items-center justify-center" aria-hidden="true">
+            <span class="stat-icon inline-grid size-(--a-stat-icon-size) shrink-0 place-items-center rounded-(--a-stat-icon-radius)" aria-hidden="true">
               @switch (i) {
                 @case (0) {
                   <portfolio-icon name="Code" size="16" />
-                }
-
-                @case (1) {
-                  <portfolio-icon name="Github" size="16" />
                 }
 
                 @default {
@@ -55,6 +51,8 @@
             </span>
           </article>
         }
+
+        <portfolio-github-stats />
       </div>
     </div>
   </div>

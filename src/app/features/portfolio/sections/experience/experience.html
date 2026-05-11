@@ -5,11 +5,11 @@
         {{ header.label }}
       </p>
 
-      <h2 id="experience-heading" class="experience-title m-0 text-(--app-text-color) text-tittle-4-bold">
+      <h2 id="experience-heading" class="m-0 text-(--app-text-color) text-tittle-4-bold">
         {{ header.title }}
       </h2>
 
-      <p class="experience-subtitle m-0 text-(--app-text-muted) text-body-1-regular">
+      <p class="m-0 text-(--app-text-muted) text-body-1-regular">
         {{ header.subtitle }}
       </p>
     </header>
@@ -23,12 +23,12 @@
 
           <article portfolioAnimatedBorder class="experience-card flex flex-col gap-(--e-card-gap) rounded-(--e-card-radius) border border-(--app-border-color) bg-(--app-panel-bg) p-(--e-card-p) [box-shadow:var(--app-container-shadow)]">
             <header class="experience-card-header flex flex-wrap items-start justify-between gap-(--e-card-header-gap)">
-              <div class="experience-card-meta flex min-w-0 flex-1 flex-col gap-1.5">
-                <h3 class="experience-role m-0 text-(--app-text-color) text-subtitle-2-bold">
+              <div class="flex min-w-0 flex-1 flex-col gap-1.5">
+                <h3 class="m-0 text-(--app-text-color) text-subtitle-2-bold">
                   {{ item.role }}
                 </h3>
 
-                <p class="experience-company m-0 inline-flex flex-wrap items-center gap-2 text-(--app-text-muted) text-body-2-medium">
+                <p class="m-0 inline-flex flex-wrap items-center gap-2 text-(--app-text-muted) text-body-2-medium">
                   <portfolio-icon name="Company" size="14" />
                   <span>{{ item.company }}</span>
 
@@ -39,25 +39,25 @@
               </div>
 
               <div class="experience-period-block flex shrink-0 flex-col items-end gap-0.5 text-right">
-                <p class="experience-period m-0 text-(--app-text-subtle) text-caption-1-medium">
+                <p class="m-0 text-(--app-text-subtle) text-caption-1-medium">
                   {{ item.period }}
                 </p>
 
                 @if (item.location) {
-                  <p class="experience-location m-0 text-(--app-text-subtle) text-caption-2-regular">
+                  <p class="m-0 text-(--app-text-subtle) text-caption-2-regular">
                     {{ item.location }}
                   </p>
                 }
               </div>
             </header>
 
-            <p class="experience-description m-0 text-(--app-text-muted) text-body-2-regular">
+            <p class="m-0 text-(--app-text-muted) text-body-2-regular">
               {{ item.description }}
             </p>
 
-            <ul class="experience-responsibilities m-0 flex list-none flex-col gap-(--e-resp-list-gap) p-0" role="list">
+            <ul class="m-0 flex list-none flex-col gap-(--e-resp-list-gap) p-0" role="list">
               @for (responsibility of item.responsibilities; track responsibility) {
-                <li class="experience-responsibility m-0 grid grid-cols-[auto_1fr] items-start gap-(--e-resp-gap) text-(--app-text-muted) text-body-2-regular">
+                <li class="m-0 grid grid-cols-[auto_1fr] items-start gap-(--e-resp-gap) text-(--app-text-muted) text-body-2-regular">
                   <span class="mt-(--e-resp-marker-top) size-(--e-resp-marker) rounded-full bg-(--app-text-primary) [box-shadow:0_0_0_3px_color-mix(in_srgb,var(--app-text-primary)_16%,transparent)]" aria-hidden="true"></span>
                   <span>{{ responsibility }}</span>
                 </li>

@@ -2,24 +2,23 @@
    Portfolio projects — Moved from components-styles.css
    ============================================================= */
 
-.projects {
-  --p-inner-gap: clamp(1rem, -0.1801rem + 4.9689vw, 3rem);
-}
-
 .projects-header {
   max-width: var(--p-header-max);
 }
 
 .projects-label {
-  font-size: var(--p-label-size);
+  color: var(--app-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .projects-title {
-  font-size: var(--p-title-size);
+  color: var(--app-text-color);
+  letter-spacing: -0.02em;
 }
 
 .projects-subtitle {
-  font-size: var(--p-subtitle-size);
+  color: var(--app-text-muted);
 }
 
 .projects .projects-toolbar portfolio-search {
@@ -53,6 +52,19 @@
 
 .projects .projects-filter-button .portfolio-button__badge {
   margin-left: 0.35rem;
+}
+
+.projects :is(.projects-tag, .projects-stat, .projects-selected-tag, .projects-filter-option, .projects-link, .projects-private, .projects-selected-tag-remove) portfolio-icon,
+.projects :is(.projects-tag, .projects-stat, .projects-selected-tag, .projects-filter-option, .projects-link, .projects-private, .projects-selected-tag-remove) portfolio-icon :is(svg, .lucide) {
+  width: var(--p-chip-icon) !important;
+  height: var(--p-chip-icon) !important;
+  min-width: var(--p-chip-icon) !important;
+  min-height: var(--p-chip-icon) !important;
+}
+
+.projects :is(.projects-tag, .projects-stat, .projects-selected-tag, .projects-filter-option, .projects-link, .projects-private, .projects-selected-tag-remove) portfolio-icon {
+  flex: 0 0 var(--p-chip-icon);
+  line-height: 0;
 }
 
 .projects .p-popover.projects-filter-panel {
@@ -163,38 +175,8 @@
     transform 0.2s;
 }
 
-/* Card activa: la que está en el centro del carousel */
 .projects .projects-card--active {
   border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
-}
-
-/* Desktop real con mouse: cualquier card puede hacer hover/scale */
-@media (hover: hover) and (pointer: fine) {
-  .projects .projects-card:hover {
-    border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
-    box-shadow: var(--shadow-extra-large);
-    transform: translateY(-2px);
-  }
-}
-
-/* Mobile/touch: evita que el :hover quede pegado después de tocar o arrastrar */
-@media (hover: none), (pointer: coarse) {
-  .projects .projects-card:hover {
-    border-color: var(--app-container-border, var(--app-border-color));
-    box-shadow: var(--app-container-shadow);
-    transform: none;
-  }
-
-  .projects .projects-card--active,
-  .projects .projects-card--active:hover {
-    border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
-  }
-
-  .projects .projects-card:active {
-    border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
-    box-shadow: var(--shadow-extra-large);
-    transform: translateY(-2px);
-  }
 }
 
 .projects .projects-stat portfolio-icon {
@@ -231,6 +213,33 @@
 .projects .projects-filter-category-tab:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .projects .projects-card:hover {
+    border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
+    box-shadow: var(--shadow-extra-large);
+    transform: translateY(-2px);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .projects .projects-card:hover {
+    border-color: var(--app-container-border, var(--app-border-color));
+    box-shadow: var(--app-container-shadow);
+    transform: none;
+  }
+
+  .projects .projects-card--active,
+  .projects .projects-card--active:hover {
+    border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
+  }
+
+  .projects .projects-card:active {
+    border-color: color-mix(in srgb, var(--app-text-primary) 40%, var(--app-border-color));
+    box-shadow: var(--shadow-extra-large);
+    transform: translateY(-2px);
+  }
 }
 
 @media (max-width: 640px) {
