@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/icons/lucide-icons.provider';
+import { provideI18nInitializer } from '@core/i18n';
 import { createPortfolioAuraPreset } from '@core/theme/portfolio-aura-preset';
 import { getStoredPrimaryColorKey, getStoredSurfaceColorKey } from '@core/theme/theme-preferences.storage';
 import { getPrimaryColor, getSurfaceColor } from '@core/theme/theme-palettes';
@@ -36,6 +37,7 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideThemeInitializer(),
+    provideI18nInitializer(),
     MessageService,
     {
       provide: LUCIDE_ICONS,

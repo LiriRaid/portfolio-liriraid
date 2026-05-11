@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject } from '@angular/core';
 
+import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioAnimatedBorderDirective } from '@shared/directives';
@@ -27,12 +28,26 @@ export class About {
   private readonly destroyRef = inject(DestroyRef);
   private readonly aboutService = inject(AboutService);
   private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('statsRef') statsRef!: ElementRef<HTMLElement>;
 
-  protected readonly about = ABOUT_CONTENT;
-  protected readonly stats = ABOUT_STATS;
+  protected readonly about = computed(() => ({
+    label: this.t(ABOUT_CONTENT.label),
+    title: this.t(ABOUT_CONTENT.title),
+    ctaLabel: this.t(ABOUT_CONTENT.ctaLabel),
+    paragraphs: ABOUT_CONTENT.paragraphs.map((key) => this.t(key)),
+  }));
+
+  protected readonly stats = computed(() =>
+    ABOUT_STATS.map((stat) => ({
+      value: this.t(stat.value),
+      label: this.t(stat.label),
+    })),
+  );
+
+  protected readonly statsAriaLabel = computed(() => this.t('about.stats.aria'));
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -56,5 +71,9 @@ export class About {
     }
 
     document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 }

@@ -1,26 +1,27 @@
 import { IExperienceHeader, IExperienceItem } from '@features/portfolio/entities';
 
+// Las cadenas de role/period/location/description/responsibilities son keys i18n; se resuelven con I18nService.t() en el componente.
 export const EXPERIENCE_HEADER: IExperienceHeader = {
-  label: 'Trayectoria',
-  title: 'Experiencia laboral',
-  subtitle: 'Roles donde he construido productos reales, tomado decisiones técnicas y crecido como ingeniero.',
+  label: 'experience.header.label',
+  title: 'experience.header.title',
+  subtitle: 'experience.header.subtitle',
 };
 
 export const EXPERIENCES: readonly IExperienceItem[] = [
   {
     company: 'CIT (Creative Infotainment Technologies)',
-    role: 'Desarrollador Full Angular',
-    period: 'Julio · 2024 — Presente',
-    location: 'Presencial',
-    description: 'Desarrollo de aplicaciones web empresariales con Angular moderno, enfocadas en arquitectura escalable, componentes reutilizables, rendimiento y experiencia de usuario.',
+    role: 'experience.items.0.role',
+    period: 'experience.items.0.period',
+    location: 'experience.items.0.location',
+    description: 'experience.items.0.description',
     responsibilities: [
-      'Construcción de módulos administrativos con Angular 21, TypeScript, PrimeNG y Tailwind CSS.',
-      'Implementación de arquitectura frontend basada en features, rutas lazy loading y separación clara por dominio.',
-      'Desarrollo de componentes reutilizables para formularios, botones, iconos, sidebars, modales, filtros, inputs y elementos de interfaz.',
-      'Manejo de estado moderno con signals, computed, effects, servicios reactivos y RxJS cuando aplica.',
-      'Integración con APIs REST para flujos CRUD, autenticación, permisos, paginación, filtros avanzados y dashboards.',
-      'Optimización de rendimiento, carga inicial, experiencia responsive y consistencia visual del sistema.',
-      'Mantenimiento y mejora de proyectos legacy con AngularJS, migrando lógica hacia soluciones más modernas y mantenibles.',
+      'experience.items.0.responsibilities.0',
+      'experience.items.0.responsibilities.1',
+      'experience.items.0.responsibilities.2',
+      'experience.items.0.responsibilities.3',
+      'experience.items.0.responsibilities.4',
+      'experience.items.0.responsibilities.5',
+      'experience.items.0.responsibilities.6',
     ],
     technologies: ['Angular 21', 'AngularJS', 'TypeScript', 'Signals', 'RxJS', 'PrimeNG', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
     current: true,

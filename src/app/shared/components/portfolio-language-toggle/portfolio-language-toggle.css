@@ -6,6 +6,11 @@
   --language-toggle-label-offset: 0.58rem;
   --language-toggle-label-size: 0.72rem;
 
+  --language-toggle-motion-duration: 0.64s;
+  --language-toggle-bg-duration: 0.36s;
+  --language-toggle-label-duration: 0.42s;
+  --language-toggle-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
   display: inline-flex;
   width: var(--language-toggle-width);
   min-width: var(--language-toggle-width);
@@ -54,8 +59,8 @@
   border: 1px solid color-mix(in srgb, var(--app-border-color) 72%, transparent);
   background-color: color-mix(in srgb, var(--app-shell-bg) 82%, var(--app-panel-bg));
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+    background-color var(--language-toggle-bg-duration) ease,
+    border-color var(--language-toggle-bg-duration) ease;
 }
 
 :host ::ng-deep .p-toggleswitch-handle {
@@ -79,9 +84,9 @@
   background-color: color-mix(in srgb, var(--app-text-color) 88%, var(--app-panel-bg));
   box-shadow: 0 2px 8px color-mix(in srgb, #000 28%, transparent);
   transition:
-    left 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+    left var(--language-toggle-motion-duration) var(--language-toggle-ease),
+    background-color var(--language-toggle-bg-duration) ease,
+    box-shadow var(--language-toggle-bg-duration) ease;
 }
 
 :host ::ng-deep .p-toggleswitch-slider::after {
@@ -95,9 +100,10 @@
   color: var(--app-text-muted);
   pointer-events: none;
   transition:
-    color 0.2s ease,
-    right 0.2s ease,
-    left 0.2s ease;
+    color var(--language-toggle-label-duration) ease,
+    right var(--language-toggle-motion-duration) var(--language-toggle-ease),
+    left var(--language-toggle-motion-duration) var(--language-toggle-ease),
+    opacity var(--language-toggle-label-duration) ease;
 }
 
 :host ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider::before {
@@ -108,6 +114,8 @@
   content: 'ES';
   left: var(--language-toggle-label-offset);
   right: auto;
+  font-size: calc(var(--language-toggle-label-size) * 1.04);
+  letter-spacing: 0.01em;
 }
 
 :host ::ng-deep .p-toggleswitch:not(.p-disabled):hover .p-toggleswitch-slider {
@@ -123,6 +131,12 @@
 :host ::ng-deep .p-toggleswitch:focus-visible .p-toggleswitch-slider {
   outline: none;
   box-shadow: none;
+}
+
+:host ::ng-deep .p-toggleswitch.is-initial-sync .p-toggleswitch-slider,
+:host ::ng-deep .p-toggleswitch.is-initial-sync .p-toggleswitch-slider::before,
+:host ::ng-deep .p-toggleswitch.is-initial-sync .p-toggleswitch-slider::after {
+  transition: none !important;
 }
 
 @media (max-width: 640px) {

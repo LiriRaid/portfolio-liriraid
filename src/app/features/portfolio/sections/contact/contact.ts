@@ -1,7 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { I18nService } from '@core/i18n';
 import { environment } from '@environments/environment';
 import { TContactForm } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
@@ -30,12 +31,33 @@ export class Contact {
   private readonly destroyRef = inject(DestroyRef);
   private readonly contactService = inject(ContactService);
   private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('formRef') formRef!: ElementRef<HTMLElement>;
 
-  protected readonly contact = CONTACT_CONTENT;
-  protected readonly socialLinks = CONTACT_SOCIAL_LINKS;
+  protected readonly contact = computed(() => ({
+    label: this.t(CONTACT_CONTENT.label),
+    titleStart: this.t(CONTACT_CONTENT.titleStart),
+    titleHighlight: this.t(CONTACT_CONTENT.titleHighlight),
+    description: this.t(CONTACT_CONTENT.description),
+  }));
+
+  protected readonly socialLinks = computed(() =>
+    CONTACT_SOCIAL_LINKS.map((link) => ({
+      ...link,
+      label: this.t(link.label),
+    })),
+  );
+
+  protected readonly nameLabel = computed(() => this.t('contact.form.name.label'));
+  protected readonly namePlaceholder = computed(() => this.t('contact.form.name.placeholder'));
+  protected readonly emailLabel = computed(() => this.t('contact.form.email.label'));
+  protected readonly emailPlaceholder = computed(() => this.t('contact.form.email.placeholder'));
+  protected readonly messageLabel = computed(() => this.t('contact.form.message.label'));
+  protected readonly messagePlaceholder = computed(() => this.t('contact.form.message.placeholder'));
+  protected readonly submitLabel = computed(() => this.t('contact.form.submit'));
+  protected readonly submittingLabel = computed(() => this.t('contact.form.submitting'));
 
   protected readonly form: TContactForm = new FormGroup({
     name: new FormControl('', {
@@ -74,7 +96,7 @@ export class Contact {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
 
-      this.alertService.showWarning('Formulario incompleto', 'Completa tu nombre, un correo válido y un mensaje antes de enviar.', undefined, 5000, false, 'top-center');
+      this.alertService.showWarning(this.t('contact.alerts.incomplete.title'), this.t('contact.alerts.incomplete.message'), undefined, 5000, false, 'top-center');
 
       return;
     }
@@ -94,11 +116,11 @@ export class Contact {
         message: '',
       });
 
-      this.alertService.showSuccess('Mensaje enviado', 'Gracias por escribirme. Te responderé pronto.', undefined, 4500, 'top-center');
+      this.alertService.showSuccess(this.t('contact.alerts.success.title'), this.t('contact.alerts.success.message'), undefined, 4500, 'top-center');
     } catch (error) {
       console.error('[EmailJS] Error sending contact email:', error);
 
-      this.alertService.showError('No se pudo enviar', 'Hubo un error al enviar tu mensaje. Intenta nuevamente en unos minutos.', undefined, 6000, 'top-center');
+      this.alertService.showError(this.t('contact.alerts.error.title'), this.t('contact.alerts.error.message'), undefined, 6000, 'top-center');
     } finally {
       this.sending.set(false);
     }
@@ -139,5 +161,9 @@ export class Contact {
     const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
 
     return `${first}${last}`.toUpperCase();
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 }

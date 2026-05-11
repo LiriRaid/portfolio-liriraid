@@ -48,6 +48,7 @@ export class PortfolioBackgroundAnimationService {
   private dpr = 1;
   private time = 0;
   private initialized = false;
+  private resizeFrameId: number | null = null;
 
   constructor() {
     if (!this.isBrowser) {
@@ -80,7 +81,7 @@ export class PortfolioBackgroundAnimationService {
 
     this.resize();
 
-    this.resizeObserver = new ResizeObserver(() => this.resize());
+    this.resizeObserver = new ResizeObserver(() => this.scheduleResize());
     this.resizeObserver.observe(document.documentElement);
 
     gsap.ticker.add(this.render);
@@ -113,6 +114,12 @@ export class PortfolioBackgroundAnimationService {
     gsap.ticker.remove(this.render);
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
+
+    if (this.resizeFrameId !== null) {
+      cancelAnimationFrame(this.resizeFrameId);
+      this.resizeFrameId = null;
+    }
+
     this.clear();
 
     this.canvas = null;
@@ -128,16 +135,36 @@ export class PortfolioBackgroundAnimationService {
     return isPlatformBrowser(this.platformId);
   }
 
+  private scheduleResize(): void {
+    if (this.resizeFrameId !== null) {
+      return;
+    }
+
+    this.resizeFrameId = requestAnimationFrame(() => {
+      this.resizeFrameId = null;
+      this.resize();
+    });
+  }
+
   private resize(): void {
     if (!this.isBrowser || !this.canvas || !this.hostElement) {
       return;
     }
 
     const rect = this.hostElement.getBoundingClientRect();
+    const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+    const nextWidth = Math.max(1, Math.round(rect.width));
+    const nextHeight = Math.max(1, Math.round(rect.height));
 
-    this.dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.width = Math.max(1, Math.round(rect.width));
-    this.height = Math.max(1, Math.round(rect.height));
+    if (nextDpr === this.dpr && nextWidth === this.width && nextHeight === this.height) {
+      return;
+    }
+
+    const sizeChanged = nextWidth !== this.width || nextHeight !== this.height;
+
+    this.dpr = nextDpr;
+    this.width = nextWidth;
+    this.height = nextHeight;
 
     this.canvas.width = Math.round(this.width * this.dpr);
     this.canvas.height = Math.round(this.height * this.dpr);
@@ -146,7 +173,13 @@ export class PortfolioBackgroundAnimationService {
 
     this.ctx?.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
 
-    this.buildCircuit();
+    if (sizeChanged || this.nodes.length === 0) {
+      this.buildCircuit();
+    }
+
+    if (this.initialized && this.enabled()) {
+      this.render();
+    }
   }
 
   private buildCircuit(): void {

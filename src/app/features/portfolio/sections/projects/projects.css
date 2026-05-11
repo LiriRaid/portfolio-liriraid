@@ -1,9 +1,9 @@
 .projects {
   --p-py: clamp(1.75rem, 0.81rem + 3.97vw, 3.35rem);
   --p-px: clamp(0.7rem, 0.23rem + 1.99vw, 1.5rem);
-  --p-section-gap: clamp(0.58rem, 0.24rem + 1.42vw, 1.15rem);
+  --p-section-gap: clamp(0.45rem, 0.25rem + 1vw, 0.95rem);
 
-  --p-inner-gap: clamp(1rem, -0.1801rem + 4.9689vw, 3rem);
+  --p-inner-gap: clamp(0.75rem, 0.4rem + 1.8vw, 1.85rem);
   --p-header-max: 40rem;
   --p-header-gap: 0.6rem;
 
@@ -40,11 +40,11 @@
   --p-filter-options-gap: 0.45rem;
   --p-selected-tags-gap: 0.55rem;
 
-  --p-card-width: min(76vw, clamp(15.75rem, 8rem + 32.9vw, 29rem));
-  --p-card-height: clamp(21.5rem, 14.5rem + 35.5vw, 41rem);
+  --p-card-width: min(88vw, clamp(15.75rem, 8rem + 32.9vw, 29rem));
+  --p-card-height: clamp(21rem, 15.5rem + 32vw, 39.25rem);
   --p-card-radius: clamp(0.85rem, 0.79rem + 0.25vw, 0.95rem);
-  --p-card-body-p: clamp(0.4rem, 0.15rem + 1vw, 1.08rem);
-  --p-card-body-gap: clamp(0.15rem, 0.1rem + 0.5vw, 0.74rem);
+  --p-card-body-p: clamp(0.38rem, 0.2rem + 0.8vw, 0.96rem);
+  --p-card-body-gap: clamp(0.12rem, 0.08rem + 0.4vw, 0.58rem);
   --p-card-title-size: clamp(0.65rem, 0.45rem + 1vw, 1.25rem);
   --p-card-desc-size: clamp(0.5rem, 0.35rem + 0.7vw, 0.875rem);
   --p-card-tags-gap: clamp(0.12rem, 0.05rem + 0.4vw, 0.4rem);

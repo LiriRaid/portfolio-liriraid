@@ -1,21 +1,22 @@
 import { IProject, IProjectTechnologyCategory, IProjectsEmptyState, IProjectsHeader } from '@features/portfolio/entities';
 
+// Las cadenas de label/title/subtitle/description y category.label son keys i18n; se resuelven con I18nService.t() en el componente.
 export const PROJECTS_HEADER: IProjectsHeader = {
-  label: 'Trabajo reciente',
-  title: 'Proyectos destacados',
-  subtitle: 'Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.',
+  label: 'projects.header.label',
+  title: 'projects.header.title',
+  subtitle: 'projects.header.subtitle',
 };
 
 export const PROJECTS_EMPTY_STATE: IProjectsEmptyState = {
-  searchTitle: 'No encontré proyectos con esa búsqueda.',
-  filtersTitle: 'No hay proyectos públicos con estos filtros.',
-  description: 'Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.',
+  searchTitle: 'projects.empty.searchTitle',
+  filtersTitle: 'projects.empty.filtersTitle',
+  description: 'projects.empty.description',
 };
 
 export const PROJECTS: readonly IProject[] = [
   {
     title: 'OmniInbox',
-    description: 'Plataforma conversacional tipo inbox omnicanal construida con Angular 21. Centraliza módulos de login, inbox, perfil y shell autenticado con arquitectura feature-first, componentes standalone, lazy loading, tema claro/oscuro, animaciones y testing moderno.',
+    description: 'projects.items.0.description',
     tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'Tailwind CSS', 'PrimeNG', 'GSAP', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
     repo: 'LiriRaid/omni-inbox',
     githubUrl: 'https://github.com/LiriRaid/omni-inbox',
@@ -25,7 +26,7 @@ export const PROJECTS: readonly IProject[] = [
   },
   {
     title: 'AgentFlow AI',
-    description: 'Orquestador multiagente para desarrollo con IA. Coordina agentes como Claude, Codex, OpenCode y Gemini, delega tareas, monitorea progreso en una TUI y mantiene el proyecto principal limpio mediante un workspace separado.',
+    description: 'projects.items.1.description',
     tags: ['Node.js', 'JavaScript', 'NPM', 'CLI', 'TUI', 'AI Agents', 'Automation', 'Clean Architecture'],
     repo: 'LiriRaid/agentflow-ai',
     githubUrl: 'https://github.com/LiriRaid/agentflow-ai',
@@ -34,7 +35,7 @@ export const PROJECTS: readonly IProject[] = [
   },
   {
     title: 'Portfolio Liriraid',
-    description: 'Portfolio personal profesional creado con Angular 21, SSR, prerender, hidratación normal, sistema de temas dinámico, componentes reutilizables y estructura escalable basada en features.',
+    description: 'projects.items.2.description',
     tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'SSR', 'Prerender', 'PrimeNG', 'Tailwind CSS', 'CSS', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
     repo: 'LiriRaid/portfolio-liriraid',
     githubUrl: 'https://github.com/LiriRaid/portfolio-liriraid',
@@ -45,32 +46,32 @@ export const PROJECTS: readonly IProject[] = [
 
 export const PROJECT_TECHNOLOGY_CATEGORIES: readonly IProjectTechnologyCategory[] = [
   {
-    label: 'Frontend',
+    label: 'projects.tech.categories.frontend',
     icon: 'Globe',
     technologies: ['Angular 21', 'AngularJS', 'Signals', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'PrimeNG', 'RxJS'],
   },
   {
-    label: 'Backend',
+    label: 'projects.tech.categories.backend',
     icon: 'Server',
     technologies: ['Node.js', 'NestJS', 'Ruby on Rails', 'Express', 'REST API'],
   },
   {
-    label: 'Base de datos',
+    label: 'projects.tech.categories.database',
     icon: 'Database',
     technologies: ['PostgreSQL', 'Redis'],
   },
   {
-    label: 'Herramientas',
+    label: 'projects.tech.categories.tools',
     icon: 'Settings',
     technologies: ['Git', 'Docker', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'GSAP', 'Vitest', 'NPM'],
   },
   {
-    label: 'Arquitectura',
+    label: 'projects.tech.categories.architecture',
     icon: 'Layers',
     technologies: ['Screaming Architecture', 'Feature-first', 'Clean Architecture', 'Prerender', 'SSR', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
   },
   {
-    label: 'IA / Automatización',
+    label: 'projects.tech.categories.ai',
     icon: 'Code',
     technologies: ['JavaScript', 'CLI', 'TUI', 'AI Agents', 'Automation'],
   },

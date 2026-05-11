@@ -1,16 +1,14 @@
 import { IAboutContent, IStat } from '@features/portfolio/entities';
 
+// Las cadenas son keys i18n; se resuelven con I18nService.t() en el componente.
 export const ABOUT_CONTENT: IAboutContent = {
-  label: '¿Quién soy?',
-  title: 'Sobre mí',
-  ctaLabel: 'Contactarme',
-  paragraphs: [
-    'Soy Gabriel Leonardo Cruz Flores, desarrollador Full Angular enfocado en crear aplicaciones web modernas, rápidas y mantenibles con Angular, TypeScript, Tailwind CSS, PrimeNG y Node.js.',
-    'Trabajo construyendo interfaces, dashboards, formularios, flujos administrativos, componentes reutilizables e integraciones con APIs, cuidando arquitectura, rendimiento y experiencia de usuario.',
-  ],
+  label: 'about.label',
+  title: 'about.title',
+  ctaLabel: 'about.cta',
+  paragraphs: ['about.paragraphs.0', 'about.paragraphs.1'],
 };
 
 export const ABOUT_STATS: readonly IStat[] = [
-  { value: '2+', label: 'Años de experiencia' },
-  { value: '100%', label: 'Orientado a producto' },
+  { value: 'about.stats.0.value', label: 'about.stats.0.label' },
+  { value: 'about.stats.1.value', label: 'about.stats.1.label' },
 ];

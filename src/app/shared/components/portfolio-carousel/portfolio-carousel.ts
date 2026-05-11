@@ -129,6 +129,12 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   private readonly DRAG_THRESHOLD = 50;
   private readonly DRAG_TIME_THRESHOLD = 120;
+  private readonly NAVIGATION_THROTTLE = 250;
+
+  private navigationId = 0;
+  private fullscreenNavigationId = 0;
+  private lastNavigationTime = 0;
+  private lastFullscreenNavigationTime = 0;
 
   constructor() {
     afterNextRender(() => {
@@ -767,7 +773,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     return (this.fullscreenNavFillRefs?.toArray() ?? []).map((ref) => ref.nativeElement);
   }
 
-  private animateCards(newIndex: number): void {
+  private animateCards(newIndex: number, animationId: number): void {
     const elements = this.cardElements();
     const total = elements.length;
 
@@ -778,6 +784,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       metrics: this.cardMetrics(),
       resolvePosition: this.resolvePosition,
       onComplete: () => {
+        if (animationId !== this.navigationId) return;
         this.isAnimating.set(false);
         this.emitActiveCardChange();
       },
@@ -785,7 +792,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   protected onTrackClick(event: MouseEvent): void {
-    if (this.mode() !== 'card' || this.wasDragging || this.isAnimating()) {
+    if (this.mode() !== 'card' || this.wasDragging) {
       this.wasDragging = false;
       return;
     }
@@ -836,7 +843,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 }
 
   protected onSlideClick(event: MouseEvent): void {
-    if (this.isAnimating() || this.wasDragging) {
+    if (this.wasDragging) {
       this.wasDragging = false;
       return;
     }
@@ -871,7 +878,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.goTo(index);
   }
 
-  private animateSlides(fromIndex: number, toIndex: number, direction: CarouselDirection): void {
+  private animateSlides(fromIndex: number, toIndex: number, direction: CarouselDirection, animationId: number): void {
     this.carouselScene.animateSlides({
       slides: this.slideElements(),
       fromIndex,
@@ -881,6 +888,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
         this.isAnimating.set(false);
       },
       onComplete: () => {
+        if (animationId !== this.navigationId) return;
         this.isAnimating.set(false);
         this.syncNavFills(toIndex, 0);
 
@@ -891,7 +899,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     });
   }
 
-  private animateFullscreenSlides(fromIndex: number, toIndex: number, direction: CarouselDirection): void {
+  private animateFullscreenSlides(fromIndex: number, toIndex: number, direction: CarouselDirection, animationId: number): void {
     this.carouselScene.animateSlides({
       slides: this.fullscreenSlideElements(),
       fromIndex,
@@ -901,6 +909,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
         this.isFullscreenAnimating.set(false);
       },
       onComplete: () => {
+        if (animationId !== this.fullscreenNavigationId) return;
         this.isFullscreenAnimating.set(false);
         this.syncFullscreenNavFills(toIndex, 0);
 
@@ -1095,13 +1104,17 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   private navigate(newIndex: number, direction: CarouselDirection): void {
+    const now = Date.now();
     const total = this.itemsLength();
 
-    if (!this.isBrowser || total <= 1 || this.isAnimating()) return;
+    if (!this.isBrowser || total <= 1 || now - this.lastNavigationTime < this.NAVIGATION_THROTTLE) return;
 
     const current = this.currentIndex();
 
     if (newIndex === current) return;
+
+    this.lastNavigationTime = now;
+    const animationId = ++this.navigationId;
 
     this.stopProgress();
     this.isAnimating.set(true);
@@ -1116,19 +1129,23 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     };
 
     if (this.mode() === 'card') {
-      this.animateCards(newIndex);
+      this.animateCards(newIndex, animationId);
       return;
     }
 
-    this.animateSlides(current, newIndex, direction);
+    this.animateSlides(current, newIndex, direction, animationId);
   }
 
   private navigateFullscreen(newIndex: number, direction: CarouselDirection): void {
+    const now = Date.now();
     const total = this.images().length;
     const current = this.fullscreenActiveIndex();
 
-    if (!this.isBrowser || total <= 1 || this.isFullscreenAnimating()) return;
+    if (!this.isBrowser || total <= 1 || now - this.lastFullscreenNavigationTime < this.NAVIGATION_THROTTLE) return;
     if (newIndex === current) return;
+
+    this.lastFullscreenNavigationTime = now;
+    const animationId = ++this.fullscreenNavigationId;
 
     this.stopFullscreenProgress();
     this.isFullscreenAnimating.set(true);
@@ -1142,7 +1159,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       paused: false,
     };
 
-    this.animateFullscreenSlides(current, newIndex, direction);
+    this.animateFullscreenSlides(current, newIndex, direction, animationId);
   }
 
   protected prev(): void {
@@ -1185,7 +1202,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   protected onMouseMove(event: MouseEvent): void {
-    if (!this.isDragging || this.isAnimating()) return;
+    if (!this.isDragging) return;
 
     if (this.mode() === 'screenshot') {
       event.stopPropagation();
@@ -1234,7 +1251,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   protected onTouchEnd(event: TouchEvent): void {
-    if (this.itemsLength() <= 1 || this.isAnimating()) return;
+    if (this.itemsLength() <= 1) return;
 
     if (this.mode() === 'screenshot' && !this.canUseScreenshotControls()) {
       return;

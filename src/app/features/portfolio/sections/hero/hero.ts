@@ -7,7 +7,7 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 import { AlertService } from '@shared/services/alert.service';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
-import { HERO_CODE_LINES, HERO_CV_FILE, HERO_STACK, HERO_WINDOW_DOTS } from './mocks';
+import { HERO_CODE_LINES, HERO_CV_FILE, HERO_STACK, HERO_TEXT_KEYS, HERO_WINDOW_DOTS } from './mocks';
 import { HeroService } from './hero.service';
 
 @Component({
@@ -30,16 +30,16 @@ export class Hero {
   protected readonly codeLines = HERO_CODE_LINES;
   protected readonly windowDots = HERO_WINDOW_DOTS;
 
-  protected readonly badge = computed(() => this.t('hero.badge'));
-  protected readonly titleLine1 = computed(() => this.t('hero.title.line1'));
-  protected readonly titleLine2 = computed(() => this.t('hero.title.line2'));
-  protected readonly titleLine3 = computed(() => this.t('hero.title.line3'));
-  protected readonly description = computed(() => this.t('hero.description'));
-  protected readonly experienceCta = computed(() => this.t('hero.cta.experience'));
-  protected readonly cvCta = computed(() => this.t('hero.cta.cv'));
-  protected readonly stackAriaLabel = computed(() => this.t('hero.stack.aria'));
-  protected readonly cvSuccessTitle = computed(() => this.t('hero.cv.success.title'));
-  protected readonly cvSuccessMessage = computed(() => this.t('hero.cv.success.message'));
+  protected readonly badge = computed(() => this.t(HERO_TEXT_KEYS['badge']));
+  protected readonly titleLine1 = computed(() => this.t(HERO_TEXT_KEYS['titleLine1']));
+  protected readonly titleLine2 = computed(() => this.t(HERO_TEXT_KEYS['titleLine2']));
+  protected readonly titleLine3 = computed(() => this.t(HERO_TEXT_KEYS['titleLine3']));
+  protected readonly description = computed(() => this.t(HERO_TEXT_KEYS['description']));
+  protected readonly experienceCta = computed(() => this.t(HERO_TEXT_KEYS['experienceCta']));
+  protected readonly cvCta = computed(() => this.t(HERO_TEXT_KEYS['cvCta']));
+  protected readonly stackAriaLabel = computed(() => this.t(HERO_TEXT_KEYS['stackAria']));
+  protected readonly cvSuccessTitle = computed(() => this.t(HERO_TEXT_KEYS['cvSuccessTitle']));
+  protected readonly cvSuccessMessage = computed(() => this.t(HERO_TEXT_KEYS['cvSuccessMessage']));
 
   private get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);

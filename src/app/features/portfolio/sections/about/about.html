@@ -4,16 +4,16 @@
       <div #contentRef class="about-content flex max-w-(--a-content-max) flex-col gap-(--a-content-gap)">
         <header class="about-header flex flex-col gap-(--a-header-gap)">
           <p class="about-label m-0 text-caption-2-bold">
-            {{ about.label }}
+            {{ about().label }}
           </p>
 
           <h2 id="about-heading" class="about-title m-0 text-tittle-4-bold">
-            {{ about.title }}
+            {{ about().title }}
           </h2>
         </header>
 
         <div class="about-body flex flex-col gap-(--a-body-gap)">
-          @for (paragraph of about.paragraphs; track paragraph) {
+          @for (paragraph of about().paragraphs; track paragraph) {
             <p class="about-text m-0 text-body-1-regular">
               {{ paragraph }}
             </p>
@@ -21,12 +21,12 @@
         </div>
 
         <div class="about-cta flex">
-          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToContact()" />
+          <portfolio-button [label]="about().ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToContact()" />
         </div>
       </div>
 
-      <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
-        @for (stat of stats; track stat.label; let i = $index) {
+      <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" [attr.aria-label]="statsAriaLabel()">
+        @for (stat of stats(); track stat.label; let i = $index) {
           <article portfolioAnimatedBorder class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
             <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">
               <span class="stat-value text-subtitle-2-bold">

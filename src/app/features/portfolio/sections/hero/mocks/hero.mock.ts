@@ -1,4 +1,18 @@
+import { I18nKey } from '@core/i18n';
 import { IHeroCodeLine, IHeroCvFile, IHeroWindowDot } from '@features/portfolio/entities';
+
+export const HERO_TEXT_KEYS: Readonly<Record<string, I18nKey>> = {
+  badge: 'hero.badge',
+  titleLine1: 'hero.title.line1',
+  titleLine2: 'hero.title.line2',
+  titleLine3: 'hero.title.line3',
+  description: 'hero.description',
+  experienceCta: 'hero.cta.experience',
+  cvCta: 'hero.cta.cv',
+  stackAria: 'hero.stack.aria',
+  cvSuccessTitle: 'hero.cv.success.title',
+  cvSuccessMessage: 'hero.cv.success.message',
+};
 
 export const HERO_CV_FILE: IHeroCvFile = {
   url: 'assets/docs/gabriel-cruz-cv.pdf',

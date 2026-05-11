@@ -2,20 +2,20 @@
   <div class="experience-inner portfolio-section-container portfolio-section-reveal flex flex-col gap-(--e-inner-gap)">
     <header #headerRef class="experience-header flex max-w-(--e-header-max) flex-col gap-3">
       <p class="experience-label m-0 font-semibold uppercase tracking-[0.08em] text-(--app-text-primary)">
-        {{ header.label }}
+        {{ header().label }}
       </p>
 
       <h2 id="experience-heading" class="m-0 text-(--app-text-color) text-tittle-4-bold">
-        {{ header.title }}
+        {{ header().title }}
       </h2>
 
       <p class="m-0 text-(--app-text-muted) text-body-1-regular">
-        {{ header.subtitle }}
+        {{ header().subtitle }}
       </p>
     </header>
 
     <ol #timelineRef class="experience-timeline m-0 list-none p-0" role="list">
-      @for (item of experiences; track item.company + item.period) {
+      @for (item of experiences(); track item.company + item.period) {
         <li class="experience-item grid grid-cols-[var(--e-timeline-col)_1fr] items-start gap-(--e-timeline-gap)">
           <div class="experience-marker relative flex min-h-full self-stretch justify-center pb-2 pt-(--e-marker-pt)" aria-hidden="true">
             <span #dotRef class="experience-dot z-10 size-(--e-dot) shrink-0 rounded-full border-2 border-(--app-border-color) bg-(--app-panel-bg)" [class.experience-dot--current]="item.current"></span>
@@ -33,7 +33,7 @@
                   <span>{{ item.company }}</span>
 
                   @if (item.current) {
-                    <span class="ml-1 rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-(--e-current-px) py-(--e-current-py) font-semibold leading-none text-(--app-text-primary) text-(length:--e-current-size)"> Actual </span>
+                    <span class="ml-1 rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-(--e-current-px) py-(--e-current-py) font-semibold leading-none text-(--app-text-primary) text-(length:--e-current-size)">{{ currentBadge() }}</span>
                   }
                 </p>
               </div>
@@ -64,7 +64,7 @@
               }
             </ul>
 
-            <div class="experience-tags flex flex-wrap items-center gap-(--e-tags-gap)" aria-label="Tecnologías utilizadas">
+            <div class="experience-tags flex flex-wrap items-center gap-(--e-tags-gap)" [attr.aria-label]="technologiesAriaLabel()">
               @for (tech of item.technologies; track tech) {
                 <span class="inline-flex items-center gap-(--e-tag-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--e-tag-px) py-(--e-tag-py) font-medium leading-none text-(--app-text-muted) text-(length:--e-tag) transition-[color,border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--app-text-primary)_35%,transparent)] hover:bg-(--app-accent-soft-bg) hover:text-(--app-text-primary)">
                   @if (techIconUrl(tech); as iconUrl) {

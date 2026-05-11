@@ -4,14 +4,7 @@ import { updatePrimaryPalette, updateSurfacePalette } from '@primeuix/themes';
 
 import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, getPrimaryColor, getSurfaceColor } from './theme-palettes';
 
-import {
-  getInitialThemeMode,
-  getStoredPrimaryColorKey,
-  getStoredSurfaceColorKey,
-  setStoredPrimaryColorKey,
-  setStoredSurfaceColorKey,
-  setStoredThemeMode,
-} from './theme-preferences.storage';
+import { getInitialThemeMode, getStoredPrimaryColorKey, getStoredSurfaceColorKey, setStoredPrimaryColorKey, setStoredSurfaceColorKey, setStoredThemeMode } from './theme-preferences.storage';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -22,8 +15,7 @@ export class ThemeService {
   private readonly rootElement = this.document.documentElement;
   private readonly faviconSourceUrl = '/favicon.svg';
 
-  private readonly emptyFaviconHref =
-    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+  private readonly emptyFaviconHref = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
 
   private faviconSvgPromise: Promise<string> | null = null;
   private prethemeRemovalScheduled = false;

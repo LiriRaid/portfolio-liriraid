@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID
 import { FormControl } from '@angular/forms';
 import { Popover } from 'primeng/popover';
 
+import { I18nService } from '@core/i18n';
 import { IProject, IProjectTechnologyCategory } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { CarouselItem } from '@shared/components/portfolio-carousel/carousel-item.directive';
@@ -33,6 +34,7 @@ export class Projects {
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
 
   @ViewChild('headerRef') private headerRef?: ElementRef<HTMLElement>;
   @ViewChild('toolbarRef') private toolbarRef?: ElementRef<HTMLElement>;
@@ -41,8 +43,40 @@ export class Projects {
 
   protected readonly techIconUrl = techIconUrl;
 
-  protected readonly header = PROJECTS_HEADER;
-  protected readonly emptyState = PROJECTS_EMPTY_STATE;
+  protected readonly header = computed(() => ({
+    label: this.t(PROJECTS_HEADER.label),
+    title: this.t(PROJECTS_HEADER.title),
+    subtitle: this.t(PROJECTS_HEADER.subtitle),
+  }));
+
+  protected readonly emptyState = computed(() => ({
+    searchTitle: this.t(PROJECTS_EMPTY_STATE.searchTitle),
+    filtersTitle: this.t(PROJECTS_EMPTY_STATE.filtersTitle),
+    description: this.t(PROJECTS_EMPTY_STATE.description),
+  }));
+
+  protected readonly filtersButtonLabel = computed(() => this.t('projects.filters.button'));
+  protected readonly filtersButtonAria = computed(() => this.t('projects.filters.button.aria'));
+  protected readonly filtersClearLabel = computed(() => this.t('projects.filters.clear'));
+  protected readonly filtersClearAria = computed(() => this.t('projects.filters.clear.aria'));
+  protected readonly filtersPanelTitle = computed(() => this.t('projects.filters.panel.title'));
+  protected readonly filtersPanelClear = computed(() => this.t('projects.filters.panel.clear'));
+  protected readonly filtersPanelHint = computed(() => this.t('projects.filters.panel.hint'));
+  protected readonly filtersCategoriesAria = computed(() => this.t('projects.filters.categories.aria'));
+  protected readonly selectedTagsAria = computed(() => this.t('projects.filters.selectedTags.aria'));
+  protected readonly removeFilterPrefix = computed(() => this.t('projects.filters.remove.prefix'));
+  protected readonly searchPlaceholder = computed(() => this.t('projects.search.placeholder'));
+  protected readonly featuredBadge = computed(() => this.t('projects.badge.featured'));
+  protected readonly cardTagsAria = computed(() => this.t('projects.card.tags.aria'));
+  protected readonly statsAria = computed(() => this.t('projects.stats.aria'));
+  protected readonly forkLabel = computed(() => this.t('projects.stats.fork'));
+  protected readonly githubLoading = computed(() => this.t('projects.github.loading'));
+  protected readonly githubUnavailable = computed(() => this.t('projects.github.unavailable'));
+  protected readonly privateProjectLabel = computed(() => this.t('projects.private'));
+  protected readonly viewGithubPrefix = computed(() => this.t('projects.link.github.prefix'));
+  protected readonly viewGithubSuffix = computed(() => this.t('projects.link.github.suffix'));
+  protected readonly demoLabel = computed(() => this.t('projects.link.live'));
+  protected readonly viewDemoPrefix = computed(() => this.t('projects.link.live.prefix'));
 
   protected readonly searchControl = new FormControl<string>('', { nonNullable: true });
   protected readonly searchTerm = signal('');
@@ -194,16 +228,28 @@ export class Projects {
     return this.projectsService.isLoading().has(repo);
   }
 
+  protected translateCategoryLabel(label: string): string {
+    return this.t(label);
+  }
+
+  protected translateProjectDescription(description: string): string {
+    return this.t(description);
+  }
+
   protected formatVisibility(visibility: string | null | undefined): string {
-    return visibility === 'private' ? 'Privado' : 'Público';
+    return visibility === 'private' ? this.t('projects.stats.visibility.private') : this.t('projects.stats.visibility.public');
   }
 
   protected formatLicense(license: string | null | undefined): string {
     if (!license || license === 'NOASSERTION') {
-      return 'Sin licencia';
+      return this.t('projects.stats.license.none');
     }
 
     return license.toUpperCase() === 'MIT' ? 'MIT' : license;
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 
   private syncDisplayedProjects(): void {
@@ -352,7 +398,7 @@ export class Projects {
   }
 
   private projectMatchesSearch(project: IProject, term: string): boolean {
-    return this.normalizeText(project.title).includes(term) || this.normalizeText(project.description).includes(term) || project.tags.some((tag) => this.normalizeText(tag).includes(term));
+    return this.normalizeText(project.title).includes(term) || this.normalizeText(this.t(project.description)).includes(term) || project.tags.some((tag) => this.normalizeText(tag).includes(term));
   }
 
   private normalizeText(value: string): string {
