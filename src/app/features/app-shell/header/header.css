@@ -92,15 +92,17 @@
   color: var(--app-text-muted);
 }
 
-:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active, .background-animation-btn).p-button:hover,
-:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active, .background-animation-btn--active, .icon-btn).p-button:hover,
+:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:hover,
+:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button,
+:host ::ng-deep .icon-btn.p-button:hover,
 :host ::ng-deep .background-animation-btn--active.p-button {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active, .background-animation-btn).p-button:hover .p-button-label,
-:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active, .background-animation-btn--active).p-button .p-button-label,
-:host ::ng-deep .icon-btn.p-button:hover {
+:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:hover .p-button-label,
+:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label,
+:host ::ng-deep .icon-btn.p-button:hover,
+:host ::ng-deep .background-animation-btn--active.p-button {
   color: var(--app-text-color);
 }
 

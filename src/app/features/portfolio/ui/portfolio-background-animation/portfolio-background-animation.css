@@ -4,7 +4,7 @@
   z-index: 1;
   display: block;
   pointer-events: none;
-  opacity: 0.58;
+  opacity: 0.72;
   transition: opacity 0.35s ease;
 }
 

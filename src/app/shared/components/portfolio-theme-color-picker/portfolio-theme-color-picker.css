@@ -14,7 +14,8 @@
   border-radius: inherit;
 }
 
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active {
+:host ::ng-deep .picker-trigger.p-button.picker-trigger--active,
+:host ::ng-deep .picker-trigger.p-button.picker-trigger--active:hover {
   color: var(--app-text-color);
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
@@ -23,9 +24,6 @@
 :host ::ng-deep .picker-trigger.p-button:focus-visible,
 :host ::ng-deep .picker-trigger.p-button.p-focus,
 :host ::ng-deep .picker-trigger.p-button[data-p-focused='true'] {
-  color: var(--app-text-muted) !important;
-  border-color: transparent !important;
-  background-color: transparent !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -36,7 +34,6 @@
 :host ::ng-deep .picker-trigger.p-button.picker-trigger--active[data-p-focused='true'] {
   color: var(--app-text-color) !important;
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
-  box-shadow: none !important;
 }
 
 ::ng-deep .p-popover.color-picker-panel {

@@ -77,7 +77,7 @@
 }
 
 .github-language {
-  grid-template-columns: minmax(5.6rem, 0.72fr) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(5.6rem, 0.72fr) minmax(0, 1fr) 4ch;
 }
 
 .github-language-name {
@@ -87,9 +87,16 @@
   white-space: nowrap;
 }
 
+.github-language > .github-muted {
+  justify-self: end;
+  text-align: right;
+  white-space: nowrap;
+}
+
 .github-language-track {
   position: relative;
   overflow: hidden;
+  width: 100%;
   height: var(--gh-bar-height);
   border-radius: 999px;
   background-color: color-mix(in srgb, var(--app-border-color) 55%, transparent);
@@ -168,6 +175,7 @@
     --gh-language-row-gap: clamp(0.3rem, 0.2593rem + 0.1737vw, 0.34rem);
     --gh-language-icon-gap: 0.22rem;
     --gh-primary-gap: clamp(0.26rem, 0.1983rem + 0.2632vw, 0.32rem);
+
     --gh-box-p: clamp(0.38rem, 0.1964rem + 0.7619vw, 0.625rem);
     --gh-metric-icon-size: clamp(0.66rem, 0.6091rem + 0.2171vw, 0.71rem);
     --gh-language-icon-size: clamp(0.66rem, 0.6091rem + 0.2171vw, 0.71rem);
@@ -190,6 +198,6 @@
   }
 
   .github-language {
-    grid-template-columns: minmax(4.25rem, 0.72fr) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(4.25rem, 0.72fr) minmax(0, 1fr) 4ch;
   }
 }
