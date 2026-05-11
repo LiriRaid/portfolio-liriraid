@@ -1,8 +1,10 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
 
+import { I18nService } from '@core/i18n';
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
+import { PortfolioLanguageToggle } from '@shared/components/portfolio-language-toggle/portfolio-language-toggle';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
 import { HeaderService } from './header.service';
 import { PortfolioBackgroundAnimationService } from '@features/portfolio/ui/portfolio-background-animation/portfolio-background-animation.service';
@@ -12,7 +14,7 @@ type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades'
 @Component({
   selector: 'portfolio-header',
   standalone: true,
-  imports: [PortfolioButton, PortfolioThemeColorPicker],
+  imports: [PortfolioButton, PortfolioThemeColorPicker, PortfolioLanguageToggle],
   providers: [HeaderService],
   templateUrl: './header.html',
   styleUrl: './header.css',
@@ -22,6 +24,7 @@ export class Header {
   private readonly themeService = inject(ThemeService);
   private readonly headerService = inject(HeaderService);
   private readonly backgroundAnimationService = inject(PortfolioBackgroundAnimationService);
+  private readonly i18nService = inject(I18nService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -32,20 +35,29 @@ export class Header {
   protected readonly isFloating = signal(false);
   protected readonly backgroundAnimationEnabled = this.backgroundAnimationService.enabled;
 
+  protected readonly navLinks = computed(() => [
+    { label: this.t('header.nav.home'), href: '#inicio', sectionId: 'inicio' as const },
+    { label: this.t('header.nav.experience'), href: '#experiencia', sectionId: 'experiencia' as const },
+    { label: this.t('header.nav.projects'), href: '#proyectos', sectionId: 'proyectos' as const },
+    { label: this.t('header.nav.skills'), href: '#habilidades', sectionId: 'habilidades' as const },
+    { label: this.t('header.nav.about'), href: '#sobre-mi', sectionId: 'sobre-mi' as const },
+    { label: this.t('header.nav.contact'), href: '#contacto', sectionId: 'contacto' as const },
+  ]);
+
+  protected readonly backgroundAnimationAriaLabel = computed(() => {
+    return this.backgroundAnimationEnabled() ? this.t('header.background.disable') : this.t('header.background.enable');
+  });
+
+  protected readonly lightThemeAriaLabel = computed(() => this.t('header.theme.light'));
+  protected readonly darkThemeAriaLabel = computed(() => this.t('header.theme.dark'));
+  protected readonly openMenuAriaLabel = computed(() => this.t('header.menu.open'));
+  protected readonly closeMenuAriaLabel = computed(() => this.t('header.menu.close'));
+
   private scrollAnimationFrameId: number | null = null;
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
 
   private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
-
-  protected readonly navLinks = [
-    { label: 'Inicio', href: '#inicio', sectionId: 'inicio' },
-    { label: 'Experiencia', href: '#experiencia', sectionId: 'experiencia' },
-    { label: 'Proyectos', href: '#proyectos', sectionId: 'proyectos' },
-    { label: 'Habilidades', href: '#habilidades', sectionId: 'habilidades' },
-    { label: 'Sobre mí', href: '#sobre-mi', sectionId: 'sobre-mi' },
-    { label: 'Contacto', href: '#contacto', sectionId: 'contacto' },
-  ] as const;
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -126,6 +138,10 @@ export class Header {
     this.headerService.closeMobileMenu(nav, () => {
       this.isMobileMenuRendered.set(false);
     });
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 
   private openMobileMenu(): void {

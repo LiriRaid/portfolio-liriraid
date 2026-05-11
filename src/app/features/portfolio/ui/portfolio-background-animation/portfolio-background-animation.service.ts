@@ -104,8 +104,8 @@ export class PortfolioBackgroundAnimationService {
 
     localStorage.setItem(this.storageKey, String(value));
 
-    if (!value) {
-      this.clear();
+    if (value) {
+      this.render();
     }
   }
 
@@ -149,50 +149,50 @@ export class PortfolioBackgroundAnimationService {
     this.buildCircuit();
   }
 
-private buildCircuit(): void {
-  const columns = Math.max(7, Math.round(this.width / 180));
-  const rows = Math.max(6, Math.round(this.height / 145));
+  private buildCircuit(): void {
+    const columns = Math.max(7, Math.round(this.width / 180));
+    const rows = Math.max(6, Math.round(this.height / 145));
 
-  const gapX = this.width / Math.max(1, columns - 1);
-  const gapY = this.height / Math.max(1, rows - 1);
+    const gapX = this.width / Math.max(1, columns - 1);
+    const gapY = this.height / Math.max(1, rows - 1);
 
-  this.nodes = [];
-  this.lines = [];
+    this.nodes = [];
+    this.lines = [];
 
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < columns; x++) {
-      const isEdgeX = x === 0 || x === columns - 1;
-      const isEdgeY = y === 0 || y === rows - 1;
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < columns; x++) {
+        const isEdgeX = x === 0 || x === columns - 1;
+        const isEdgeY = y === 0 || y === rows - 1;
 
-      const offsetX = isEdgeX ? 0 : Math.sin((x + y) * 1.7) * gapX * 0.12;
-      const offsetY = isEdgeY ? 0 : Math.cos((x - y) * 1.3) * gapY * 0.1;
+        const offsetX = isEdgeX ? 0 : Math.sin((x + y) * 1.7) * gapX * 0.12;
+        const offsetY = isEdgeY ? 0 : Math.cos((x - y) * 1.3) * gapY * 0.1;
 
-      this.nodes.push({
-        x: this.clamp(x * gapX + offsetX, 0, this.width),
-        y: this.clamp(y * gapY + offsetY, 0, this.height),
-        pulse: Math.random(),
-      });
+        this.nodes.push({
+          x: this.clamp(x * gapX + offsetX, 0, this.width),
+          y: this.clamp(y * gapY + offsetY, 0, this.height),
+          pulse: Math.random(),
+        });
+      }
+    }
+
+    for (let index = 0; index < this.nodes.length; index++) {
+      const node = this.nodes[index];
+      const right = this.nodes[index + 1];
+      const bottom = this.nodes[index + columns];
+
+      if (right && index % columns !== columns - 1) {
+        this.lines.push({ from: node, to: right, delay: Math.random() });
+      }
+
+      if (bottom) {
+        this.lines.push({ from: node, to: bottom, delay: Math.random() });
+      }
     }
   }
 
-  for (let index = 0; index < this.nodes.length; index++) {
-    const node = this.nodes[index];
-    const right = this.nodes[index + 1];
-    const bottom = this.nodes[index + columns];
-
-    if (right && index % columns !== columns - 1) {
-      this.lines.push({ from: node, to: right, delay: Math.random() });
-    }
-
-    if (bottom) {
-      this.lines.push({ from: node, to: bottom, delay: Math.random() });
-    }
+  private clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
   }
-}
-
-private clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
-}
 
   private readonly render = (): void => {
     if (!this.ctx || !this.initialized || !this.enabled()) {

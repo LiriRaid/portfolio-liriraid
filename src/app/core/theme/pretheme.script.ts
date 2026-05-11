@@ -3,14 +3,7 @@ import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, PRIMARY_COLORS, S
 type ThemePaletteColor = (typeof PRIMARY_COLORS | typeof SURFACE_COLORS)[number];
 
 const toInlinePaletteObject = (colors: readonly ThemePaletteColor[]): string => {
-  return JSON.stringify(
-    Object.fromEntries(
-      colors.map((color) => [
-        color.key,
-        Object.values(color.palette),
-      ]),
-    ),
-  );
+  return JSON.stringify(Object.fromEntries(colors.map((color) => [color.key, Object.values(color.palette)])));
 };
 
 export const PORTFOLIO_PRETHEME_SCRIPT = `
@@ -25,7 +18,10 @@ export const PORTFOLIO_PRETHEME_SCRIPT = `
     var DEFAULT_PRIMARY = '${DEFAULT_PRIMARY_COLOR_KEY}';
     var DEFAULT_SURFACE = '${DEFAULT_SURFACE_COLOR_KEY}';
 
-    var mode = localStorage.getItem('portfolio-theme-mode') || 'dark';
+    var storedMode = localStorage.getItem('portfolio-theme-mode');
+    var systemMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var mode = storedMode === 'dark' || storedMode === 'light' ? storedMode : systemMode;
+
     var primaryKey = localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY;
     var surfaceKey = localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE;
 
@@ -35,6 +31,7 @@ export const PORTFOLIO_PRETHEME_SCRIPT = `
     var root = document.documentElement;
 
     root.classList.toggle('dark', mode === 'dark');
+    root.style.colorScheme = mode;
     root.dataset.primaryColor = primaryKey;
     root.dataset.surfaceColor = surfaceKey;
 
@@ -55,7 +52,7 @@ export const PORTFOLIO_PRETHEME_SCRIPT = `
     var shellBg = mode === 'dark' ? surfacePalette[11] : surfacePalette[3];
     var textColor = mode === 'dark' ? surfacePalette[0] : surfacePalette[10];
 
-    css += 'html{background-color:' + shellBg + ';}';
+    css += 'html{color-scheme:' + mode + ';background-color:' + shellBg + ';}';
     css += 'body{background-color:' + shellBg + ';color:' + textColor + ';}';
 
     var style = document.createElement('style');

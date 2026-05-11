@@ -4,7 +4,14 @@ import { updatePrimaryPalette, updateSurfacePalette } from '@primeuix/themes';
 
 import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, getPrimaryColor, getSurfaceColor } from './theme-palettes';
 
-import { getStoredPrimaryColorKey, getStoredSurfaceColorKey, getStoredThemeMode, setStoredPrimaryColorKey, setStoredSurfaceColorKey, setStoredThemeMode } from './theme-preferences.storage';
+import {
+  getInitialThemeMode,
+  getStoredPrimaryColorKey,
+  getStoredSurfaceColorKey,
+  setStoredPrimaryColorKey,
+  setStoredSurfaceColorKey,
+  setStoredThemeMode,
+} from './theme-preferences.storage';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -15,7 +22,8 @@ export class ThemeService {
   private readonly rootElement = this.document.documentElement;
   private readonly faviconSourceUrl = '/favicon.svg';
 
-  private readonly emptyFaviconHref = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+  private readonly emptyFaviconHref =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
 
   private faviconSvgPromise: Promise<string> | null = null;
   private prethemeRemovalScheduled = false;
@@ -34,8 +42,6 @@ export class ThemeService {
     }
   }
 
-  // ── Mode ──────────────────────────────────────────────
-
   toggleMode(): void {
     this.setMode(this.mode() === 'dark' ? 'light' : 'dark');
   }
@@ -44,8 +50,6 @@ export class ThemeService {
     this.applyMode(mode, true);
     setStoredThemeMode(mode);
   }
-
-  // ── Primary color ─────────────────────────────────────
 
   applyColor(key: string): void {
     const color = getPrimaryColor(key);
@@ -62,8 +66,6 @@ export class ThemeService {
     this.updateFavicon(color.palette['500']);
   }
 
-  // ── Surface color ─────────────────────────────────────
-
   applySurface(key: string): void {
     const color = getSurfaceColor(key);
 
@@ -77,14 +79,8 @@ export class ThemeService {
     this.rootElement.dataset['surfaceColor'] = color.key;
   }
 
-  // ── Private ───────────────────────────────────────────
-
   private initMode(): void {
-    const saved = getStoredThemeMode();
-
-    const resolved: ThemeMode = saved ? saved : globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-
-    this.applyMode(resolved, false);
+    this.applyMode(getInitialThemeMode(), false);
   }
 
   private initColor(): void {
@@ -105,6 +101,7 @@ export class ThemeService {
     }
 
     this.rootElement.classList.toggle('dark', mode === 'dark');
+    this.rootElement.style.colorScheme = mode;
 
     if (withTransitionGuard) {
       requestAnimationFrame(() => {

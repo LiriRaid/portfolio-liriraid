@@ -21,9 +21,18 @@ const writeStorage = (key: string, value: string): void => {
   }
 };
 
+export const getSystemThemeMode = (): ThemeMode => {
+  return globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
 export const getStoredThemeMode = (): ThemeMode | null => {
   const saved = readStorage(THEME_MODE_STORAGE_KEY);
+
   return saved === 'dark' || saved === 'light' ? saved : null;
+};
+
+export const getInitialThemeMode = (): ThemeMode => {
+  return getStoredThemeMode() ?? getSystemThemeMode();
 };
 
 export const setStoredThemeMode = (mode: ThemeMode): void => {

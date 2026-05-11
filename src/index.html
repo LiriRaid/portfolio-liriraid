@@ -22,35 +22,28 @@
 
     <meta name="theme-color" content="#dd0031" />
 
-    <script>
-      (function () {
-        try {
-          var cachedGithubStats = localStorage.getItem('portfolio-github-stats');
-
-          if (!cachedGithubStats || Date.now() - JSON.parse(cachedGithubStats).timestamp > 36e5) {
-            var link = document.createElement('link');
-
-            link.rel = 'preconnect';
-            link.href = 'https://api.github.com';
-            link.crossOrigin = '';
-
-            document.head.appendChild(link);
-          }
-        } catch (error) {}
-      })();
-    </script>
-
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
-
     <style>
       html {
-        background-color: #0a0a0a;
+        color-scheme: light;
+        background-color: #e5e5e5;
       }
 
       body {
         margin: 0;
-        background-color: #0a0a0a;
-        color: #ffffff;
+        background-color: #e5e5e5;
+        color: #171717;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html {
+          color-scheme: dark;
+          background-color: #0a0a0a;
+        }
+
+        body {
+          background-color: #0a0a0a;
+          color: #ffffff;
+        }
       }
     </style>
 
@@ -67,7 +60,10 @@
     var DEFAULT_PRIMARY = 'angular';
     var DEFAULT_SURFACE = 'neutral';
 
-    var mode = localStorage.getItem('portfolio-theme-mode') || 'dark';
+    var storedMode = localStorage.getItem('portfolio-theme-mode');
+    var systemMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var mode = storedMode === 'dark' || storedMode === 'light' ? storedMode : systemMode;
+
     var primaryKey = localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY;
     var surfaceKey = localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE;
 
@@ -77,6 +73,7 @@
     var root = document.documentElement;
 
     root.classList.toggle('dark', mode === 'dark');
+    root.style.colorScheme = mode;
     root.dataset.primaryColor = primaryKey;
     root.dataset.surfaceColor = surfaceKey;
 
@@ -97,7 +94,7 @@
     var shellBg = mode === 'dark' ? surfacePalette[11] : surfacePalette[3];
     var textColor = mode === 'dark' ? surfacePalette[0] : surfacePalette[10];
 
-    css += 'html{background-color:' + shellBg + ';}';
+    css += 'html{color-scheme:' + mode + ';background-color:' + shellBg + ';}';
     css += 'body{background-color:' + shellBg + ';color:' + textColor + ';}';
 
     var style = document.createElement('style');
@@ -116,6 +113,26 @@
 })();
     </script>
     <!-- portfolio-pretheme:end -->
+
+    <script>
+      (function () {
+        try {
+          var cachedGithubStats = localStorage.getItem('portfolio-github-stats');
+
+          if (!cachedGithubStats || Date.now() - JSON.parse(cachedGithubStats).timestamp > 36e5) {
+            var link = document.createElement('link');
+
+            link.rel = 'preconnect';
+            link.href = 'https://api.github.com';
+            link.crossOrigin = '';
+
+            document.head.appendChild(link);
+          }
+        } catch (error) {}
+      })();
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
   </head>
 
   <body>

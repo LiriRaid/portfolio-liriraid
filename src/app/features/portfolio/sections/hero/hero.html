@@ -3,24 +3,26 @@
     <div class="hero-content flex w-full max-w-200 flex-1 flex-col gap-(--h-content-gap) max-[1024px]:max-w-full max-[1024px]:items-center">
       <div class="hero-badge inline-flex w-fit items-center gap-(--h-badge-gap) rounded-full border border-(--h-badge-border) bg-(--app-badge-soft-bg) px-(--h-badge-px) py-(--h-badge-py) text-caption-1-semibold text-(--app-badge-soft-text)">
         <portfolio-icon name="Code" size="14" />
-        <span>Desarrollador Full Angular</span>
+        <span>{{ badge() }}</span>
       </div>
 
       <h1 id="hero-heading" class="hero-title mx-0 max-w-(--h-title-max) text-tittle-1-bold tracking-[-0.03em] text-(--app-text-color)">
-        <span class="hero-title-line">Construyo aplicaciones web</span>
-        <span class="hero-title-line text-(--app-text-primary)">modernas, escalables</span>
-        <span class="hero-title-line">y mantenibles.</span>
+        <span class="hero-title-line">{{ titleLine1() }}</span>
+        <span class="hero-title-line text-(--app-text-primary)">{{ titleLine2() }}</span>
+        <span class="hero-title-line">{{ titleLine3() }}</span>
       </h1>
 
-      <p class="hero-description m-0 max-w-(--h-desc-max) text-body-1-regular text-(--app-text-muted) max-[1024px]:mx-auto max-[1024px]:text-center">Desarrollador Full Angular con Angular 21 y experiencia en versiones legacy (AngularJS 10+). Creo soluciones orientadas a producto con arquitectura limpia, rendimiento óptimo, experiencia de usuario y producto escalable.</p>
+      <p class="hero-description m-0 max-w-(--h-desc-max) text-body-1-regular text-(--app-text-muted) max-[1024px]:mx-auto max-[1024px]:text-center">
+        {{ description() }}
+      </p>
 
       <div class="hero-ctas flex flex-wrap gap-(--h-ctas-gap) max-[1024px]:justify-center max-[640px]:mx-auto max-[640px]:w-full max-[640px]:max-w-(--h-ctas-max) max-[640px]:flex-col">
-        <portfolio-button label="Ver experiencia" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="hero-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
+        <portfolio-button [label]="experienceCta()" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="hero-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
 
-        <portfolio-button label="Descargar CV" icon="Download" iconPos="right" iconSize="16" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
+        <portfolio-button [label]="cvCta()" icon="Download" iconPos="right" iconSize="16" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
       </div>
 
-      <div class="hero-stack flex flex-wrap gap-(--h-stack-gap) max-[1024px]:justify-center max-[640px]:max-w-(--h-stack-max)" aria-label="Stack tecnológico principal">
+      <div class="hero-stack flex flex-wrap gap-(--h-stack-gap) max-[1024px]:justify-center max-[640px]:max-w-(--h-stack-max)" [attr.aria-label]="stackAriaLabel()">
         @for (tech of stack; track tech) {
           <span class="hero-tech inline-flex items-center gap-(--h-tech-gap) rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--h-tech-px) py-(--h-tech-py) font-medium leading-none text-(--app-text-color) text-(length:--h-tech-size) transition-colors hover:border-(--h-tech-hover-border) hover:bg-(--app-accent-soft-bg) hover:text-(--app-text-primary)">
             @if (techIconUrl(tech); as iconUrl) {

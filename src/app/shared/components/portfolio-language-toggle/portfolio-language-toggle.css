@@ -1,0 +1,137 @@
+:host {
+  --language-toggle-width: 3.75rem;
+  --language-toggle-height: 1.95rem;
+  --language-toggle-padding: 0.28rem;
+  --language-toggle-ball-size: 1.38rem;
+  --language-toggle-label-offset: 0.58rem;
+  --language-toggle-label-size: 0.72rem;
+
+  display: inline-flex;
+  width: var(--language-toggle-width);
+  min-width: var(--language-toggle-width);
+}
+
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  color: var(--app-text-muted);
+  user-select: none;
+}
+
+:host ::ng-deep .p-toggleswitch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--language-toggle-width);
+  min-width: var(--language-toggle-width);
+  height: var(--language-toggle-height);
+  min-height: var(--language-toggle-height);
+  flex: 0 0 var(--language-toggle-width);
+}
+
+:host ::ng-deep .p-toggleswitch-input {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+:host ::ng-deep .p-toggleswitch-slider {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--app-border-color) 72%, transparent);
+  background-color: color-mix(in srgb, var(--app-shell-bg) 82%, var(--app-panel-bg));
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+:host ::ng-deep .p-toggleswitch-handle {
+  display: none !important;
+}
+
+:host ::ng-deep .p-toggleswitch-slider::before,
+:host ::ng-deep .p-toggleswitch-slider::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+:host ::ng-deep .p-toggleswitch-slider::before {
+  content: '';
+  left: var(--language-toggle-padding);
+  z-index: 2;
+  width: var(--language-toggle-ball-size);
+  height: var(--language-toggle-ball-size);
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--app-text-color) 88%, var(--app-panel-bg));
+  box-shadow: 0 2px 8px color-mix(in srgb, #000 28%, transparent);
+  transition:
+    left 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+:host ::ng-deep .p-toggleswitch-slider::after {
+  content: 'EN';
+  right: var(--language-toggle-label-offset);
+  z-index: 1;
+  font-size: var(--language-toggle-label-size);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--app-text-muted);
+  pointer-events: none;
+  transition:
+    color 0.2s ease,
+    right 0.2s ease,
+    left 0.2s ease;
+}
+
+:host ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider::before {
+  left: calc(100% - var(--language-toggle-ball-size) - var(--language-toggle-padding));
+}
+
+:host ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider::after {
+  content: 'ES';
+  left: var(--language-toggle-label-offset);
+  right: auto;
+}
+
+:host ::ng-deep .p-toggleswitch:not(.p-disabled):hover .p-toggleswitch-slider {
+  background-color: color-mix(in srgb, var(--app-text-primary) 18%, var(--app-shell-bg));
+  border-color: color-mix(in srgb, var(--app-text-primary) 38%, var(--app-border-color));
+}
+
+:host ::ng-deep .p-toggleswitch:not(.p-disabled):hover .p-toggleswitch-slider::after {
+  color: color-mix(in srgb, var(--app-text-color) 88%, var(--app-text-primary));
+}
+
+:host ::ng-deep .p-toggleswitch.p-focus .p-toggleswitch-slider,
+:host ::ng-deep .p-toggleswitch:focus-visible .p-toggleswitch-slider {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  :host {
+    --language-toggle-width: 3.45rem;
+    --language-toggle-height: 1.82rem;
+    --language-toggle-padding: 0.26rem;
+    --language-toggle-ball-size: 1.3rem;
+    --language-toggle-label-offset: 0.52rem;
+    --language-toggle-label-size: 0.68rem;
+  }
+}

@@ -5,6 +5,7 @@ import AuraDivider from '@primeuix/themes/aura/divider';
 import AuraPopover from '@primeuix/themes/aura/popover';
 import AuraRipple from '@primeuix/themes/aura/ripple';
 import AuraToast from '@primeuix/themes/aura/toast';
+import AuraToggleSwitch from '@primeuix/themes/aura/toggleswitch';
 
 import { DEFAULT_PRIMARY_PALETTE, DEFAULT_SURFACE_PALETTE } from './theme-palettes';
 
@@ -16,6 +17,7 @@ const portfolioAuraBase = {
     popover: AuraPopover,
     ripple: AuraRipple,
     toast: AuraToast,
+    toggleswitch: AuraToggleSwitch,
   },
 };
 
