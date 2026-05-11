@@ -1,100 +1,20 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
-import { gsap } from 'gsap';
 import { FormControl } from '@angular/forms';
 import { Popover } from 'primeng/popover';
 
-import { Project, ProjectTechnologyCategory } from '@features/portfolio/entities';
+import { IProject, IProjectTechnologyCategory } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { CarouselItem } from '@shared/components/portfolio-carousel/carousel-item.directive';
 import { PortfolioCarousel } from '@shared/components/portfolio-carousel/portfolio-carousel';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { PortfolioSearch } from '@shared/components/portfolio-search/portfolio-search';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
+import { PROJECT_TECH_FALLBACK_ICONS, PROJECT_TECHNOLOGY_CATEGORIES, PROJECTS, PROJECTS_EMPTY_STATE, PROJECTS_HEADER } from './mocks';
 import { ProjectsService } from './projects.service';
-import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-animated-border.directive';
-
-const PROJECTS: Project[] = [
-  {
-    title: 'OmniInbox',
-    description: 'Plataforma conversacional tipo inbox omnicanal construida con Angular 21. Centraliza módulos de login, inbox, perfil y shell autenticado con arquitectura feature-first, componentes standalone, lazy loading, tema claro/oscuro, animaciones y testing moderno.',
-    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'Tailwind CSS', 'PrimeNG', 'GSAP', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
-    repo: 'LiriRaid/omni-inbox',
-    githubUrl: 'https://github.com/LiriRaid/omni-inbox',
-    liveUrl: null,
-    featured: true,
-    screenshots: ['assets/img/projects/omniinbox-profile.svg', 'assets/img/projects/omniinbox-login.svg', 'assets/img/projects/omniinbox-inbox.svg'],
-  },
-  {
-    title: 'AgentFlow AI',
-    description: 'Orquestador multiagente para desarrollo con IA. Coordina agentes como Claude, Codex, OpenCode y Gemini, delega tareas, monitorea progreso en una TUI y mantiene el proyecto principal limpio mediante un workspace separado.',
-    tags: ['Node.js', 'JavaScript', 'NPM', 'CLI', 'TUI', 'AI Agents', 'Automation', 'Clean Architecture'],
-    repo: 'LiriRaid/agentflow-ai',
-    githubUrl: 'https://github.com/LiriRaid/agentflow-ai',
-    liveUrl: null,
-    screenshots: ['assets/img/projects/agentflow-tui.svg', 'assets/img/projects/agentflow-orchestrator.svg'],
-  },
-  {
-    title: 'Portfolio Liriraid',
-    description: 'Portfolio personal profesional creado con Angular 21, SSR, prerender, hidratación normal, sistema de temas dinámico, componentes reutilizables y estructura escalable basada en features.',
-    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'SSR', 'Prerender', 'PrimeNG', 'Tailwind CSS', 'CSS', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
-    repo: 'LiriRaid/portfolio-liriraid',
-    githubUrl: 'https://github.com/LiriRaid/portfolio-liriraid',
-    liveUrl: null,
-    screenshots: ['assets/img/projects/portfolio-hero.svg', 'assets/img/projects/portfolio-projects.svg'],
-  },
-];
-
-const TECHNOLOGY_CATEGORIES: ProjectTechnologyCategory[] = [
-  {
-    label: 'Frontend',
-    icon: 'Globe',
-    technologies: ['Angular 21', 'AngularJS', 'Signals', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'PrimeNG', 'RxJS'],
-  },
-  {
-    label: 'Backend',
-    icon: 'Server',
-    technologies: ['Node.js', 'NestJS', 'Ruby on Rails', 'Express', 'REST API'],
-  },
-  {
-    label: 'Base de datos',
-    icon: 'Database',
-    technologies: ['PostgreSQL', 'Redis'],
-  },
-  {
-    label: 'Herramientas',
-    icon: 'Settings',
-    technologies: ['Git', 'Docker', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'GSAP', 'Vitest', 'NPM'],
-  },
-  {
-    label: 'Arquitectura',
-    icon: 'Layers',
-    technologies: ['Screaming Architecture', 'Feature-first', 'Clean Architecture', 'Prerender', 'SSR', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
-  },
-  {
-    label: 'IA / Automatización',
-    icon: 'Code',
-    technologies: ['JavaScript', 'CLI', 'TUI', 'AI Agents', 'Automation'],
-  },
-];
-
-const FALLBACK_ICONS: Record<string, string> = {
-  'Clean Architecture': 'Layers',
-  'Screaming Architecture': 'Folder',
-  'Feature-first': 'Folder',
-  SSR: 'Server',
-  Prerender: 'Globe',
-  'Lazy Loading': 'Download',
-  'DRY / SOLID': 'ShieldCheck',
-  DDD: 'Database',
-  CLI: 'Code',
-  TUI: 'MediaPreview',
-  'AI Agents': 'MessagesSquare',
-  Automation: 'Settings',
-  'REST API': 'Server',
-  MIT: 'Scale',
-};
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-projects',
@@ -104,7 +24,7 @@ const FALLBACK_ICONS: Record<string, string> = {
   styleUrl: './projects.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    style: 'display: block; background-color: var(--app-panel-muted-bg); --p-inner-opacity: 0; --p-inner-visibility: hidden;',
+    style: 'display: block; background-color: var(--app-panel-muted-bg);',
   },
 })
 export class Projects {
@@ -112,6 +32,7 @@ export class Projects {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly revealService = inject(PortfolioSectionRevealService);
 
   @ViewChild('headerRef') private headerRef?: ElementRef<HTMLElement>;
   @ViewChild('toolbarRef') private toolbarRef?: ElementRef<HTMLElement>;
@@ -120,16 +41,19 @@ export class Projects {
 
   protected readonly techIconUrl = techIconUrl;
 
+  protected readonly header = PROJECTS_HEADER;
+  protected readonly emptyState = PROJECTS_EMPTY_STATE;
+
   protected readonly searchControl = new FormControl<string>('', { nonNullable: true });
   protected readonly searchTerm = signal('');
 
-  protected readonly projects = signal<Project[]>(PROJECTS);
-  protected readonly technologyCategories = signal<ProjectTechnologyCategory[]>(TECHNOLOGY_CATEGORIES);
+  protected readonly projects = signal<IProject[]>([...PROJECTS]);
+  protected readonly technologyCategories = signal<IProjectTechnologyCategory[]>([...PROJECT_TECHNOLOGY_CATEGORIES]);
   protected readonly selectedTechnologies = signal<string[]>([]);
 
-  protected readonly activeFilterCategoryLabel = signal<string | null>(TECHNOLOGY_CATEGORIES[0]?.label ?? null);
+  protected readonly activeFilterCategoryLabel = signal<string | null>(PROJECT_TECHNOLOGY_CATEGORIES[0]?.label ?? null);
 
-  protected readonly displayedProjects = signal<Project[]>(PROJECTS);
+  protected readonly displayedProjects = signal<IProject[]>([...PROJECTS]);
   protected readonly leavingProjectTitles = signal<Set<string>>(new Set());
   protected readonly enteringProjectTitles = signal<Set<string>>(new Set());
 
@@ -205,33 +129,14 @@ export class Projects {
     }
 
     afterNextRender(() => {
-      // Lógica de disparo
-      const triggerAnimation = () => {
-        this.projectsService.animateEntrance(this.elementRef, this.headerRef, this.toolbarRef, this.resultsRef);
-        void this.loadGithubStats();
-      };
-
-      // 1. Salto Directo: Si ya estamos en la sección (ej. click en header), animamos YA.
-      const rect = this.elementRef.nativeElement.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-
-      if (isVisible) {
-        triggerAnimation();
-        return;
-      }
-
-      // 2. Observador para cuando se llega por scroll
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            observer.disconnect();
-            triggerAnimation();
-          }
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
+          this.projectsService.animateEntrance(this.elementRef, this.headerRef, this.toolbarRef, this.resultsRef);
+          void this.loadGithubStats();
         },
-        { threshold: 0.1 },
-      );
-
-      observer.observe(this.elementRef.nativeElement);
+      });
 
       const onResize = (): void => {
         this.filterPanel?.hide();
@@ -282,7 +187,7 @@ export class Projects {
   }
 
   protected techFallbackIcon(technology: string): string {
-    return FALLBACK_ICONS[technology] ?? 'Code';
+    return PROJECT_TECH_FALLBACK_ICONS[technology] ?? 'Code';
   }
 
   protected isRepositoryLoading(repo: string): boolean {
@@ -307,17 +212,15 @@ export class Projects {
 
     this.activeCarouselProjectTitle.set(nextProjects[0]?.title ?? '');
 
-    // 1. Manejo de estado vacío
     if (!nextProjects.length) {
       this.updateStateForEmptyResults(currentDisplayedProjects);
       return;
     }
 
-    // 2. Manejo de actualización de resultados
     this.updateStateForResults(nextProjects, currentDisplayedProjects);
   }
 
-  private updateStateForEmptyResults(currentProjects: Project[]): void {
+  private updateStateForEmptyResults(currentProjects: IProject[]): void {
     this.clearEmptyStateTimer();
     this.clearEnteringProjectAnimations();
 
@@ -339,26 +242,28 @@ export class Projects {
     });
   }
 
-  private updateStateForResults(nextProjects: Project[], currentProjects: Project[]): void {
+  private updateStateForResults(nextProjects: IProject[], currentProjects: IProject[]): void {
     const wasEmpty = this.showEmptyState() || !this.showProjectsCarousel() || !currentProjects.length;
 
     this.clearEmptyStateTimer();
     this.showEmptyState.set(false);
     this.showProjectsCarousel.set(true);
 
-    const nextTitles = new Set(nextProjects.map((p) => p.title));
-    const currentTitles = new Set(currentProjects.map((p) => p.title));
+    const nextTitles = new Set(nextProjects.map((project) => project.title));
+    const currentTitles = new Set(currentProjects.map((project) => project.title));
 
-    const leaving = currentProjects.filter((p) => !nextTitles.has(p.title));
-    const entering = nextProjects.filter((p) => !currentTitles.has(p.title));
+    const leaving = currentProjects.filter((project) => !nextTitles.has(project.title));
+    const entering = nextProjects.filter((project) => !currentTitles.has(project.title));
 
-    // Cancelar salidas si el proyecto vuelve a entrar
-    nextProjects.forEach((p) => {
-      const timeout = this.leavingProjectTimeouts.get(p.title);
-      if (timeout) {
-        clearTimeout(timeout);
-        this.leavingProjectTimeouts.delete(p.title);
+    nextProjects.forEach((project) => {
+      const timeout = this.leavingProjectTimeouts.get(project.title);
+
+      if (!timeout) {
+        return;
       }
+
+      clearTimeout(timeout);
+      this.leavingProjectTimeouts.delete(project.title);
     });
 
     if (!leaving.length) {
@@ -375,8 +280,10 @@ export class Projects {
     this.markProjectsState(leaving, 'leaving');
   }
 
-  private markProjectsState(projects: Project[], state: 'entering' | 'leaving', callback?: () => void): void {
-    if (!projects.length) return;
+  private markProjectsState(projects: IProject[], state: 'entering' | 'leaving', callback?: () => void): void {
+    if (!projects.length) {
+      return;
+    }
 
     const signal = state === 'entering' ? this.enteringProjectTitles : this.leavingProjectTitles;
     const timeouts = state === 'entering' ? this.enteringProjectTimeouts : this.leavingProjectTimeouts;
@@ -384,23 +291,30 @@ export class Projects {
 
     projects.forEach((project) => {
       const existing = timeouts.get(project.title);
-      if (existing) clearTimeout(existing);
+
+      if (existing) {
+        clearTimeout(existing);
+      }
 
       signal.update((current) => new Set(current).add(project.title));
 
       const timeout = setTimeout(() => {
         if (state === 'leaving') {
-          this.displayedProjects.update((list) => list.filter((p) => p.title !== project.title));
+          this.displayedProjects.update((list) => list.filter((item) => item.title !== project.title));
         }
 
         signal.update((current) => {
           const updated = new Set(current);
           updated.delete(project.title);
+
           return updated;
         });
 
         timeouts.delete(project.title);
-        if (callback) callback();
+
+        if (callback) {
+          callback();
+        }
       }, duration);
 
       timeouts.set(project.title, timeout);
@@ -408,25 +322,27 @@ export class Projects {
   }
 
   private clearEnteringProjectAnimations(): void {
-    this.enteringProjectTimeouts.forEach((t) => clearTimeout(t));
+    this.enteringProjectTimeouts.forEach((timeout) => clearTimeout(timeout));
     this.enteringProjectTimeouts.clear();
     this.enteringProjectTitles.set(new Set());
   }
 
   private clearEmptyStateTimer(): void {
-    if (this.emptyStateTimer) {
-      clearTimeout(this.emptyStateTimer);
-      this.emptyStateTimer = null;
+    if (!this.emptyStateTimer) {
+      return;
     }
+
+    clearTimeout(this.emptyStateTimer);
+    this.emptyStateTimer = null;
   }
 
-  private replaceProjectReferences(projects: Project[]): Project[] {
+  private replaceProjectReferences(projects: IProject[]): IProject[] {
     const projectByTitle = new Map(this.projects().map((project) => [project.title, project]));
 
     return projects.map((project) => projectByTitle.get(project.title) ?? project);
   }
 
-  private sortProjectsByOriginalOrder(projects: Project[], originalProjects: Project[]): Project[] {
+  private sortProjectsByOriginalOrder(projects: IProject[], originalProjects: IProject[]): IProject[] {
     const uniqueProjects = new Map(projects.map((project) => [project.title, project]));
     const order = new Map(originalProjects.map((project, index) => [project.title, index]));
 
@@ -435,7 +351,7 @@ export class Projects {
     });
   }
 
-  private projectMatchesSearch(project: Project, term: string): boolean {
+  private projectMatchesSearch(project: IProject, term: string): boolean {
     return this.normalizeText(project.title).includes(term) || this.normalizeText(project.description).includes(term) || project.tags.some((tag) => this.normalizeText(tag).includes(term));
   }
 

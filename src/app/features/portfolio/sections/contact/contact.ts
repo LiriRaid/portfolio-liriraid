@@ -1,20 +1,16 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { environment } from '@environments/environment';
-import { SocialLink } from '@features/portfolio/entities';
+import { TContactForm } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioInput } from '@shared/components/portfolio-input/portfolio-input';
 import { AlertService } from '@shared/services/alert.service';
 
+import { CONTACT_CONTENT, CONTACT_SOCIAL_LINKS } from './mocks';
 import { ContactService } from './contact.service';
-
-type ContactForm = FormGroup<{
-  name: FormControl<string>;
-  email: FormControl<string>;
-  message: FormControl<string>;
-}>;
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-contact',
@@ -24,36 +20,24 @@ type ContactForm = FormGroup<{
   styleUrl: './contact.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    style: 'display: block; --c-inner-opacity: 0; --c-inner-visibility: hidden;',
+    style: 'display: block;',
   },
 })
 export class Contact {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly alertService = inject(AlertService);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly contactService = inject(ContactService);
+  private readonly revealService = inject(PortfolioSectionRevealService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('formRef') formRef!: ElementRef<HTMLElement>;
 
-  protected readonly socialLinks: SocialLink[] = [
-    {
-      techIcon: 'GitHub',
-      label: 'GitHub',
-      href: 'https://github.com/liriraid',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-    },
-    {
-      techIcon: 'LinkedIn',
-      label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/gabriel-leonardo-cruz-flores-64570a1a4/',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-    },
-  ];
+  protected readonly contact = CONTACT_CONTENT;
+  protected readonly socialLinks = CONTACT_SOCIAL_LINKS;
 
-  protected readonly form: ContactForm = new FormGroup({
+  protected readonly form: TContactForm = new FormGroup({
     name: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(2)],
@@ -71,21 +55,20 @@ export class Contact {
   protected readonly sending = signal(false);
 
   constructor() {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
           this.contactService.animateEntrance(this.elementRef, this.contentRef, this.formRef);
-        }
-      }, { threshold: 0.1 });
-      
-      observer.observe(this.elementRef.nativeElement);
+        },
+      });
     });
   }
-
-
 
   protected async onSubmit(): Promise<void> {
     if (this.form.invalid) {

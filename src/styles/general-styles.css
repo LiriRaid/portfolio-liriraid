@@ -1,0 +1,70 @@
+:root {
+  --app-header-height: 4rem;
+  --app-section-min-height: calc(100dvh - var(--app-header-height));
+
+  --app-section-container-max-width: 90rem;
+  --app-section-container-px: clamp(0.75rem, 0.3075rem + 1.8634vw, 1.5rem);
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--app-shell-bg);
+  color: var(--app-text-color);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.portfolio-section-container {
+  width: 100%;
+  max-width: var(--app-section-container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--app-section-container-px);
+}
+
+.portfolio-section-reveal {
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+
+.portfolio-section-reveal--ready {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-section-reveal {
+    opacity: 1;
+    visibility: visible;
+    will-change: auto;
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --app-section-container-max-width: 92rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --app-section-container-px: clamp(0.5rem, 0.2808rem + 0.9231vw, 0.65rem);
+  }
+}

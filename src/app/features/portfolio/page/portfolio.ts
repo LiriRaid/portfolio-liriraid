@@ -5,7 +5,7 @@ import { Projects } from '../sections/projects/projects';
 import { Skills } from '../sections/skills/skills';
 import { About } from '../sections/about/about';
 import { Contact } from '../sections/contact/contact';
-import { PortfolioBackgroundAnimation } from '../components/portfolio-background-animation/portfolio-background-animation';
+import { PortfolioBackgroundAnimation } from '../ui/portfolio-background-animation/portfolio-background-animation';
 
 @Component({
   selector: 'portfolio-page',

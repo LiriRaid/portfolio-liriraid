@@ -1,12 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
 
-import { ExperienceItem } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
+import { EXPERIENCE_HEADER, EXPERIENCES } from './mocks';
 import { ExperienceService } from './experience.service';
-import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-animated-border.directive';
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-experience',
@@ -16,52 +17,37 @@ import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-a
   styleUrl: './experience.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    style: 'display: block; --e-inner-opacity: 0; --e-inner-visibility: hidden;',
+    style: 'display: block;',
   },
 })
 export class Experience {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly experienceService = inject(ExperienceService);
+  private readonly revealService = inject(PortfolioSectionRevealService);
 
-  @ViewChild('headerRef') headerRef!: ElementRef<HTMLElement>;
-  @ViewChild('timelineRef') timelineRef!: ElementRef<HTMLElement>;
+  @ViewChild('headerRef') protected headerRef!: ElementRef<HTMLElement>;
+  @ViewChild('timelineRef') protected timelineRef!: ElementRef<HTMLElement>;
 
   protected readonly techIconUrl = techIconUrl;
 
-  protected readonly experiences: readonly ExperienceItem[] = [
-    {
-      company: 'CIT (Creative Infotainment Technologies)',
-      role: 'Desarrollador Full Angular',
-      period: 'Julio · 2024 — Presente',
-      location: 'Presencial',
-      description: 'Desarrollo de aplicaciones web empresariales con Angular moderno, enfocadas en arquitectura escalable, componentes reutilizables, rendimiento y experiencia de usuario.',
-      responsibilities: [
-        'Construcción de módulos administrativos con Angular 21, TypeScript, PrimeNG y Tailwind CSS.',
-        'Implementación de arquitectura frontend basada en features, rutas lazy loading y separación clara por dominio.',
-        'Desarrollo de componentes reutilizables para formularios, botones, iconos, sidebars, modales, filtros, inputs y elementos de interfaz.',
-        'Manejo de estado moderno con signals, computed, effects, servicios reactivos y RxJS cuando aplica.',
-        'Integración con APIs REST para flujos CRUD, autenticación, permisos, paginación, filtros avanzados y dashboards.',
-        'Optimización de rendimiento, carga inicial, experiencia responsive y consistencia visual del sistema.',
-        'Mantenimiento y mejora de proyectos legacy con AngularJS, migrando lógica hacia soluciones más modernas y mantenibles.',
-      ],
-      technologies: ['Angular 21', 'AngularJS', 'TypeScript', 'Signals', 'RxJS', 'PrimeNG', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
-      current: true,
-    },
-  ];
+  protected readonly header = EXPERIENCE_HEADER;
+  protected readonly experiences = EXPERIENCES;
 
   constructor() {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
           this.experienceService.animateEntrance(this.elementRef, this.headerRef, this.timelineRef);
-        }
-      }, { threshold: 0.1 });
-
-      observer.observe(this.elementRef.nativeElement);
+        },
+      });
     });
   }
 }

@@ -52,6 +52,18 @@
   content: ' ';
 }
 
+.hero-window-dot--red {
+  background-color: #ff5f57;
+}
+
+.hero-window-dot--yellow {
+  background-color: #febc2e;
+}
+
+.hero-window-dot--green {
+  background-color: #28c840;
+}
+
 /* Avatar */
 .hero-avatar {
   width: var(--h-avatar);

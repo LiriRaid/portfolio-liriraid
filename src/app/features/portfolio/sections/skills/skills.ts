@@ -1,12 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
 
-import { SkillCategory } from '@features/portfolio/entities';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
+import { SKILL_CATEGORIES, SKILL_FALLBACK_ICONS, SKILLS_HEADER } from './mocks';
 import { SkillsService } from './skills.service';
-import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-animated-border.directive';
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-skills',
@@ -16,75 +17,41 @@ import { PortfolioAnimatedBorderDirective } from '@shared/directives/portfolio-a
   styleUrl: './skills.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    style: 'display: block; --s-inner-opacity: 0; --s-inner-visibility: hidden;',
+    style: 'display: block;',
   },
 })
 export class Skills {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly skillsService = inject(SkillsService);
+  private readonly revealService = inject(PortfolioSectionRevealService);
 
-  @ViewChild('headerRef') headerRef!: ElementRef<HTMLElement>;
-  @ViewChild('gridRef') gridRef!: ElementRef<HTMLElement>;
+  @ViewChild('headerRef') protected headerRef!: ElementRef<HTMLElement>;
+  @ViewChild('gridRef') protected gridRef!: ElementRef<HTMLElement>;
 
   protected readonly techIconUrl = techIconUrl;
 
-  private readonly fallbackIcons: Record<string, string> = {
-    'REST API': 'Server',
-    'Clean Architecture': 'Layers',
-    'Screaming Architecture': 'Folder',
-    'SSR + Hydration': 'Server',
-    'Lazy Loading': 'Download',
-    'DRY / SOLID': 'ShieldCheck',
-    DDD: 'Database',
-  };
-
-  protected readonly categories: SkillCategory[] = [
-    {
-      label: 'Frontend',
-      icon: 'Globe',
-      skills: ['Angular 21', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'RxJS', 'Signals'],
-    },
-    {
-      label: 'Backend',
-      icon: 'Server',
-      skills: ['Node.js', 'NestJS', 'Ruby on Rails', 'Express', 'REST API'],
-    },
-    {
-      label: 'Base de datos',
-      icon: 'Database',
-      skills: ['PostgreSQL', 'Redis'],
-    },
-    {
-      label: 'Herramientas',
-      icon: 'Settings',
-      skills: ['Git', 'Docker', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'GSAP', 'Vitest', 'NPM'],
-    },
-    {
-      label: 'Arquitectura',
-      icon: 'Layers',
-      skills: ['Clean Architecture', 'Screaming Architecture', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
-    },
-  ];
+  protected readonly header = SKILLS_HEADER;
+  protected readonly categories = SKILL_CATEGORIES;
 
   constructor() {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
           this.skillsService.animateEntrance(this.elementRef, this.headerRef, this.gridRef);
-        }
-      }, { threshold: 0.1 });
-
-      observer.observe(this.elementRef.nativeElement);
+        },
+      });
     });
   }
 
-
-
   protected skillFallbackIcon(skill: string): string {
-    return this.fallbackIcons[skill] ?? 'Code';
+    return SKILL_FALLBACK_ICONS[skill] ?? 'Code';
   }
 }

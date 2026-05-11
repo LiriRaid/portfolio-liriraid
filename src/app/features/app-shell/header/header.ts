@@ -5,7 +5,7 @@ import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
 import { HeaderService } from './header.service';
-import { PortfolioBackgroundAnimationService } from '@features/portfolio/components/portfolio-background-animation/portfolio-background-animation.service';
+import { PortfolioBackgroundAnimationService } from '@features/portfolio/ui/portfolio-background-animation/portfolio-background-animation.service';
 
 type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades' | 'sobre-mi' | 'contacto';
 

@@ -1,5 +1,5 @@
 <section id="inicio" class="hero flex min-h-(--app-section-min-height) flex-col justify-center py-(--h-py)" aria-labelledby="hero-heading">
-  <div class="mx-auto flex w-full max-w-7xl items-center justify-center gap-(--h-inner-gap) px-(--h-px) max-[1024px]:flex-col max-[1024px]:text-center">
+  <div class="portfolio-section-container flex items-center justify-center gap-(--h-inner-gap) max-[1024px]:flex-col max-[1024px]:text-center">
     <div class="hero-content flex w-full max-w-200 flex-1 flex-col gap-(--h-content-gap) max-[1024px]:max-w-full max-[1024px]:items-center">
       <div class="inline-flex w-fit items-center gap-(--h-badge-gap) rounded-full border border-(--h-badge-border) bg-(--app-badge-soft-bg) px-(--h-badge-px) py-(--h-badge-py) font-semibold text-(--app-badge-soft-text) text-(length:--h-badge-size)">
         <portfolio-icon name="Code" size="14" />
@@ -43,9 +43,9 @@
 
       <div class="w-full overflow-hidden rounded-2xl border border-(--app-border-color) bg-(--app-panel-bg) font-mono [box-shadow:var(--app-container-shadow)] max-[1024px]:hidden" aria-hidden="true">
         <div class="flex items-center gap-1.5 border-b border-(--app-border-color) bg-(--app-panel-muted-bg) px-4 py-3">
-          <span class="size-2.5 rounded-full bg-[#ff5f57]"></span>
-          <span class="size-2.5 rounded-full bg-[#febc2e]"></span>
-          <span class="size-2.5 rounded-full bg-[#28c840]"></span>
+          @for (dot of windowDots; track dot.className) {
+            <span class="hero-window-dot size-2.5 rounded-full" [class]="dot.className"></span>
+          }
 
           <span class="ml-1.5 text-(--app-text-subtle) text-caption-1-regular">portfolio.ts</span>
         </div>

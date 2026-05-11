@@ -1,15 +1,21 @@
 <section id="contacto" class="contact flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-shell-bg) py-(--c-py)" aria-labelledby="contact-heading">
-  <div class="contact-inner mx-auto w-full max-w-7xl px-(--c-px)" [style.opacity]="'var(--c-inner-opacity)'" [style.visibility]="'var(--c-inner-visibility)'">
+  <div class="contact-inner portfolio-section-container portfolio-section-reveal">
     <div class="contact-layout grid items-center gap-(--c-layout-gap)">
       <div #contentRef class="contact-content flex flex-col gap-(--c-content-gap)">
-        <p class="contact-label m-0">Hablemos</p>
+        <p class="contact-label m-0">
+          {{ contact.label }}
+        </p>
 
         <h2 id="contact-heading" class="contact-title m-0 text-tittle-4-bold">
-          ¿Listo para construir<br />
-          <span class="text-(--app-text-primary)">algo juntos</span>?
+          {{ contact.titleStart }}<br />
+          <span class="text-(--app-text-primary)">
+            {{ contact.titleHighlight }}
+          </span>
         </h2>
 
-        <p class="contact-description m-0 max-w-(--c-desc-max) text-body-1-regular">Estoy abierto a proyectos freelance, colaboraciones técnicas y propuestas donde pueda aportar valor construyendo soluciones web modernas, escalables y bien cuidadas. Si tienes una idea que quieras llevar a producción, me encantaría escucharla.</p>
+        <p class="contact-description m-0 max-w-(--c-desc-max) text-body-1-regular">
+          {{ contact.description }}
+        </p>
 
         <div class="contact-social flex flex-wrap gap-(--c-social-gap)">
           @for (link of socialLinks; track link.label) {
@@ -26,6 +32,7 @@
 
           <div class="textarea textarea-default">
             <label for="contact-message" class="sr-only">Mensaje</label>
+
             <textarea id="contact-message" formControlName="message" class="contact-textarea text-caption-1-medium placeholder:text-(--app-text-subtle)" placeholder="Cuéntame sobre tu proyecto o idea..." rows="5" autocapitalize="sentences" autocorrect="on" spellcheck="true"></textarea>
           </div>
 

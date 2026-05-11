@@ -1,13 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal, ElementRef } from '@angular/core';
 import { gsap } from 'gsap';
-import { GithubRepositoryResponse, GithubRepositoryStats } from '@features/portfolio/entities';
+import { IGithubRepositoryResponse, IGithubRepositoryStats } from '@features/portfolio/entities';
 
 const CACHE_KEY = 'portfolio-github-stats';
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hora
 
 interface CachedStats {
-  data: Record<string, GithubRepositoryStats>;
+  data: Record<string, IGithubRepositoryStats>;
   timestamp: number;
 }
 
@@ -16,8 +16,8 @@ interface CachedStats {
 })
 export class ProjectsService {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly memoryCache = new Map<string, GithubRepositoryStats>();
-  private readonly pendingRequests = new Map<string, Promise<GithubRepositoryStats | null>>();
+  private readonly memoryCache = new Map<string, IGithubRepositoryStats>();
+  private readonly pendingRequests = new Map<string, Promise<IGithubRepositoryStats | null>>();
   private readonly loadingRepos = signal<Set<string>>(new Set());
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
@@ -29,7 +29,7 @@ export class ProjectsService {
     }
   }
 
-  getRepositoryStats(repo: string): Promise<GithubRepositoryStats | null> {
+  getRepositoryStats(repo: string): Promise<IGithubRepositoryStats | null> {
     const cachedStats = this.memoryCache.get(repo);
 
     if (cachedStats) {
@@ -51,7 +51,7 @@ export class ProjectsService {
     return request;
   }
 
-  private async fetchRepositoryStats(repo: string): Promise<GithubRepositoryStats | null> {
+  private async fetchRepositoryStats(repo: string): Promise<IGithubRepositoryStats | null> {
     this.setRepoLoading(repo, true);
 
     try {
@@ -65,9 +65,9 @@ export class ProjectsService {
         return null;
       }
 
-      const data = (await response.json()) as GithubRepositoryResponse;
+      const data = (await response.json()) as IGithubRepositoryResponse;
 
-      const stats: GithubRepositoryStats = {
+      const stats: IGithubRepositoryStats = {
         stars: data.stargazers_count,
         forks: data.forks_count,
         visibility: data.visibility,
@@ -124,7 +124,7 @@ export class ProjectsService {
     if (!this.isBrowser) return;
 
     try {
-      const data: Record<string, GithubRepositoryStats> = {};
+      const data: Record<string, IGithubRepositoryStats> = {};
 
       this.memoryCache.forEach((stats, repo) => {
         data[repo] = stats;
@@ -149,8 +149,7 @@ export class ProjectsService {
   /**
    * Animación de entrada ÚNICA y EXCLUSIVA para la sección de Proyectos: "Focus-Reveal".
    */
-  animateEntrance(hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, toolbarRef?: ElementRef<HTMLElement>, resultsRef?: ElementRef<HTMLElement>): void {
-    if (hostRef?.nativeElement) gsap.killTweensOf(hostRef.nativeElement);
+  animateEntrance(_hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, toolbarRef?: ElementRef<HTMLElement>, resultsRef?: ElementRef<HTMLElement>): void {
     if (headerRef?.nativeElement) gsap.killTweensOf(headerRef.nativeElement.children);
     if (toolbarRef?.nativeElement) gsap.killTweensOf(toolbarRef.nativeElement);
     if (resultsRef?.nativeElement) gsap.killTweensOf(resultsRef.nativeElement);
@@ -159,24 +158,16 @@ export class ProjectsService {
       defaults: { ease: 'power4.out', force3D: true },
     });
 
-    if (hostRef?.nativeElement) {
-      tl.set(hostRef.nativeElement, {
-        '--p-inner-opacity': 1,
-        '--p-inner-visibility': 'visible',
-        clearProps: '--p-inner-opacity,--p-inner-visibility',
-      });
-    }
-
     if (headerRef?.nativeElement) {
-      tl.fromTo(headerRef.nativeElement.children, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.12, clearProps: 'all' });
+      tl.fromTo(headerRef.nativeElement.children, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.12, clearProps: 'opacity,visibility,transform' });
     }
 
     if (toolbarRef?.nativeElement) {
-      tl.fromTo(toolbarRef.nativeElement, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.7, clearProps: 'all' }, '-=0.5');
+      tl.fromTo(toolbarRef.nativeElement, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.7, clearProps: 'opacity,visibility,transform' }, '-=0.5');
     }
 
     if (resultsRef?.nativeElement) {
-      tl.fromTo(resultsRef.nativeElement, { autoAlpha: 0, y: 40, filter: 'blur(10px)', scale: 0.98 }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: 1.1, clearProps: 'all' }, '-=0.4');
+      tl.fromTo(resultsRef.nativeElement, { autoAlpha: 0, y: 40, filter: 'blur(10px)', scale: 0.98 }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: 1.1, clearProps: 'opacity,visibility,transform,filter' }, '-=0.4');
     }
   }
 

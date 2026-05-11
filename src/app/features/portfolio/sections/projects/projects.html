@@ -1,11 +1,17 @@
 <section id="proyectos" class="projects flex min-h-(--app-section-min-height) flex-col justify-center py-(--p-py)" aria-labelledby="projects-heading">
-  <div class="projects-inner mx-auto flex w-full max-w-7xl flex-col gap-(--p-inner-gap) px-(--p-px)" [style.opacity]="'var(--p-inner-opacity)'" [style.visibility]="'var(--p-inner-visibility)'">
+  <div class="projects-inner portfolio-section-container portfolio-section-reveal flex flex-col gap-(--p-inner-gap)">
     <header #headerRef class="projects-header flex flex-col gap-(--p-header-gap)">
-      <p class="projects-label m-0 font-semibold uppercase tracking-[0.08em] text-(--app-text-primary)">Trabajo reciente</p>
+      <p class="projects-label m-0 font-semibold uppercase tracking-[0.08em] text-(--app-text-primary)">
+        {{ header.label }}
+      </p>
 
-      <h2 id="projects-heading" class="projects-title m-0 font-bold text-(--app-text-color) tracking-tight">Proyectos destacados</h2>
+      <h2 id="projects-heading" class="projects-title m-0 font-bold text-(--app-text-color) tracking-tight">
+        {{ header.title }}
+      </h2>
 
-      <p class="projects-subtitle m-0 text-(--app-text-muted)">Aplicaciones reales construidas con foco en arquitectura limpia, rendimiento y escalabilidad.</p>
+      <p class="projects-subtitle m-0 text-(--app-text-muted)">
+        {{ header.subtitle }}
+      </p>
     </header>
 
     <div #toolbarRef class="projects-toolbar relative z-60 flex min-w-0 items-center justify-between gap-(--p-toolbar-gap)">
@@ -217,13 +223,15 @@
         <div class="projects-empty-state flex min-w-0 flex-col gap-(--p-empty-gap) p-(--p-empty-p) rounded-(--p-empty-radius) bg-(--app-panel-bg) origin-top will-change-[opacity,transform]" animate.enter="projects-empty-state-enter">
           <p class="projects-empty-title m-0 font-bold text-(--app-text-color) text-(length:--p-empty-title-size) leading-tight">
             @if (hasSearchTerm()) {
-              No encontré proyectos con esa búsqueda.
+              {{ emptyState.searchTitle }}
             } @else {
-              No hay proyectos públicos con estos filtros.
+              {{ emptyState.filtersTitle }}
             }
           </p>
 
-          <p class="projects-empty-description m-0 text-(--app-text-muted) text-(length:--p-empty-desc-size) leading-[1.32]">Prueba con otra tecnología, limpia los filtros o busca por nombre, descripción o stack.</p>
+          <p class="projects-empty-description m-0 text-(--app-text-muted) text-(length:--p-empty-desc-size) leading-[1.32]">
+            {{ emptyState.description }}
+          </p>
         </div>
       }
     </div>

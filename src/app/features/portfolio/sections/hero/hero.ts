@@ -6,17 +6,8 @@ import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon'
 import { AlertService } from '@shared/services/alert.service';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
+import { HERO_CODE_LINES, HERO_CV_FILE, HERO_STACK, HERO_WINDOW_DOTS } from './mocks';
 import { HeroService } from './hero.service';
-
-type CodeToken = {
-  readonly value: string;
-  readonly className: string;
-};
-
-type CodeLine = {
-  readonly indent?: 1 | 2;
-  readonly tokens: readonly CodeToken[];
-};
 
 @Component({
   selector: 'portfolio-hero',
@@ -31,73 +22,11 @@ export class Hero {
   private readonly alertService = inject(AlertService);
   private readonly heroService = inject(HeroService);
 
-  private readonly cvUrl = 'assets/docs/gabriel-cruz-cv.pdf';
-  private readonly cvFileName = 'Gabriel-Leonardo-Cruz-Flores-CV.pdf';
-
   protected readonly techIconUrl = techIconUrl;
 
-  protected readonly stack = ['Angular', 'TypeScript', 'HTML', 'CSS', 'SASS', 'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS'] as const;
-
-  protected readonly windowDots = ['dot-red', 'dot-yellow', 'dot-green'] as const;
-
-  protected readonly codeLines: readonly CodeLine[] = [
-    {
-      tokens: [
-        { value: 'export class', className: 'code-keyword' },
-        { value: ' GabrielCruz', className: 'code-class' },
-        { value: ' {', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [
-        { value: 'role', className: 'code-prop' },
-        { value: ' = ', className: 'code-punct' },
-        { value: "'Full Angular Dev'", className: 'code-string' },
-        { value: ';', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [
-        { value: 'focus', className: 'code-prop' },
-        { value: ' = ', className: 'code-punct' },
-        { value: "'Product & Scale'", className: 'code-string' },
-        { value: ';', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [
-        { value: 'stack', className: 'code-prop' },
-        { value: ' = [', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 2,
-      tokens: [
-        { value: "'Angular'", className: 'code-string' },
-        { value: ',', className: 'code-punct' },
-        { value: " 'Node.js'", className: 'code-string' },
-        { value: ',', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 2,
-      tokens: [
-        { value: "'Rails'", className: 'code-string' },
-        { value: ',', className: 'code-punct' },
-        { value: " 'PostgreSQL'", className: 'code-string' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [{ value: '];', className: 'code-punct' }],
-    },
-    {
-      tokens: [{ value: '}', className: 'code-punct' }],
-    },
-  ];
+  protected readonly stack = HERO_STACK;
+  protected readonly codeLines = HERO_CODE_LINES;
+  protected readonly windowDots = HERO_WINDOW_DOTS;
 
   private get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
@@ -133,8 +62,8 @@ export class Hero {
 
     const link = document.createElement('a');
 
-    link.href = this.cvUrl;
-    link.download = this.cvFileName;
+    link.href = HERO_CV_FILE.url;
+    link.download = HERO_CV_FILE.fileName;
     link.rel = 'noopener';
     link.target = '_blank';
 

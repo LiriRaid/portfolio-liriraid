@@ -47,10 +47,10 @@ export class Layout {
           if (visibleSectionId) {
             this.scrollToSection(visibleSectionId, 'auto');
           }
-        }, 50);
+        }, 80);
       };
 
-      window.addEventListener('resize', onResize);
+      window.addEventListener('resize', onResize, { passive: true });
 
       this.destroyRef.onDestroy(() => {
         window.removeEventListener('resize', onResize);
@@ -74,7 +74,11 @@ export class Layout {
       return 64;
     }
 
-    return value.endsWith('rem') ? parsed * this.getRootFontSize() : parsed;
+    if (value.endsWith('rem')) {
+      return parsed * this.getRootFontSize();
+    }
+
+    return parsed;
   }
 
   private getRootFontSize(): number {
@@ -110,7 +114,8 @@ export class Layout {
 
     const rootRect = scrollRoot.getBoundingClientRect();
     const headerHeight = this.getHeaderHeight();
-    const scanLine = rootRect.top + headerHeight + 1;
+    const scanTop = rootRect.top + headerHeight;
+    const scanBottom = rootRect.bottom;
 
     let bestMatch: string | null = null;
     let maxVisibleHeight = 0;
@@ -123,8 +128,8 @@ export class Layout {
       }
 
       const rect = section.getBoundingClientRect();
-      const visibleTop = Math.max(rect.top, scanLine);
-      const visibleBottom = Math.min(rect.bottom, rootRect.bottom);
+      const visibleTop = Math.max(rect.top, scanTop);
+      const visibleBottom = Math.min(rect.bottom, scanBottom);
       const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
       if (visibleHeight > maxVisibleHeight) {
