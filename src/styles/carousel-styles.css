@@ -124,32 +124,80 @@ portfolio-carousel .carousel-item > * {
 
 .expand-btn {
   position: absolute;
-  top: var(--carousel-expand-offset);
-  left: var(--carousel-expand-offset);
+  top: 50%;
+  left: 50%;
   z-index: 60;
   width: var(--carousel-expand-size);
   height: var(--carousel-expand-size);
+  background: var(--carousel-expand-bg);
+  color: var(--carousel-expand-color);
+  border: 0;
+  backdrop-filter: none;
+  box-shadow: var(--carousel-expand-shadow);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.55);
+  transition:
+    opacity 0.28s ease,
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.45),
+    background-color 0.2s ease,
+    box-shadow 0.25s ease;
+  pointer-events: none;
 }
 
-.expand-btn:hover {
-  transform: scale(1.1);
+.expand-btn portfolio-icon,
+.expand-btn svg {
+  width: var(--carousel-expand-icon-size);
+  height: var(--carousel-expand-icon-size);
 }
 
-.nav-btn,
-.fullscreen-nav {
+.carousel-screenshot-active .carousel-root--screenshot:hover .expand-btn,
+.carousel-screenshot-active .carousel-root--screenshot:focus-within .expand-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+.carousel-screenshot-active .carousel-root--screenshot .carousel-img {
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-img,
+.carousel-screenshot-active .carousel-root--screenshot:focus-within .carousel-img {
+  transform: translateZ(0) scale(1.06);
+}
+
+.carousel-screenshot-active .carousel-root--screenshot .carousel-slides::after {
+  content: '';
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-slides::after,
+.carousel-screenshot-active .carousel-root--screenshot:focus-within .carousel-slides::after {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .expand-btn {
+    display: none;
+  }
 }
 
 .nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 65;
   width: var(--carousel-nav-size);
   height: var(--carousel-nav-size);
 }
 
-.nav-btn:hover,
-.fullscreen-nav:hover {
+.nav-btn:hover {
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -162,8 +210,23 @@ portfolio-carousel .carousel-item > * {
 }
 
 .fullscreen-nav {
+  position: absolute;
+  bottom: var(--carousel-fullscreen-nav-bottom);
+  z-index: 100;
   width: var(--carousel-fullscreen-control-size);
   height: var(--carousel-fullscreen-control-size);
+}
+
+.fullscreen-nav--prev {
+  left: var(--carousel-fullscreen-nav-x);
+}
+
+.fullscreen-nav--next {
+  right: var(--carousel-fullscreen-nav-x);
+}
+
+.fullscreen-nav:hover {
+  transform: scale(1.1);
 }
 
 .fullscreen-close {
@@ -289,6 +352,11 @@ portfolio-carousel .carousel-item > * {
 
   --carousel-fullscreen-control-size: clamp(1.45rem, 1.18rem + 0.9vw, 2rem);
   --carousel-fullscreen-icon-size: clamp(0.78rem, 0.65rem + 0.42vw, 1rem);
+  --carousel-fullscreen-nav-bottom: clamp(0.6rem, 0.4rem + 0.6vw, 0.95rem);
+  --carousel-fullscreen-nav-x: clamp(0.75rem, 0.55rem + 0.8vw, 1.1rem);
+  --carousel-fullscreen-progress-inset: clamp(3rem, 2.5rem + 2vw, 4rem);
+  --carousel-fullscreen-progress-bottom: clamp(1.25rem, 0.85rem + 1.3vw, 1.85rem);
+  --carousel-fullscreen-counter-bottom: clamp(2.15rem, 1.55rem + 1.85vw, 3.05rem);
 
   --carousel-slide-nav-h: clamp(0.16rem, 0.15rem + 0.05vw, 0.18rem);
   --carousel-counter-size: clamp(0.54rem, 0.46rem + 0.35vw, 0.68rem);
@@ -296,6 +364,16 @@ portfolio-carousel .carousel-item > * {
   background: rgba(0, 0, 0, 0.48);
   backdrop-filter: blur(4px);
   animation: carousel-fade-in 0.2s ease;
+}
+
+.fullscreen-slide-nav {
+  left: var(--carousel-fullscreen-progress-inset);
+  right: var(--carousel-fullscreen-progress-inset);
+  bottom: var(--carousel-fullscreen-progress-bottom);
+}
+
+.fullscreen-counter {
+  bottom: var(--carousel-fullscreen-counter-bottom);
 }
 
 .fullscreen-inner {

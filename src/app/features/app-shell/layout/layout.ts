@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { PortfolioToast } from '@shared/components/portfolio-toast/portfolio-toast';
+import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 
 @Component({
   selector: 'app-layout',
@@ -16,8 +17,6 @@ import { PortfolioToast } from '@shared/components/portfolio-toast/portfolio-toa
 export class Layout {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-
-  private readonly sectionIds = ['home', 'experience', 'projects', 'skills', 'about', 'contact'];
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -45,7 +44,7 @@ export class Layout {
 
         resizeTimer = setTimeout(() => {
           if (visibleSectionId) {
-            this.scrollToSection(visibleSectionId, 'auto');
+            scrollToPortfolioSection(visibleSectionId, 'auto');
           }
         }, 80);
       };
@@ -62,10 +61,6 @@ export class Layout {
     });
   }
 
-  private getScrollRoot(): HTMLElement | null {
-    return document.querySelector<HTMLElement>('.layout-scroll-root');
-  }
-
   private getHeaderHeight(): number {
     const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
     const parsed = Number.parseFloat(value);
@@ -74,39 +69,13 @@ export class Layout {
       return 64;
     }
 
-    if (value.endsWith('rem')) {
-      return parsed * this.getRootFontSize();
-    }
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
 
-    return parsed;
-  }
-
-  private getRootFontSize(): number {
-    return Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  }
-
-  private scrollToSection(sectionId: string, behavior: ScrollBehavior): void {
-    const scrollRoot = this.getScrollRoot();
-    const section = document.getElementById(sectionId);
-
-    if (!scrollRoot || !section) {
-      return;
-    }
-
-    const scrollRootRect = scrollRoot.getBoundingClientRect();
-    const sectionRect = section.getBoundingClientRect();
-    const headerHeight = this.getHeaderHeight();
-
-    const top = sectionRect.top - scrollRootRect.top + scrollRoot.scrollTop - headerHeight;
-
-    scrollRoot.scrollTo({
-      top: Math.max(0, Math.round(top)),
-      behavior,
-    });
+    return value.endsWith('rem') ? parsed * rootFontSize : parsed;
   }
 
   private getVisibleSectionId(): string | null {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
 
     if (!scrollRoot) {
       return null;
@@ -120,7 +89,7 @@ export class Layout {
     let bestMatch: string | null = null;
     let maxVisibleHeight = 0;
 
-    for (const id of this.sectionIds) {
+    for (const id of PORTFOLIO_SECTION_IDS) {
       const section = document.getElementById(id);
 
       if (!section) {

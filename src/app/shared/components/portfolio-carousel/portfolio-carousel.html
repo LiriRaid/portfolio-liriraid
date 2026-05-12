@@ -32,7 +32,7 @@
       </div>
 
       <button type="button" class="expand-btn" (click)="onExpandClick($event)" aria-label="Ver en pantalla completa">
-        <portfolio-icon name="Expand" size="14" />
+        <portfolio-icon name="ZoomIn" size="22" />
       </button>
 
       @if (images().length > 1) {
@@ -80,15 +80,15 @@
         </button>
 
         @if (images().length > 1) {
-          <button type="button" class="fullscreen-nav fullscreen-nav--prev absolute top-1/2 left-4 z-100 w-7.5 h-7.5" (click)="fullscreenPrev()" aria-label="Anterior">
+          <button type="button" class="fullscreen-nav fullscreen-nav--prev" (click)="fullscreenPrev()" aria-label="Anterior">
             <portfolio-icon name="ChevronLeft" size="16" />
           </button>
 
-          <button type="button" class="fullscreen-nav fullscreen-nav--next absolute top-1/2 right-4 z-100 w-7.5 h-7.5" (click)="fullscreenNext()" aria-label="Siguiente">
+          <button type="button" class="fullscreen-nav fullscreen-nav--next" (click)="fullscreenNext()" aria-label="Siguiente">
             <portfolio-icon name="ChevronRight" size="16" />
           </button>
 
-          <nav class="fullscreen-slide-nav absolute left-4 right-4 bottom-3.5 z-80 flex gap-1.25" aria-label="Navegar imágenes en pantalla completa">
+          <nav class="fullscreen-slide-nav absolute z-80 flex gap-1.25" aria-label="Navegar imágenes en pantalla completa">
             @for (img of images(); track $index) {
               <button type="button" class="fullscreen-slide-nav-item relative flex-1 h-0.75 rounded-full overflow-hidden border-0 p-0 cursor-pointer" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === fullscreenActiveIndex() ? 'true' : null" (click)="fullscreenGoTo($index)">
                 <span class="fullscreen-slide-nav-fill" #fullscreenNavFillRef></span>
@@ -96,7 +96,7 @@
             }
           </nav>
 
-          <div class="fullscreen-counter absolute left-1/2 bottom-[1.2rem] z-85 -translate-x-1/2 px-2.5 py-0.5">{{ fullscreenActiveIndex() + 1 }} / {{ images().length }}</div>
+          <div class="fullscreen-counter absolute left-1/2 z-85 -translate-x-1/2 px-2.5 py-0.5">{{ fullscreenActiveIndex() + 1 }} / {{ images().length }}</div>
         }
       </div>
     </div>

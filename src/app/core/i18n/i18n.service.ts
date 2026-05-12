@@ -58,7 +58,7 @@ export class I18nService {
 
   private readonly translatedTexts = this.createTranslatedTexts();
 
-  private readonly animatedTextSelector = ['main h1 span', 'main h2', 'main h3', 'main h4', 'main p', 'main .p-button-label', 'main .hero-badge span', 'main .stat-label', 'main .github-label', 'main label', 'main input', 'main textarea', 'main li > span:not([aria-hidden="true"])', 'main [data-i18n-text]', 'header nav a', 'header .p-button-label', 'footer .footer-tagline', 'footer .footer-copy', 'footer .p-button-label', 'footer [data-i18n-text]'].join(',');
+  private readonly animatedTextSelector = ['main h1 span', 'main h2', 'main h3', 'main h4', 'main p', 'main .p-button-label', 'main .hero-badge span', 'main .stat-label', 'main .github-label', 'main label', 'main input', 'main textarea', 'main li > span:not([aria-hidden="true"])', 'main [data-i18n-text]', 'main .projects-featured-badge', 'header nav a', 'header .p-button-label', 'footer .footer-tagline', 'footer .footer-copy', 'footer .p-button-label', 'footer [data-i18n-text]'].join(',');
 
   private readonly iconFollowSelector = ['.p-button-icon', 'lucide-icon', 'portfolio-icon', 'svg[role="img"]', '[data-i18n-follow]'].join(',');
 

@@ -217,3 +217,7 @@
     --mobile-nav-size: clamp(0.78rem, 0.506rem + 1.219vw, var(--font-size-body-2));
   }
 }
+
+:host-context(.header-is-floating) {
+  margin-bottom: calc(var(--header-height) * -1);
+}

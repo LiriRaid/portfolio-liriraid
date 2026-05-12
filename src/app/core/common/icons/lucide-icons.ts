@@ -41,6 +41,7 @@ import {
   LucideLayoutPanelTop,
   LucideMessagesSquare,
   LucideSparkles,
+  LucideZoomIn,
 } from '@lucide/angular';
 type PortfolioLucideIcon = LucideIcon | LucideIconData;
 
@@ -88,6 +89,7 @@ const PortfolioLucideIcons = {
   Star: LucideStar,
   Sun: LucideSun,
   User: LucideUser,
+  ZoomIn: LucideZoomIn,
 } as const satisfies Record<string, PortfolioLucideIcon>;
 
 export const LucideIcons = Object.fromEntries(Object.entries(PortfolioLucideIcons).map(([name, icon]) => [name, toLucideIconData(icon)])) as { [Name in keyof typeof PortfolioLucideIcons]: LucideIconData };

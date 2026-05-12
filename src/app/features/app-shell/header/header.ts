@@ -1,15 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, computed, effect, inject, signal } from '@angular/core';
 
 import { I18nService } from '@core/i18n';
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
 import { PortfolioLanguageToggle } from '@shared/components/portfolio-language-toggle/portfolio-language-toggle';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
+import { PORTFOLIO_SECTION_IDS, PortfolioSectionId, getPortfolioScrollRoot, scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 import { HeaderService } from './header.service';
 import { PortfolioBackgroundAnimationService } from '@features/portfolio/ui/portfolio-background-animation/portfolio-background-animation.service';
-
-type PortfolioSectionId = 'home' | 'experience' | 'projects' | 'skills' | 'about' | 'contact';
 
 @Component({
   selector: 'portfolio-header',
@@ -57,12 +56,16 @@ export class Header {
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
 
-  private readonly sectionIds: PortfolioSectionId[] = ['home', 'experience', 'projects', 'skills', 'about', 'contact'];
+  private readonly sectionIds = PORTFOLIO_SECTION_IDS;
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+
+    effect(() => {
+      document.documentElement.classList.toggle('header-is-floating', this.isFloating());
+    });
 
     afterNextRender(() => {
       setTimeout(() => {
@@ -98,7 +101,7 @@ export class Header {
     this.targetSection = sectionId;
     this.clearScrollUnlockTimer();
 
-    this.scrollToSection(sectionId, 'smooth');
+    scrollToPortfolioSection(sectionId, 'smooth');
 
     history.replaceState(null, '', `${window.location.pathname}${window.location.search}${href}`);
 
@@ -158,7 +161,7 @@ export class Header {
   }
 
   private initializeHeaderRuntime(): void {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
 
     if (!scrollRoot) {
       return;
@@ -271,7 +274,7 @@ export class Header {
     this.activeSection.set(hash);
 
     requestAnimationFrame(() => {
-      this.scrollToSection(hash, 'auto');
+      scrollToPortfolioSection(hash, 'auto');
     });
   }
 
@@ -287,10 +290,6 @@ export class Header {
     return this.elementRef.nativeElement.querySelector<HTMLElement>('.mobile-nav');
   }
 
-  private getScrollRoot(): HTMLElement | null {
-    return document.querySelector<HTMLElement>('.layout-scroll-root');
-  }
-
   private getHeaderHeight(): number {
     const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
     const parsed = Number.parseFloat(value);
@@ -304,26 +303,6 @@ export class Header {
 
   private getRootFontSize(): number {
     return Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  }
-
-  private scrollToSection(sectionId: PortfolioSectionId, behavior: ScrollBehavior): void {
-    const scrollRoot = this.getScrollRoot();
-    const section = document.getElementById(sectionId);
-
-    if (!scrollRoot || !section) {
-      return;
-    }
-
-    const scrollRootRect = scrollRoot.getBoundingClientRect();
-    const sectionRect = section.getBoundingClientRect();
-    const headerHeight = this.getHeaderHeight();
-
-    const top = sectionRect.top - scrollRootRect.top + scrollRoot.scrollTop - headerHeight;
-
-    scrollRoot.scrollTo({
-      top: Math.max(0, Math.round(top)),
-      behavior,
-    });
   }
 
   private scheduleActiveSectionSync(): void {
@@ -364,7 +343,7 @@ export class Header {
   }
 
   private syncTargetSection(): void {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
     const target = document.getElementById(this.targetSection!);
 
     if (!scrollRoot || !target) {
@@ -374,10 +353,10 @@ export class Header {
 
     const scrollRootRect = scrollRoot.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
-    const headerHeight = this.getHeaderHeight();
 
     const targetVisualTop = targetRect.top - scrollRootRect.top;
-    const reachedTarget = Math.abs(targetVisualTop - headerHeight) <= 2 || targetVisualTop <= headerHeight;
+    const expectedTop = this.targetSection === 'home' ? this.getHeaderHeight() : 0;
+    const reachedTarget = Math.abs(targetVisualTop - expectedTop) <= 2 || targetVisualTop <= expectedTop;
 
     if (!reachedTarget) {
       return;
@@ -393,7 +372,7 @@ export class Header {
   }
 
   private getCurrentSectionId(): PortfolioSectionId | null {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
 
     if (!scrollRoot) {
       return null;

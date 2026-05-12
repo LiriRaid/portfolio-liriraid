@@ -6,6 +6,10 @@
   --app-section-container-px: clamp(0.75rem, 0.3075rem + 1.8634vw, 1.5rem);
 }
 
+html.header-is-floating {
+  --app-section-min-height: 100dvh;
+}
+
 html,
 body {
   width: 100%;

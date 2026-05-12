@@ -1,15 +1,6 @@
-function getHeaderHeight(): number {
-  const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
-  const parsed = Number.parseFloat(value);
+export const PORTFOLIO_SECTION_IDS = ['home', 'experience', 'projects', 'skills', 'about', 'contact'] as const;
 
-  if (!Number.isFinite(parsed)) {
-    return 64;
-  }
-
-  const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-
-  return value.endsWith('rem') ? parsed * rootFontSize : parsed;
-}
+export type PortfolioSectionId = (typeof PORTFOLIO_SECTION_IDS)[number];
 
 export function getPortfolioScrollRoot(): HTMLElement | null {
   return document.querySelector<HTMLElement>('.layout-scroll-root');
@@ -17,17 +8,23 @@ export function getPortfolioScrollRoot(): HTMLElement | null {
 
 export function scrollToPortfolioSection(sectionId: string, behavior: ScrollBehavior = 'smooth'): void {
   const scrollRoot = getPortfolioScrollRoot();
-  const section = document.getElementById(sectionId);
 
-  if (!scrollRoot || !section) {
+  if (!scrollRoot) {
     return;
   }
 
-  const scrollRootRect = scrollRoot.getBoundingClientRect();
-  const sectionRect = section.getBoundingClientRect();
-  const headerHeight = getHeaderHeight();
+  if (sectionId === 'home') {
+    scrollRoot.scrollTo({ top: 0, behavior });
+    return;
+  }
 
-  const top = sectionRect.top - scrollRootRect.top + scrollRoot.scrollTop - headerHeight;
+  const sectionIndex = (PORTFOLIO_SECTION_IDS as readonly string[]).indexOf(sectionId);
+
+  if (sectionIndex === -1) {
+    return;
+  }
+
+  const top = sectionIndex * window.innerHeight;
 
   scrollRoot.scrollTo({
     top: Math.max(0, Math.round(top)),

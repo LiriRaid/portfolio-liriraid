@@ -38,6 +38,9 @@ type ProgressState = {
   styleUrl: './portfolio-carousel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CarouselItemSceneService],
+  host: {
+    '[class.carousel-screenshot-active]': "mode() === 'screenshot' && active()",
+  },
 })
 export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -55,6 +58,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   readonly activeItemKey = input<string>('');
   readonly autoPlay = input<boolean>(true);
   readonly autoPlayDuration = input<number>(4000);
+  readonly active = input<boolean>(true);
   readonly activeItemChange = output<string>();
 
   protected readonly currentIndex = signal(0);
@@ -848,14 +852,18 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       return;
     }
 
-    if (this.canUseScreenshotControls()) {
-      event.preventDefault();
-      event.stopPropagation();
+    if (!this.canUseScreenshotControls() || !this.active()) {
+      return;
     }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.openFullscreen(this.currentIndex());
   }
 
   protected onExpandClick(event: MouseEvent): void {
-    if (!this.allowScreenshotControl(event)) return;
+    if (!this.allowScreenshotControl(event) || !this.active()) return;
 
     this.openFullscreen(this.currentIndex());
   }
