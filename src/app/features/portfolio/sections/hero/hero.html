@@ -1,20 +1,20 @@
 <section id="home" class="hero flex min-h-(--app-section-min-height) flex-col justify-center py-(--h-py)" aria-labelledby="hero-heading">
   <div class="portfolio-section-container flex items-center justify-center gap-(--h-inner-gap) max-[1024px]:flex-col max-[1024px]:text-center">
     <div class="hero-content flex w-full max-w-200 flex-1 flex-col gap-(--h-content-gap) max-[1024px]:max-w-full max-[1024px]:items-center">
-      <div class="hero-badge inline-flex w-fit items-center gap-(--h-badge-gap) rounded-full border border-(--h-badge-border) bg-(--app-badge-soft-bg) px-(--h-badge-px) py-(--h-badge-py) text-caption-1-semibold text-(--app-badge-soft-text)">
+      <div class="hero-badge inline-flex w-fit items-center gap-(--h-badge-gap) rounded-full border px-(--h-badge-px) py-(--h-badge-py) text-caption-1-semibold shadow-(--h-badge-shadow)">
         <portfolio-icon name="Code" size="14" />
         <span>{{ badge() }}</span>
       </div>
 
-      <p class="hero-intro m-0 max-w-(--h-intro-max) text-body-2-medium max-[1024px]:mx-auto max-[1024px]:text-center">
+      <p class="hero-intro m-0 max-w-(--h-intro-max) text-(--app-text-color) font-extrabold leading-[1.18] tracking-[-0.015em] text-[clamp(1.18rem,0.88rem+1.25vw,1.65rem)] max-[1024px]:mx-auto max-[1024px]:text-center max-[1024px]:text-[clamp(1rem,0.7rem+1.25vw,1.35rem)] max-[640px]:text-[clamp(0.96rem,0.7rem+1.08vw,1.12rem)] max-[640px]:leading-tight">
         <span>{{ introPrefix() }}</span>
-        <span class="hero-intro-name">{{ introName() }}</span>
+        <span class="text-(--app-text-primary) bg-[linear-gradient(90deg,var(--app-text-primary),color-mix(in_srgb,var(--app-text-primary)_72%,white)_42%,color-mix(in_srgb,var(--app-text-primary)_82%,var(--app-text-color)))] bg-clip-text [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">{{ introName() }}</span>
       </p>
 
-      <h1 id="hero-heading" class="hero-title mx-0 max-w-(--h-title-max) text-tittle-1-bold tracking-[-0.03em] text-(--app-text-color)">
-        <span class="hero-title-line">{{ titleLine1() }}</span>
-        <span class="hero-title-line text-(--app-text-primary)">{{ titleLine2() }}</span>
-        <span class="hero-title-line">{{ titleLine3() }}</span>
+      <h1 id="hero-heading" class="mx-0 max-w-(--h-title-max) text-tittle-1-bold tracking-[-0.03em] text-(--app-text-color) max-[640px]:mx-auto max-[640px]:w-full max-[640px]:text-center">
+        <span class="block max-[640px]:w-full max-[640px]:whitespace-nowrap max-[640px]:text-center">{{ titleLine1() }}</span>
+        <span class="block text-(--app-text-primary) max-[640px]:w-full max-[640px]:whitespace-nowrap max-[640px]:text-center">{{ titleLine2() }}</span>
+        <span class="block max-[640px]:w-full max-[640px]:whitespace-nowrap max-[640px]:text-center">{{ titleLine3() }}</span>
       </h1>
 
       <p class="hero-description m-0 max-w-(--h-desc-max) text-body-1-regular text-(--app-text-muted) max-[1024px]:mx-auto max-[1024px]:text-center">
@@ -41,7 +41,7 @@
     </div>
 
     <div class="flex w-[clamp(300px,30vw,400px)] shrink-0 flex-col items-center gap-6 max-[1024px]:-order-1 max-[1024px]:w-auto max-[1024px]:gap-0">
-      <div class="hero-avatar shrink-0 rounded-full p-1.25">
+      <div class="size-(--h-avatar) shrink-0 rounded-full bg-[linear-gradient(135deg,var(--app-text-primary),color-mix(in_srgb,var(--app-text-primary)_40%,transparent))] p-1.25 [box-shadow:var(--app-container-shadow),0_0_0_var(--h-avatar-ring)_color-mix(in_srgb,var(--app-text-primary)_12%,transparent)]">
         <picture class="block size-full rounded-full">
           <source srcset="assets/img/me-hero-mobile.webp" media="(max-width: 640px)" />
 
@@ -51,9 +51,9 @@
 
       <div class="w-full overflow-hidden rounded-2xl border border-(--app-border-color) bg-(--app-panel-bg) font-mono [box-shadow:var(--app-container-shadow)] max-[1024px]:hidden" aria-hidden="true">
         <div class="flex items-center gap-1.5 border-b border-(--app-border-color) bg-(--app-panel-muted-bg) px-4 py-3">
-          @for (dot of windowDots; track dot.className) {
-            <span class="hero-window-dot size-2.5 rounded-full" [class]="dot.className"></span>
-          }
+          <span class="size-2.5 rounded-full bg-[#ff5f57]"></span>
+          <span class="size-2.5 rounded-full bg-[#febc2e]"></span>
+          <span class="size-2.5 rounded-full bg-[#28c840]"></span>
 
           <span class="ml-1.5 text-caption-1-regular text-(--app-text-subtle)">portfolio.ts</span>
         </div>
