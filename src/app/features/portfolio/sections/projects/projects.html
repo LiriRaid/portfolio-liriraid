@@ -123,7 +123,7 @@
             <div carouselItem class="projects-card-shell h-full min-h-0 w-full" [attr.data-carousel-key]="project.title" [attr.data-carousel-leaving]="isProjectLeaving(project.title) ? 'true' : null" [attr.data-project-entering]="isProjectEntering(project.title) ? 'true' : null">
               <article portfolioAnimatedBorder [portfolioAnimatedBorderActive]="activeCarouselProjectTitle() === project.title" class="projects-card relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden" [class.projects-card--featured]="project.featured" [class.projects-card--active]="activeCarouselProjectTitle() === project.title">
                 @if (project.featured) {
-                  <span class="projects-featured-badge pointer-events-none absolute top-2 right-(--p-featured-right) z-80 w-fit max-w-max rounded-full bg-(--app-badge-soft-bg) px-(--p-featured-px) py-(--p-featured-py) text-(length:--p-featured-size) leading-none font-bold text-(--app-badge-soft-text)">{{ featuredBadge() }}</span>
+                  <span class="projects-featured-badge pointer-events-none absolute top-2 right-(--p-featured-right) z-80 w-fit max-w-max rounded-full px-(--p-featured-px) py-(--p-featured-py) text-(length:--p-featured-size) leading-none font-bold">{{ featuredBadge() }}</span>
                 }
 
                 @if (project.screenshots?.length) {

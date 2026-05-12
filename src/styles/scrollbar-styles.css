@@ -1,6 +1,6 @@
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background-color: transparent;
   -webkit-appearance: none;
   appearance: none;
@@ -12,7 +12,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--p-primary-600);
+  background: var(--p-primary-700);
   border-radius: 12px;
   border: 0.5px solid transparent;
   background-clip: padding-box;

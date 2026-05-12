@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, QueryList, ViewChild, ViewChildren, afterNextRender, computed, inject } from '@angular/core';
 
 import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
@@ -31,6 +31,8 @@ export class Experience {
 
   @ViewChild('headerRef') protected headerRef!: ElementRef<HTMLElement>;
   @ViewChild('timelineRef') protected timelineRef!: ElementRef<HTMLElement>;
+  @ViewChildren('lineRef') protected lineRefs!: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('dotRef') protected dotRefs!: QueryList<ElementRef<HTMLElement>>;
 
   protected readonly techIconUrl = techIconUrl;
 
@@ -64,7 +66,7 @@ export class Experience {
         hostRef: this.elementRef,
         destroyRef: this.destroyRef,
         onReveal: () => {
-          this.experienceService.animateEntrance(this.elementRef, this.headerRef, this.timelineRef);
+          this.experienceService.animateEntrance(this.elementRef, this.headerRef, this.timelineRef, this.lineRefs, this.dotRefs);
         },
       });
     });

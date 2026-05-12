@@ -21,6 +21,15 @@
   border-radius: 0.55rem !important;
 }
 
+.search-collapsed-btn portfolio-icon,
+.search-collapsed-btn portfolio-icon :is(svg, .lucide),
+.search-collapsed-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+}
+
 .search-mobile-panel {
   --search-mobile-gap: 0.52rem;
 
@@ -59,6 +68,15 @@
     opacity 0.2s ease;
 }
 
+:host ::ng-deep .input.input-default portfolio-icon,
+:host ::ng-deep .input.input-default portfolio-icon :is(svg, .lucide),
+:host ::ng-deep .input.input-default svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+}
+
 :host ::ng-deep .input.input-default:focus-within portfolio-icon {
   color: var(--app-search-input-prefix);
   opacity: 1;
@@ -83,10 +101,10 @@
 /* Mobile */
 @media (max-width: 640px) {
   :host {
-    --search-action-size: clamp(36px, calc(24px + 2.5vw), 40px);
+    --search-action-size: 36px;
     --search-input-height: clamp(36px, calc(30px + 1.25vw), 38px);
     --search-input-size: clamp(var(--font-size-caption-2), calc(0.375rem + 1.25vw), var(--font-size-caption-1));
-    --search-icon-size: clamp(16px, calc(10px + 1.25vw), 18px);
+    --search-icon-size: 18px;
   }
 
   .search-collapsed-btn {
@@ -97,9 +115,12 @@
   }
 
   .search-collapsed-btn portfolio-icon,
+  .search-collapsed-btn portfolio-icon :is(svg, .lucide),
   .search-collapsed-btn svg {
     width: var(--search-icon-size) !important;
     height: var(--search-icon-size) !important;
+    min-width: var(--search-icon-size) !important;
+    min-height: var(--search-icon-size) !important;
   }
 
   :host ::ng-deep .input.input-default {
@@ -114,8 +135,12 @@
     font-weight: 500;
   }
 
-  :host ::ng-deep .input.input-default portfolio-icon {
-    width: var(--search-icon-size);
-    height: var(--search-icon-size);
+  :host ::ng-deep .input.input-default portfolio-icon,
+  :host ::ng-deep .input.input-default portfolio-icon :is(svg, .lucide),
+  :host ::ng-deep .input.input-default svg {
+    width: var(--search-icon-size) !important;
+    height: var(--search-icon-size) !important;
+    min-width: var(--search-icon-size) !important;
+    min-height: var(--search-icon-size) !important;
   }
 }

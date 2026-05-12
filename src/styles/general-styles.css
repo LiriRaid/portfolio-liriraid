@@ -69,6 +69,7 @@ button:disabled {
 
 @media (max-width: 640px) {
   :root {
+    --app-header-height: clamp(3rem, 1.714rem + 5.714vw, 4rem);
     --app-section-container-px: clamp(0.5rem, 0.2808rem + 0.9231vw, 0.65rem);
   }
 }

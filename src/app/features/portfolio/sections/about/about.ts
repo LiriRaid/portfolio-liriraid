@@ -66,12 +66,12 @@ export class About {
     });
   }
 
-  protected scrollToContact(): void {
+  protected scrollToExperience(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    scrollToPortfolioSection('contact');
+    scrollToPortfolioSection('experience');
   }
 
   private t(key: string): string {

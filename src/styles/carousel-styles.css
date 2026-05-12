@@ -150,8 +150,7 @@ portfolio-carousel .carousel-item > * {
   height: var(--carousel-expand-icon-size);
 }
 
-.carousel-screenshot-active .carousel-root--screenshot:hover .expand-btn,
-.carousel-screenshot-active .carousel-root--screenshot:focus-within .expand-btn {
+.carousel-screenshot-active .carousel-root--screenshot:hover .expand-btn {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
   pointer-events: auto;
@@ -161,8 +160,7 @@ portfolio-carousel .carousel-item > * {
   transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
-.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-img,
-.carousel-screenshot-active .carousel-root--screenshot:focus-within .carousel-img {
+.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-img {
   transform: translateZ(0) scale(1.06);
 }
 
@@ -177,8 +175,7 @@ portfolio-carousel .carousel-item > * {
   pointer-events: none;
 }
 
-.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-slides::after,
-.carousel-screenshot-active .carousel-root--screenshot:focus-within .carousel-slides::after {
+.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-slides::after {
   opacity: 1;
 }
 
@@ -344,11 +341,11 @@ portfolio-carousel .carousel-item > * {
 }
 
 .fullscreen-overlay {
-  --carousel-control-bg: color-mix(in srgb, #000000 78%, transparent);
-  --carousel-control-hover-bg: color-mix(in srgb, #000000 90%, transparent);
+  --carousel-control-bg: rgba(0, 0, 0, 0.4);
+  --carousel-control-hover-bg: rgba(0, 0, 0, 0.7);
   --carousel-control-color: #ffffff;
-  --carousel-control-border: color-mix(in srgb, #ffffff 18%, transparent);
-  --carousel-control-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  --carousel-control-border: transparent;
+  --carousel-control-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 
   --carousel-fullscreen-control-size: clamp(1.45rem, 1.18rem + 0.9vw, 2rem);
   --carousel-fullscreen-icon-size: clamp(0.78rem, 0.65rem + 0.42vw, 1rem);

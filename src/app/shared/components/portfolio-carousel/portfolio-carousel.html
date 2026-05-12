@@ -36,14 +36,6 @@
       </button>
 
       @if (images().length > 1) {
-        <button type="button" class="nav-btn nav-btn--prev" (click)="onScreenshotPrevClick($event)" aria-label="Imagen anterior">
-          <portfolio-icon name="ChevronLeft" size="16" />
-        </button>
-
-        <button type="button" class="nav-btn nav-btn--next" (click)="onScreenshotNextClick($event)" aria-label="Siguiente imagen">
-          <portfolio-icon name="ChevronRight" size="16" />
-        </button>
-
         <nav class="slide-nav absolute z-45 flex" aria-label="Navegar imágenes">
           @for (img of images(); track $index) {
             <button type="button" class="slide-nav-item" [attr.aria-label]="'Ir a imagen ' + ($index + 1)" [attr.aria-current]="$index === currentIndex() ? 'true' : null" (click)="onScreenshotDotClick($event, $index)">

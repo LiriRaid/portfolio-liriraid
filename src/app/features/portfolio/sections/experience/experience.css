@@ -60,17 +60,17 @@
 }
 
 /* Timeline */
-.experience-marker::after {
-  content: '';
+.experience-line {
   position: absolute;
   top: var(--e-line-top);
   bottom: 0;
   left: 50%;
   width: var(--e-line-width);
-  transform: translateX(-50%);
+  margin-left: calc(var(--e-line-width) / -2);
   pointer-events: none;
   background: linear-gradient(to bottom, color-mix(in srgb, var(--app-text-primary) 55%, transparent) 0%, color-mix(in srgb, var(--app-text-primary) 38%, transparent) 28%, color-mix(in srgb, var(--app-text-primary) 22%, transparent) 62%, transparent 100%);
   clip-path: polygon(18% 0%, 82% 0%, 50% 100%);
+  transform-origin: center bottom;
 }
 
 .experience-dot--current {
@@ -104,6 +104,35 @@
 }
 
 @media (max-width: 640px) {
+  section.experience {
+    padding-top: clamp(2.6rem, 1.6rem + 4.5vw, 3.6rem);
+    padding-bottom: clamp(0.45rem, 0.2rem + 1vw, 0.95rem);
+  }
+
+  .experience {
+    --e-py: clamp(1.2rem, 0.4rem + 4vw, 2.2rem);
+    --e-inner-gap: clamp(0.7rem, 0.35rem + 1.75vw, 1.2rem);
+
+    --font-size-tittle-4: clamp(1.05rem, 0.55rem + 2.5vw, 1.55rem);
+    --font-size-body-1: clamp(0.65rem, 0.5rem + 0.75vw, 0.82rem);
+    --font-size-subtitle-2: clamp(0.82rem, 0.65rem + 0.85vw, 1rem);
+    --font-size-body-2: clamp(0.66rem, 0.54rem + 0.6vw, 0.8rem);
+    --font-size-caption-1: clamp(0.6rem, 0.5rem + 0.5vw, 0.74rem);
+    --font-size-caption-2: clamp(0.58rem, 0.5rem + 0.4vw, 0.7rem);
+
+    --e-card-p: clamp(0.6rem, 0.35rem + 1.25vw, 1rem);
+    --e-card-gap: clamp(0.42rem, 0.3rem + 0.6vw, 0.65rem);
+    --e-resp-list-gap: clamp(0.35rem, 0.27rem + 0.4vw, 0.5rem);
+    --e-resp-gap: clamp(0.35rem, 0.27rem + 0.4vw, 0.5rem);
+    --e-tags-gap: clamp(0.3rem, 0.22rem + 0.4vw, 0.45rem);
+    --e-tag-py: clamp(0.18rem, 0.14rem + 0.2vw, 0.26rem);
+    --e-tag-px: clamp(0.42rem, 0.32rem + 0.5vw, 0.6rem);
+    --e-tag: clamp(0.55rem, 0.46rem + 0.45vw, 0.72rem);
+
+    --e-timeline-col: clamp(0.95rem, 0.5rem + 2.25vw, 1.6rem);
+    --e-timeline-gap: clamp(0.55rem, 0.32rem + 1.15vw, 0.95rem);
+  }
+
   .experience-card-header {
     flex-direction: column;
   }

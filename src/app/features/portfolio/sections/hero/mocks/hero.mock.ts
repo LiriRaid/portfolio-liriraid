@@ -3,11 +3,13 @@ import { IHeroCodeLine, IHeroCvFile, IHeroWindowDot } from '@features/portfolio/
 
 export const HERO_TEXT_KEYS: Readonly<Record<string, I18nKey>> = {
   badge: 'hero.badge',
+  introPrefix: 'hero.intro.prefix',
+  introName: 'hero.intro.name',
   titleLine1: 'hero.title.line1',
   titleLine2: 'hero.title.line2',
   titleLine3: 'hero.title.line3',
   description: 'hero.description',
-  experienceCta: 'hero.cta.experience',
+  aboutCta: 'hero.cta.about',
   cvCta: 'hero.cta.cv',
   stackAria: 'hero.stack.aria',
   cvSuccessTitle: 'hero.cv.success.title',

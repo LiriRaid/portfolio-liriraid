@@ -32,11 +32,13 @@ export class Hero {
   protected readonly windowDots = HERO_WINDOW_DOTS;
 
   protected readonly badge = computed(() => this.t(HERO_TEXT_KEYS['badge']));
+  protected readonly introPrefix = computed(() => this.t(HERO_TEXT_KEYS['introPrefix']));
+  protected readonly introName = computed(() => this.t(HERO_TEXT_KEYS['introName']));
   protected readonly titleLine1 = computed(() => this.t(HERO_TEXT_KEYS['titleLine1']));
   protected readonly titleLine2 = computed(() => this.t(HERO_TEXT_KEYS['titleLine2']));
   protected readonly titleLine3 = computed(() => this.t(HERO_TEXT_KEYS['titleLine3']));
   protected readonly description = computed(() => this.t(HERO_TEXT_KEYS['description']));
-  protected readonly experienceCta = computed(() => this.t(HERO_TEXT_KEYS['experienceCta']));
+  protected readonly aboutCta = computed(() => this.t(HERO_TEXT_KEYS['aboutCta']));
   protected readonly cvCta = computed(() => this.t(HERO_TEXT_KEYS['cvCta']));
   protected readonly stackAriaLabel = computed(() => this.t(HERO_TEXT_KEYS['stackAria']));
   protected readonly cvSuccessTitle = computed(() => this.t(HERO_TEXT_KEYS['cvSuccessTitle']));
@@ -60,12 +62,12 @@ export class Hero {
     });
   }
 
-  protected scrollToExperience(): void {
+  protected scrollToAbout(): void {
     if (!this.isBrowser) {
       return;
     }
 
-    scrollToPortfolioSection('experience');
+    scrollToPortfolioSection('about');
   }
 
   protected downloadCV(): void {
@@ -90,5 +92,4 @@ export class Hero {
   private t(key: string): string {
     return this.i18nService.t(key);
   }
-
 }

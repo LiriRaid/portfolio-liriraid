@@ -3,7 +3,7 @@
   --p-px: clamp(0.7rem, 0.23rem + 1.99vw, 1.5rem);
   --p-section-gap: clamp(0.45rem, 0.25rem + 1vw, 0.95rem);
 
-  --p-inner-gap: clamp(0.75rem, 0.4rem + 1.8vw, 1.85rem);
+--p-inner-gap: clamp(0.65rem, 0.34rem + 1.35vw, 1.45rem);
   --p-header-max: 40rem;
   --p-header-gap: 0.6rem;
 
@@ -79,4 +79,10 @@
   --carousel-card-height: var(--p-card-height);
 
   box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .projects {
+    --p-inner-gap: clamp(0.75rem, 0.4rem + 1.8vw, 1.85rem);
+  }
 }

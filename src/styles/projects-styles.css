@@ -54,17 +54,55 @@
   margin-left: 0.35rem;
 }
 
-.projects :is(.projects-tag, .projects-stat, .projects-selected-tag, .projects-filter-option, .projects-link, .projects-private, .projects-selected-tag-remove) portfolio-icon,
-.projects :is(.projects-tag, .projects-stat, .projects-selected-tag, .projects-filter-option, .projects-link, .projects-private, .projects-selected-tag-remove) portfolio-icon :is(svg, .lucide) {
+.projects :is(.projects-tag, .projects-stat, .projects-filter-option, .projects-link, .projects-private) portfolio-icon,
+.projects :is(.projects-tag, .projects-stat, .projects-filter-option, .projects-link, .projects-private) portfolio-icon :is(svg, .lucide) {
   width: var(--p-chip-icon) !important;
   height: var(--p-chip-icon) !important;
   min-width: var(--p-chip-icon) !important;
   min-height: var(--p-chip-icon) !important;
 }
 
-.projects :is(.projects-tag, .projects-stat, .projects-selected-tag, .projects-filter-option, .projects-link, .projects-private, .projects-selected-tag-remove) portfolio-icon {
+.projects :is(.projects-tag, .projects-stat, .projects-filter-option, .projects-link, .projects-private) portfolio-icon {
   flex: 0 0 var(--p-chip-icon);
   line-height: 0;
+}
+
+.projects .projects-selected-tag {
+  min-height: 28px;
+  padding: 6px 8px 6px 10px;
+  font-size: 14px;
+  line-height: 1.1;
+}
+
+.projects .projects-selected-tag > img,
+.projects .projects-selected-tag > portfolio-icon,
+.projects .projects-selected-tag > portfolio-icon :is(svg, .lucide) {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  min-height: 14px !important;
+}
+
+.projects .projects-selected-tag > portfolio-icon {
+  flex: 0 0 14px;
+  line-height: 0;
+}
+
+.projects .projects-selected-tag-remove {
+  width: 18px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  flex: 0 0 18px;
+}
+
+.projects .projects-selected-tag-remove portfolio-icon,
+.projects .projects-selected-tag-remove portfolio-icon :is(svg, .lucide),
+.projects .projects-selected-tag-remove svg {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  min-height: 14px !important;
 }
 
 .projects .p-popover.projects-filter-panel {
@@ -164,6 +202,12 @@
   transform-origin: center center;
 }
 
+.projects .projects-featured-badge {
+  background-color: var(--p-primary-700);
+  color: #ffffff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--p-primary-700) 35%, transparent);
+}
+
 .projects .projects-card {
   border: 1px solid var(--app-container-border, var(--app-border-color));
   border-radius: var(--p-card-radius);
@@ -244,8 +288,9 @@
 
 @media (max-width: 640px) {
   .projects {
-    --p-toolbar-action-size: clamp(36px, calc(24px + 2.5vw), 40px);
-    --p-toolbar-action-icon: clamp(0.82rem, calc(0.58rem + 0.8vw), 0.9rem);
+    --p-toolbar-action-size: 36px;
+    --p-toolbar-action-icon: 18px;
+    --p-selected-tag-font-mobile: clamp(0.625rem, 0.55rem + 0.3vw, 0.75rem);
   }
 
   .projects .projects-toolbar {
@@ -276,9 +321,13 @@
     display: none;
   }
 
-  .projects .projects-filter-button.p-button :is(.p-button-icon, portfolio-icon, svg) {
+  .projects .projects-filter-button.p-button :is(.p-button-icon, portfolio-icon),
+  .projects .projects-filter-button.p-button :is(.p-button-icon, portfolio-icon) :is(svg, .lucide),
+  .projects .projects-filter-button.p-button svg {
     width: var(--p-toolbar-action-icon) !important;
     height: var(--p-toolbar-action-icon) !important;
+    min-width: var(--p-toolbar-action-icon) !important;
+    min-height: var(--p-toolbar-action-icon) !important;
     font-size: var(--p-toolbar-action-icon) !important;
     color: var(--app-text-color) !important;
     opacity: 1 !important;
@@ -287,10 +336,64 @@
 
   .projects .projects-clear-button.p-button {
     width: auto;
-    min-height: clamp(30px, 24.6px + 0.84vw, 34px) !important;
-    padding: 0.26rem 0.55rem !important;
+    min-height: 28px !important;
+    padding: 8px 12px !important;
     border-radius: 0.46rem !important;
-    font-size: 0.62rem !important;
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+  }
+
+  .projects .projects-clear-button.p-button .p-button-label {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    font-weight: 700 !important;
+  }
+
+  .projects .projects-clear-button.p-button :is(.p-button-icon, portfolio-icon),
+  .projects .projects-clear-button.p-button :is(.p-button-icon, portfolio-icon) :is(svg, .lucide),
+  .projects .projects-clear-button.p-button svg {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    font-size: 14px !important;
+  }
+
+  .projects .projects-selected-tag {
+    min-height: 24px;
+    padding: 4px 8px 4px 10px;
+    font-size: var(--p-selected-tag-font-mobile);
+    line-height: 1.1;
+  }
+
+  .projects .projects-selected-tag > img,
+  .projects .projects-selected-tag > portfolio-icon,
+  .projects .projects-selected-tag > portfolio-icon :is(svg, .lucide) {
+    width: 12px !important;
+    height: 12px !important;
+    min-width: 12px !important;
+    min-height: 12px !important;
+  }
+
+  .projects .projects-selected-tag > portfolio-icon {
+    flex: 0 0 12px;
+  }
+
+  .projects .projects-selected-tag-remove {
+    width: 14px !important;
+    min-width: 14px !important;
+    height: 14px !important;
+    min-height: 14px !important;
+    flex: 0 0 14px;
+  }
+
+  .projects .projects-selected-tag-remove portfolio-icon,
+  .projects .projects-selected-tag-remove portfolio-icon :is(svg, .lucide),
+  .projects .projects-selected-tag-remove svg {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
   }
 
   .projects .p-popover.projects-filter-panel {

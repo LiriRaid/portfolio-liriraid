@@ -121,3 +121,32 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+@media (max-width: 640px) {
+  section.skills {
+    padding-top: clamp(2.6rem, 1.6rem + 4.5vw, 3.6rem);
+    padding-bottom: clamp(0.45rem, 0.2rem + 1vw, 0.95rem);
+  }
+
+  .skills {
+    --s-py: clamp(1.3rem, 0.5rem + 4vw, 2.3rem);
+    --s-section-gap: clamp(0.7rem, 0.4rem + 1.5vw, 1.2rem);
+
+    --font-size-tittle-4: clamp(1.05rem, 0.55rem + 2.5vw, 1.55rem);
+    --font-size-body-1: clamp(0.65rem, 0.5rem + 0.75vw, 0.82rem);
+    --font-size-subtitle-2: clamp(0.78rem, 0.6rem + 0.9vw, 0.95rem);
+    --font-size-caption-1: clamp(0.58rem, 0.48rem + 0.5vw, 0.72rem);
+    --font-size-caption-2: clamp(0.56rem, 0.48rem + 0.4vw, 0.7rem);
+
+    --s-grid-gap: clamp(0.5rem, 0.3rem + 1vw, 0.85rem);
+    --s-card-p: clamp(0.55rem, 0.3rem + 1.25vw, 0.95rem);
+    --s-card-gap: clamp(0.42rem, 0.25rem + 0.85vw, 0.7rem);
+    --s-card-header-gap: clamp(0.38rem, 0.25rem + 0.65vw, 0.6rem);
+    --s-icon-size: clamp(1.3rem, 0.95rem + 1.75vw, 1.85rem);
+    --s-icon-radius: clamp(0.42rem, 0.32rem + 0.5vw, 0.58rem);
+
+    --s-list-gap: clamp(0.32rem, 0.22rem + 0.5vw, 0.48rem);
+    --s-badge-py: clamp(0.18rem, 0.14rem + 0.2vw, 0.26rem);
+    --s-badge-px: clamp(0.42rem, 0.32rem + 0.5vw, 0.6rem);
+  }
+}

@@ -72,7 +72,7 @@ export class I18nService {
 
   private readonly layoutExcludedMatchesSelectors = ['.projects-carousel', 'portfolio-carousel', '.carousel-root', '.carousel-root--card', '.carousel-track', '.projects-card-shell', '.projects-card', '.projects-card-carousel'].join(',');
 
-  private readonly nestedLayoutKeepSelector = ['.projects-toolbar', '.projects-selected-tags', '.projects-results', '.skills-grid', '.contact-content', '.contact-social', '.contact-social portfolio-button', '.contact-form-wrap', '.contact-form', '.about-content', '.about-stats', '.github-stats', '[data-i18n-layout]'].join(',');
+  private readonly nestedLayoutKeepSelector = ['.projects-toolbar', '.projects-selected-tags', '.projects-results', '.skills-grid', '.contact-content', '.contact-social', '.contact-social portfolio-button', '.contact-form-wrap', '.contact-form', '.about-content', '.about-stats', '.github-stats', '.experience-card-header', '.experience-card-description', '.experience-card-responsibilities', '.experience-tags', '[data-i18n-layout]'].join(',');
 
   private readonly layoutSections: LayoutSectionConfig[] = [
     {
@@ -93,7 +93,7 @@ export class I18nService {
     },
     {
       sectionClass: 'experience',
-      selectors: ['.experience-timeline', '.experience-card', '.experience-content'],
+      selectors: ['.experience-timeline', '.experience-card', '.experience-card-header', '.experience-card-description', '.experience-card-responsibilities', '.experience-tags'],
     },
   ];
 
@@ -731,7 +731,7 @@ export class I18nService {
 
   private containsTranslatedPhrase(text: string): boolean {
     for (const translatedText of this.translatedTexts) {
-      if (translatedText.length >= 8 && text.includes(translatedText)) {
+      if (translatedText.length >= 6 && text.includes(translatedText)) {
         return true;
       }
     }
@@ -770,7 +770,21 @@ export class I18nService {
       texts.add(enText);
     });
 
+    this.addComposedTranslatedText(texts, 'hero.intro.prefix', 'hero.intro.name');
+
     return texts;
+  }
+
+  private addComposedTranslatedText(texts: Set<string>, ...keys: string[]): void {
+    const esText = this.normalizeText(keys.map((key) => I18N_MESSAGES.es[key] ?? '').join(''));
+    const enText = this.normalizeText(keys.map((key) => I18N_MESSAGES.en[key] ?? '').join(''));
+
+    if (!esText || !enText || esText === enText) {
+      return;
+    }
+
+    texts.add(esText);
+    texts.add(enText);
   }
 
   private createRectMap(elements: HTMLElement[]): Map<HTMLElement, DOMRect> {

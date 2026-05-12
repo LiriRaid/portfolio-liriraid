@@ -31,7 +31,7 @@ export const SKILL_CATEGORIES: readonly ISkillCategory[] = [
   {
     label: 'skills.categories.architecture',
     icon: 'Layers',
-    skills: ['Clean Architecture', 'Screaming Architecture', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
+    skills: ['Clean Architecture', 'Screaming Architecture', 'DDD', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID'],
   },
 ];
 

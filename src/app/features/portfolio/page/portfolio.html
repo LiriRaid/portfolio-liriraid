@@ -3,6 +3,10 @@
 <portfolio-hero />
 
 @defer (hydrate on viewport; prefetch on idle) {
+  <portfolio-about />
+}
+
+@defer (hydrate on viewport; prefetch on idle) {
   <portfolio-experience />
 }
 
@@ -12,10 +16,6 @@
 
 @defer (hydrate on viewport; prefetch on idle) {
   <portfolio-skills />
-}
-
-@defer (hydrate on viewport; prefetch on idle) {
-  <portfolio-about />
 }
 
 @defer (hydrate on viewport; prefetch on idle) {

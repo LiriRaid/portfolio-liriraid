@@ -19,6 +19,7 @@
         <li class="experience-item grid grid-cols-[var(--e-timeline-col)_1fr] items-start gap-(--e-timeline-gap)">
           <div class="experience-marker relative flex min-h-full self-stretch justify-center pb-2 pt-(--e-marker-pt)" aria-hidden="true">
             <span #dotRef class="experience-dot z-10 size-(--e-dot) shrink-0 rounded-full border-2 border-(--app-border-color) bg-(--app-panel-bg)" [class.experience-dot--current]="item.current"></span>
+            <span #lineRef class="experience-line" aria-hidden="true"></span>
           </div>
 
           <article portfolioAnimatedBorder class="experience-card flex flex-col gap-(--e-card-gap) rounded-(--e-card-radius) border border-(--app-border-color) bg-(--app-panel-bg) p-(--e-card-p) [box-shadow:var(--app-container-shadow)]">
@@ -33,7 +34,7 @@
                   <span>{{ item.company }}</span>
 
                   @if (item.current) {
-                    <span class="ml-1 rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-(--e-current-px) py-(--e-current-py) font-semibold leading-none text-(--app-text-primary) text-(length:--e-current-size)">{{ currentBadge() }}</span>
+                    <span class="rounded-full bg-[color-mix(in_srgb,var(--app-text-primary)_18%,transparent)] px-(--e-current-px) py-(--e-current-py) font-semibold leading-none text-(--app-text-primary) text-(length:--e-current-size)">{{ currentBadge() }}</span>
                   }
                 </p>
               </div>
@@ -51,11 +52,11 @@
               </div>
             </header>
 
-            <p class="m-0 text-(--app-text-muted) text-body-2-regular">
+            <p class="experience-card-description m-0 text-(--app-text-muted) text-body-2-regular">
               {{ item.description }}
             </p>
 
-            <ul class="m-0 flex list-none flex-col gap-(--e-resp-list-gap) p-0" role="list">
+            <ul class="experience-card-responsibilities m-0 flex list-none flex-col gap-(--e-resp-list-gap) p-0" role="list">
               @for (responsibility of item.responsibilities; track responsibility) {
                 <li class="m-0 grid grid-cols-[auto_1fr] items-start gap-(--e-resp-gap) text-(--app-text-muted) text-body-2-regular">
                   <span class="mt-(--e-resp-marker-top) size-(--e-resp-marker) rounded-full bg-(--app-text-primary) [box-shadow:0_0_0_3px_color-mix(in_srgb,var(--app-text-primary)_16%,transparent)]" aria-hidden="true"></span>

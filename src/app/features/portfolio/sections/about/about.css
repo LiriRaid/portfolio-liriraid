@@ -120,6 +120,27 @@ portfolio-github-stats {
   }
 }
 
+:host ::ng-deep .about-cta .about-primary-cta.p-button {
+  color: #fff !important;
+  background: var(--p-primary-800) !important;
+  border-color: var(--p-primary-800) !important;
+}
+
+:host ::ng-deep .about-cta .about-primary-cta.p-button:not(:disabled):hover {
+  color: #fff !important;
+  background: var(--p-primary-900) !important;
+  border-color: var(--p-primary-900) !important;
+}
+
+:host ::ng-deep .about-cta .about-primary-cta.p-button:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-800) 30%, transparent);
+}
+
+:host ::ng-deep .about-cta .about-primary-cta.p-button .p-button-label,
+:host ::ng-deep .about-cta .about-primary-cta.p-button :is(.p-button-icon, portfolio-icon, portfolio-icon *) {
+  color: #fff !important;
+}
+
 @media (max-width: 640px) {
   :host ::ng-deep .about-cta .p-button {
     min-height: var(--a-btn-min-h);

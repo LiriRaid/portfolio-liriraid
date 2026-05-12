@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, computed, effect, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { I18nService } from '@core/i18n';
 import { ThemeService } from '@core/theme/theme.service';
@@ -24,9 +25,12 @@ export class Header {
   private readonly headerService = inject(HeaderService);
   private readonly backgroundAnimationService = inject(PortfolioBackgroundAnimationService);
   private readonly i18nService = inject(I18nService);
+  private readonly titleService = inject(Title);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  private readonly baseTitle = 'Portfolio - Gabriel Cruz';
 
   protected readonly mobileMenuOpen = signal(false);
   protected readonly isMobileMenuRendered = signal(false);
@@ -36,10 +40,10 @@ export class Header {
 
   protected readonly navLinks = computed(() => [
     { label: this.t('header.nav.home'), href: '#home', sectionId: 'home' as const },
+    { label: this.t('header.nav.about'), href: '#about', sectionId: 'about' as const },
     { label: this.t('header.nav.experience'), href: '#experience', sectionId: 'experience' as const },
     { label: this.t('header.nav.projects'), href: '#projects', sectionId: 'projects' as const },
     { label: this.t('header.nav.skills'), href: '#skills', sectionId: 'skills' as const },
-    { label: this.t('header.nav.about'), href: '#about', sectionId: 'about' as const },
     { label: this.t('header.nav.contact'), href: '#contact', sectionId: 'contact' as const },
   ]);
 
@@ -59,6 +63,14 @@ export class Header {
   private readonly sectionIds = PORTFOLIO_SECTION_IDS;
 
   constructor() {
+    effect(() => {
+      const sectionKey = `header.nav.${this.activeSection()}`;
+      const sectionLabel = this.i18nService.t(sectionKey);
+      const nextTitle = sectionLabel && sectionLabel !== sectionKey ? `${this.baseTitle} | ${sectionLabel}` : this.baseTitle;
+
+      this.titleService.setTitle(nextTitle);
+    });
+
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -100,6 +112,10 @@ export class Header {
     this.activeSection.set(sectionId);
     this.targetSection = sectionId;
     this.clearScrollUnlockTimer();
+
+    if (sectionId !== 'home') {
+      this.isFloating.set(true);
+    }
 
     scrollToPortfolioSection(sectionId, 'smooth');
 
@@ -237,6 +253,10 @@ export class Header {
       headerHeight: this.getHeaderHeight(),
       isMobile: window.innerWidth <= 768,
       onFloatingChange: (floating) => {
+        if (this.targetSection && this.targetSection !== 'home' && !floating) {
+          return;
+        }
+
         if (this.isFloating() !== floating) {
           this.isFloating.set(floating);
         }

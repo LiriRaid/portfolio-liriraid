@@ -868,18 +868,6 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.openFullscreen(this.currentIndex());
   }
 
-  protected onScreenshotPrevClick(event: MouseEvent): void {
-    if (!this.allowScreenshotControl(event)) return;
-
-    this.prev();
-  }
-
-  protected onScreenshotNextClick(event: MouseEvent): void {
-    if (!this.allowScreenshotControl(event)) return;
-
-    this.next();
-  }
-
   protected onScreenshotDotClick(event: MouseEvent, index: number): void {
     if (!this.allowScreenshotControl(event)) return;
 

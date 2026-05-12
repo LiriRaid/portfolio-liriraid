@@ -18,6 +18,8 @@
   --f-copy-size: var(--font-size-caption-2);
   --f-copy-lh: 1.4;
 
+  position: relative;
+  z-index: 2;
   border-top: 1px solid var(--app-border-color);
   background-color: var(--app-panel-bg);
   padding: var(--f-py) var(--f-px);

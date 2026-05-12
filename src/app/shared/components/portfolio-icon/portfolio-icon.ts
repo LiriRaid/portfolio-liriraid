@@ -141,7 +141,7 @@ export class PortfolioIcon {
 
   readonly resolvedColor = computed(() => {
     if (this.color()) return this.color()!;
-    if (this.svgColored()) return 'var(--p-primary-500)';
+    if (this.svgColored()) return 'var(--app-text-primary)';
     return null;
   });
 

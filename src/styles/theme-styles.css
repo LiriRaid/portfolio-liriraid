@@ -7,7 +7,7 @@
   --app-text-color: var(--p-surface-900);
   --app-text-muted: var(--p-surface-600);
   --app-text-subtle: var(--p-surface-500);
-  --app-text-primary: var(--p-primary-500);
+  --app-text-primary: var(--p-primary-600);
 
   --app-container-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
   --app-container-border: transparent;
@@ -27,7 +27,7 @@
   --app-search-button-bg: var(--p-surface-0);
   --app-search-button-border: var(--p-surface-300);
   --app-search-button-text: var(--p-surface-900);
-  --app-search-button-hover-bg: var(--p-primary-500);
+  --app-search-button-hover-bg: var(--p-primary-600);
   --app-search-button-hover-text: var(--p-surface-0);
   --app-search-button-active-bg: var(--p-surface-0);
   --app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
@@ -63,7 +63,7 @@
   --app-text-color: var(--p-surface-0);
   --app-text-muted: var(--p-surface-200);
   --app-text-subtle: var(--p-surface-400);
-  --app-text-primary: var(--p-primary-400);
+  --app-text-primary: var(--p-primary-500);
 
   --app-container-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
   --app-container-border: var(--app-border-color);
@@ -71,7 +71,7 @@
   --app-control-surface-bg: var(--app-panel-bg);
   --app-control-surface-border: color-mix(in srgb, var(--app-border-color) 75%, rgba(255, 255, 255, 0.2));
   --app-control-surface-text: var(--app-text-color);
-  --app-control-focus-ring: color-mix(in srgb, var(--p-primary-500) 60%, transparent);
+  --app-control-focus-ring: color-mix(in srgb, var(--p-primary-600) 60%, transparent);
   --app-control-disabled-bg: color-mix(in srgb, var(--app-panel-muted-bg) 80%, black);
   --app-control-disabled-border: var(--app-border-color);
   --app-control-disabled-text: var(--p-surface-400);
@@ -83,7 +83,7 @@
   --app-search-button-bg: var(--p-surface-0);
   --app-search-button-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));
   --app-search-button-text: var(--p-surface-900);
-  --app-search-button-hover-bg: var(--p-primary-500);
+  --app-search-button-hover-bg: var(--p-primary-600);
   --app-search-button-hover-text: var(--p-surface-0);
   --app-search-button-active-bg: var(--app-panel-muted-bg);
   --app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
@@ -105,7 +105,7 @@
 
   --app-accent-soft-bg: color-mix(in srgb, var(--p-primary-500) 16%, transparent);
   --app-badge-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, var(--app-panel-bg));
-  --app-badge-soft-text: var(--p-primary-400);
+  --app-badge-soft-text: var(--p-primary-500);
   --app-action-icon-color: var(--p-surface-0);
   --app-disabled-text: var(--p-surface-400);
 }

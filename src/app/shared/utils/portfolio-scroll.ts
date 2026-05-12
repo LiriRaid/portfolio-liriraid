@@ -18,13 +18,19 @@ export function scrollToPortfolioSection(sectionId: string, behavior: ScrollBeha
     return;
   }
 
-  const sectionIndex = (PORTFOLIO_SECTION_IDS as readonly string[]).indexOf(sectionId);
-
-  if (sectionIndex === -1) {
+  if (!(PORTFOLIO_SECTION_IDS as readonly string[]).includes(sectionId)) {
     return;
   }
 
-  const top = sectionIndex * window.innerHeight;
+  const section = document.getElementById(sectionId);
+
+  if (!section) {
+    return;
+  }
+
+  document.documentElement.classList.add('header-is-floating');
+
+  const top = section.offsetTop;
 
   scrollRoot.scrollTo({
     top: Math.max(0, Math.round(top)),

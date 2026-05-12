@@ -287,7 +287,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly labelColor = computed(() => {
     if (this.hasErrors()) return '#e51d21';
     if (this.isDisabled()) return 'var(--app-disabled-text)';
-    if (this.isInputFocused() || this.isFocused()) return 'var(--p-primary-500)';
+    if (this.isInputFocused() || this.isFocused()) return 'var(--p-primary-600)';
     if (this.hasValue()) return 'var(--app-text-muted)';
 
     return 'var(--app-text-subtle)';

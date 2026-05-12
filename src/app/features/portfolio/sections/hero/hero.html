@@ -6,6 +6,11 @@
         <span>{{ badge() }}</span>
       </div>
 
+      <p class="hero-intro m-0 max-w-(--h-intro-max) text-body-2-medium max-[1024px]:mx-auto max-[1024px]:text-center">
+        <span>{{ introPrefix() }}</span>
+        <span class="hero-intro-name">{{ introName() }}</span>
+      </p>
+
       <h1 id="hero-heading" class="hero-title mx-0 max-w-(--h-title-max) text-tittle-1-bold tracking-[-0.03em] text-(--app-text-color)">
         <span class="hero-title-line">{{ titleLine1() }}</span>
         <span class="hero-title-line text-(--app-text-primary)">{{ titleLine2() }}</span>
@@ -17,7 +22,7 @@
       </p>
 
       <div class="hero-ctas flex flex-wrap gap-(--h-ctas-gap) max-[1024px]:justify-center max-[640px]:mx-auto max-[640px]:w-full max-[640px]:max-w-(--h-ctas-max) max-[640px]:flex-col">
-        <portfolio-button [label]="experienceCta()" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="hero-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
+        <portfolio-button [label]="aboutCta()" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="hero-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToAbout()" />
 
         <portfolio-button [label]="cvCta()" icon="Download" iconPos="right" iconSize="16" variant="outlined" styleClass="rounded-2xl !border-(--app-border-color) text-body-2-medium" (onClick)="downloadCV()" />
       </div>
