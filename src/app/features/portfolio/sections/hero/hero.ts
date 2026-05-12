@@ -5,6 +5,7 @@ import { I18nService } from '@core/i18n';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { AlertService } from '@shared/services/alert.service';
+import { scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
 import { HERO_CODE_LINES, HERO_CV_FILE, HERO_STACK, HERO_TEXT_KEYS, HERO_WINDOW_DOTS } from './mocks';
@@ -55,7 +56,6 @@ export class Hero {
     }
 
     afterNextRender(() => {
-      this.resetToHeroOnLoad();
       this.heroService.animateEntrance();
     });
   }
@@ -65,7 +65,7 @@ export class Hero {
       return;
     }
 
-    document.getElementById('experiencia')?.scrollIntoView({ behavior: 'smooth' });
+    scrollToPortfolioSection('experience');
   }
 
   protected downloadCV(): void {
@@ -91,12 +91,4 @@ export class Hero {
     return this.i18nService.t(key);
   }
 
-  private resetToHeroOnLoad(): void {
-    if (!window.location.hash) {
-      return;
-    }
-
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-    window.scrollTo(0, 0);
-  }
 }

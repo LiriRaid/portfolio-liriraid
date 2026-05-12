@@ -5,6 +5,7 @@ import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioAnimatedBorderDirective } from '@shared/directives';
+import { scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 
 import { ABOUT_CONTENT, ABOUT_STATS } from './mocks';
 import { AboutService } from './about.service';
@@ -70,7 +71,7 @@ export class About {
       return;
     }
 
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+    scrollToPortfolioSection('contact');
   }
 
   private t(key: string): string {

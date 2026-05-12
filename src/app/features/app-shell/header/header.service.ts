@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import gsap from 'gsap';
+import type gsap from 'gsap';
+import { getGsapSync, loadGsap } from '@shared/utils/gsap-loader';
 
 interface HeaderMorphOptions {
   header: HTMLElement;
@@ -46,12 +47,13 @@ export class HeaderService {
     this.cancelHeaderMorphFrame();
 
     this.headerMorphFrameId = requestAnimationFrame(() => {
-      this.updateHeaderMorph(options);
+      void this.updateHeaderMorph(options);
       this.headerMorphFrameId = null;
     });
   }
 
-  openMobileMenu(nav: HTMLElement): void {
+  async openMobileMenu(nav: HTMLElement): Promise<void> {
+    const gsap = await loadGsap();
     this.menuAnimation?.kill();
 
     gsap.set(nav, {
@@ -69,7 +71,8 @@ export class HeaderService {
     });
   }
 
-  closeMobileMenu(nav: HTMLElement, onComplete: () => void): void {
+  async closeMobileMenu(nav: HTMLElement, onComplete: () => void): Promise<void> {
+    const gsap = await loadGsap();
     this.menuAnimation?.kill();
 
     this.menuAnimation = gsap.to(nav, {
@@ -83,9 +86,21 @@ export class HeaderService {
   }
 
   resetHeaderInlineStyles(header: HTMLElement): void {
-    gsap.set(header, {
-      clearProps: 'width,height,transform,y,borderTopLeftRadius,borderTopRightRadius,borderBottomLeftRadius,borderBottomRightRadius,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,borderStyle,borderColor,boxShadow',
-    });
+    const gsap = getGsapSync();
+
+    if (gsap) {
+      gsap.set(header, {
+        clearProps: 'width,height,transform,y,borderTopLeftRadius,borderTopRightRadius,borderBottomLeftRadius,borderBottomRightRadius,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,borderStyle,borderColor,boxShadow',
+      });
+
+      return;
+    }
+
+    const props = ['width', 'height', 'transform', 'y', 'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius', 'borderTopWidth', 'borderLeftWidth', 'borderRightWidth', 'borderBottomWidth', 'borderStyle', 'borderColor', 'boxShadow'];
+
+    for (const prop of props) {
+      header.style.removeProperty(prop);
+    }
   }
 
   destroy(): void {
@@ -93,7 +108,9 @@ export class HeaderService {
     this.menuAnimation?.kill();
   }
 
-  private updateHeaderMorph({ header, scrollTop, hostWidth, headerHeight, isMobile, onFloatingChange }: HeaderMorphOptions): void {
+  private async updateHeaderMorph({ header, scrollTop, hostWidth, headerHeight, isMobile, onFloatingChange }: HeaderMorphOptions): Promise<void> {
+    const gsap = await loadGsap();
+
     const progress = this.clamp((scrollTop - this.morphStart) / (this.morphEnd - this.morphStart), 0, 1);
     const easedProgress = gsap.parseEase('sine.inOut')(progress);
     const shouldFloat = progress > 0.45;

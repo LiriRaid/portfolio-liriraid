@@ -22,10 +22,27 @@
 
     <meta name="theme-color" content="#dd0031" />
 
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('portfolio-theme-mode');
+          var mode = stored === 'dark' || stored === 'light' ? stored : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          var root = document.documentElement;
+          root.classList.toggle('dark', mode === 'dark');
+          root.style.colorScheme = mode;
+        } catch (error) {}
+      })();
+    </script>
+
     <style>
       html {
         color-scheme: light;
         background-color: #e5e5e5;
+      }
+
+      html.dark {
+        color-scheme: dark;
+        background-color: #0a0a0a;
       }
 
       body {
@@ -34,16 +51,9 @@
         color: #171717;
       }
 
-      @media (prefers-color-scheme: dark) {
-        html {
-          color-scheme: dark;
-          background-color: #0a0a0a;
-        }
-
-        body {
-          background-color: #0a0a0a;
-          color: #ffffff;
-        }
+      html.dark body {
+        background-color: #0a0a0a;
+        color: #ffffff;
       }
     </style>
 

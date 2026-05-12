@@ -21,6 +21,7 @@ import { PortfolioSectionRevealService } from '@shared/services';
   selector: 'portfolio-projects',
   standalone: true,
   imports: [Popover, PortfolioButton, PortfolioCarousel, CarouselItem, PortfolioIcon, PortfolioSearch, PortfolioAnimatedBorderDirective],
+  providers: [ProjectsService],
   templateUrl: './projects.html',
   styleUrl: './projects.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

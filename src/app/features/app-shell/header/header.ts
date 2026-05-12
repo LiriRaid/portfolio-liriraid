@@ -9,7 +9,7 @@ import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-co
 import { HeaderService } from './header.service';
 import { PortfolioBackgroundAnimationService } from '@features/portfolio/ui/portfolio-background-animation/portfolio-background-animation.service';
 
-type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades' | 'sobre-mi' | 'contacto';
+type PortfolioSectionId = 'home' | 'experience' | 'projects' | 'skills' | 'about' | 'contact';
 
 @Component({
   selector: 'portfolio-header',
@@ -31,17 +31,17 @@ export class Header {
 
   protected readonly mobileMenuOpen = signal(false);
   protected readonly isMobileMenuRendered = signal(false);
-  protected readonly activeSection = signal<PortfolioSectionId>('inicio');
+  protected readonly activeSection = signal<PortfolioSectionId>('home');
   protected readonly isFloating = signal(false);
   protected readonly backgroundAnimationEnabled = this.backgroundAnimationService.enabled;
 
   protected readonly navLinks = computed(() => [
-    { label: this.t('header.nav.home'), href: '#inicio', sectionId: 'inicio' as const },
-    { label: this.t('header.nav.experience'), href: '#experiencia', sectionId: 'experiencia' as const },
-    { label: this.t('header.nav.projects'), href: '#proyectos', sectionId: 'proyectos' as const },
-    { label: this.t('header.nav.skills'), href: '#habilidades', sectionId: 'habilidades' as const },
-    { label: this.t('header.nav.about'), href: '#sobre-mi', sectionId: 'sobre-mi' as const },
-    { label: this.t('header.nav.contact'), href: '#contacto', sectionId: 'contacto' as const },
+    { label: this.t('header.nav.home'), href: '#home', sectionId: 'home' as const },
+    { label: this.t('header.nav.experience'), href: '#experience', sectionId: 'experience' as const },
+    { label: this.t('header.nav.projects'), href: '#projects', sectionId: 'projects' as const },
+    { label: this.t('header.nav.skills'), href: '#skills', sectionId: 'skills' as const },
+    { label: this.t('header.nav.about'), href: '#about', sectionId: 'about' as const },
+    { label: this.t('header.nav.contact'), href: '#contact', sectionId: 'contact' as const },
   ]);
 
   protected readonly backgroundAnimationAriaLabel = computed(() => {
@@ -57,7 +57,7 @@ export class Header {
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
 
-  private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
+  private readonly sectionIds: PortfolioSectionId[] = ['home', 'experience', 'projects', 'skills', 'about', 'contact'];
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -343,9 +343,24 @@ export class Header {
 
     const currentSection = this.getCurrentSectionId();
 
-    if (currentSection) {
+    if (currentSection && currentSection !== this.activeSection()) {
       this.activeSection.set(currentSection);
+      this.updateUrlHash(currentSection);
     }
+  }
+
+  private updateUrlHash(sectionId: PortfolioSectionId): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const currentHash = window.location.hash.replace('#', '');
+
+    if (currentHash === sectionId) {
+      return;
+    }
+
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${sectionId}`);
   }
 
   private syncTargetSection(): void {

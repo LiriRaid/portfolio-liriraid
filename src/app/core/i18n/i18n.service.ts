@@ -1,7 +1,8 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { ApplicationRef, Injectable, NgZone, PLATFORM_ID, REQUEST, computed, inject, signal } from '@angular/core';
-import { gsap } from 'gsap';
+import type gsap from 'gsap';
 
+import { getGsapSync, loadGsap } from '@shared/utils/gsap-loader';
 import { I18N_MESSAGES } from './i18n.messages';
 import { resolveInitialLanguage, setStoredLanguage } from './i18n-storage';
 
@@ -41,6 +42,8 @@ export class I18nService {
 
   private switchingLanguage = false;
   private pendingLanguage: PortfolioLanguage | null = null;
+
+  private gsap: import('@shared/utils/gsap-loader').GsapInstance | null = null;
 
   private animationRunId = 0;
   private activeTimeline: gsap.core.Timeline | null = null;
@@ -137,6 +140,18 @@ export class I18nService {
   }
 
   private animateLanguageChange(language: PortfolioLanguage): void {
+    if (!this.gsap) {
+      void loadGsap().then((gsap) => {
+        this.gsap = gsap;
+        this.runLanguageAnimation(language);
+      });
+      return;
+    }
+
+    this.runLanguageAnimation(language);
+  }
+
+  private runLanguageAnimation(language: PortfolioLanguage): void {
     this.ensureSwitchingStyle();
     this.cancelActiveAnimation();
 
@@ -155,7 +170,7 @@ export class I18nService {
 
     this.activeTextTargets = [...targets];
 
-    gsap.killTweensOf(targets);
+    this.gsap!.killTweensOf(targets);
 
     const icons = this.collectIconsToFlip(targets);
     const iconRects = this.createRectMap(icons);
@@ -166,7 +181,7 @@ export class I18nService {
     this.activeIconTargets = [...icons];
     this.activeLayoutTargets = [...layoutElements];
 
-    const timeline = gsap.timeline();
+    const timeline = this.gsap!.timeline();
     this.activeTimeline = timeline;
 
     this.animateCurrentLanguageOut(timeline, freeTargets, containedTargets);
@@ -236,7 +251,7 @@ export class I18nService {
 
     this.activeTextTargets = this.uniqueElements([...this.activeTextTargets, ...nextTargets]);
 
-    gsap.killTweensOf(nextTargets);
+    this.gsap!.killTweensOf(nextTargets);
 
     const totalAnimations = Number(freeTargets.length > 0) + Number(containedTargets.length > 0);
 
@@ -260,13 +275,13 @@ export class I18nService {
     };
 
     if (freeTargets.length) {
-      gsap.set(freeTargets, {
+      this.gsap!.set(freeTargets, {
         opacity: 0,
         yPercent: 52,
       });
 
       this.trackTween(
-        gsap.to(freeTargets, {
+        this.gsap!.to(freeTargets, {
           opacity: 1,
           yPercent: 0,
           duration: 0.58,
@@ -283,12 +298,12 @@ export class I18nService {
     }
 
     if (containedTargets.length) {
-      gsap.set(containedTargets, {
+      this.gsap!.set(containedTargets, {
         opacity: 0,
       });
 
       this.trackTween(
-        gsap.to(containedTargets, {
+        this.gsap!.to(containedTargets, {
           opacity: 1,
           duration: 0.34,
           ease: 'power2.out',
@@ -345,7 +360,7 @@ export class I18nService {
   }
 
   private resetActiveAnimationState(): void {
-    if (!this.isBrowser) {
+    if (!this.isBrowser || !this.gsap) {
       return;
     }
 
@@ -354,10 +369,10 @@ export class I18nService {
     const iconTargets = this.uniqueElements(this.activeIconTargets);
     const { freeTargets, containedTargets } = this.groupTargets(textTargets);
 
-    gsap.killTweensOf([...textTargets, ...layoutTargets, ...iconTargets]);
+    this.gsap!.killTweensOf([...textTargets, ...layoutTargets, ...iconTargets]);
 
     if (freeTargets.length) {
-      gsap.set(freeTargets, {
+      this.gsap!.set(freeTargets, {
         opacity: 1,
         yPercent: 0,
         y: 0,
@@ -366,14 +381,14 @@ export class I18nService {
     }
 
     if (containedTargets.length) {
-      gsap.set(containedTargets, {
+      this.gsap!.set(containedTargets, {
         opacity: 1,
         clearProps: 'opacity,willChange',
       });
     }
 
     if (layoutTargets.length) {
-      gsap.set(layoutTargets, {
+      this.gsap!.set(layoutTargets, {
         x: 0,
         y: 0,
         clearProps: 'transform,willChange',
@@ -381,7 +396,7 @@ export class I18nService {
     }
 
     if (iconTargets.length) {
-      gsap.set(iconTargets, {
+      this.gsap!.set(iconTargets, {
         x: 0,
         y: 0,
         clearProps: 'transform,willChange',
@@ -626,9 +641,9 @@ export class I18nService {
       return null;
     }
 
-    gsap.killTweensOf(element);
+    this.gsap!.killTweensOf(element);
 
-    return gsap.fromTo(
+    return this.gsap!.fromTo(
       element,
       {
         x: dx,

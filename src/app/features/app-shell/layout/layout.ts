@@ -17,7 +17,7 @@ export class Layout {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly sectionIds = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
+  private readonly sectionIds = ['home', 'experience', 'projects', 'skills', 'about', 'contact'];
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {

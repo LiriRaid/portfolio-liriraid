@@ -1,6 +1,6 @@
 <header class="header relative mx-auto h-full border-b border-(--app-border-color) bg-(--header-bg) transition-colors duration-300 [backdrop-filter:blur(18px)_saturate(135%)] [-webkit-backdrop-filter:blur(18px)_saturate(135%)] will-change-[width,height,transform,border-radius,box-shadow]" [class.mobile-menu-open]="mobileMenuOpen()" [class.header--floating]="isFloating()" role="banner">
   <div class="header-inner mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-(--header-inner-gap) px-(--header-inner-px) max-[1100px]:gap-4 max-[1100px]:px-4">
-    <a href="#inicio" class="group flex shrink-0 items-center gap-[0.05rem] no-underline" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#inicio', 'inicio')">
+    <a href="#home" class="group flex shrink-0 items-center gap-[0.05rem] no-underline" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#home', 'home')">
       <span class="font-bold leading-none tracking-[-0.02em] text-(--app-text-color) text-(length:--header-logo-size) transition-colors group-hover:text-(--app-text-primary)"> Liriraid </span>
       <span class="font-bold leading-none text-(--app-text-primary) text-(length:--header-dot-size)" aria-hidden="true">.</span>
     </a>

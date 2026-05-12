@@ -1,6 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Directive, DestroyRef, ElementRef, HostBinding, HostListener, Input, PLATFORM_ID, inject } from '@angular/core';
-import gsap from 'gsap';
+import type gsap from 'gsap';
+import { getGsapSync, loadGsap } from '@shared/utils/gsap-loader';
+
+type GsapTween = gsap.core.Tween;
 
 @Directive({
   selector: '[portfolioAnimatedBorder]',
@@ -18,11 +21,12 @@ export class PortfolioAnimatedBorderDirective {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
 
-  private tween?: gsap.core.Tween;
-  private fadeTween?: gsap.core.Tween;
+  private tween?: GsapTween;
+  private fadeTween?: GsapTween;
 
   private active = false;
   private controlled = false;
+  private wantsAnimation = false;
 
   private touchStartX = 0;
   private touchStartY = 0;
@@ -79,10 +83,9 @@ export class PortfolioAnimatedBorderDirective {
 
     PortfolioAnimatedBorderDirective.instances.add(this);
 
-    gsap.set(this.elementRef.nativeElement, {
-      '--portfolio-border-angle': `${PortfolioAnimatedBorderDirective.sharedAngle}deg`,
-      '--portfolio-border-opacity': 0,
-    });
+    const element = this.elementRef.nativeElement;
+    element.style.setProperty('--portfolio-border-angle', `${PortfolioAnimatedBorderDirective.sharedAngle}deg`);
+    element.style.setProperty('--portfolio-border-opacity', '0');
 
     this.destroyRef.onDestroy(() => {
       PortfolioAnimatedBorderDirective.instances.delete(this);
@@ -232,7 +235,19 @@ export class PortfolioAnimatedBorderDirective {
   }
 
   private startAnimation(): void {
+    this.wantsAnimation = true;
+
     if (this.tween?.isActive()) {
+      return;
+    }
+
+    void this.startAnimationAsync();
+  }
+
+  private async startAnimationAsync(): Promise<void> {
+    const gsap = await loadGsap();
+
+    if (!this.wantsAnimation) {
       return;
     }
 
@@ -265,6 +280,7 @@ export class PortfolioAnimatedBorderDirective {
   }
 
   private stopAnimation(force = false): void {
+    this.wantsAnimation = false;
     this.tween?.kill();
     this.tween = undefined;
 
@@ -274,10 +290,14 @@ export class PortfolioAnimatedBorderDirective {
     const element = this.elementRef.nativeElement;
 
     if (force) {
-      gsap.set(element, {
-        '--portfolio-border-opacity': 0,
-      });
+      element.style.setProperty('--portfolio-border-opacity', '0');
+      return;
+    }
 
+    const gsap = getGsapSync();
+
+    if (!gsap) {
+      element.style.setProperty('--portfolio-border-opacity', '0');
       return;
     }
 

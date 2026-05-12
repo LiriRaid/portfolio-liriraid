@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal, ElementRef } from '@angular/core';
-import { gsap } from 'gsap';
 import { IGithubRepositoryResponse, IGithubRepositoryStats } from '@features/portfolio/entities';
+import { loadGsap } from '@shared/utils/gsap-loader';
 
 const CACHE_KEY = 'portfolio-github-stats';
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hora
@@ -11,9 +11,7 @@ interface CachedStats {
   timestamp: number;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ProjectsService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly memoryCache = new Map<string, IGithubRepositoryStats>();
@@ -149,7 +147,9 @@ export class ProjectsService {
   /**
    * Animación de entrada ÚNICA y EXCLUSIVA para la sección de Proyectos: "Focus-Reveal".
    */
-  animateEntrance(_hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, toolbarRef?: ElementRef<HTMLElement>, resultsRef?: ElementRef<HTMLElement>): void {
+  async animateEntrance(_hostRef: ElementRef<HTMLElement>, headerRef?: ElementRef<HTMLElement>, toolbarRef?: ElementRef<HTMLElement>, resultsRef?: ElementRef<HTMLElement>): Promise<void> {
+    const gsap = await loadGsap();
+
     if (headerRef?.nativeElement) gsap.killTweensOf(headerRef.nativeElement.children);
     if (toolbarRef?.nativeElement) gsap.killTweensOf(toolbarRef.nativeElement);
     if (resultsRef?.nativeElement) gsap.killTweensOf(resultsRef.nativeElement);
@@ -175,6 +175,8 @@ export class ProjectsService {
    * Ejecuta la animación de salida de una tarjeta y notifica al terminar
    */
   async animateCardExit(element: HTMLElement): Promise<void> {
+    const gsap = await loadGsap();
+
     await gsap.to(element, {
       opacity: 0,
       scale: 0.95,
@@ -187,7 +189,9 @@ export class ProjectsService {
   /**
    * Ejecuta la animación de entrada de una tarjeta
    */
-  animateCardEntry(element: HTMLElement): void {
+  async animateCardEntry(element: HTMLElement): Promise<void> {
+    const gsap = await loadGsap();
+
     gsap.fromTo(
       element,
       { opacity: 0, scale: 0.95, y: -20 },

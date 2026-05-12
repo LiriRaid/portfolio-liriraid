@@ -1,6 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
-import { gsap } from 'gsap';
 
 type CircuitNode = {
   x: number;
@@ -49,6 +48,8 @@ export class PortfolioBackgroundAnimationService {
   private time = 0;
   private initialized = false;
   private resizeFrameId: number | null = null;
+  private animationFrameId: number | null = null;
+  private lastFrameTime = 0;
 
   constructor() {
     if (!this.isBrowser) {
@@ -84,12 +85,38 @@ export class PortfolioBackgroundAnimationService {
     this.resizeObserver = new ResizeObserver(() => this.scheduleResize());
     this.resizeObserver.observe(document.documentElement);
 
-    gsap.ticker.add(this.render);
+    this.startAnimationLoop();
     this.initialized = true;
 
     if (!this.enabled()) {
       this.clear();
     }
+  }
+
+  private startAnimationLoop(): void {
+    if (this.animationFrameId !== null) {
+      return;
+    }
+
+    this.lastFrameTime = 0;
+
+    const tick = (currentTime: number): void => {
+      const delta = this.lastFrameTime ? (currentTime - this.lastFrameTime) / 1000 : 1 / 60;
+      this.lastFrameTime = currentTime;
+      this.renderFrame(delta);
+      this.animationFrameId = requestAnimationFrame(tick);
+    };
+
+    this.animationFrameId = requestAnimationFrame(tick);
+  }
+
+  private stopAnimationLoop(): void {
+    if (this.animationFrameId === null) {
+      return;
+    }
+
+    cancelAnimationFrame(this.animationFrameId);
+    this.animationFrameId = null;
   }
 
   toggle(): void {
@@ -106,12 +133,12 @@ export class PortfolioBackgroundAnimationService {
     localStorage.setItem(this.storageKey, String(value));
 
     if (value) {
-      this.render();
+      this.renderFrame(1 / 60);
     }
   }
 
   destroy(): void {
-    gsap.ticker.remove(this.render);
+    this.stopAnimationLoop();
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
 
@@ -178,7 +205,7 @@ export class PortfolioBackgroundAnimationService {
     }
 
     if (this.initialized && this.enabled()) {
-      this.render();
+      this.renderFrame(1 / 60);
     }
   }
 
@@ -227,12 +254,12 @@ export class PortfolioBackgroundAnimationService {
     return Math.min(Math.max(value, min), max);
   }
 
-  private readonly render = (): void => {
+  private renderFrame(deltaSeconds: number): void {
     if (!this.ctx || !this.initialized || !this.enabled()) {
       return;
     }
 
-    this.time += gsap.ticker.deltaRatio(60) * 0.01;
+    this.time += deltaSeconds * 0.6;
 
     const primary = this.getCssColor('--app-text-primary');
     const muted = this.getCssColor('--app-text-muted');
@@ -245,7 +272,7 @@ export class PortfolioBackgroundAnimationService {
     this.drawCircuitLines(muted, primary, intensity);
     this.drawCircuitNodes(primary, intensity);
     this.drawPackets(primary, intensity);
-  };
+  }
 
   private drawAmbientGlow(primary: string, scrollProgress: number, intensity: BackgroundIntensity): void {
     if (!this.ctx) {
