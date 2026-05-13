@@ -1,8 +1,7 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { ApplicationRef, Injectable, NgZone, PLATFORM_ID, REQUEST, computed, inject, signal } from '@angular/core';
-import type gsap from 'gsap';
 
-import { getGsapSync, loadGsap } from '@shared/utils/gsap-loader';
+import { loadGsap } from '@shared/utils/gsap-loader';
 import { I18N_MESSAGES } from './i18n.messages';
 import { resolveInitialLanguage, setStoredLanguage } from './i18n-storage';
 
