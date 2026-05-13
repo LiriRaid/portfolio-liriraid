@@ -5,11 +5,11 @@ import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioAnimatedBorderDirective } from '@shared/directives';
+import { PortfolioSectionRevealService } from '@shared/services';
 import { scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 
 import { ABOUT_CONTENT, ABOUT_STATS } from './mocks';
 import { AboutService } from './about.service';
-import { PortfolioSectionRevealService } from '@shared/services';
 import { GithubStatsComponent } from './ui/github-stats/github-stats';
 
 @Component({
@@ -38,11 +38,15 @@ export class About {
     label: this.t(ABOUT_CONTENT.label),
     title: this.t(ABOUT_CONTENT.title),
     ctaLabel: this.t(ABOUT_CONTENT.ctaLabel),
-    paragraphs: ABOUT_CONTENT.paragraphs.map((key) => this.t(key)),
+    paragraphs: ABOUT_CONTENT.paragraphs.map((key) => ({
+      id: key,
+      text: this.t(key),
+    })),
   }));
 
   protected readonly stats = computed(() =>
     ABOUT_STATS.map((stat) => ({
+      id: stat.label,
       value: this.t(stat.value),
       label: this.t(stat.label),
     })),

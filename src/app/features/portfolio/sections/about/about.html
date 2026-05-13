@@ -13,9 +13,9 @@
         </header>
 
         <div class="about-body flex flex-col gap-(--a-body-gap)">
-          @for (paragraph of about().paragraphs; track paragraph) {
+          @for (paragraph of about().paragraphs; track paragraph.id) {
             <p class="about-text m-0 text-body-1-regular">
-              {{ paragraph }}
+              {{ paragraph.text }}
             </p>
           }
         </div>
@@ -26,7 +26,7 @@
       </div>
 
       <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" [attr.aria-label]="statsAriaLabel()">
-        @for (stat of stats(); track stat.label; let i = $index) {
+        @for (stat of stats(); track stat.id; let i = $index) {
           <article portfolioAnimatedBorder class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
             <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">
               <span class="stat-value text-subtitle-2-bold">
