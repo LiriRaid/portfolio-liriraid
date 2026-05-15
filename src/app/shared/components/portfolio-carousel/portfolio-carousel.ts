@@ -65,6 +65,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   protected readonly fullscreenIndex = signal<number | null>(null);
   protected readonly isAnimating = signal(false);
   protected readonly isFullscreenAnimating = signal(false);
+  protected readonly isScreenshotPreviewVisible = signal(false);
 
   protected readonly cardItems = contentChildren(CarouselItem, { descendants: true });
 
@@ -130,6 +131,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   private resizeFrame = 0;
   private cardInitFrame = 0;
   private lastMeasuredCardRootWidth = 0;
+  private screenshotPreviewTimeout = 0;
 
   private readonly DRAG_THRESHOLD = 50;
   private readonly DRAG_TIME_THRESHOLD = 120;
@@ -177,6 +179,10 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
       if (this.cardInitFrame) {
         cancelAnimationFrame(this.cardInitFrame);
+      }
+
+      if (this.screenshotPreviewTimeout && this.isBrowser) {
+        window.clearTimeout(this.screenshotPreviewTimeout);
       }
     });
   }
@@ -449,6 +455,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
       this.closeFullscreen();
       this.stopProgress();
       this.stopFullscreenProgress();
+      this.hideScreenshotPreview();
       this.isAnimating.set(false);
       this.isFullscreenAnimating.set(false);
       return;
@@ -823,8 +830,38 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     return parentCardItem.dataset['carouselPosition'] === 'center';
   }
 
+  protected showScreenshotPreview(): void {
+    if (!this.isBrowser) return;
+
+    if (!this.active() || !this.canUseScreenshotControls()) {
+      this.hideScreenshotPreview();
+      return;
+    }
+
+    this.isScreenshotPreviewVisible.set(true);
+
+    if (this.screenshotPreviewTimeout) {
+      window.clearTimeout(this.screenshotPreviewTimeout);
+    }
+
+    this.screenshotPreviewTimeout = window.setTimeout(() => {
+      this.isScreenshotPreviewVisible.set(false);
+      this.screenshotPreviewTimeout = 0;
+    }, 1800);
+  }
+
+  protected hideScreenshotPreview(): void {
+    if (this.screenshotPreviewTimeout && this.isBrowser) {
+      window.clearTimeout(this.screenshotPreviewTimeout);
+      this.screenshotPreviewTimeout = 0;
+    }
+
+    this.isScreenshotPreviewVisible.set(false);
+  }
+
   private allowScreenshotControl(event: Event): boolean {
     if (!this.canUseScreenshotControls()) {
+      this.hideScreenshotPreview();
       return false;
     }
 
@@ -835,16 +872,21 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   }
 
   protected onScreenshotRootInteraction(event: Event): void {
-  if (this.mode() !== 'screenshot') {
-    return;
-  }
+    if (this.mode() !== 'screenshot') {
+      return;
+    }
 
-  if (!this.canUseScreenshotControls()) {
-    return;
-  }
+    if (!this.canUseScreenshotControls()) {
+      this.hideScreenshotPreview();
+      return;
+    }
 
-  event.stopPropagation();
-}
+    event.stopPropagation();
+
+    if (event.type === 'click' || event.type === 'mousedown' || event.type === 'mousemove' || event.type === 'touchstart' || event.type === 'touchmove') {
+      this.showScreenshotPreview();
+    }
+  }
 
   protected onSlideClick(event: MouseEvent): void {
     if (this.wasDragging) {
@@ -853,6 +895,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     }
 
     if (!this.canUseScreenshotControls() || !this.active()) {
+      this.hideScreenshotPreview();
       return;
     }
 
@@ -871,6 +914,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
   protected onScreenshotDotClick(event: MouseEvent, index: number): void {
     if (!this.allowScreenshotControl(event)) return;
 
+    this.hideScreenshotPreview();
     this.goTo(index);
   }
 
@@ -1112,6 +1156,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     this.lastNavigationTime = now;
     const animationId = ++this.navigationId;
 
+    this.hideScreenshotPreview();
     this.stopProgress();
     this.isAnimating.set(true);
     this.lastDirection = direction;
@@ -1184,11 +1229,13 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     if (this.itemsLength() <= 1) return;
 
     if (this.mode() === 'screenshot' && !this.canUseScreenshotControls()) {
+      this.hideScreenshotPreview();
       return;
     }
 
     if (this.mode() === 'screenshot') {
       event.stopPropagation();
+      this.showScreenshotPreview();
     }
 
     this.isDragging = true;
@@ -1202,6 +1249,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     if (this.mode() === 'screenshot') {
       event.stopPropagation();
+      this.showScreenshotPreview();
     }
 
     const deltaX = event.clientX - this.dragStartX;
@@ -1215,6 +1263,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     this.wasDragging = true;
     this.isDragging = false;
+    this.hideScreenshotPreview();
 
     deltaX > 0 ? this.prev() : this.next();
   }
@@ -1229,17 +1278,23 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
   protected onTrackMouseLeave(): void {
     this.isDragging = false;
+
+    if (this.mode() === 'screenshot') {
+      this.hideScreenshotPreview();
+    }
   }
 
   protected onTouchStart(event: TouchEvent): void {
     if (this.itemsLength() <= 1) return;
 
     if (this.mode() === 'screenshot' && !this.canUseScreenshotControls()) {
+      this.hideScreenshotPreview();
       return;
     }
 
     if (this.mode() === 'screenshot') {
       event.stopPropagation();
+      this.showScreenshotPreview();
     }
 
     this.wasDragging = false;
@@ -1250,6 +1305,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     if (this.itemsLength() <= 1) return;
 
     if (this.mode() === 'screenshot' && !this.canUseScreenshotControls()) {
+      this.hideScreenshotPreview();
       return;
     }
 
@@ -1263,6 +1319,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
     if (Math.abs(delta) < this.DRAG_THRESHOLD) return;
 
     this.wasDragging = true;
+    this.hideScreenshotPreview();
 
     delta > 0 ? this.prev() : this.next();
   }
@@ -1272,6 +1329,7 @@ export class PortfolioCarousel implements AfterViewInit, DoCheck {
 
     const progress = this.getInlineProgress(index);
 
+    this.hideScreenshotPreview();
     this.fullscreenHydrated = false;
     this.pendingFullscreenProgress = progress;
 

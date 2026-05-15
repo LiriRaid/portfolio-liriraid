@@ -128,13 +128,6 @@
     height: var(--search-input-height) !important;
   }
 
-  :host ::ng-deep .input.input-default input,
-  :host ::ng-deep input {
-    font-size: var(--search-input-size) !important;
-    line-height: 1.1 !important;
-    font-weight: 500;
-  }
-
   :host ::ng-deep .input.input-default portfolio-icon,
   :host ::ng-deep .input.input-default portfolio-icon :is(svg, .lucide),
   :host ::ng-deep .input.input-default svg {

@@ -150,7 +150,8 @@ portfolio-carousel .carousel-item > * {
   height: var(--carousel-expand-icon-size);
 }
 
-.carousel-screenshot-active .carousel-root--screenshot:hover .expand-btn {
+/* Desktop hover + touch/devtools preview */
+.carousel-screenshot-active .carousel-root--screenshot:is(:hover, .carousel-root--screenshot-preview) .expand-btn {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
   pointer-events: auto;
@@ -160,7 +161,7 @@ portfolio-carousel .carousel-item > * {
   transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
-.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-img {
+.carousel-screenshot-active .carousel-root--screenshot:is(:hover, .carousel-root--screenshot-preview) .carousel-img {
   transform: translateZ(0) scale(1.06);
 }
 
@@ -175,14 +176,23 @@ portfolio-carousel .carousel-item > * {
   pointer-events: none;
 }
 
-.carousel-screenshot-active .carousel-root--screenshot:hover .carousel-slides::after {
+.carousel-screenshot-active .carousel-root--screenshot:is(:hover, .carousel-root--screenshot-preview) .carousel-slides::after {
   opacity: 1;
 }
 
-@media (hover: none) {
-  .expand-btn {
-    display: none;
-  }
+/* Bloquea hover/overlay en cards laterales */
+:host-context(.carousel-item:not([data-carousel-position='center'])) .carousel-root--screenshot .expand-btn {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.55);
+  pointer-events: none;
+}
+
+:host-context(.carousel-item:not([data-carousel-position='center'])) .carousel-root--screenshot .carousel-img {
+  transform: translateZ(0);
+}
+
+:host-context(.carousel-item:not([data-carousel-position='center'])) .carousel-root--screenshot .carousel-slides::after {
+  opacity: 0;
 }
 
 .nav-btn {

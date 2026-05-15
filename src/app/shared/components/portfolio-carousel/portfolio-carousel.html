@@ -22,7 +22,7 @@
   </div>
 } @else {
   @if (images().length) {
-    <div class="carousel-root carousel-root--screenshot relative w-full overflow-hidden" (click)="onScreenshotRootInteraction($event)" (mousedown)="onScreenshotRootInteraction($event)" (mousemove)="onScreenshotRootInteraction($event)" (mouseup)="onScreenshotRootInteraction($event)" (touchstart)="onScreenshotRootInteraction($event)" (touchmove)="onScreenshotRootInteraction($event)" (touchend)="onScreenshotRootInteraction($event)">
+    <div class="carousel-root carousel-root--screenshot relative w-full overflow-hidden" [class.carousel-root--screenshot-preview]="isScreenshotPreviewVisible()" (click)="onScreenshotRootInteraction($event)" (mousedown)="onScreenshotRootInteraction($event)" (mousemove)="onScreenshotRootInteraction($event)" (mouseup)="onScreenshotRootInteraction($event)" (mouseleave)="hideScreenshotPreview()" (touchstart)="onScreenshotRootInteraction($event)" (touchmove)="onScreenshotRootInteraction($event)" (touchend)="onScreenshotRootInteraction($event)">
       <div class="carousel-slides relative w-full h-full overflow-hidden cursor-grab select-none active:cursor-grabbing" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onTrackMouseLeave()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
         @for (img of images(); track $index) {
           <div #slideRef class="carousel-slide absolute inset-0 w-full h-full overflow-hidden cursor-pointer" (click)="onSlideClick($event)" draggable="false">

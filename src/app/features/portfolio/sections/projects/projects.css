@@ -14,7 +14,7 @@
   --line-height-tittle-4: 1.1;
 
   --font-size-body-1: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);
-  --line-height-body-1: 1.5;
+  --font-size-body-2: clamp(0.62rem, 0.3993rem + 0.9386vw, 1rem);
 
   --p-toolbar-gap: 1rem;
   --p-search-max: clamp(16rem, 13.64rem + 9.94vw, 20rem);

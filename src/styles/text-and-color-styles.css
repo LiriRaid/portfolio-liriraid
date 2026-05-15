@@ -1,7 +1,7 @@
 @theme {
     /* ===== Breakpoints ===== */
   --breakpoint-xs: 480px;
-  
+
   /* ===== Tipografía ===== */
 
   --font-size-h1: 42px;
@@ -40,7 +40,7 @@
   --line-height-subtitle-2: 1.75rem;   /* 28px */
 
   --line-height-body-1: 1.75rem;       /* 28px */
-  --line-height-body-2: 1.75rem;       /* 28px */
+  --line-height-body-2: 1.625rem;       /* 26px */
 
   --line-height-caption-1: 1.5rem;   /* 24px -> como text-sm leading-6 */
   --line-height-caption-2: 1rem;     /* 16px */
