@@ -50,6 +50,9 @@ export class PortfolioBackgroundAnimationService {
   private resizeFrameId: number | null = null;
   private animationFrameId: number | null = null;
   private lastFrameTime = 0;
+  private cachedPrimaryColor = '#ffffff';
+  private cachedMutedColor = '#ffffff';
+  private colorCacheFrames = 0;
 
   constructor() {
     if (!this.isBrowser) {
@@ -261,8 +264,9 @@ export class PortfolioBackgroundAnimationService {
 
     this.time += deltaSeconds * 0.6;
 
-    const primary = this.getCssColor('--app-text-primary');
-    const muted = this.getCssColor('--app-text-muted');
+    this.refreshThemeColors();
+    const primary = this.cachedPrimaryColor;
+    const muted = this.cachedMutedColor;
     const intensity = this.getIntensity();
     const scrollProgress = this.getScrollProgress();
 
@@ -402,6 +406,20 @@ export class PortfolioBackgroundAnimationService {
     }
 
     return Math.min(1, Math.max(0, this.scrollRoot.scrollTop / max));
+  }
+
+  private refreshThemeColors(): void {
+    // getComputedStyle forces a style recalc; reading it every frame causes a
+    // continuous forced reflow. The theme colors only change on theme toggle,
+    // so refresh the cache at most ~every 30 frames (~0.5s, visually imperceptible).
+    if (this.colorCacheFrames > 0) {
+      this.colorCacheFrames--;
+      return;
+    }
+
+    this.cachedPrimaryColor = this.getCssColor('--app-text-primary');
+    this.cachedMutedColor = this.getCssColor('--app-text-muted');
+    this.colorCacheFrames = 30;
   }
 
   private getCssColor(variableName: string): string {

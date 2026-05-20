@@ -1,4 +1,4 @@
-<p-toast key="portfolio-toast" [position]="position()" styleClass="portfolio-toast-panel" [baseZIndex]="9999" [motionOptions]="{ duration: { enter: 350, leave: 250 } }">
+<p-toast key="portfolio-toast" [position]="position()" styleClass="portfolio-toast-panel" [baseZIndex]="9999" [motionOptions]="{ duration: { enter: 350, leave: 250 } }" (onClose)="onToastClosed()">
   <ng-template #headless let-message let-closeFn="closeFn">
     <div class="portfolio-toast-shell">
       <div class="portfolio-toast-main">

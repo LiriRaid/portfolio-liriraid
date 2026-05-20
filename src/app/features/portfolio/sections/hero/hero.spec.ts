@@ -30,7 +30,7 @@ describe('Hero', () => {
     expect(component.introName()).toBe('t:hero.intro.name');
     expect(component.titleLine1()).toBe('t:hero.title.line1');
     expect(component.description()).toBe('t:hero.description');
-    expect(component.cvCta()).toBe('t:hero.cv.cta');
+    expect(component.cvCta()).toBe('t:hero.cta.cv');
     // Falls back to the key on miss — the computed wrapper should just propagate it.
   });
 

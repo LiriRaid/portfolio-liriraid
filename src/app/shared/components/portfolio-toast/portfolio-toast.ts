@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, afterNextRender, computed, inject } from '@angular/core';
 import { type ButtonSeverity } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 
@@ -24,6 +24,19 @@ export class PortfolioToast {
 
   protected readonly position = computed(() => this.alertService.toastPosition());
   protected readonly PortfolioToastType = PortfolioToastType;
+
+  constructor() {
+    // After the inner <p-toast> has rendered and subscribed to MessageService,
+    // let the AlertService flush any messages that were buffered before this
+    // (deferred) component mounted.
+    afterNextRender(() => this.alertService.markToastReady());
+  }
+
+  protected onToastClosed(): void {
+    // Notify on every message close (manual or by life) so the AlertService can
+    // destroy this instance once no alerts remain.
+    this.alertService.notifyToastClosed();
+  }
 
   protected closeToast(event: MouseEvent, closeFn: PrimeToastCloseFn): void {
     event.preventDefault();

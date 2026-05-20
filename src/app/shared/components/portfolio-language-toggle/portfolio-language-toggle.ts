@@ -113,8 +113,6 @@ export class PortfolioLanguageToggle implements DoCheck {
     }
 
     if (toggle && options.instant) {
-      void toggle.offsetHeight;
-
       requestAnimationFrame(() => {
         toggle.classList.remove('is-initial-sync');
       });

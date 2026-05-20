@@ -8,4 +8,8 @@
   <portfolio-footer />
 </div>
 
-<portfolio-toast />
+@defer (when alertService.toastRequested()) {
+  @if (alertService.toastActive()) {
+    <portfolio-toast />
+  }
+}

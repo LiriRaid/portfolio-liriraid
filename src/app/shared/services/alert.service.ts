@@ -3,6 +3,8 @@ import { MessageService } from 'primeng/api';
 
 import { PortfolioToastAction, PortfolioToastData, PortfolioToastType, ToastPosition } from '@shared/components/portfolio-toast/portfolio-toast.types';
 
+type ToastMessage = Parameters<MessageService['add']>[0];
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +13,55 @@ export class AlertService {
 
   readonly toastPosition = signal<ToastPosition>('top-right');
 
+  // Latches true on the first toast request so the @defer downloads the toast
+  // chunk once (lazy) and keeps it ready for instant re-mounts afterwards.
+  readonly toastRequested = signal(false);
+
+  // Drives the @if that creates/destroys the toast instance: true while there
+  // are visible alerts, false when none remain. The toast is never mounted at
+  // startup and is destroyed once the last alert is closed/expires.
+  readonly toastActive = signal(false);
+
+  // Number of alerts currently on screen; when it reaches 0 the toast unmounts.
+  private activeCount = 0;
+
+  // Messages requested before the toast component has mounted/subscribed are
+  // buffered here and flushed by markToastReady(), so none are lost.
+  private toastReady = false;
+  private readonly pending: ToastMessage[] = [];
+
   constructor(private readonly messageService: MessageService) {}
+
+  /** Called by <portfolio-toast> once it has mounted and subscribed. */
+  markToastReady(): void {
+    this.toastReady = true;
+
+    if (this.pending.length === 0) {
+      return;
+    }
+
+    for (const message of this.pending) {
+      this.messageService.add(message);
+    }
+
+    this.pending.length = 0;
+  }
+
+  /** Called by <portfolio-toast> when a message closes (manual or by its life). */
+  notifyToastClosed(): void {
+    this.activeCount = Math.max(0, this.activeCount - 1);
+
+    if (this.activeCount === 0) {
+      this.teardownToast();
+    }
+  }
+
+  private teardownToast(): void {
+    // Destroy the toast instance (frees DOM/overlay/timers) until the next alert.
+    this.pending.length = 0;
+    this.toastReady = false;
+    this.toastActive.set(false);
+  }
 
   showSuccess(title: string, message: string, action?: PortfolioToastAction, duration?: number, position: ToastPosition = 'top-right'): void {
     this.showAlert(title, message, PortfolioToastType.Success, action, duration, undefined, false, position);
@@ -47,6 +97,8 @@ export class AlertService {
 
   clear(): void {
     this.messageService.clear(this.toastKey);
+    this.activeCount = 0;
+    this.teardownToast();
   }
 
   private showAlert(title: string, message: string, type: PortfolioToastType, action?: PortfolioToastAction, duration?: number, context?: 'view' | 'edit' | 'create', persistent = false, position: ToastPosition = 'top-right'): void {
@@ -63,7 +115,7 @@ export class AlertService {
       position,
     };
 
-    this.messageService.add({
+    this.enqueue({
       key: this.toastKey,
       severity: this.toPrimeSeverity(type),
       summary: title,
@@ -73,6 +125,20 @@ export class AlertService {
       closable: false,
       data,
     });
+  }
+
+  private enqueue(message: ToastMessage): void {
+    // Mount the deferred toast on demand, then either show now or buffer until ready.
+    this.activeCount++;
+    this.toastRequested.set(true);
+    this.toastActive.set(true);
+
+    if (this.toastReady) {
+      this.messageService.add(message);
+      return;
+    }
+
+    this.pending.push(message);
   }
 
   private toPrimeSeverity(type: PortfolioToastType): string {

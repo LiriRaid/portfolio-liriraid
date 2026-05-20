@@ -2,22 +2,22 @@
 
 <portfolio-hero />
 
-@defer (hydrate on viewport; prefetch on idle) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-about />
 }
 
-@defer (hydrate on viewport; prefetch on idle) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-experience />
 }
 
-@defer (hydrate on viewport; prefetch on idle) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-projects />
 }
 
-@defer (hydrate on viewport; prefetch on idle) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-skills />
 }
 
-@defer (hydrate on viewport; prefetch on idle) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-contact />
 }

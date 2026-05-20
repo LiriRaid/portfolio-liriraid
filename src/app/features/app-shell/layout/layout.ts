@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { PortfolioToast } from '@shared/components/portfolio-toast/portfolio-toast';
+import { AlertService } from '@shared/services/alert.service';
 import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 
 @Component({
@@ -17,6 +18,7 @@ import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection
 export class Layout {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly alertService = inject(AlertService);
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {

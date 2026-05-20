@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/api';
 
 import { Portfolio } from './portfolio';
@@ -8,6 +8,9 @@ describe('Portfolio (page)', () => {
     await TestBed.configureTestingModule({
       imports: [Portfolio],
       providers: [MessageService],
+      // The page wraps its below-the-fold sections in @defer blocks; Manual
+      // behavior lets the spec render them to their final state explicitly.
+      deferBlockBehavior: DeferBlockBehavior.Manual,
     }).compileComponents();
   });
 
@@ -17,9 +20,14 @@ describe('Portfolio (page)', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('mounts every portfolio section plus the background animation in order', () => {
+  it('mounts every portfolio section plus the background animation in order', async () => {
     const fixture = TestBed.createComponent(Portfolio);
     fixture.detectChanges();
+
+    const deferBlocks = await fixture.getDeferBlocks();
+    for (const block of deferBlocks) {
+      await block.render(DeferBlockState.Complete);
+    }
 
     const root: HTMLElement = fixture.nativeElement;
 
