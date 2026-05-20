@@ -1,12 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 
-import {
-  DEFAULT_PRIMARY_COLOR_KEY,
-  DEFAULT_SURFACE_COLOR_KEY,
-  getPrimaryColor,
-  getSurfaceColor,
-} from '@core/theme/theme-palettes';
+import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, getPrimaryColor, getSurfaceColor } from '@core/theme/theme-palettes';
 
 type CircuitNode = {
   x: number;
@@ -173,6 +168,10 @@ export class PortfolioBackgroundAnimationService {
   }
 
   destroy(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
     this.stopAnimationLoop();
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
