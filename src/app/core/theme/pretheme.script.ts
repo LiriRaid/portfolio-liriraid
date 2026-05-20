@@ -20,7 +20,7 @@ const APP_THEME_TOKENS_CSS = `
     --app-text-color: var(--p-surface-900);
     --app-text-muted: var(--p-surface-600);
     --app-text-subtle: var(--p-surface-500);
-    --app-text-primary: var(--p-primary-600);
+    --app-text-primary: var(--p-primary-700);
     --app-container-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
     --app-container-border: transparent;
     --app-control-surface-bg: var(--p-surface-0);
@@ -55,7 +55,7 @@ const APP_THEME_TOKENS_CSS = `
     --app-textarea-focus-outline: solid 3px rgba(251, 0, 33, 0.3);
     --app-accent-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, transparent);
     --app-badge-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, var(--app-panel-bg));
-    --app-badge-soft-text: var(--p-primary-700);
+    --app-badge-soft-text: var(--p-primary-800);
     --app-action-icon-color: var(--app-text-subtle);
     --app-disabled-text: var(--p-surface-700);
   }
@@ -133,6 +133,9 @@ export const PORTFOLIO_PRETHEME_SCRIPT = `
 
     var primaryKey = localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY;
     var surfaceKey = localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE;
+    var storedBackgroundAnimation = localStorage.getItem('portfolio-background-animation-enabled');
+    var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var backgroundAnimationEnabled = storedBackgroundAnimation === null ? !prefersReducedMotion : storedBackgroundAnimation === 'true';
 
     var primaryPalette = PRIMARY_PALETTES[primaryKey] || PRIMARY_PALETTES[DEFAULT_PRIMARY];
     var surfacePalette = SURFACE_PALETTES[surfaceKey] || SURFACE_PALETTES[DEFAULT_SURFACE];
@@ -143,6 +146,7 @@ export const PORTFOLIO_PRETHEME_SCRIPT = `
     root.style.colorScheme = mode;
     root.dataset.primaryColor = primaryKey;
     root.dataset.surfaceColor = surfaceKey;
+    root.classList.toggle('portfolio-background-animation-enabled', backgroundAnimationEnabled);
 
     var css = ':root{';
 

@@ -10,6 +10,7 @@
   --h-badge-gap: 0.5rem;
   --h-badge-py: 0.375rem;
   --h-badge-px: 0.875rem;
+  --h-badge-border: color-mix(in srgb, var(--app-badge-soft-text) 24%, var(--app-border-color));
   --h-badge-shadow: 0 0 0 1px color-mix(in srgb, #fff 65%, transparent) inset, 0 0 12px color-mix(in srgb, var(--app-text-primary) 18%, transparent), 0 0 26px color-mix(in srgb, var(--app-text-primary) 16%, transparent);
 
   --h-intro-max: 660px;
@@ -46,9 +47,9 @@
 }
 
 .hero-badge {
-  color: var(--app-text-primary);
-  border-color: color-mix(in srgb, var(--app-text-primary) 24%, #fff);
-  background: color-mix(in srgb, #fff 86%, var(--app-text-primary));
+  color: var(--app-badge-soft-text);
+  border-color: var(--h-badge-border);
+  background: var(--app-badge-soft-bg);
 }
 
 :host-context(.dark) .hero-badge {

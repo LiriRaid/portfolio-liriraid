@@ -28,17 +28,11 @@ export class PortfolioSectionRevealService {
 
     let revealed = false;
     let observer: IntersectionObserver | null = null;
-    let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
     let rafId = 0;
 
     const cleanup = (): void => {
       observer?.disconnect();
       observer = null;
-
-      if (fallbackTimer) {
-        clearTimeout(fallbackTimer);
-        fallbackTimer = null;
-      }
 
       if (rafId) {
         cancelAnimationFrame(rafId);
@@ -62,21 +56,8 @@ export class PortfolioSectionRevealService {
       onReveal();
     };
 
-    const isVisibleNow = (): boolean => {
-      const element = hostRef.nativeElement;
-      const rect = element.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-
-      return rect.top < viewportHeight * (1 - threshold) && rect.bottom > viewportHeight * threshold;
-    };
-
     rafId = requestAnimationFrame(() => {
       rafId = requestAnimationFrame(() => {
-        if (isVisibleNow()) {
-          reveal();
-          return;
-        }
-
         observer = new IntersectionObserver(
           (entries) => {
             if (!entries[0]?.isIntersecting) {
@@ -92,12 +73,6 @@ export class PortfolioSectionRevealService {
         );
 
         observer.observe(hostRef.nativeElement);
-
-        fallbackTimer = setTimeout(() => {
-          if (isVisibleNow()) {
-            reveal();
-          }
-        }, 500);
       });
     });
 

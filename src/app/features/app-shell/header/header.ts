@@ -183,8 +183,12 @@ export class Header {
       return;
     }
 
-    this.syncInitialHash();
-    this.syncActiveSection();
+    const initialHash = this.syncInitialHash();
+
+    if (initialHash !== 'home' && scrollRoot.scrollTop > 1) {
+      this.syncActiveSection();
+    }
+
     this.scheduleHeaderMorph(scrollRoot.scrollTop);
 
     const desktopMq = window.matchMedia('(min-width: 769px)');
@@ -249,7 +253,7 @@ export class Header {
     this.headerService.scheduleHeaderMorph({
       header,
       scrollTop,
-      hostWidth: this.elementRef.nativeElement.clientWidth,
+      hostWidth: window.innerWidth,
       headerHeight: this.getHeaderHeight(),
       isMobile: window.innerWidth <= 768,
       onFloatingChange: (floating) => {
@@ -284,11 +288,11 @@ export class Header {
     this.closeMobileMenu();
   }
 
-  private syncInitialHash(): void {
+  private syncInitialHash(): PortfolioSectionId | null {
     const hash = window.location.hash.replace('#', '') as PortfolioSectionId;
 
     if (!this.sectionIds.includes(hash)) {
-      return;
+      return null;
     }
 
     this.activeSection.set(hash);
@@ -296,6 +300,8 @@ export class Header {
     requestAnimationFrame(() => {
       scrollToPortfolioSection(hash, 'auto');
     });
+
+    return hash;
   }
 
   private getLinkClass(baseClass: string, activeClass: string, sectionId: PortfolioSectionId): string {
@@ -311,18 +317,11 @@ export class Header {
   }
 
   private getHeaderHeight(): number {
-    const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
-    const parsed = Number.parseFloat(value);
-
-    if (!Number.isFinite(parsed)) {
+    if (window.innerWidth > 640) {
       return 64;
     }
 
-    return value.endsWith('rem') ? parsed * this.getRootFontSize() : parsed;
-  }
-
-  private getRootFontSize(): number {
-    return Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    return Math.min(64, Math.max(48, 27.424 + window.innerWidth * 0.05714));
   }
 
   private scheduleActiveSectionSync(): void {

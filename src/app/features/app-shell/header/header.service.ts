@@ -109,10 +109,7 @@ export class HeaderService {
   }
 
   private async updateHeaderMorph({ header, scrollTop, hostWidth, headerHeight, isMobile, onFloatingChange }: HeaderMorphOptions): Promise<void> {
-    const gsap = await loadGsap();
-
     const progress = this.clamp((scrollTop - this.morphStart) / (this.morphEnd - this.morphStart), 0, 1);
-    const easedProgress = gsap.parseEase('sine.inOut')(progress);
     const shouldFloat = progress > 0.45;
 
     onFloatingChange(shouldFloat);
@@ -122,6 +119,8 @@ export class HeaderService {
       return;
     }
 
+    const gsap = await loadGsap();
+    const easedProgress = gsap.parseEase('sine.inOut')(progress);
     const config = isMobile ? this.mobileMorph : this.desktopMorph;
     const floatingWidth = Math.min(hostWidth * config.widthRatio, config.maxWidth);
 

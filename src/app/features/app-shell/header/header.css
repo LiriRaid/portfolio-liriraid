@@ -95,6 +95,7 @@
 :host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:hover,
 :host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button,
 :host ::ng-deep .icon-btn.p-button:hover,
+:host-context(.portfolio-background-animation-enabled) ::ng-deep .background-animation-btn.p-button,
 :host ::ng-deep .background-animation-btn--active.p-button {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
@@ -102,6 +103,7 @@
 :host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:hover .p-button-label,
 :host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label,
 :host ::ng-deep .icon-btn.p-button:hover,
+:host-context(.portfolio-background-animation-enabled) ::ng-deep .background-animation-btn.p-button,
 :host ::ng-deep .background-animation-btn--active.p-button {
   color: var(--app-text-color);
 }
@@ -216,8 +218,4 @@
     --mobile-nav-py: clamp(0.55rem, 0.093rem + 2.032vw, 0.75rem);
     --mobile-nav-size: clamp(0.78rem, 0.506rem + 1.219vw, var(--font-size-body-2));
   }
-}
-
-:host-context(.header-is-floating) {
-  margin-bottom: calc(var(--header-height) * -1);
 }

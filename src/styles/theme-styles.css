@@ -7,7 +7,7 @@
   --app-text-color: var(--p-surface-900);
   --app-text-muted: var(--p-surface-600);
   --app-text-subtle: var(--p-surface-500);
-  --app-text-primary: var(--p-primary-600);
+  --app-text-primary: var(--p-primary-700);
 
   --app-container-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
   --app-container-border: transparent;
@@ -49,7 +49,7 @@
 
   --app-accent-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, transparent);
   --app-badge-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, var(--app-panel-bg));
-  --app-badge-soft-text: var(--p-primary-700);
+  --app-badge-soft-text: var(--p-primary-800);
   --app-action-icon-color: var(--app-text-subtle);
   --app-disabled-text: var(--p-surface-700);
 }

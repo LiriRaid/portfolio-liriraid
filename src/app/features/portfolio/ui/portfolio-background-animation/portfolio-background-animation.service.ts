@@ -1,6 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 
+import {
+  DEFAULT_PRIMARY_COLOR_KEY,
+  DEFAULT_SURFACE_COLOR_KEY,
+  getPrimaryColor,
+  getSurfaceColor,
+} from '@core/theme/theme-palettes';
+
 type CircuitNode = {
   x: number;
   y: number;
@@ -31,6 +38,7 @@ type BackgroundIntensity = {
 export class PortfolioBackgroundAnimationService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly storageKey = 'portfolio-background-animation-enabled';
+  private readonly rootEnabledClass = 'portfolio-background-animation-enabled';
 
   readonly enabled = signal(false);
 
@@ -38,6 +46,7 @@ export class PortfolioBackgroundAnimationService {
   private hostElement: HTMLElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private themeObserver: MutationObserver | null = null;
   private scrollRoot: HTMLElement | null = null;
 
   private nodes: CircuitNode[] = [];
@@ -49,10 +58,20 @@ export class PortfolioBackgroundAnimationService {
   private initialized = false;
   private resizeFrameId: number | null = null;
   private animationFrameId: number | null = null;
+  private scrollFrameId: number | null = null;
   private lastFrameTime = 0;
   private cachedPrimaryColor = '#ffffff';
   private cachedMutedColor = '#ffffff';
-  private colorCacheFrames = 0;
+  private scrollProgress = 0;
+
+  private readonly onScrollRootScroll = (): void => {
+    this.scheduleScrollProgressUpdate();
+  };
+
+  private readonly onWindowResize = (): void => {
+    this.scheduleResize();
+    this.scheduleScrollProgressUpdate();
+  };
 
   constructor() {
     if (!this.isBrowser) {
@@ -61,8 +80,10 @@ export class PortfolioBackgroundAnimationService {
 
     const storedValue = localStorage.getItem(this.storageKey);
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const enabled = storedValue === null ? !prefersReducedMotion : storedValue === 'true';
 
-    this.enabled.set(storedValue === null ? !prefersReducedMotion : storedValue === 'true');
+    this.enabled.set(enabled);
+    this.syncRootEnabledClass(enabled);
   }
 
   initialize(canvas: HTMLCanvasElement, hostElement: HTMLElement): void {
@@ -83,15 +104,20 @@ export class PortfolioBackgroundAnimationService {
     this.ctx = ctx;
     this.scrollRoot = document.querySelector<HTMLElement>('.layout-scroll-root');
 
+    this.refreshThemeColors();
     this.resize();
 
     this.resizeObserver = new ResizeObserver(() => this.scheduleResize());
     this.resizeObserver.observe(document.documentElement);
+    this.scrollRoot?.addEventListener('scroll', this.onScrollRootScroll, { passive: true });
+    window.addEventListener('resize', this.onWindowResize, { passive: true });
+    this.observeThemeChanges();
 
-    this.startAnimationLoop();
     this.initialized = true;
 
-    if (!this.enabled()) {
+    if (this.enabled()) {
+      this.startAnimationLoop();
+    } else {
       this.clear();
     }
   }
@@ -134,20 +160,35 @@ export class PortfolioBackgroundAnimationService {
     }
 
     localStorage.setItem(this.storageKey, String(value));
+    this.syncRootEnabledClass(value);
 
     if (value) {
+      this.startAnimationLoop();
       this.renderFrame(1 / 60);
+      return;
     }
+
+    this.stopAnimationLoop();
+    this.clear();
   }
 
   destroy(): void {
     this.stopAnimationLoop();
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
+    this.themeObserver?.disconnect();
+    this.themeObserver = null;
+    this.scrollRoot?.removeEventListener('scroll', this.onScrollRootScroll);
+    window.removeEventListener('resize', this.onWindowResize);
 
     if (this.resizeFrameId !== null) {
       cancelAnimationFrame(this.resizeFrameId);
       this.resizeFrameId = null;
+    }
+
+    if (this.scrollFrameId !== null) {
+      cancelAnimationFrame(this.scrollFrameId);
+      this.scrollFrameId = null;
     }
 
     this.clear();
@@ -177,14 +218,13 @@ export class PortfolioBackgroundAnimationService {
   }
 
   private resize(): void {
-    if (!this.isBrowser || !this.canvas || !this.hostElement) {
+    if (!this.isBrowser || !this.canvas) {
       return;
     }
 
-    const rect = this.hostElement.getBoundingClientRect();
     const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
-    const nextWidth = Math.max(1, Math.round(rect.width));
-    const nextHeight = Math.max(1, Math.round(rect.height));
+    const nextWidth = Math.max(1, Math.round(window.innerWidth));
+    const nextHeight = Math.max(1, Math.round(window.innerHeight));
 
     if (nextDpr === this.dpr && nextWidth === this.width && nextHeight === this.height) {
       return;
@@ -264,7 +304,6 @@ export class PortfolioBackgroundAnimationService {
 
     this.time += deltaSeconds * 0.6;
 
-    this.refreshThemeColors();
     const primary = this.cachedPrimaryColor;
     const muted = this.cachedMutedColor;
     const intensity = this.getIntensity();
@@ -395,35 +434,64 @@ export class PortfolioBackgroundAnimationService {
   }
 
   private getScrollProgress(): number {
-    if (!this.scrollRoot) {
-      return 0;
-    }
-
-    const max = this.scrollRoot.scrollHeight - this.scrollRoot.clientHeight;
-
-    if (max <= 0) {
-      return 0;
-    }
-
-    return Math.min(1, Math.max(0, this.scrollRoot.scrollTop / max));
+    return this.scrollProgress;
   }
 
-  private refreshThemeColors(): void {
-    // getComputedStyle forces a style recalc; reading it every frame causes a
-    // continuous forced reflow. The theme colors only change on theme toggle,
-    // so refresh the cache at most ~every 30 frames (~0.5s, visually imperceptible).
-    if (this.colorCacheFrames > 0) {
-      this.colorCacheFrames--;
+  private scheduleScrollProgressUpdate(): void {
+    if (this.scrollFrameId !== null) {
       return;
     }
 
-    this.cachedPrimaryColor = this.getCssColor('--app-text-primary');
-    this.cachedMutedColor = this.getCssColor('--app-text-muted');
-    this.colorCacheFrames = 30;
+    this.scrollFrameId = requestAnimationFrame(() => {
+      this.scrollFrameId = null;
+      this.updateScrollProgress();
+    });
   }
 
-  private getCssColor(variableName: string): string {
-    return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim() || '#ffffff';
+  private updateScrollProgress(): void {
+    if (!this.scrollRoot) {
+      this.scrollProgress = 0;
+      return;
+    }
+
+    const max = window.innerHeight * 5;
+
+    if (max <= 0) {
+      this.scrollProgress = 0;
+      return;
+    }
+
+    this.scrollProgress = Math.min(1, Math.max(0, this.scrollRoot.scrollTop / max));
+  }
+
+  private refreshThemeColors(): void {
+    const root = document.documentElement;
+    const isDark = root.classList.contains('dark');
+    const primary = getPrimaryColor(root.dataset['primaryColor'] || localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY_COLOR_KEY);
+    const surface = getSurfaceColor(root.dataset['surfaceColor'] || localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE_COLOR_KEY);
+
+    this.cachedPrimaryColor = primary.palette[isDark ? '500' : '700'];
+    this.cachedMutedColor = surface.palette[isDark ? '200' : '600'];
+  }
+
+  private observeThemeChanges(): void {
+    this.themeObserver?.disconnect();
+    this.themeObserver = new MutationObserver(() => {
+      this.refreshThemeColors();
+
+      if (this.enabled()) {
+        this.renderFrame(1 / 60);
+      }
+    });
+
+    this.themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-primary-color', 'data-surface-color'],
+    });
+  }
+
+  private syncRootEnabledClass(enabled: boolean): void {
+    document.documentElement.classList.toggle(this.rootEnabledClass, enabled);
   }
 
   private withAlpha(color: string, alpha: number): string {
