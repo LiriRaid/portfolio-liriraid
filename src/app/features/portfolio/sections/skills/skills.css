@@ -1,7 +1,4 @@
 .skills {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 700px;
-
   --s-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
   --s-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
   --s-section-gap: clamp(0.92rem, -0.3958rem + 5.5404vw, 3.15rem);

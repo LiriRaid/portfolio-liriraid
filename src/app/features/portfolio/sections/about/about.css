@@ -1,7 +1,4 @@
 .about {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
-
   --a-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
   --a-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
 
