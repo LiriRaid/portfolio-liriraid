@@ -21,7 +21,7 @@ portfolio-carousel .carousel-item {
   height: var(--carousel-card-height, 39rem);
   max-height: var(--carousel-card-height, 39rem);
   transform-origin: center center;
-  will-change: transform, opacity, filter;
+  will-change: auto;
   user-select: none;
 }
 

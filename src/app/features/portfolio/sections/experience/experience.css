@@ -1,4 +1,7 @@
 .experience {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+
   --e-py: clamp(1.75rem, -0.1677rem + 8.0745vw, 5rem);
   --e-px: clamp(0.75rem, 0.3075rem + 1.8634vw, 1.5rem);
   --e-inner-gap: clamp(1rem, -0.1801rem + 4.9689vw, 3rem);

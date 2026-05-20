@@ -1,30 +1,22 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 
-import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, getPrimaryColor, getSurfaceColor } from '@core/theme/theme-palettes';
+import {
+  DEFAULT_PRIMARY_COLOR_KEY,
+  DEFAULT_SURFACE_COLOR_KEY,
+  getPrimaryColor,
+  getSurfaceColor,
+} from '@core/theme/theme-palettes';
 
-type CircuitNode = {
-  x: number;
-  y: number;
-  pulse: number;
-};
+// ---------------------------------------------------------------------------
+// Fallback-only types (used when OffscreenCanvas is not available)
+// ---------------------------------------------------------------------------
 
-type CircuitLine = {
-  from: CircuitNode;
-  to: CircuitNode;
-  delay: number;
-};
-
+type CircuitNode = { x: number; y: number; pulse: number };
+type CircuitLine = { from: CircuitNode; to: CircuitNode; delay: number };
 type BackgroundIntensity = {
-  glowStart: number;
-  glowMid: number;
-  lineBase: number;
-  linePulse: number;
-  lineAccent: number;
-  nodeBase: number;
-  nodePulse: number;
-  packet: number;
-  packetGlow: number;
+  glowStart: number; glowMid: number; lineBase: number; linePulse: number;
+  lineAccent: number; nodeBase: number; nodePulse: number; packet: number; packetGlow: number;
 };
 
 @Injectable({
@@ -37,27 +29,35 @@ export class PortfolioBackgroundAnimationService {
 
   readonly enabled = signal(false);
 
+  // Shared state
   private canvas: HTMLCanvasElement | null = null;
-  private hostElement: HTMLElement | null = null;
-  private ctx: CanvasRenderingContext2D | null = null;
+  private scrollRoot: HTMLElement | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private themeObserver: MutationObserver | null = null;
-  private scrollRoot: HTMLElement | null = null;
-
-  private nodes: CircuitNode[] = [];
-  private lines: CircuitLine[] = [];
+  private resizeFrameId: number | null = null;
+  private scrollFrameId: number | null = null;
+  private scrollProgress = 0;
   private width = 0;
   private height = 0;
   private dpr = 1;
+
+  // Worker path
+  private worker: Worker | null = null;
+  private readonly supportsOffscreen =
+    typeof OffscreenCanvas !== 'undefined' &&
+    typeof HTMLCanvasElement !== 'undefined' &&
+    'transferControlToOffscreen' in HTMLCanvasElement.prototype;
+
+  // Fallback path (main-thread canvas)
+  private ctx: CanvasRenderingContext2D | null = null;
+  private nodes: CircuitNode[] = [];
+  private lines: CircuitLine[] = [];
   private time = 0;
   private initialized = false;
-  private resizeFrameId: number | null = null;
   private animationFrameId: number | null = null;
-  private scrollFrameId: number | null = null;
   private lastFrameTime = 0;
   private cachedPrimaryColor = '#ffffff';
   private cachedMutedColor = '#ffffff';
-  private scrollProgress = 0;
 
   private readonly onScrollRootScroll = (): void => {
     this.scheduleScrollProgressUpdate();
@@ -88,59 +88,16 @@ export class PortfolioBackgroundAnimationService {
 
     this.destroy();
 
-    const ctx = canvas.getContext('2d', { alpha: true });
-
-    if (!ctx) {
-      return;
-    }
-
     this.canvas = canvas;
-    this.hostElement = hostElement;
-    this.ctx = ctx;
     this.scrollRoot = document.querySelector<HTMLElement>('.layout-scroll-root');
 
-    this.refreshThemeColors();
-    this.resize();
+    this.setupListeners();
 
-    this.resizeObserver = new ResizeObserver(() => this.scheduleResize());
-    this.resizeObserver.observe(document.documentElement);
-    this.scrollRoot?.addEventListener('scroll', this.onScrollRootScroll, { passive: true });
-    window.addEventListener('resize', this.onWindowResize, { passive: true });
-    this.observeThemeChanges();
-
-    this.initialized = true;
-
-    if (this.enabled()) {
-      this.startAnimationLoop();
+    if (this.supportsOffscreen) {
+      this.initializeWorker(canvas);
     } else {
-      this.clear();
+      this.initializeFallback(canvas, hostElement);
     }
-  }
-
-  private startAnimationLoop(): void {
-    if (this.animationFrameId !== null) {
-      return;
-    }
-
-    this.lastFrameTime = 0;
-
-    const tick = (currentTime: number): void => {
-      const delta = this.lastFrameTime ? (currentTime - this.lastFrameTime) / 1000 : 1 / 60;
-      this.lastFrameTime = currentTime;
-      this.renderFrame(delta);
-      this.animationFrameId = requestAnimationFrame(tick);
-    };
-
-    this.animationFrameId = requestAnimationFrame(tick);
-  }
-
-  private stopAnimationLoop(): void {
-    if (this.animationFrameId === null) {
-      return;
-    }
-
-    cancelAnimationFrame(this.animationFrameId);
-    this.animationFrameId = null;
   }
 
   toggle(): void {
@@ -157,14 +114,19 @@ export class PortfolioBackgroundAnimationService {
     localStorage.setItem(this.storageKey, String(value));
     this.syncRootEnabledClass(value);
 
+    if (this.worker) {
+      this.worker.postMessage({ type: 'enabled', value });
+      return;
+    }
+
     if (value) {
       this.startAnimationLoop();
-      this.renderFrame(1 / 60);
+      this.renderFrameFallback(1 / 60);
       return;
     }
 
     this.stopAnimationLoop();
-    this.clear();
+    this.clearFallback();
   }
 
   destroy(): void {
@@ -172,13 +134,7 @@ export class PortfolioBackgroundAnimationService {
       return;
     }
 
-    this.stopAnimationLoop();
-    this.resizeObserver?.disconnect();
-    this.resizeObserver = null;
-    this.themeObserver?.disconnect();
-    this.themeObserver = null;
-    this.scrollRoot?.removeEventListener('scroll', this.onScrollRootScroll);
-    window.removeEventListener('resize', this.onWindowResize);
+    this.teardownListeners();
 
     if (this.resizeFrameId !== null) {
       cancelAnimationFrame(this.resizeFrameId);
@@ -190,34 +146,158 @@ export class PortfolioBackgroundAnimationService {
       this.scrollFrameId = null;
     }
 
-    this.clear();
+    if (this.worker) {
+      this.worker.postMessage({ type: 'destroy' });
+      this.worker.terminate();
+      this.worker = null;
+    } else {
+      this.stopAnimationLoop();
+      this.clearFallback();
+      this.ctx = null;
+    }
 
     this.canvas = null;
-    this.hostElement = null;
-    this.ctx = null;
     this.scrollRoot = null;
     this.nodes = [];
     this.lines = [];
     this.initialized = false;
   }
 
-  private get isBrowser(): boolean {
-    return isPlatformBrowser(this.platformId);
+  // ---------------------------------------------------------------------------
+  // Worker path
+  // ---------------------------------------------------------------------------
+
+  private initializeWorker(canvas: HTMLCanvasElement): void {
+    const offscreen = canvas.transferControlToOffscreen();
+
+    const { primary, muted, isDark } = this.readThemeColors();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(window.innerWidth));
+    const h = Math.max(1, Math.round(window.innerHeight));
+
+    this.width = w;
+    this.height = h;
+    this.dpr = dpr;
+
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+
+    this.worker = new Worker(
+      new URL('./background-animation.worker', import.meta.url),
+      { type: 'module' },
+    );
+
+    this.worker.postMessage(
+      {
+        type: 'init',
+        canvas: offscreen,
+        width: w,
+        height: h,
+        dpr,
+        primary,
+        muted,
+        isDark,
+        enabled: this.enabled(),
+        scrollProgress: this.scrollProgress,
+      },
+      [offscreen],
+    );
   }
 
-  private scheduleResize(): void {
-    if (this.resizeFrameId !== null) {
+  private resizeWorker(): void {
+    if (!this.worker || !this.canvas) {
       return;
     }
 
-    this.resizeFrameId = requestAnimationFrame(() => {
-      this.resizeFrameId = null;
-      this.resize();
-    });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(window.innerWidth));
+    const h = Math.max(1, Math.round(window.innerHeight));
+
+    if (dpr === this.dpr && w === this.width && h === this.height) {
+      return;
+    }
+
+    this.dpr = dpr;
+    this.width = w;
+    this.height = h;
+
+    this.canvas.style.width = `${w}px`;
+    this.canvas.style.height = `${h}px`;
+
+    this.worker.postMessage({ type: 'resize', width: w, height: h, dpr });
   }
 
-  private resize(): void {
-    if (!this.isBrowser || !this.canvas) {
+  private updateThemeWorker(): void {
+    if (!this.worker) {
+      return;
+    }
+
+    const { primary, muted, isDark } = this.readThemeColors();
+    this.worker.postMessage({ type: 'theme', primary, muted, isDark });
+  }
+
+  private updateScrollWorker(): void {
+    if (!this.worker) {
+      return;
+    }
+
+    this.worker.postMessage({ type: 'scroll', progress: this.scrollProgress });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Fallback path (main-thread canvas — identical to original behavior)
+  // ---------------------------------------------------------------------------
+
+  private initializeFallback(canvas: HTMLCanvasElement, _hostElement: HTMLElement): void {
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    if (!ctx) {
+      return;
+    }
+
+    this.ctx = ctx;
+
+    this.refreshThemeColors();
+    this.resizeFallback();
+    this.observeThemeChanges();
+
+    this.initialized = true;
+
+    if (this.enabled()) {
+      this.startAnimationLoop();
+    } else {
+      this.clearFallback();
+    }
+  }
+
+  private startAnimationLoop(): void {
+    if (this.animationFrameId !== null) {
+      return;
+    }
+
+    this.lastFrameTime = 0;
+
+    const tick = (currentTime: number): void => {
+      const delta = this.lastFrameTime ? (currentTime - this.lastFrameTime) / 1000 : 1 / 60;
+      this.lastFrameTime = currentTime;
+      this.renderFrameFallback(delta);
+      this.animationFrameId = requestAnimationFrame(tick);
+    };
+
+    this.animationFrameId = requestAnimationFrame(tick);
+  }
+
+  private stopAnimationLoop(): void {
+    if (this.animationFrameId === null) {
+      return;
+    }
+
+    cancelAnimationFrame(this.animationFrameId);
+    this.animationFrameId = null;
+  }
+
+  private resizeFallback(): void {
+    if (!this.canvas || !this.ctx) {
       return;
     }
 
@@ -240,21 +320,20 @@ export class PortfolioBackgroundAnimationService {
     this.canvas.style.width = `${this.width}px`;
     this.canvas.style.height = `${this.height}px`;
 
-    this.ctx?.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
 
     if (sizeChanged || this.nodes.length === 0) {
       this.buildCircuit();
     }
 
     if (this.initialized && this.enabled()) {
-      this.renderFrame(1 / 60);
+      this.renderFrameFallback(1 / 60);
     }
   }
 
   private buildCircuit(): void {
     const columns = Math.max(7, Math.round(this.width / 180));
     const rows = Math.max(6, Math.round(this.height / 145));
-
     const gapX = this.width / Math.max(1, columns - 1);
     const gapY = this.height / Math.max(1, rows - 1);
 
@@ -265,13 +344,12 @@ export class PortfolioBackgroundAnimationService {
       for (let x = 0; x < columns; x++) {
         const isEdgeX = x === 0 || x === columns - 1;
         const isEdgeY = y === 0 || y === rows - 1;
-
         const offsetX = isEdgeX ? 0 : Math.sin((x + y) * 1.7) * gapX * 0.12;
         const offsetY = isEdgeY ? 0 : Math.cos((x - y) * 1.3) * gapY * 0.1;
 
         this.nodes.push({
-          x: this.clamp(x * gapX + offsetX, 0, this.width),
-          y: this.clamp(y * gapY + offsetY, 0, this.height),
+          x: Math.min(Math.max(x * gapX + offsetX, 0), this.width),
+          y: Math.min(Math.max(y * gapY + offsetY, 0), this.height),
           pulse: Math.random(),
         });
       }
@@ -292,11 +370,7 @@ export class PortfolioBackgroundAnimationService {
     }
   }
 
-  private clamp(value: number, min: number, max: number): number {
-    return Math.min(Math.max(value, min), max);
-  }
-
-  private renderFrame(deltaSeconds: number): void {
+  private renderFrameFallback(deltaSeconds: number): void {
     if (!this.ctx || !this.initialized || !this.enabled()) {
       return;
     }
@@ -305,40 +379,20 @@ export class PortfolioBackgroundAnimationService {
 
     const primary = this.cachedPrimaryColor;
     const muted = this.cachedMutedColor;
-    const intensity = this.getIntensity();
-    const scrollProgress = this.getScrollProgress();
+    const intensity = this.getFallbackIntensity();
 
     this.ctx.clearRect(0, 0, this.width, this.height);
 
-    this.drawAmbientGlow(primary, scrollProgress, intensity);
-    this.drawCircuitLines(muted, primary, intensity);
-    this.drawCircuitNodes(primary, intensity);
-    this.drawPackets(primary, intensity);
-  }
-
-  private drawAmbientGlow(primary: string, scrollProgress: number, intensity: BackgroundIntensity): void {
-    if (!this.ctx) {
-      return;
-    }
-
-    const x = this.width * (0.18 + scrollProgress * 0.64);
+    const x = this.width * (0.18 + this.scrollProgress * 0.64);
     const y = this.height * (0.22 + Math.sin(this.time * 0.7) * 0.12);
     const radius = Math.max(this.width, this.height) * 0.38;
-
     const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, radius);
 
     gradient.addColorStop(0, this.withAlpha(primary, intensity.glowStart));
     gradient.addColorStop(0.45, this.withAlpha(primary, intensity.glowMid));
     gradient.addColorStop(1, 'transparent');
-
     this.ctx.fillStyle = gradient;
     this.ctx.fillRect(0, 0, this.width, this.height);
-  }
-
-  private drawCircuitLines(muted: string, primary: string, intensity: BackgroundIntensity): void {
-    if (!this.ctx) {
-      return;
-    }
 
     this.ctx.lineWidth = 1;
 
@@ -359,81 +413,114 @@ export class PortfolioBackgroundAnimationService {
         this.ctx.stroke();
       }
     }
-  }
-
-  private drawCircuitNodes(primary: string, intensity: BackgroundIntensity): void {
-    if (!this.ctx) {
-      return;
-    }
 
     for (const node of this.nodes) {
       const pulse = 0.5 + Math.sin(this.time * 1.6 + node.pulse * 10) * 0.5;
-      const radius = 1 + pulse * 1.05;
+      const nodeRadius = 1 + pulse * 1.05;
 
       this.ctx.beginPath();
-      this.ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+      this.ctx.arc(node.x, node.y, nodeRadius, 0, Math.PI * 2);
       this.ctx.fillStyle = this.withAlpha(primary, intensity.nodeBase + pulse * intensity.nodePulse);
       this.ctx.fill();
-    }
-  }
-
-  private drawPackets(primary: string, intensity: BackgroundIntensity): void {
-    if (!this.ctx) {
-      return;
     }
 
     for (let index = 0; index < this.lines.length; index += 4) {
       const line = this.lines[index];
       const progress = (this.time * 0.16 + line.delay) % 1;
       const fade = Math.sin(progress * Math.PI);
-
-      const x = line.from.x + (line.to.x - line.from.x) * progress;
-      const y = line.from.y + (line.to.y - line.from.y) * progress;
+      const px = line.from.x + (line.to.x - line.from.x) * progress;
+      const py = line.from.y + (line.to.y - line.from.y) * progress;
 
       this.ctx.beginPath();
-      this.ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      this.ctx.arc(px, py, 1.8, 0, Math.PI * 2);
       this.ctx.fillStyle = this.withAlpha(primary, intensity.packet * fade);
       this.ctx.fill();
 
       this.ctx.beginPath();
-      this.ctx.arc(x, y, 5.2, 0, Math.PI * 2);
+      this.ctx.arc(px, py, 5.2, 0, Math.PI * 2);
       this.ctx.fillStyle = this.withAlpha(primary, intensity.packetGlow * fade);
       this.ctx.fill();
     }
   }
 
-  private getIntensity(): BackgroundIntensity {
+  private getFallbackIntensity(): BackgroundIntensity {
     const isDark = document.documentElement.classList.contains('dark');
 
     if (isDark) {
-      return {
-        glowStart: 0.14,
-        glowMid: 0.052,
-        lineBase: 0.04,
-        linePulse: 0.014,
-        lineAccent: 0.052,
-        nodeBase: 0.085,
-        nodePulse: 0.075,
-        packet: 0.26,
-        packetGlow: 0.06,
-      };
+      return { glowStart: 0.14, glowMid: 0.052, lineBase: 0.04, linePulse: 0.014, lineAccent: 0.052, nodeBase: 0.085, nodePulse: 0.075, packet: 0.26, packetGlow: 0.06 };
     }
 
-    return {
-      glowStart: 0.2,
-      glowMid: 0.08,
-      lineBase: 0.075,
-      linePulse: 0.022,
-      lineAccent: 0.085,
-      nodeBase: 0.12,
-      nodePulse: 0.095,
-      packet: 0.34,
-      packetGlow: 0.085,
-    };
+    return { glowStart: 0.2, glowMid: 0.08, lineBase: 0.075, linePulse: 0.022, lineAccent: 0.085, nodeBase: 0.12, nodePulse: 0.095, packet: 0.34, packetGlow: 0.085 };
   }
 
-  private getScrollProgress(): number {
-    return this.scrollProgress;
+  private clearFallback(): void {
+    this.ctx?.clearRect(0, 0, this.width, this.height);
+  }
+
+  private observeThemeChanges(): void {
+    this.themeObserver?.disconnect();
+    this.themeObserver = new MutationObserver(() => {
+      this.refreshThemeColors();
+
+      if (this.enabled()) {
+        this.renderFrameFallback(1 / 60);
+      }
+    });
+
+    this.themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-primary-color', 'data-surface-color'],
+    });
+  }
+
+  private refreshThemeColors(): void {
+    const { primary, muted } = this.readThemeColors();
+    this.cachedPrimaryColor = primary;
+    this.cachedMutedColor = muted;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Shared helpers
+  // ---------------------------------------------------------------------------
+
+  private setupListeners(): void {
+    this.resizeObserver = new ResizeObserver(() => this.scheduleResize());
+    this.resizeObserver.observe(document.documentElement);
+    this.scrollRoot?.addEventListener('scroll', this.onScrollRootScroll, { passive: true });
+    window.addEventListener('resize', this.onWindowResize, { passive: true });
+
+    if (this.supportsOffscreen) {
+      this.themeObserver = new MutationObserver(() => this.updateThemeWorker());
+      this.themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'data-primary-color', 'data-surface-color'],
+      });
+    }
+  }
+
+  private teardownListeners(): void {
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
+    this.themeObserver?.disconnect();
+    this.themeObserver = null;
+    this.scrollRoot?.removeEventListener('scroll', this.onScrollRootScroll);
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+
+  private scheduleResize(): void {
+    if (this.resizeFrameId !== null) {
+      return;
+    }
+
+    this.resizeFrameId = requestAnimationFrame(() => {
+      this.resizeFrameId = null;
+
+      if (this.worker) {
+        this.resizeWorker();
+      } else {
+        this.resizeFallback();
+      }
+    });
   }
 
   private scheduleScrollProgressUpdate(): void {
@@ -450,43 +537,27 @@ export class PortfolioBackgroundAnimationService {
   private updateScrollProgress(): void {
     if (!this.scrollRoot) {
       this.scrollProgress = 0;
-      return;
+    } else {
+      const max = window.innerHeight * 5;
+      this.scrollProgress = max > 0 ? Math.min(1, Math.max(0, this.scrollRoot.scrollTop / max)) : 0;
     }
 
-    const max = window.innerHeight * 5;
-
-    if (max <= 0) {
-      this.scrollProgress = 0;
-      return;
+    if (this.worker) {
+      this.updateScrollWorker();
     }
-
-    this.scrollProgress = Math.min(1, Math.max(0, this.scrollRoot.scrollTop / max));
   }
 
-  private refreshThemeColors(): void {
+  private readThemeColors(): { primary: string; muted: string; isDark: boolean } {
     const root = document.documentElement;
     const isDark = root.classList.contains('dark');
-    const primary = getPrimaryColor(root.dataset['primaryColor'] || localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY_COLOR_KEY);
-    const surface = getSurfaceColor(root.dataset['surfaceColor'] || localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE_COLOR_KEY);
+    const primaryPalette = getPrimaryColor(root.dataset['primaryColor'] || localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY_COLOR_KEY);
+    const surfacePalette = getSurfaceColor(root.dataset['surfaceColor'] || localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE_COLOR_KEY);
 
-    this.cachedPrimaryColor = primary.palette[isDark ? '500' : '700'];
-    this.cachedMutedColor = surface.palette[isDark ? '200' : '600'];
-  }
-
-  private observeThemeChanges(): void {
-    this.themeObserver?.disconnect();
-    this.themeObserver = new MutationObserver(() => {
-      this.refreshThemeColors();
-
-      if (this.enabled()) {
-        this.renderFrame(1 / 60);
-      }
-    });
-
-    this.themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class', 'data-primary-color', 'data-surface-color'],
-    });
+    return {
+      primary: primaryPalette.palette[isDark ? '500' : '700'],
+      muted: surfacePalette.palette[isDark ? '200' : '600'],
+      isDark,
+    };
   }
 
   private syncRootEnabledClass(enabled: boolean): void {
@@ -496,19 +567,12 @@ export class PortfolioBackgroundAnimationService {
   private withAlpha(color: string, alpha: number): string {
     if (color.startsWith('#')) {
       const hex = color.replace('#', '');
-      const value =
-        hex.length === 3
-          ? hex
-              .split('')
-              .map((char) => char + char)
-              .join('')
-          : hex;
+      const value = hex.length === 3 ? hex.split('').map((c) => c + c).join('') : hex;
+      const r = Number.parseInt(value.slice(0, 2), 16);
+      const g = Number.parseInt(value.slice(2, 4), 16);
+      const b = Number.parseInt(value.slice(4, 6), 16);
 
-      const red = Number.parseInt(value.slice(0, 2), 16);
-      const green = Number.parseInt(value.slice(2, 4), 16);
-      const blue = Number.parseInt(value.slice(4, 6), 16);
-
-      return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
     if (color.startsWith('rgb(')) {
@@ -522,7 +586,7 @@ export class PortfolioBackgroundAnimationService {
     return color;
   }
 
-  private clear(): void {
-    this.ctx?.clearRect(0, 0, this.width, this.height);
+  private get isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
   }
 }
