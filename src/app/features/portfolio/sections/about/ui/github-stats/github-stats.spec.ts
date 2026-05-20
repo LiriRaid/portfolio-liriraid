@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GithubStats } from './github-stats';
+import { GithubStatsComponent } from './github-stats';
 
-describe('GithubStats', () => {
-  let component: GithubStats;
-  let fixture: ComponentFixture<GithubStats>;
+describe('GithubStatsComponent', () => {
+  let component: GithubStatsComponent;
+  let fixture: ComponentFixture<GithubStatsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GithubStats],
+      imports: [GithubStatsComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GithubStats);
+    fixture = TestBed.createComponent(GithubStatsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

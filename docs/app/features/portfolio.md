@@ -4,92 +4,134 @@ Documentación de `src/app/features/portfolio/`.
 
 ## Objetivo
 
-Renderizar el portfolio profesional completo como una Single Page con múltiples secciones de desplazamiento continuo.
+Renderizar el portfolio profesional completo como una Single Page con múltiples secciones de desplazamiento continuo, internacionalizado (ES/EN) y con tema dinámico.
 
 ## Estructura
 
 ```
 portfolio/
-├── entities/          → interfaces y DTOs por sección
+├── entities/                              → interfaces y DTOs por sección
 │   ├── hero.entity.ts
 │   ├── experience.entity.ts
 │   ├── projects.entity.ts
 │   ├── skills.entity.ts
 │   ├── about.entity.ts
-│   └── contact.entity.ts
+│   ├── contact.entity.ts
+│   └── index.ts
 │
-├── sections/          → componente por cada sección del portfolio
-│   ├── hero/
-│   ├── experience/
-│   ├── projects/
-│   ├── skills/
-│   ├── about/
-│   └── contact/
+├── sections/                              → componente por cada sección
+│   ├── hero/         (+ hero.service.ts, mocks/)
+│   ├── experience/   (+ experience.service.ts, mocks/)
+│   ├── projects/     (+ projects.service.ts, mocks/)
+│   ├── skills/       (+ skills.service.ts, mocks/)
+│   ├── about/        (+ about.service.ts, mocks/, ui/github-stats/)
+│   └── contact/      (+ contact.service.ts, mocks/)
+│
+├── ui/
+│   └── portfolio-background-animation/    → canvas de partículas globales del portfolio
 │
 └── page/
-    ├── portfolio.ts   → orquestador que importa y monta todas las secciones
+    ├── portfolio.ts                        → orquestador que monta todas las secciones
     ├── portfolio.html
     └── portfolio.css
 ```
 
+## Page (`page/portfolio.ts`)
+
+Componente raíz de la feature. Sin lógica: importa y compone `Hero`, `Experience`, `Projects`, `Skills`, `About`, `Contact` y `PortfolioBackgroundAnimation`. Se monta como hijo del `Layout` desde `app.routes.ts`.
+
 ## Secciones
 
+Todas las secciones siguen la misma estructura interna:
+
+- Componente standalone con `ChangeDetectionStrategy.OnPush`.
+- Servicio `<section>.service.ts` para lógica de animación / datos.
+- Carpeta `mocks/` con los datos estáticos de la sección (separados del componente para facilitar i18n y tests).
+- Inyectan `I18nService` para traducciones y `PortfolioSectionRevealService` para revelar la sección al entrar al viewport.
+- Tokens de tipografía locales con `clamp()` para escalado fluido (ver [styles README](../../styles/README.md)).
+
 ### Hero (`sections/hero/`)
-- Bloque de código animado con estilo editor (macOS dots, tokens coloreados)
-- Stack tecnológico listado con iconos de `skillicons.dev`
-- Botón de descarga del CV (`assets/docs/gabriel-cruz-cv.pdf`)
-- Botón de scroll a la sección de experiencia
-- Animación de entrada con GSAP (opacity + Y offset)
+- Bloque de código animado con estilo editor (macOS dots, tokens coloreados, líneas en `HERO_CODE_LINES`).
+- Stack tecnológico con iconos resueltos por [`techIconUrl`](../shared/utils.md#tech-iconsts).
+- CTA "Descargar CV" (descarga `assets/docs/gabriel-cruz-cv.pdf` y emite toast vía `AlertService`).
+- CTA "Sobre mí" que hace scroll a la sección About.
+- Animación de entrada coordinada por `HeroService` (GSAP, fade + Y offset).
 
 ### Experience (`sections/experience/`)
-- Array `readonly` de experiencias con: empresa, rol, período, ubicación, descripción, responsabilidades y tecnologías
-- Renderiza la experiencia en CIT (Creative Infotainment Technologies) como desarrollador Full Angular
+- Timeline con la trayectoria laboral; cada ítem incluye empresa, rol, período, ubicación, descripción, responsabilidades y tecnologías.
+- Badge "Actual" cuando aplica.
+- Datos en `EXPERIENCES` (mocks); cada texto se traduce vía claves i18n.
 
 ### Projects (`sections/projects/`)
-Tres proyectos destacados con:
-- **Búsqueda reactiva** mediante `FormControl` + `computed()` que filtra por título, descripción y tags
-- **Integración con GitHub API**: `GithubRepositoryService` obtiene stars, forks, visibilidad y licencia; cachea las respuestas por repo
-- **Categorías de tecnologías**: popover con tecnologías agrupadas por Frontend, Backend, BD, Herramientas, Arquitectura, IA
-- **Proyectos incluidos**: OmniInbox, AgentFlow AI, Portfolio Liriraid
+Búsqueda + filtros + carrusel de proyectos destacados:
+
+- **Búsqueda reactiva** mediante `FormControl` no-nullable + `computed()` que filtra por título, descripción traducida y tags.
+- **Filtros por tecnología** con popover (PrimeNG `Popover`) y categorías (Frontend, Backend, BD, Herramientas, Arquitectura, IA, ...) definidas en `PROJECT_TECHNOLOGY_CATEGORIES`.
+- **Carrusel de cards** ([`PortfolioCarousel`](../shared/components.md#portfolio-carousel) en modo `card`) con animación entering/leaving para entrada/salida de proyectos al filtrar.
+- **Carrusel de screenshots** anidado por proyecto (mismo componente en modo `screenshot`) con fullscreen.
+- **Integración con GitHub API**: `ProjectsService` obtiene stars, forks, visibilidad y licencia; cachea las respuestas por repo. Se llama tras `revealOnViewport`.
+- **Borde animado** con la directiva [`portfolioAnimatedBorder`](../shared/directives.md) en la card centrada.
 
 ### Skills (`sections/skills/`)
-Cinco categorías de habilidades:
+Categorías de habilidades con barra de proficiencia. Datos en `SKILLS` (mocks).
 
 | Categoría | Habilidades principales |
 |-----------|------------------------|
-| Frontend | Angular 21, TypeScript, HTML5, CSS3, Tailwind, RxJS, Signals |
+| Frontend | Angular 21, TypeScript, HTML5, CSS3, Tailwind CSS, RxJS, Signals |
 | Backend | Node.js, NestJS, Ruby on Rails, Express, REST API |
 | Base de datos | PostgreSQL, Redis |
 | Herramientas | Git, Docker, GitHub Actions, VS Code, GSAP, Vitest |
 | Arquitectura | Clean Architecture, Screaming Architecture, SSR + Hydration, SOLID, DDD |
 
 ### About (`sections/about/`)
-- Descripción personal en dos párrafos
-- Estadísticas: 2+ años de experiencia, 2 proyectos públicos en GitHub, 100% orientado a producto
-- Botón de llamada a la acción hacia la sección de contacto
+- Descripción personal en dos párrafos con claves `about.paragraphs.0` / `.1`.
+- Estadísticas profesionales (años de experiencia, % producto, repos públicos).
+- CTA hacia la sección de experiencia.
+- Subcomponente `ui/github-stats/`: tarjeta en vivo con stats de GitHub (repos, stars, forks, lenguaje principal, último update) — su propio `GithubStatsService` consulta la GitHub REST API y cachea en `localStorage` con TTL.
 
 ### Contact (`sections/contact/`)
 Formulario reactivo con `ReactiveFormsModule`:
 
 ```typescript
-form: FormGroup = new FormGroup({
-  name:    FormControl<string>('', [Validators.required, Validators.minLength(2)]),
-  email:   FormControl<string>('', [Validators.required, Validators.email]),
-  message: FormControl<string>('', [Validators.required, Validators.minLength(10)])
-})
+form = new FormGroup({
+  name:    new FormControl('', { nonNullable: true,
+            validators: [Validators.required, Validators.minLength(2)] }),
+  email:   new FormControl('', { nonNullable: true,
+            validators: [Validators.required, Validators.email] }),
+  message: new FormControl('', { nonNullable: true,
+            validators: [Validators.required, Validators.minLength(10)] }),
+});
 ```
 
-- Envío vía **EmailJS** (carga lazy de `@emailjs/browser`)
-- Credenciales tomadas de `environment.emailjs` (excluido del repo por `.gitignore`)
-- Feedback de éxito/error a través del `AlertService`
-- Links sociales: GitHub y LinkedIn
+- Envío vía **EmailJS** (`@emailjs/browser` cargado lazy).
+- Credenciales tomadas de `environment.emailjs` (excluido del repo por `.gitignore`).
+- Feedback de éxito/error a través del [`AlertService`](../shared/services.md#alertservice).
+- Links sociales: GitHub y LinkedIn.
 
-## Entities
+## UI (`ui/portfolio-background-animation/`)
 
-Cada entidad define el contrato de datos de su sección. Mantener las interfaces locales dentro de la feature, y no en `shared/`, porque son exclusivas del dominio del portfolio.
+Capa de animación de fondo global del portfolio.
+
+- Canvas a pantalla completa (z-index bajo) con partículas que se mueven y se conectan al acercarse.
+- `PortfolioBackgroundAnimationService` controla el ciclo: usa `requestAnimationFrame`, expone un signal `enabled` (toggle desde el header), y se adapta al modo claro/oscuro leyendo `html.dark`.
+- Suspende la animación cuando el documento está oculto (`visibilitychange`).
+- Se monta una sola vez en `Portfolio` (page) y vive detrás de todas las secciones.
+
+## Entities (`entities/`)
+
+Cada entidad define el contrato de datos de su sección (`IHero`, `IExperience`, `IProject`, `ISkillCategory`, `IAboutContent`, `TContactForm`, etc.). Las interfaces son locales a la feature porque son exclusivas del dominio del portfolio.
+
+## Mocks (`sections/<name>/mocks/`)
+
+Cada sección tiene su carpeta `mocks/` con datos en tiempo de build (constantes `readonly`). Esto permite:
+
+- Tests sin depender de servicios externos.
+- Mantener las cadenas como claves i18n en lugar de strings duros (los componentes resuelven con `i18nService.t(key)`).
+- Cambiar datos sin tocar el componente.
 
 ## Notas
 
 - Todos los componentes de sección usan `ChangeDetectionStrategy.OnPush`.
-- `portfolio.ts` es un orquestador sin lógica: solo importa y compone las secciones.
+- `portfolio.ts` (page) es un orquestador sin lógica: solo importa y compone secciones + background animation.
 - Las credenciales de EmailJS y GitHub viven en `src/environments/` (ignorado por git).
+- Cada sección revela su contenido cuando entra al viewport vía [`PortfolioSectionRevealService`](../shared/services.md#portfoliosectionrevealservice).
