@@ -29,6 +29,7 @@ export class AlertService {
   // buffered here and flushed by markToastReady(), so none are lost.
   private toastReady = false;
   private readonly pending: ToastMessage[] = [];
+  private destroyTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private readonly messageService: MessageService) {}
 
@@ -57,10 +58,13 @@ export class AlertService {
   }
 
   private teardownToast(): void {
-    // Destroy the toast instance (frees DOM/overlay/timers) until the next alert.
     this.pending.length = 0;
-    this.toastReady = false;
-    this.toastActive.set(false);
+
+    this.destroyTimer = setTimeout(() => {
+      this.toastReady = false;
+      this.toastActive.set(false);
+      this.destroyTimer = null;
+    }, 300);
   }
 
   showSuccess(title: string, message: string, action?: PortfolioToastAction, duration?: number, position: ToastPosition = 'top-right'): void {
@@ -128,6 +132,11 @@ export class AlertService {
   }
 
   private enqueue(message: ToastMessage): void {
+    if (this.destroyTimer !== null) {
+      clearTimeout(this.destroyTimer);
+      this.destroyTimer = null;
+    }
+
     // Mount the deferred toast on demand, then either show now or buffer until ready.
     this.activeCount++;
     this.toastRequested.set(true);
