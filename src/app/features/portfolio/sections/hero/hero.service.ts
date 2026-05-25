@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
+import { loadGsap } from '@shared/utils/gsap-loader';
+
 @Injectable({
   providedIn: 'root',
 })
 export class HeroService {
   async animateEntrance(): Promise<void> {
-    const { gsap } = await import('gsap');
+    const gsap = await loadGsap();
 
     const heroAvatar = document.querySelector('.hero-avatar');
     const heroContentItems = document.querySelectorAll('.hero-content > *');

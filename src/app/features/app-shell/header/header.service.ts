@@ -23,6 +23,7 @@ type HeaderMorphConfig = {
 export class HeaderService {
   private headerMorphFrameId: number | null = null;
   private menuAnimation?: gsap.core.Tween;
+  private hasMorphStyles = false;
 
   private readonly morphStart = 0;
   private readonly morphEnd = 220;
@@ -86,6 +87,9 @@ export class HeaderService {
   }
 
   resetHeaderInlineStyles(header: HTMLElement): void {
+    this.hasMorphStyles = false;
+    header.style.removeProperty('will-change');
+
     const gsap = getGsapSync();
 
     if (gsap) {
@@ -104,6 +108,7 @@ export class HeaderService {
   }
 
   destroy(): void {
+    this.hasMorphStyles = false;
     this.cancelHeaderMorphFrame();
     this.menuAnimation?.kill();
   }
@@ -115,8 +120,15 @@ export class HeaderService {
     onFloatingChange(shouldFloat);
 
     if (progress === 0) {
-      this.resetHeaderInlineStyles(header);
+      if (this.hasMorphStyles) {
+        this.resetHeaderInlineStyles(header);
+      }
       return;
+    }
+
+    if (!this.hasMorphStyles) {
+      header.style.setProperty('will-change', 'width, height, transform, border-radius, box-shadow');
+      this.hasMorphStyles = true;
     }
 
     const gsap = await loadGsap();
