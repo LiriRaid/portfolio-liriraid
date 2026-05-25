@@ -60,7 +60,6 @@ export class GithubStatsComponent {
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
-      this.loading.set(false);
       return;
     }
 

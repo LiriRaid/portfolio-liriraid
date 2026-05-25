@@ -1,4 +1,6 @@
 .hero {
+  min-height: calc(100dvh - var(--app-header-height));
+
   --h-py: 5rem;
   --h-px: 1.5rem;
   --h-inner-gap: clamp(2rem, 5vw, 5rem);
@@ -123,7 +125,7 @@
 
 @media (max-width: 640px) {
   .hero {
-    --h-py: clamp(1.25rem, 0.5192rem + 3.0769vw, 1.75rem);
+    --h-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
     --h-px: clamp(0.5rem, 0.2808rem + 0.9231vw, 0.65rem);
     --h-inner-gap: clamp(1rem, 0.6346rem + 1.5385vw, 1.4rem);
     --h-content-gap: clamp(0.95rem, 0.6731rem + 1.2308vw, 1.25rem);

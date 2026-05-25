@@ -1,5 +1,5 @@
 .projects {
-  --p-py: clamp(1.75rem, 0.81rem + 3.97vw, 3.35rem);
+  --p-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
   --p-px: clamp(0.7rem, 0.23rem + 1.99vw, 1.5rem);
   --p-section-gap: clamp(0.45rem, 0.25rem + 1vw, 0.95rem);
 

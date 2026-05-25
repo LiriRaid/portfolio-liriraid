@@ -28,8 +28,8 @@
   --gh-icon-size: var(--a-stat-icon-size, clamp(1.55rem, 1.196rem + 1.4907vw, 2.15rem));
   --gh-icon-radius: var(--a-stat-icon-radius, clamp(0.5rem, 0.382rem + 0.4969vw, 0.7rem));
 
-  --gh-metric-icon-size: clamp(0.7rem, 0.5229rem + 0.7453vw, 1rem);
   --gh-language-icon-size: clamp(0.7rem, 0.5229rem + 0.7453vw, 1rem);
+  --gh-metric-icon-size: var(--gh-language-icon-size);
   --gh-bar-height: clamp(0.32rem, 0.2969rem + 0.0725vw, 0.36rem);
 
   border-color: color-mix(in srgb, var(--app-border-color) 55%, var(--app-container-border, transparent));
@@ -111,12 +111,17 @@
 }
 
 .github-language--loading :is(.github-language-name, .github-language-track, .github-language-percent) {
-  min-height: var(--gh-bar-height);
   border-radius: 999px;
   background-color: color-mix(in srgb, var(--app-border-color) 55%, transparent);
 }
 
-.github-language-icon {
+.github-language--loading .github-language-name,
+.github-language--loading .github-language-percent {
+  min-height: var(--line-height-caption-1);
+}
+
+.github-language-icon,
+.github-metric-icon {
   width: var(--gh-language-icon-size);
   height: var(--gh-language-icon-size);
   min-width: var(--gh-language-icon-size);
@@ -125,11 +130,6 @@
 }
 
 .github-metric-icon {
-  width: var(--gh-metric-icon-size);
-  height: var(--gh-metric-icon-size);
-  min-width: var(--gh-metric-icon-size);
-  min-height: var(--gh-metric-icon-size);
-  flex: 0 0 var(--gh-metric-icon-size);
   color: var(--app-text-subtle);
   line-height: 0;
 }
@@ -177,7 +177,6 @@
     --gh-primary-gap: clamp(0.26rem, 0.1983rem + 0.2632vw, 0.32rem);
 
     --gh-box-p: clamp(0.38rem, 0.1964rem + 0.7619vw, 0.625rem);
-    --gh-metric-icon-size: clamp(0.66rem, 0.6091rem + 0.2171vw, 0.71rem);
     --gh-language-icon-size: clamp(0.66rem, 0.6091rem + 0.2171vw, 0.71rem);
     --gh-bar-height: clamp(0.3rem, 0.2796rem + 0.0868vw, 0.32rem);
   }

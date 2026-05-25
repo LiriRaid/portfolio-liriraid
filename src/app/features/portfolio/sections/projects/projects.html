@@ -1,5 +1,5 @@
 <section id="projects" class="projects flex min-h-(--app-section-min-height) flex-col justify-center py-(--p-py)" aria-labelledby="projects-heading">
-  <div class="projects-inner portfolio-section-container portfolio-section-reveal flex flex-col gap-(--p-inner-gap)">
+  <div class="portfolio-section-container portfolio-section-reveal flex flex-col gap-(--p-inner-gap)">
     <header #headerRef class="projects-header flex flex-col gap-(--p-header-gap)">
       <p class="projects-label m-0 text-caption-2-bold">
         {{ header().label }}
@@ -15,19 +15,19 @@
     </header>
 
     <div #toolbarRef class="projects-toolbar relative z-60 flex min-w-0 items-center justify-between gap-(--p-toolbar-gap)">
-      <div class="projects-filter-container relative w-auto min-w-0 shrink-0" #filterPanelContainer>
-        <div class="projects-filter-bar flex flex-wrap items-center gap-(--p-filter-bar-gap)">
+      <div class="relative w-auto min-w-0 shrink-0" #filterPanelContainer>
+        <div class="flex flex-wrap items-center gap-(--p-filter-bar-gap)">
           <portfolio-button [label]="filtersButtonLabel()" icon="Filter" iconPos="left" [badge]="selectedTechnologies().length || null" styleClass="projects-filter-button" [ariaLabel]="filtersButtonAria()" (onClick)="filterPanel.toggle($event)" />
 
           @if (hasSelectedTechnologies()) {
-            <portfolio-button [label]="filtersClearLabel()" icon="Close" iconPos="left" variant="outlined" styleClass="projects-clear-button text-caption-1-medium" [ariaLabel]="filtersClearAria()" (onClick)="clearFilters()" />
+            <portfolio-button [label]="filtersClearLabel()" icon="Close" iconPos="left" variant="outlined" styleClass="text-caption-1-medium" [ariaLabel]="filtersClearAria()" (onClick)="clearFilters()" />
           }
         </div>
 
         <p-popover #filterPanel styleClass="projects-filter-panel" [appendTo]="filterPanelContainer">
-          <div class="projects-filter-panel-content flex min-w-0 flex-col">
-            <div class="projects-filter-panel-header flex min-w-0 items-center justify-between gap-3.5 border-b border-(--app-border-color) px-[0.95rem] pt-[0.85rem] pb-[0.7rem]">
-              <p class="projects-filter-panel-title m-0 text-caption-1-bold font-bold uppercase tracking-[0.08em] text-(--app-text-color)">{{ filtersPanelTitle() }}</p>
+          <div class="flex min-w-0 flex-col">
+            <div class="flex min-w-0 items-center justify-between gap-3.5 border-b border-(--app-border-color) px-[0.95rem] pt-[0.85rem] pb-[0.7rem]">
+              <p class="m-0 text-caption-1-bold font-bold uppercase tracking-[0.08em] text-(--app-text-color)">{{ filtersPanelTitle() }}</p>
 
               @if (hasSelectedTechnologies()) {
                 <button type="button" class="projects-filter-panel-clear cursor-pointer border-0 bg-transparent text-caption-1-bold font-bold text-(--app-text-color)" (click)="clearFilters()">{{ filtersPanelClear() }}</button>
@@ -38,7 +38,7 @@
               <nav class="projects-filter-category-tabs flex h-full min-h-0 min-w-0 flex-col gap-[0.45rem] overflow-y-auto overflow-x-hidden overscroll-contain border-r border-(--app-border-color) p-2.5" [attr.aria-label]="filtersCategoriesAria()">
                 @for (category of technologyCategories(); track category.label) {
                   <button type="button" class="projects-filter-category-tab flex min-h-[2.15rem] w-full min-w-0 cursor-pointer items-center gap-2 rounded-[0.65rem] border border-transparent bg-transparent px-[0.45rem] py-[0.35rem] text-left text-[0.72rem] font-bold text-(--app-text-muted)" [class.projects-filter-category-tab--active]="activeFilterCategoryLabel() === category.label" (click)="selectFilterCategory(category.label)">
-                    <span class="projects-filter-category-tab-icon inline-flex h-[1.45rem] w-[1.45rem] shrink-0 items-center justify-center rounded-[0.45rem] bg-(--app-badge-soft-bg) text-(--app-text-primary)" aria-hidden="true">
+                    <span class="inline-flex h-[1.45rem] w-[1.45rem] shrink-0 items-center justify-center rounded-[0.45rem] bg-(--app-badge-soft-bg) text-(--app-text-primary)" aria-hidden="true">
                       <portfolio-icon [name]="category.icon" size="14" />
                     </span>
 
@@ -46,7 +46,7 @@
                       {{ translateCategoryLabel(category.label) }}
                     </span>
 
-                    <span class="projects-filter-category-tab-count inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-(--app-panel-bg) text-[0.62rem] font-extrabold text-(--app-text-muted)">
+                    <span class="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-(--app-panel-bg) text-[0.62rem] font-extrabold text-(--app-text-muted)">
                       {{ category.technologies.length }}
                     </span>
                   </button>
@@ -55,21 +55,21 @@
 
               @if (activeFilterCategory(); as category) {
                 <section class="projects-filter-active-category flex h-full min-h-0 min-w-0 flex-col gap-[0.85rem] overflow-y-auto overflow-x-hidden overscroll-contain p-2.5">
-                  <header class="projects-filter-active-category-header flex min-w-0 items-center gap-(--p-filter-category-header-gap)">
-                    <span class="projects-filter-category-icon inline-flex h-(--p-filter-category-icon) w-(--p-filter-category-icon) shrink-0 items-center justify-center rounded-(--p-filter-category-icon-radius) bg-(--app-badge-soft-bg) text-(--app-text-primary)" aria-hidden="true">
+                  <header class="flex min-w-0 items-center gap-(--p-filter-category-header-gap)">
+                    <span class="inline-flex h-(--p-filter-category-icon) w-(--p-filter-category-icon) shrink-0 items-center justify-center rounded-(--p-filter-category-icon-radius) bg-(--app-badge-soft-bg) text-(--app-text-primary)" aria-hidden="true">
                       <portfolio-icon [name]="category.icon" size="15" />
                     </span>
 
-                    <div class="projects-filter-active-category-copy flex min-w-0 flex-col gap-[0.15rem]">
+                    <div class="flex min-w-0 flex-col gap-[0.15rem]">
                       <h3 class="projects-filter-category-title m-0 text-(length:--p-filter-category-title) font-bold text-(--app-text-color)">
                         {{ translateCategoryLabel(category.label) }}
                       </h3>
 
-                      <p class="projects-filter-category-subtitle m-0 text-[0.68rem] leading-tight text-(--app-text-muted)">{{ filtersPanelHint() }}</p>
+                      <p class="m-0 text-[0.68rem] leading-tight text-(--app-text-muted)">{{ filtersPanelHint() }}</p>
                     </div>
                   </header>
 
-                  <div class="projects-filter-options flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
+                  <div class="flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
                     @for (tech of category.technologies; track tech) {
                       <button type="button" class="projects-filter-option inline-flex min-h-(--p-chip-min-h) items-center justify-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) px-[0.62rem] py-[0.4rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                         @if (techIconUrl(tech); as iconUrl) {
@@ -130,12 +130,12 @@
                   <portfolio-carousel mode="screenshot" [images]="project.screenshots!" [autoPlay]="true" [active]="activeCarouselProjectTitle() === project.title" class="projects-card-carousel block shrink-0" />
                 }
 
-                <div class="projects-card-body flex min-w-0 flex-1 flex-col gap-(--p-card-body-gap) overflow-hidden p-(--p-card-body-p)">
+                <div class="flex min-w-0 flex-1 flex-col gap-(--p-card-body-gap) overflow-hidden p-(--p-card-body-p)">
                   <h3 class="projects-card-title m-0 pr-18 text-(length:--p-card-title-size) leading-[1.19] font-bold text-(--app-text-color)">
                     {{ project.title }}
                   </h3>
 
-                  <p class="projects-card-description m-0 text-(length:--p-card-desc-size) leading-[1.32] text-(--app-text-muted)">
+                  <p class="m-0 text-(length:--p-card-desc-size) leading-[1.32] text-(--app-text-muted)">
                     {{ translateProjectDescription(project.description) }}
                   </p>
 
@@ -154,8 +154,8 @@
                   </div>
                 </div>
 
-                <div class="projects-card-github mt-auto flex min-w-0 shrink-0 flex-col border-t border-(--app-border-color) bg-(--app-panel-bg)">
-                  <div class="projects-stats flex min-w-0 flex-wrap gap-(--p-card-tags-gap) overflow-visible px-(--p-stats-px) py-(--p-stats-py)" [attr.aria-label]="statsAria()">
+                <div class="mt-auto flex min-w-0 shrink-0 flex-col border-t border-(--app-border-color) bg-(--app-panel-bg)">
+                  <div class="flex min-w-0 flex-wrap gap-(--p-card-tags-gap) overflow-visible px-(--p-stats-px) py-(--p-stats-py)" [attr.aria-label]="statsAria()">
                     @if (project.githubStats) {
                       <span class="projects-stat projects-stat--stars inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         <portfolio-icon name="Star" size="14" />
@@ -221,7 +221,7 @@
 
       @if (showEmptyState()) {
         <div class="projects-empty-state flex min-w-0 origin-top flex-col gap-(--p-empty-gap) rounded-(--p-empty-radius) bg-(--app-panel-bg) p-(--p-empty-p) will-change-[opacity,transform]" animate.enter="projects-empty-state-enter">
-          <p class="projects-empty-title m-0 text-(length:--p-empty-title-size) leading-tight font-bold text-(--app-text-color)">
+          <p class="m-0 text-(length:--p-empty-title-size) leading-tight font-bold text-(--app-text-color)">
             @if (hasSearchTerm()) {
               {{ emptyState().searchTitle }}
             } @else {
@@ -229,7 +229,7 @@
             }
           </p>
 
-          <p class="projects-empty-description m-0 text-(length:--p-empty-desc-size) leading-[1.32] text-(--app-text-muted)">
+          <p class="m-0 text-(length:--p-empty-desc-size) leading-[1.32] text-(--app-text-muted)">
             {{ emptyState().description }}
           </p>
         </div>
