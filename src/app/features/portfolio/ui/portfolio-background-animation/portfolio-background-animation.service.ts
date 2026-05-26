@@ -48,6 +48,9 @@ export class PortfolioBackgroundAnimationService {
     typeof HTMLCanvasElement !== 'undefined' &&
     'transferControlToOffscreen' in HTMLCanvasElement.prototype;
 
+  private readonly fadeOutDurationMs = 450;
+  private clearTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
   // Fallback path (main-thread canvas)
   private ctx: CanvasRenderingContext2D | null = null;
   private nodes: CircuitNode[] = [];
@@ -114,6 +117,11 @@ export class PortfolioBackgroundAnimationService {
     localStorage.setItem(this.storageKey, String(value));
     this.syncRootEnabledClass(value);
 
+    if (this.clearTimeoutId !== null) {
+      clearTimeout(this.clearTimeoutId);
+      this.clearTimeoutId = null;
+    }
+
     if (this.worker) {
       this.worker.postMessage({ type: 'enabled', value });
       return;
@@ -126,12 +134,20 @@ export class PortfolioBackgroundAnimationService {
     }
 
     this.stopAnimationLoop();
-    this.clearFallback();
+    this.clearTimeoutId = setTimeout(() => {
+      this.clearFallback();
+      this.clearTimeoutId = null;
+    }, this.fadeOutDurationMs);
   }
 
   destroy(): void {
     if (!this.isBrowser) {
       return;
+    }
+
+    if (this.clearTimeoutId !== null) {
+      clearTimeout(this.clearTimeoutId);
+      this.clearTimeoutId = null;
     }
 
     this.teardownListeners();

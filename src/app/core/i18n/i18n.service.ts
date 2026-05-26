@@ -51,9 +51,10 @@ export class I18nService {
   private activeLayoutTargets: HTMLElement[] = [];
   private activeIconTargets: HTMLElement[] = [];
 
-  private readonly switchingClass = 'portfolio-i18n-switching';
-  private readonly switchingStyleId = 'portfolio-i18n-switching-style';
-  private readonly viewportBuffer = 120;
+private readonly switchingClass = 'portfolio-i18n-switching';
+private readonly switchingStyleId = 'portfolio-i18n-switching-style';
+private readonly initialPendingClass = 'portfolio-i18n-pending';
+private readonly viewportBuffer = 120;
 
   private readonly translatedTexts = this.createTranslatedTexts();
 
@@ -98,19 +99,20 @@ export class I18nService {
 
   private readonly githubDynamicKeys = ['about.github.updated', 'about.github.syncing', 'about.github.language'];
 
-  initialize(): void {
-    const acceptLanguage = this.request?.headers?.get('accept-language') ?? null;
-    const cookieHeader = this.request?.headers?.get('cookie') ?? null;
+initialize(): void {
+  const acceptLanguage = this.request?.headers?.get('accept-language') ?? null;
+  const cookieHeader = this.request?.headers?.get('cookie') ?? null;
 
-    const initial = resolveInitialLanguage({
-      cookieHeader,
-      acceptLanguage,
-      isBrowser: this.isBrowser,
-    });
+  const initial = resolveInitialLanguage({
+    cookieHeader,
+    acceptLanguage,
+    isBrowser: this.isBrowser,
+  });
 
-    this.language.set(initial);
-    this.applyDocumentLanguage(initial);
-  }
+  this.language.set(initial);
+  this.applyDocumentLanguage(initial);
+  this.releaseInitialLanguageLock();
+}
 
   setLanguage(language: PortfolioLanguage): void {
     if (this.switchingLanguage) {
@@ -829,17 +831,72 @@ export class I18nService {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  private commitLanguage(language: PortfolioLanguage): void {
-    this.language.set(language);
-    setStoredLanguage(language);
-    this.applyDocumentLanguage(language);
+ private commitLanguage(language: PortfolioLanguage): void {
+  this.language.set(language);
+  setStoredLanguage(language);
+  this.applyDocumentLanguage(language);
+}
+
+private applyDocumentLanguage(language: PortfolioLanguage): void {
+  const documentElement = this.document.documentElement;
+
+  if (!documentElement) {
+    return;
   }
 
-  private applyDocumentLanguage(language: PortfolioLanguage): void {
-    this.document.documentElement.lang = language;
+  documentElement.setAttribute('lang', language);
+  documentElement.setAttribute('data-language', language);
+}
+
+private releaseInitialLanguageLock(): void {
+  if (!this.isBrowser) {
+    return;
   }
 
-  private prefersReducedMotion(): boolean {
-    return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  const documentElement = this.document.documentElement;
+
+  if (!documentElement || !documentElement.classList.contains(this.initialPendingClass)) {
+    return;
   }
+
+  let released = false;
+
+  const release = (): void => {
+    if (released) {
+      return;
+    }
+
+    released = true;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const currentDocumentElement = this.document.documentElement;
+
+        if (!currentDocumentElement) {
+          return;
+        }
+
+        currentDocumentElement.classList.remove(this.initialPendingClass);
+      });
+    });
+  };
+
+  const subscription = this.appRef.isStable.subscribe((isStable) => {
+    if (!isStable) {
+      return;
+    }
+
+    subscription.unsubscribe();
+    release();
+  });
+
+  setTimeout(() => {
+    subscription.unsubscribe();
+    release();
+  }, 1200);
+}
+
+private prefersReducedMotion(): boolean {
+  return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+}
 }

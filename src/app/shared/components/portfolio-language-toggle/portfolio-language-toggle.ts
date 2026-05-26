@@ -22,7 +22,7 @@ export class PortfolioLanguageToggle implements DoCheck {
   protected readonly ariaLabel = computed(() => this.i18nService.t('header.language.toggle'));
 
   protected readonly checked = computed(() => this.language() === 'es');
-  protected readonly localChecked = signal(false);
+  protected readonly localChecked = signal(this.i18nService.language() === 'es');
 
   private initialSyncDone = false;
   private previousLanguage: PortfolioLanguage | null = null;
@@ -86,6 +86,10 @@ export class PortfolioLanguageToggle implements DoCheck {
   }
 
   private syncPrimeNgToggleState(options: { instant: boolean }): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
     const root = this.elementRef.nativeElement;
     const toggle = root.querySelector<HTMLElement>('.p-toggleswitch');
     const input = root.querySelector<HTMLInputElement>('.p-toggleswitch-input');
@@ -114,7 +118,9 @@ export class PortfolioLanguageToggle implements DoCheck {
 
     if (toggle && options.instant) {
       requestAnimationFrame(() => {
-        toggle.classList.remove('is-initial-sync');
+        requestAnimationFrame(() => {
+          toggle.classList.remove('is-initial-sync');
+        });
       });
     }
   }

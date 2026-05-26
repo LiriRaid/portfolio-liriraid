@@ -40,6 +40,9 @@ let mutedColor = '#ffffff';
 
 let intervalId: ReturnType<typeof setInterval> | null = null;
 let lastFrameTime = 0;
+let clearTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+const FADE_OUT_DURATION_MS = 450;
 
 self.onmessage = (event: MessageEvent<WorkerMessage>) => {
   const msg = event.data;
@@ -89,15 +92,26 @@ self.onmessage = (event: MessageEvent<WorkerMessage>) => {
 
     case 'enabled':
       enabled = msg.value;
+      if (clearTimeoutId !== null) {
+        clearTimeout(clearTimeoutId);
+        clearTimeoutId = null;
+      }
       if (enabled) {
         startLoop();
       } else {
         stopLoop();
-        clear();
+        clearTimeoutId = setTimeout(() => {
+          clear();
+          clearTimeoutId = null;
+        }, FADE_OUT_DURATION_MS);
       }
       break;
 
     case 'destroy':
+      if (clearTimeoutId !== null) {
+        clearTimeout(clearTimeoutId);
+        clearTimeoutId = null;
+      }
       stopLoop();
       canvas = null;
       ctx = null;

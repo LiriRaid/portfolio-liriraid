@@ -141,7 +141,7 @@
 
                   <div class="projects-tags flex min-w-0 flex-wrap gap-(--p-card-tags-gap)" [attr.aria-label]="cardTagsAria()">
                     @for (tag of project.tags; track tag) {
-                      <span class="projects-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                      <span class="projects-tag inline-flex min-h-(--p-chip-min-h) cursor-default items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
                         @if (techIconUrl(tag); as iconUrl) {
                           <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
                         } @else {

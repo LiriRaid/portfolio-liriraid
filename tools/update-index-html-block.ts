@@ -28,13 +28,14 @@ function normalizeEndOfLine(text: string, endOfLine: string): string {
   return text.replace(/\r\n|\n|\r/g, endOfLine);
 }
 
-export function updateIndexHtmlBlock({
-  indexPath,
-  startMarker,
-  endMarker,
-  script,
-  label,
-}: UpdateIndexHtmlBlockOptions): void {
+function indentMultiline(text: string, indent: string): string {
+  return text
+    .split('\n')
+    .map((line) => `${indent}${line}`)
+    .join('\n');
+}
+
+export function updateIndexHtmlBlock({ indexPath, startMarker, endMarker, script, label }: UpdateIndexHtmlBlockOptions): void {
   const indexHtml = readFileSync(indexPath, 'utf8');
   const endOfLine = detectEndOfLine(indexHtml);
   const normalizedIndexHtml = normalizeEndOfLine(indexHtml, endOfLine);
@@ -48,19 +49,12 @@ export function updateIndexHtmlBlock({
 
   const before = normalizedIndexHtml.slice(0, startIndex + startMarker.length);
   const after = normalizedIndexHtml.slice(endIndex);
-  const scriptBlock = normalizeEndOfLine(
-    [
-      '',
-      '    <script>',
-      `      ${script}`,
-      '    </script>',
-      '',
-    ].join('\n'),
-    endOfLine,
-  );
-  const nextIndexHtml = `${before}${scriptBlock}    ${after}`;
 
-  if (nextIndexHtml === normalizedIndexHtml && indexHtml === normalizedIndexHtml) {
+  const scriptBlock = normalizeEndOfLine(['', '    <script>', indentMultiline(script.trim(), '      '), '    </script>', '    '].join('\n'), endOfLine);
+
+  const nextIndexHtml = `${before}${scriptBlock}${after}`;
+
+  if (nextIndexHtml === normalizedIndexHtml) {
     console.log(`${label} sin cambios en src/index.html`);
     return;
   }
