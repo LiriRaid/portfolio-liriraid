@@ -37,6 +37,8 @@
   --s-badge-px: clamp(0.52rem, 0.3843rem + 0.5714vw, 0.75rem);
   --s-badge-icon: clamp(10px, 6.46px + 0.9317vw, 16px);
 
+  --s-cat-icon: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+
   box-sizing: border-box;
 }
 
@@ -73,7 +75,7 @@
   height: var(--s-icon-size);
   border-radius: var(--s-icon-radius);
   background-color: var(--app-badge-soft-bg);
-  color: var(--app-text-primary);
+  color: var(--app-skill-icon-color, var(--app-text-primary));
 }
 
 .skill-badge {

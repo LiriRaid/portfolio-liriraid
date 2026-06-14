@@ -2,15 +2,19 @@
 @import 'tailwindcss-primeui';
 
 @import './styles/general-styles.css';
-@import './styles/theme-styles.css';
-@import './styles/components-styles.css';
-@import './styles/carousel-styles.css';
-@import './styles/projects-styles.css';
-@import './styles/input-styles.css';
 @import './styles/scrollbar-styles.css';
-@import './styles/text-and-color-styles.css';
-@import './styles/typography-styles.css';
-@import './styles/animated-border-styles.css';
-@import './styles/theme-switching-styles.css';
+
+@import './styles/theme/theme-styles.css';
+@import './styles/theme/theme-switching-styles.css';
+
+@import './styles/typography/text-and-color-styles.css';
+@import './styles/typography/typography-styles.css';
+
+@import './styles/components/input-styles.css';
+@import './styles/components/button-styles.css';
+@import './styles/components/carousel-styles.css';
+@import './styles/components/animated-border-styles.css';
+
+@import './styles/features/projects-styles.css';
 
 @import './app/shared/animations/animations.css';

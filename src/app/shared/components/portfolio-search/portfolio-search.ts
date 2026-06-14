@@ -2,12 +2,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, DoCheck, OnDestroy, PLATFORM_ID, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { PortfolioIcon } from '..';
+import { PortfolioButton } from '../portfolio-button/portfolio-button';
+import { PortfolioInput } from '../portfolio-input/portfolio-input';
 
 @Component({
   selector: 'portfolio-search',
   standalone: true,
-  imports: [ReactiveFormsModule, PortfolioIcon],
+  imports: [ReactiveFormsModule, PortfolioButton, PortfolioInput],
   templateUrl: './portfolio-search.html',
   styleUrl: './portfolio-search.css',
   host: {

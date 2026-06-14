@@ -48,7 +48,7 @@ Todas las secciones siguen la misma estructura interna:
 - Servicio `<section>.service.ts` para lógica de animación / datos.
 - Carpeta `mocks/` con los datos estáticos de la sección (separados del componente para facilitar i18n y tests).
 - Inyectan `I18nService` para traducciones y `PortfolioSectionRevealService` para revelar la sección al entrar al viewport.
-- Tokens de tipografía locales con `clamp()` para escalado fluido (ver [styles README](../../styles/README.md)).
+- Tokens de tipografía y espaciado locales con `clamp()` para escalado fluido. Las variables de gap/padding usan un valor mínimo (mobile) y un máximo aumentado para desktop sin breakpoints adicionales — los `@media (max-width: ...)` existentes en cada sección sobreescriben para tablet y mobile.
 
 ### Hero (`sections/hero/`)
 - Bloque de código animado con estilo editor (macOS dots, tokens coloreados, líneas en `HERO_CODE_LINES`).
@@ -63,7 +63,15 @@ Todas las secciones siguen la misma estructura interna:
 - Datos en `EXPERIENCES` (mocks); cada texto se traduce vía claves i18n.
 
 ### Projects (`sections/projects/`)
-Búsqueda + filtros + carrusel de proyectos destacados:
+Búsqueda + filtros + carrusel de proyectos destacados.
+
+**Proyectos actuales y su stack:**
+
+| Proyecto | Stack destacado |
+|----------|----------------|
+| OmniInbox | Angular 21, TypeScript, RxJS, Signals, Tailwind CSS, PrimeNG, GSAP, Vitest, Ruby on Rails, Screaming Architecture, Feature-first |
+| AgentFlow AI | Node.js, JavaScript, NPM, CLI, TUI, AI Agents, Automation, Clean Architecture |
+| Portfolio Liriraid | Angular 21, TypeScript, SSR, Prerender, PrimeNG, Tailwind CSS, Vitest, Screaming Architecture, Feature-first |
 
 - **Búsqueda reactiva** mediante `FormControl` no-nullable + `computed()` que filtra por título, descripción traducida y tags.
 - **Filtros por tecnología** con popover (PrimeNG `Popover`) y categorías (Frontend, Backend, BD, Herramientas, Arquitectura, IA, ...) definidas en `PROJECT_TECHNOLOGY_CATEGORIES`.
@@ -74,6 +82,7 @@ Búsqueda + filtros + carrusel de proyectos destacados:
 
 ### Skills (`sections/skills/`)
 Categorías de habilidades con barra de proficiencia. Datos en `SKILLS` (mocks).
+Iconos de categoría dimensionados con `clamp()` vía `extraClass="size-(--s-cat-icon)"` en `portfolio-icon` (sin `::ng-deep`).
 
 | Categoría | Habilidades principales |
 |-----------|------------------------|
@@ -88,6 +97,7 @@ Categorías de habilidades con barra de proficiencia. Datos en `SKILLS` (mocks).
 - Estadísticas profesionales (años de experiencia, % producto, repos públicos).
 - CTA hacia la sección de experiencia.
 - Subcomponente `ui/github-stats/`: tarjeta en vivo con stats de GitHub (repos, stars, forks, lenguaje principal, último update) — su propio `GithubStatsService` consulta la GitHub REST API y cachea en `localStorage` con TTL.
+- Iconos de estadísticas y GitHub stats dimensionados con `clamp()` vía `extraClass="size-(--var)"` en `portfolio-icon` (sin `::ng-deep`). El icono del CTA usa `iconExtraClass` en `portfolio-button`.
 
 ### Contact (`sections/contact/`)
 Formulario reactivo con `ReactiveFormsModule`:

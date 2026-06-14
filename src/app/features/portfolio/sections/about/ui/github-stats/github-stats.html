@@ -2,16 +2,16 @@
   <header class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-(--gh-header-gap)">
     <div class="flex min-w-0 flex-col gap-(--gh-title-gap)">
       <p class="github-eyebrow no-i18n-animation m-0 text-caption-2-bold">{{ eyebrow() }}</p>
- 
+
       <h3 class="github-title m-0 text-subtitle-2-bold">{{ title() }}</h3>
- 
+
       <p class="github-muted m-0 text-caption-2-regular">
         {{ updatedLabel() }}
       </p>
     </div>
 
     <span class="github-icon inline-grid size-(--gh-icon-size) shrink-0 place-items-center rounded-(--gh-icon-radius)" aria-hidden="true">
-      <portfolio-icon name="GitBranch" size="16" />
+      <portfolio-icon name="GitBranch" size="18" extraClass="size-(--gh-cat-icon)" />
     </span>
   </header>
 
@@ -28,7 +28,7 @@
 
       <span class="github-muted text-caption-1-regular">{{ reposLabel() }}</span>
     </div>
- 
+
     <div class="github-box github-box--stars flex min-w-0 flex-col justify-center gap-[0.12rem] rounded-(--gh-metric-radius) border p-(--gh-box-p)">
       <span class="github-strong inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-subtitle-2-bold">
         @if (loading()) {
@@ -38,10 +38,10 @@
           <span>{{ stats()?.totalStars ?? 0 }}</span>
         }
       </span>
- 
+
       <span class="github-muted text-caption-1-regular">{{ starsLabel() }}</span>
     </div>
- 
+
     <div class="github-box flex min-w-0 flex-col justify-center gap-[0.12rem] rounded-(--gh-metric-radius) border p-(--gh-box-p)">
       <span class="github-strong inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-subtitle-2-bold">
         @if (loading()) {
@@ -51,10 +51,10 @@
           <span>{{ stats()?.totalForks ?? 0 }}</span>
         }
       </span>
- 
+
       <span class="github-muted text-caption-1-regular">{{ forksLabel() }}</span>
     </div>
- 
+
     <div class="github-primary github-box flex min-w-0 items-center justify-between rounded-(--gh-metric-radius) border p-(--gh-box-p)">
       <span class="github-muted github-label text-caption-1-regular">{{ mainLanguageLabel() }}</span>
 

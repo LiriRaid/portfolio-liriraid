@@ -27,6 +27,7 @@
 
   --gh-icon-size: var(--a-stat-icon-size, clamp(1.55rem, 1.196rem + 1.4907vw, 2.15rem));
   --gh-icon-radius: var(--a-stat-icon-radius, clamp(0.5rem, 0.382rem + 0.4969vw, 0.7rem));
+  --gh-cat-icon: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
 
   --gh-language-icon-size: clamp(0.7rem, 0.5229rem + 0.7453vw, 1rem);
   --gh-metric-icon-size: var(--gh-language-icon-size);
@@ -58,7 +59,7 @@
 
 .github-icon {
   background-color: color-mix(in srgb, var(--app-text-primary) 14%, var(--app-panel-bg));
-  color: var(--app-text-primary);
+  color: var(--app-skill-icon-color, var(--app-text-primary));
   line-height: 0;
 }
 

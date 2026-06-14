@@ -55,8 +55,14 @@ Componente `OnPush` con el header de navegación principal.
 ### Lógica de scroll
 
 - Distingue scroll manual (rueda/touch) de scroll programático (click en un link).
-- Durante un scroll programático bloquea la detección de sección activa hasta llegar al target (timeout de 1200ms) para evitar parpadeos en el indicador.
+- **`history.scrollRestoration = 'manual'`** al inicializar: deshabilita la restauración nativa del browser para evitar conflictos con el scroll programático al recargar la página en un hash distinto de `#home`.
+- Durante un scroll programático bloquea la detección de sección activa con `targetSection` (lock). El lock se libera cuando `Math.abs(scrollRoot.scrollTop - target.offsetTop) <= 5px`. Fallback: timeout de 1200ms.
+- Al recargar con hash en la URL (`#projects`, `#contact`, etc.), `waitAndScrollToSection` hace polling cada 100ms hasta que `document.getElementById(sectionId)` retorne el elemento (máx. 30 intentos = 3s), luego hace scroll con `behavior: 'auto'`.
 - Sincroniza el hash de la URL via `history.replaceState` (sin disparar navegación).
+
+#### Corrección URL flickering (upward navigation)
+
+`syncTargetSection` compara `scrollRoot.scrollTop` vs `target.offsetTop` directamente. La lógica anterior comparaba coordenadas de viewport (`targetVisualTop <= expectedTop`), que era `true` inmediatamente cuando el destino estaba por encima del viewport (valor negativo), liberando el lock en el primer frame y causando que la URL mostrara brevemente la sección de origen antes de la destino.
 
 ### `HeaderService`
 

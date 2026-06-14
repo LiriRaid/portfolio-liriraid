@@ -23,8 +23,8 @@ export interface IProject {
   title: string;
   description: string;
   tags: string[];
-  repo: string;
-  githubUrl: string;
+  repo: string | null;
+  githubUrl: string | null;
   liveUrl: string | null;
   featured?: boolean;
   screenshots?: string[];

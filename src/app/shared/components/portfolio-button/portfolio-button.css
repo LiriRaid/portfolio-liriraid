@@ -1,3 +1,28 @@
+:host ::ng-deep .p-button {
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .p-button:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+/* Tamaños estandarizados */
+:host ::ng-deep .p-button.portfolio-btn-small  { height: 2.375rem; }
+:host ::ng-deep .p-button.portfolio-btn-medium { height: 2.5rem; }
+:host ::ng-deep .p-button.portfolio-btn-high   { height: 2.625rem; }
+
+/* Ícono solo: sin padding, cuadrado */
+:host ::ng-deep .p-button.portfolio-btn-icon { padding: 0; }
+:host ::ng-deep .p-button.portfolio-btn-icon.portfolio-btn-small  { width: 2.375rem; min-width: 2.375rem; }
+:host ::ng-deep .p-button.portfolio-btn-icon.portfolio-btn-medium { width: 2.5rem;   min-width: 2.5rem; }
+:host ::ng-deep .p-button.portfolio-btn-icon.portfolio-btn-high   { width: 2.625rem; min-width: 2.625rem; }
+
 :host ::ng-deep .portfolio-button__label {
   display: inline-block;
   min-width: 0;

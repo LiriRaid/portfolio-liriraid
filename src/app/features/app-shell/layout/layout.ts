@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
+import { PortfolioScrollProgress } from '@shared/components/portfolio-scroll-progress/portfolio-scroll-progress';
 import { PortfolioToast } from '@shared/components/portfolio-toast/portfolio-toast';
 import { AlertService } from '@shared/services/alert.service';
 import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
@@ -11,7 +12,7 @@ import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, Header, Footer, PortfolioToast],
+  imports: [RouterOutlet, Header, Footer, PortfolioToast, PortfolioScrollProgress],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })

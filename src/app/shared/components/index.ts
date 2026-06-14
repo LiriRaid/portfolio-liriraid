@@ -1,4 +1,5 @@
 export { PortfolioButton } from './portfolio-button/portfolio-button';
+export { PortfolioScrollProgress } from './portfolio-scroll-progress/portfolio-scroll-progress';
 export { PortfolioCarousel } from './portfolio-carousel/portfolio-carousel';
 export { PortfolioIcon } from './portfolio-icon/portfolio-icon';
 export { PortfolioInput } from './portfolio-input/portfolio-input';

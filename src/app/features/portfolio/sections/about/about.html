@@ -21,7 +21,7 @@
         </div>
 
         <div class="about-cta flex">
-          <portfolio-button [label]="about().ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="about-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
+          <portfolio-button [label]="about().ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" iconExtraClass="size-(--a-btn-icon)" styleClass="about-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
         </div>
       </div>
 
@@ -41,11 +41,11 @@
             <span class="stat-icon inline-grid size-(--a-stat-icon-size) shrink-0 place-items-center rounded-(--a-stat-icon-radius)" aria-hidden="true">
               @switch (i) {
                 @case (0) {
-                  <portfolio-icon name="Code" size="16" />
+                  <portfolio-icon name="Code" size="18" extraClass="size-(--a-stat-icon-svg)" />
                 }
 
                 @default {
-                  <portfolio-icon name="ShieldCheck" size="16" />
+                  <portfolio-icon name="ShieldCheck" size="18" extraClass="size-(--a-stat-icon-svg)" />
                 }
               }
             </span>

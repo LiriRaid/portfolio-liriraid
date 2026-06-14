@@ -41,19 +41,26 @@ button:disabled {
 .portfolio-section-reveal {
   opacity: 0;
   visibility: hidden;
+  transform: translateY(14px);
   will-change: opacity, transform;
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .portfolio-section-reveal--ready {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .portfolio-section-reveal {
     opacity: 1;
     visibility: visible;
+    transform: none;
     will-change: auto;
+    transition: none;
   }
 }
 

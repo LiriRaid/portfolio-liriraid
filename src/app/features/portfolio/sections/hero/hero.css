@@ -3,8 +3,8 @@
 
   --h-py: 5rem;
   --h-px: 1.5rem;
-  --h-inner-gap: clamp(2rem, 5vw, 5rem);
-  --h-content-gap: 1.45rem;
+  --h-inner-gap: clamp(2rem, 5vw, 7rem);
+  --h-content-gap: clamp(1.5rem, 2.5vw, 2.5rem);
 
   --h-avatar: clamp(10rem, 18vw, 15rem);
   --h-avatar-ring: 8px;

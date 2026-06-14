@@ -4,7 +4,7 @@ import { Popover } from 'primeng/popover';
 
 import { PRIMARY_COLORS, SURFACE_COLORS } from '@core/theme/theme-palettes';
 import { ThemeService } from '@core/theme/theme.service';
-import { PortfolioButton } from '..';
+import { PortfolioButton } from '../portfolio-button/portfolio-button';
 
 @Component({
   selector: 'portfolio-theme-color-picker',

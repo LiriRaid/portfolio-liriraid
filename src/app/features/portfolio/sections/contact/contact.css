@@ -2,9 +2,9 @@
   --c-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
   --c-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
 
-  --c-layout-gap: clamp(1.1rem, -1.2012rem + 9.6894vw, 5rem);
-  --c-form-width: 30rem;
-  --c-content-gap: clamp(0.82rem, 0.4188rem + 1.6894vw, 1.5rem);
+  --c-layout-gap: clamp(1.1rem, -1.2012rem + 9.6894vw, 7rem);
+  --c-form-width: 37rem;
+  --c-content-gap: clamp(0.82rem, 0.4188rem + 1.6894vw, 3rem);
 
   --font-size-caption-2: clamp(0.64rem, 0.5013rem + 0.5839vw, 0.875rem);
   --line-height-caption-2: 1rem;
@@ -21,11 +21,11 @@
   --font-size-caption-1: clamp(0.71rem, 0.6126rem + 0.4099vw, 0.875rem);
   --line-height-caption-1: clamp(1.28rem, 1.1502rem + 0.5466vw, 1.5rem);
 
-  --c-desc-max: 30rem;
-  --c-social-gap: clamp(0.4rem, 0.1935rem + 0.8696vw, 0.75rem);
+  --c-desc-max: 38rem;
+  --c-social-gap: clamp(0.4rem, 0.1935rem + 0.8696vw, 1rem);
 
-  --c-form-p: clamp(1rem, 0.4099rem + 2.4845vw, 2rem);
-  --c-form-gap: clamp(0.7rem, 0.3755rem + 1.3665vw, 1.25rem);
+  --c-form-p: clamp(1rem, 0.4099rem + 2.4845vw, 2.5rem);
+  --c-form-gap: clamp(0.7rem, 0.3755rem + 1.3665vw, 1.75rem);
   --c-form-radius: clamp(0.85rem, 0.614rem + 0.9938vw, 1.25rem);
 
   --c-input-size: var(--font-size-caption-1);

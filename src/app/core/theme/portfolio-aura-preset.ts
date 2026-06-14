@@ -44,10 +44,10 @@ export const createPortfolioAuraPreset = (primaryPalette: Record<string, string>
         dark: {
           surface: surfacePalette,
           primary: {
-            color: '{primary.600}',
+            color: '{primary.500}',
             inverseColor: '#ffffff',
-            hoverColor: '{primary.700}',
-            activeColor: '{primary.800}',
+            hoverColor: '{primary.600}',
+            activeColor: '{primary.700}',
           },
           highlight: {
             background: 'rgba(255, 255, 255, 0.15)',

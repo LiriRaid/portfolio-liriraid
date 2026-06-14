@@ -155,6 +155,7 @@
                 </div>
 
                 <div class="mt-auto flex min-w-0 shrink-0 flex-col border-t border-(--app-border-color) bg-(--app-panel-bg)">
+                  @if (project.repo) {
                   <div class="flex min-w-0 flex-wrap gap-(--p-card-tags-gap) overflow-visible px-(--p-stats-px) py-(--p-stats-py)" [attr.aria-label]="statsAria()">
                     @if (project.githubStats) {
                       <span class="projects-stat projects-stat--stars inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
@@ -184,6 +185,7 @@
                       <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">{{ githubUnavailable() }}</span>
                     }
                   </div>
+                  }
 
                   <div class="projects-card-footer flex min-w-0 items-center gap-[0.7rem] border-t border-(--app-border-color) px-(--p-footer-px) py-(--p-footer-py)">
                     @if (project.githubUrl) {

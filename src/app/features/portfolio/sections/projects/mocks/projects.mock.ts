@@ -17,9 +17,9 @@ export const PROJECTS: readonly IProject[] = [
   {
     title: 'OmniInbox',
     description: 'projects.items.0.description',
-    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'Tailwind CSS', 'PrimeNG', 'GSAP', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
-    repo: 'LiriRaid/omni-inbox',
-    githubUrl: 'https://github.com/LiriRaid/omni-inbox',
+    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'Tailwind CSS', 'PrimeNG', 'GSAP', 'Vitest', 'Ruby on Rails', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
+    repo: null,
+    githubUrl: null,
     liveUrl: null,
     featured: true,
     screenshots: ['assets/img/projects/omniinbox-profile.svg', 'assets/img/projects/omniinbox-login.svg', 'assets/img/projects/omniinbox-inbox.svg'],

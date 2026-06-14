@@ -5,7 +5,7 @@ import { AbstractControl, ControlValueAccessor, FormsModule, NgControl, Reactive
 
 import { LucideIconName } from '@core/common/icons/lucide-icons';
 import { createControlValueAccessorProvider } from '@core/forms/control-value-accessor.provider';
-import { PortfolioIcon } from '..';
+import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 
 type PortfolioInputType = 'text' | 'email' | 'password' | 'number' | 'date' | 'tel' | 'url' | 'price';
 type PortfolioVariant = 'over' | 'in' | 'on';
@@ -36,6 +36,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly variant = input<PortfolioVariant>('on');
 
   readonly lucideIcon = input<LucideIconName | ''>('');
+  readonly iconSize = input<number>(16);
   readonly iconPosition = input<PortfolioIconPosition>('left');
   readonly iconClickable = input<boolean>(false);
 
@@ -50,6 +51,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly valueChange = output<string>();
   readonly tagsChange = output<string[]>();
   readonly iconClick = output<Event>();
+  readonly keyup = output<KeyboardEvent>();
 
   readonly isDisabled = signal(false);
   readonly tags = signal<string[]>([]);

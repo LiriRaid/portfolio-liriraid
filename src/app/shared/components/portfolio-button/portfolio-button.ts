@@ -9,6 +9,7 @@ import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 type ButtonVariant = 'outlined' | 'text' | undefined;
 type ButtonType = 'button' | 'submit' | 'reset';
 type IconPosition = 'left' | 'right' | 'top' | 'bottom';
+type ButtonSize = 'small' | 'medium' | 'high';
 
 type ButtonClassParts = {
   button: string;
@@ -33,6 +34,7 @@ export class PortfolioButton {
 
   readonly iconSize = input<string | number>('16');
   readonly iconPos = input<IconPosition>('left');
+  readonly size = input<ButtonSize>('high');
 
   readonly severity = input<ButtonSeverity | undefined>(undefined);
   readonly outlined = input(false, { transform: booleanAttribute });
@@ -76,7 +78,11 @@ export class PortfolioButton {
     };
   });
 
-  readonly buttonClass = computed(() => this.classParts().button);
+  readonly isIconOnly = computed(() => this.hasIcon() && !this.label() && !this.hasBadge());
+
+  readonly buttonClass = computed(() =>
+    this.joinClasses(this.classParts().button, `portfolio-btn-${this.size()}`, this.isIconOnly() ? 'portfolio-btn-icon' : ''),
+  );
 
   readonly hostClass = computed(() => {
     const widthTokens = this.toClassList(this.styleClass()).filter((token) => this.isWidthClass(token));

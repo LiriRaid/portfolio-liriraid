@@ -225,8 +225,8 @@ export class Projects {
     return PROJECT_TECH_FALLBACK_ICONS[technology] ?? 'Code';
   }
 
-  protected isRepositoryLoading(repo: string): boolean {
-    return this.projectsService.isLoading().has(repo);
+  protected isRepositoryLoading(repo: string | null): boolean {
+    return !!repo && this.projectsService.isLoading().has(repo);
   }
 
   protected translateCategoryLabel(label: string): string {
@@ -410,7 +410,7 @@ export class Projects {
     const entries = await Promise.all(
       this.projects().map(async (project) => ({
         repo: project.repo,
-        stats: await this.projectsService.getRepositoryStats(project.repo),
+        stats: project.repo ? await this.projectsService.getRepositoryStats(project.repo) : null,
       })),
     );
 

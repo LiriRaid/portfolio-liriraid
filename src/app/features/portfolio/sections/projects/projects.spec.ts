@@ -85,4 +85,17 @@ describe('Projects', () => {
 
     expect(component.techFallbackIcon('SomeUnmappedTech')).toBe('Code');
   });
+
+  it('OmniInbox project includes Ruby on Rails in its tags before architecture tags', () => {
+    const fixture = TestBed.createComponent(Projects);
+    const component = fixture.componentInstance as any;
+
+    const omniinbox = component.projects().find((p: { title: string }) => p.title === 'OmniInbox');
+    expect(omniinbox).toBeDefined();
+    expect(omniinbox.tags).toContain('Ruby on Rails');
+
+    const railsIdx = omniinbox.tags.indexOf('Ruby on Rails');
+    const screamingIdx = omniinbox.tags.indexOf('Screaming Architecture');
+    expect(railsIdx).toBeLessThan(screamingIdx);
+  });
 });

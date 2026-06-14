@@ -83,4 +83,98 @@ describe('Header', () => {
     animationService.enabled.set(false);
     expect(component.backgroundAnimationButtonClass()).not.toContain('background-animation-btn--active');
   });
+
+  it('waitAndScrollToSection scrolls immediately when the target element exists', () => {
+    const section = document.createElement('section');
+    section.id = 'projects';
+    document.body.appendChild(section);
+
+    const scrollRoot = document.createElement('div');
+    scrollRoot.className = 'layout-scroll-root';
+    const scrollToSpy = vi.fn();
+    scrollRoot.scrollTo = scrollToSpy as any;
+    document.body.appendChild(scrollRoot);
+
+    const fixture = TestBed.createComponent(Header);
+    (fixture.componentInstance as any).waitAndScrollToSection('projects', 0);
+
+    expect(scrollToSpy).toHaveBeenCalled();
+
+    document.body.removeChild(section);
+    document.body.removeChild(scrollRoot);
+  });
+
+  it('waitAndScrollToSection schedules a retry when the element is absent', () => {
+    vi.useFakeTimers();
+
+    const fixture = TestBed.createComponent(Header);
+    const component = fixture.componentInstance as any;
+
+    component.waitAndScrollToSection('projects', 0);
+
+    expect(component.initialScrollTimer).not.toBeNull();
+
+    vi.useRealTimers();
+  });
+
+  it('waitAndScrollToSection stops retrying after 30 attempts', () => {
+    vi.useFakeTimers();
+
+    const fixture = TestBed.createComponent(Header);
+    const component = fixture.componentInstance as any;
+
+    component.waitAndScrollToSection('projects', 30);
+
+    expect(component.initialScrollTimer).toBeNull();
+
+    vi.useRealTimers();
+  });
+
+  it('syncTargetSection unlocks when scrollTop matches the target offsetTop within 5px', () => {
+    const section = document.createElement('section');
+    section.id = 'contact';
+    Object.defineProperty(section, 'offsetTop', { value: 500 });
+    document.body.appendChild(section);
+
+    const scrollRoot = document.createElement('div');
+    scrollRoot.className = 'layout-scroll-root';
+    Object.defineProperty(scrollRoot, 'scrollTop', { value: 502 });
+    document.body.appendChild(scrollRoot);
+
+    const fixture = TestBed.createComponent(Header);
+    const component = fixture.componentInstance as any;
+    component.targetSection = 'contact';
+    component.activeSection.set('home');
+
+    component.syncTargetSection();
+
+    expect(component.targetSection).toBeNull();
+    expect(component.activeSection()).toBe('contact');
+
+    document.body.removeChild(section);
+    document.body.removeChild(scrollRoot);
+  });
+
+  it('syncTargetSection does not unlock when scroll position is far from target', () => {
+    const section = document.createElement('section');
+    section.id = 'contact';
+    Object.defineProperty(section, 'offsetTop', { value: 500 });
+    document.body.appendChild(section);
+
+    const scrollRoot = document.createElement('div');
+    scrollRoot.className = 'layout-scroll-root';
+    Object.defineProperty(scrollRoot, 'scrollTop', { value: 100 });
+    document.body.appendChild(scrollRoot);
+
+    const fixture = TestBed.createComponent(Header);
+    const component = fixture.componentInstance as any;
+    component.targetSection = 'contact';
+
+    component.syncTargetSection();
+
+    expect(component.targetSection).toBe('contact');
+
+    document.body.removeChild(section);
+    document.body.removeChild(scrollRoot);
+  });
 });

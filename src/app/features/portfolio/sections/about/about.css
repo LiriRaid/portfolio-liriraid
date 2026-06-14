@@ -2,12 +2,12 @@
   --a-py: clamp(1.95rem, 0.1503rem + 7.5776vw, 5rem);
   --a-px: clamp(0.74rem, 0.2916rem + 1.8882vw, 1.5rem);
 
-  --a-layout-gap: clamp(1.1rem, -0.6112rem + 7.205vw, 4rem);
-  --a-content-max: clamp(32rem, 22.854rem + 38.5093vw, 47.5rem);
-  --a-content-gap: clamp(0.82rem, 0.4188rem + 1.6894vw, 1.5rem);
+  --a-layout-gap: clamp(1.1rem, -0.6112rem + 7.205vw, 6rem);
+  --a-content-max: clamp(32rem, 22.854rem + 38.5093vw, 54rem);
+  --a-content-gap: clamp(0.82rem, 0.4188rem + 1.6894vw, 3rem);
 
   --a-header-gap: clamp(0.35rem, 0.2615rem + 0.3727vw, 0.5rem);
-  --a-body-gap: clamp(0.62rem, 0.3958rem + 0.9441vw, 1rem);
+  --a-body-gap: clamp(0.62rem, 0.3958rem + 0.9441vw, 1.5rem);
 
   --a-label-size: clamp(0.64rem, 0.5013rem + 0.5839vw, 0.875rem);
 
@@ -17,10 +17,10 @@
   --font-size-body-1: clamp(0.7rem, 0.4492rem + 1.0559vw, 1.125rem);
   --line-height-body-1: 1.5;
 
-  --a-stats-width: clamp(17.5rem, 15.7298rem + 7.4534vw, 20.5rem);
-  --a-stats-gap: clamp(0.52rem, 0.2368rem + 1.1925vw, 1rem);
+  --a-stats-width: clamp(17.5rem, 15.7298rem + 7.4534vw, 25rem);
+  --a-stats-gap: clamp(0.52rem, 0.2368rem + 1.1925vw, 1.5rem);
 
-  --a-stat-p: clamp(0.82rem, 0.6356rem + 0.5797vw, 1.125rem);
+  --a-stat-p: clamp(0.82rem, 0.6356rem + 0.5797vw, 2rem);
   --a-stat-gap: clamp(0.18rem, 0.1387rem + 0.1739vw, 0.25rem);
   --a-stat-content-gap: clamp(0.58rem, 0.3322rem + 1.0435vw, 1rem);
   --a-stat-radius: clamp(0.7rem, 0.523rem + 0.7453vw, 1rem);
@@ -32,6 +32,7 @@
 
   --a-stat-icon-size: clamp(1.55rem, 1.196rem + 1.4907vw, 2.125rem);
   --a-stat-icon-radius: clamp(0.5rem, 0.382rem + 0.4969vw, 0.7rem);
+  --a-stat-icon-svg: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
 
   --a-btn-min-h: clamp(2rem, 1.941rem + 0.2484vw, 2.1rem);
   --a-btn-py: clamp(0.4rem, 0.3882rem + 0.0497vw, 0.42rem);
@@ -89,7 +90,7 @@ portfolio-github-stats {
 
 .stat-icon {
   background-color: color-mix(in srgb, var(--app-text-primary) 14%, var(--app-panel-bg));
-  color: var(--app-text-primary);
+  color: var(--app-skill-icon-color, var(--app-text-primary));
   line-height: 0;
 }
 
@@ -153,11 +154,6 @@ portfolio-github-stats {
     line-height: 1.1;
   }
 
-  :host ::ng-deep .about-cta .p-button-icon,
-  :host ::ng-deep .about-cta portfolio-icon {
-    width: var(--a-btn-icon);
-    height: var(--a-btn-icon);
-  }
 }
 
 @media (max-width: 480px) {

@@ -58,6 +58,7 @@ export class Header {
 
   private scrollAnimationFrameId: number | null = null;
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
+  private initialScrollTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
 
   private readonly sectionIds = PORTFOLIO_SECTION_IDS;
@@ -183,6 +184,8 @@ export class Header {
       return;
     }
 
+    history.scrollRestoration = 'manual';
+
     const initialHash = this.syncInitialHash();
 
     if (initialHash !== 'home' && scrollRoot.scrollTop > 1) {
@@ -239,6 +242,7 @@ export class Header {
 
       this.cancelActiveSectionFrame();
       this.clearScrollUnlockTimer();
+      this.clearInitialScrollTimer();
       this.headerService.destroy();
     });
   }
@@ -297,11 +301,35 @@ export class Header {
 
     this.activeSection.set(hash);
 
-    requestAnimationFrame(() => {
-      scrollToPortfolioSection(hash, 'auto');
-    });
+    if (hash !== 'home') {
+      this.waitAndScrollToSection(hash, 0);
+    }
 
     return hash;
+  }
+
+  private waitAndScrollToSection(sectionId: PortfolioSectionId, attempt: number): void {
+    if (document.getElementById(sectionId)) {
+      scrollToPortfolioSection(sectionId, 'auto');
+      return;
+    }
+
+    if (attempt >= 30) {
+      return;
+    }
+
+    this.initialScrollTimer = setTimeout(() => {
+      this.waitAndScrollToSection(sectionId, attempt + 1);
+    }, 100);
+  }
+
+  private clearInitialScrollTimer(): void {
+    if (this.initialScrollTimer === null) {
+      return;
+    }
+
+    clearTimeout(this.initialScrollTimer);
+    this.initialScrollTimer = null;
   }
 
   private getLinkClass(baseClass: string, activeClass: string, sectionId: PortfolioSectionId): string {
@@ -370,12 +398,8 @@ export class Header {
       return;
     }
 
-    const scrollRootRect = scrollRoot.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
-
-    const targetVisualTop = targetRect.top - scrollRootRect.top;
-    const expectedTop = this.targetSection === 'home' ? this.getHeaderHeight() : 0;
-    const reachedTarget = Math.abs(targetVisualTop - expectedTop) <= 2 || targetVisualTop <= expectedTop;
+    const targetScrollTop = this.targetSection === 'home' ? 0 : Math.max(0, Math.round(target.offsetTop));
+    const reachedTarget = Math.abs(scrollRoot.scrollTop - targetScrollTop) <= 5;
 
     if (!reachedTarget) {
       return;

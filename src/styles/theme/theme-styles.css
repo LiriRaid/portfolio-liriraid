@@ -52,6 +52,8 @@
   --app-badge-soft-text: var(--p-primary-800);
   --app-action-icon-color: var(--app-text-subtle);
   --app-disabled-text: var(--p-surface-700);
+
+  --app-skill-icon-color: var(--app-text-primary);
 }
 
 .dark {
@@ -71,7 +73,6 @@
   --app-control-surface-bg: var(--app-panel-bg);
   --app-control-surface-border: color-mix(in srgb, var(--app-border-color) 75%, rgba(255, 255, 255, 0.2));
   --app-control-surface-text: var(--app-text-color);
-  --app-control-focus-ring: color-mix(in srgb, var(--p-primary-600) 60%, transparent);
   --app-control-disabled-bg: color-mix(in srgb, var(--app-panel-muted-bg) 80%, black);
   --app-control-disabled-border: var(--app-border-color);
   --app-control-disabled-text: var(--p-surface-400);
@@ -80,34 +81,23 @@
   --app-search-input-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));
   --app-search-input-text: var(--p-surface-0);
   --app-search-input-prefix: var(--app-text-muted);
-  --app-search-button-bg: var(--p-surface-0);
   --app-search-button-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));
-  --app-search-button-text: var(--p-surface-900);
-  --app-search-button-hover-bg: var(--p-primary-600);
-  --app-search-button-hover-text: var(--p-surface-0);
   --app-search-button-active-bg: var(--app-panel-muted-bg);
-  --app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);
 
-  --app-primary-button-bg: var(--p-primary-700);
-  --app-primary-button-disabled-text: var(--p-surface-0);
+  --app-textarea-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));
 
   --app-outline-button-bg: var(--app-panel-bg);
   --app-outline-button-border: var(--app-border-color);
   --app-outline-button-text: var(--app-text-color);
-  --app-outline-button-hover-bg: var(--p-primary-600);
-  --app-outline-button-hover-text: var(--p-surface-0);
   --app-outline-button-disabled-bg: rgba(255, 255, 255, 0.12);
   --app-outline-button-disabled-text: var(--app-text-color);
 
-  --app-textarea-bg: var(--app-panel-bg);
-  --app-textarea-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));
-  --app-textarea-focus-outline: solid 3px rgba(251, 0, 33, 0.3);
-
   --app-accent-soft-bg: color-mix(in srgb, var(--p-primary-500) 16%, transparent);
-  --app-badge-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, var(--app-panel-bg));
   --app-badge-soft-text: var(--p-primary-500);
   --app-action-icon-color: var(--p-surface-0);
   --app-disabled-text: var(--p-surface-400);
+
+  --app-skill-icon-color: white;
 }
 
 .dark[data-primary-color='black'] {

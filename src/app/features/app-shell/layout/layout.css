@@ -15,6 +15,12 @@
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.layout-scroll-root::-webkit-scrollbar {
+  display: none;
 }
 
 .main-content {
