@@ -41,7 +41,7 @@
   --p-selected-tags-gap: 0.55rem;
 
   --p-card-width: min(88vw, clamp(15.75rem, 8rem + 32.9vw, 29rem));
-  --p-card-height: clamp(21rem, 15.5rem + 32vw, 39.25rem);
+  --p-card-height: clamp(21rem, 15.5rem + 32.5vw, 40.5rem);
   --p-card-radius: clamp(0.85rem, 0.79rem + 0.25vw, 0.95rem);
   --p-card-body-p: clamp(0.38rem, 0.2rem + 0.8vw, 0.96rem);
   --p-card-body-gap: clamp(0.12rem, 0.08rem + 0.4vw, 0.58rem);
@@ -49,15 +49,7 @@
   --p-card-desc-size: clamp(0.5rem, 0.35rem + 0.7vw, 0.875rem);
   --p-card-tags-gap: clamp(0.12rem, 0.05rem + 0.4vw, 0.4rem);
 
-  --p-chip-gap: clamp(0.17rem, 0.03rem + 0.57vw, 0.4rem);
   --p-chip-min-h: clamp(1.1rem, 0.76rem + 1.44vw, 1.68rem);
-
-  /* Desktop: 4px vertical / 10px horizontal. Mobile baja con clamp. */
-  --p-chip-py: clamp(0.09rem, 0.0359rem + 0.2278vw, 0.25rem);
-  --p-chip-px: clamp(0.28rem, 0.1634rem + 0.491vw, 0.625rem);
-
-  --p-chip-size: clamp(0.48rem, 0.34rem + 0.58vw, 0.75rem);
-  --p-chip-icon: clamp(8.3px, 5.23px + 0.81vw, 14px);
 
   --p-featured-right: clamp(2.44rem, 1.96rem + 2.01vw, 3.25rem);
   --p-featured-py: clamp(0.13rem, 0.07rem + 0.25vw, 0.23rem);

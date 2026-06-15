@@ -39,13 +39,6 @@
 
   --h-stack-max: none;
   --h-stack-gap: 0.5rem;
-
-  --h-tech-gap: 0.375rem;
-  --h-tech-py: 0.375rem;
-  --h-tech-px: 0.75rem;
-  --h-tech-size: 0.875rem;
-  --h-tech-icon: 1rem;
-  --h-tech-hover-border: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
 }
 
 .hero-badge {
@@ -116,10 +109,6 @@
     --h-ctas-gap: clamp(0.45rem, 0.2727rem + 0.7453vw, 0.75rem);
     --h-stack-gap: clamp(0.3rem, 0.2115rem + 0.3727vw, 0.45rem);
 
-    --h-tech-py: clamp(0.23rem, 0.1592rem + 0.2981vw, 0.375rem);
-    --h-tech-px: clamp(0.52rem, 0.3843rem + 0.5714vw, 0.75rem);
-    --h-tech-size: clamp(0.61rem, 0.4536rem + 0.6584vw, 0.875rem);
-    --h-tech-icon: clamp(10px, 6.46px + 0.9317vw, 16px);
   }
 }
 
@@ -160,8 +149,6 @@
 
     --h-stack-max: min(clamp(19rem, 14.6154rem + 18.4615vw, 22rem), calc(100vw - 1rem));
     --h-stack-gap: clamp(0.4rem, 0.3123rem + 0.3692vw, 0.46rem);
-
-    --h-tech-gap: 0.45rem;
   }
 
   :host ::ng-deep .hero-ctas :is(portfolio-button, .p-button) {

@@ -32,11 +32,6 @@
 
   --s-list-gap: clamp(0.37rem, 0.2195rem + 0.6335vw, 0.625rem);
 
-  --s-badge-gap: 0.45rem;
-  --s-badge-py: clamp(0.23rem, 0.1592rem + 0.2981vw, 0.375rem);
-  --s-badge-px: clamp(0.52rem, 0.3843rem + 0.5714vw, 0.75rem);
-  --s-badge-icon: clamp(10px, 6.46px + 0.9317vw, 16px);
-
   --s-cat-icon: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
 
   box-sizing: border-box;
@@ -79,14 +74,7 @@
 }
 
 .skill-badge {
-  border-color: var(--app-border-color);
-  background-color: var(--app-panel-muted-bg);
   color: var(--app-text-muted);
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background-color 0.2s,
-    transform 0.2s;
 }
 
 .skill-badge :is(span, portfolio-icon) {
@@ -94,21 +82,14 @@
 }
 
 .skill-badge-icon {
-  width: var(--s-badge-icon);
-  height: var(--s-badge-icon);
+  width: var(--chip-icon);
+  height: var(--chip-icon);
 }
 
 @media (hover: hover) {
   .skill-category:hover {
     border-color: color-mix(in srgb, var(--app-text-primary) 30%, var(--app-border-color));
     box-shadow: var(--shadow-extra-large);
-  }
-
-  .skill-badge:hover {
-    transform: translateY(-1px);
-    color: var(--app-text-primary);
-    border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
-    background-color: var(--app-accent-soft-bg);
   }
 }
 
@@ -148,7 +129,5 @@
     --s-icon-radius: clamp(0.42rem, 0.32rem + 0.5vw, 0.58rem);
 
     --s-list-gap: clamp(0.32rem, 0.22rem + 0.5vw, 0.48rem);
-    --s-badge-py: clamp(0.18rem, 0.14rem + 0.2vw, 0.26rem);
-    --s-badge-px: clamp(0.42rem, 0.32rem + 0.5vw, 0.6rem);
   }
 }

@@ -71,9 +71,9 @@
 
                   <div class="flex min-w-0 flex-wrap gap-(--p-filter-options-gap)">
                     @for (tech of category.technologies; track tech) {
-                      <button type="button" class="projects-filter-option inline-flex min-h-(--p-chip-min-h) items-center justify-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) px-[0.62rem] py-[0.4rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
+                      <button type="button" class="projects-filter-option inline-flex min-h-(--p-chip-min-h) items-center justify-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) px-[0.62rem] py-[0.4rem] text-(length:--chip-compact-size) font-semibold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200" [class.projects-filter-option--active]="isTechnologySelected(tech)" (click)="toggleTechnology(tech)">
                         @if (techIconUrl(tech); as iconUrl) {
-                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
+                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--chip-compact-icon) w-(--chip-compact-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
                         }
@@ -99,9 +99,9 @@
     @if (hasSelectedTechnologies()) {
       <div class="projects-selected-tags flex min-w-0 flex-wrap gap-(--p-selected-tags-gap)" [attr.aria-label]="selectedTagsAria()">
         @for (tech of selectedTechnologies(); track tech) {
-          <span class="projects-selected-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) py-(--p-chip-py) pr-[0.45rem] pl-[0.58rem] text-(length:--p-chip-size) font-bold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200">
+          <span class="projects-selected-tag inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-bg) py-(--chip-compact-py) pr-[0.45rem] pl-[0.58rem] text-(length:--chip-compact-size) font-bold text-(--app-text-color) transition-[border-color,background-color,transform] duration-200">
             @if (techIconUrl(tech); as iconUrl) {
-              <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
+              <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--chip-compact-icon) w-(--chip-compact-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
             } @else {
               <portfolio-icon [name]="techFallbackIcon(tech)" size="14" />
             }
@@ -141,9 +141,9 @@
 
                   <div class="projects-tags flex min-w-0 flex-wrap gap-(--p-card-tags-gap)" [attr.aria-label]="cardTagsAria()">
                     @for (tag of project.tags; track tag) {
-                      <span class="projects-tag inline-flex min-h-(--p-chip-min-h) cursor-default items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                      <span class="projects-tag chip inline-flex min-h-(--p-chip-min-h) cursor-default items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">
                         @if (techIconUrl(tag); as iconUrl) {
-                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
+                          <img [src]="iconUrl" alt="" aria-hidden="true" class="h-(--chip-compact-icon) w-(--chip-compact-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
                         } @else {
                           <portfolio-icon [name]="techFallbackIcon(tag)" size="14" />
                         }
@@ -158,40 +158,40 @@
                   @if (project.repo) {
                   <div class="flex min-w-0 flex-wrap gap-(--p-card-tags-gap) overflow-visible px-(--p-stats-px) py-(--p-stats-py)" [attr.aria-label]="statsAria()">
                     @if (project.githubStats) {
-                      <span class="projects-stat projects-stat--stars inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                      <span class="projects-stat projects-stat--stars chip inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">
                         <portfolio-icon name="Star" size="14" />
                         <span>{{ project.githubStats.stars }}</span>
                       </span>
 
-                      <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                      <span class="projects-stat chip inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">
                         <portfolio-icon name="GitFork" size="14" />
                         <span>{{ forkLabel() }} {{ project.githubStats.forks }}</span>
                       </span>
 
-                      <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                      <span class="projects-stat chip inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">
                         <portfolio-icon name="Globe" size="14" />
                         <span class="github-label">{{ formatVisibility(project.githubStats.visibility) }}</span>
                       </span>
 
                       @if (project.githubStats.license && project.githubStats.license !== 'NOASSERTION') {
-                        <span class="projects-stat inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">
+                        <span class="projects-stat chip inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">
                           <portfolio-icon name="License" size="14" />
                           <span>{{ formatLicense(project.githubStats.license) }}</span>
                         </span>
                       }
                     } @else if (isRepositoryLoading(project.repo)) {
-                      <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">{{ githubLoading() }}</span>
+                      <span class="projects-stat projects-stat--loading chip inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">{{ githubLoading() }}</span>
                     } @else {
-                      <span class="projects-stat projects-stat--loading inline-flex min-h-(--p-chip-min-h) items-center gap-(--p-chip-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--p-chip-px) py-(--p-chip-py) text-(length:--p-chip-size) font-semibold text-(--app-text-color) transition-colors duration-200">{{ githubUnavailable() }}</span>
+                      <span class="projects-stat projects-stat--loading chip inline-flex min-h-(--p-chip-min-h) items-center gap-(--chip-compact-gap) whitespace-nowrap rounded-full border px-(--chip-compact-px) py-(--chip-compact-py) text-(length:--chip-compact-size) font-semibold text-(--app-text-color)">{{ githubUnavailable() }}</span>
                     }
                   </div>
                   }
 
                   <div class="projects-card-footer flex min-w-0 items-center gap-[0.7rem] border-t border-(--app-border-color) px-(--p-footer-px) py-(--p-footer-py)">
                     @if (project.githubUrl) {
-                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="viewGithubPrefix() + ' ' + project.title + ' ' + viewGithubSuffix()">
+                      <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--chip-compact-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--chip-compact-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="viewGithubPrefix() + ' ' + project.title + ' ' + viewGithubSuffix()">
                         @if (techIconUrl('GitHub'); as iconUrl) {
-                          <img [src]="iconUrl" alt="" aria-hidden="true" width="14" height="14" loading="lazy" decoding="async" class="h-(--p-chip-icon) w-(--p-chip-icon) shrink-0 rounded-[3px] object-contain" />
+                          <img [src]="iconUrl" alt="" aria-hidden="true" width="14" height="14" loading="lazy" decoding="async" class="h-(--chip-compact-icon) w-(--chip-compact-icon) shrink-0 rounded-[3px] object-contain" />
                         } @else {
                           <portfolio-icon name="Github" size="14" />
                         }
@@ -201,14 +201,14 @@
                     }
 
                     @if (project.liveUrl) {
-                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--p-chip-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--p-chip-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="viewDemoPrefix() + ' ' + project.title">
+                      <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="projects-link inline-flex items-center gap-(--chip-compact-gap) rounded-md px-[0.45rem] py-[0.22rem] text-(length:--chip-compact-size) font-semibold text-(--app-text-color) no-underline transition-colors duration-200 hover:bg-(--app-panel-muted-bg) hover:text-(--app-text-primary)" [attr.aria-label]="viewDemoPrefix() + ' ' + project.title">
                         <portfolio-icon name="ExternalLink" size="14" />
                         <span>{{ demoLabel() }}</span>
                       </a>
                     }
 
                     @if (!project.githubUrl && !project.liveUrl) {
-                      <span class="projects-private inline-flex items-center gap-(--p-chip-gap) text-(length:--p-chip-size) font-semibold text-(--app-text-subtle)">
+                      <span class="projects-private inline-flex items-center gap-(--chip-compact-gap) text-(length:--chip-compact-size) font-semibold text-(--app-text-subtle)">
                         <portfolio-icon name="Lock" size="14" />
                         {{ privateProjectLabel() }}
                       </span>

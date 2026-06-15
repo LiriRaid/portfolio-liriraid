@@ -67,9 +67,9 @@
 
             <div class="experience-tags flex flex-wrap items-center gap-(--e-tags-gap)" [attr.aria-label]="technologiesAriaLabel()">
               @for (tech of item.technologies; track tech) {
-                <span class="inline-flex items-center gap-(--e-tag-gap) whitespace-nowrap rounded-full border border-(--app-border-color) bg-(--app-panel-muted-bg) px-(--e-tag-px) py-(--e-tag-py) font-medium leading-none text-(--app-text-muted) text-(length:--e-tag) transition-[color,border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--app-text-primary)_35%,transparent)] hover:bg-(--app-accent-soft-bg) hover:text-(--app-text-primary)">
+                <span class="chip inline-flex items-center gap-(--chip-gap) whitespace-nowrap rounded-full border px-(--chip-px) py-(--chip-py) font-medium leading-none text-(--app-text-muted) text-(length:--chip-size)">
                   @if (techIconUrl(tech); as iconUrl) {
-                    <img [src]="iconUrl" alt="" aria-hidden="true" class="size-(--e-tag-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
+                    <img [src]="iconUrl" alt="" aria-hidden="true" class="size-(--chip-icon) shrink-0 rounded-[3px] object-contain" width="14" height="14" loading="lazy" decoding="async" />
                   }
 
                   <span>{{ tech }}</span>

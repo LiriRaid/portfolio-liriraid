@@ -29,7 +29,7 @@
 
           <ul class="m-0 flex list-none flex-wrap gap-(--s-list-gap) p-0" role="list" [attr.aria-label]="categoryAriaPrefix() + ' ' + category.label">
             @for (skill of category.skills; track skill) {
-              <li class="skill-badge inline-flex items-center gap-(--s-badge-gap) whitespace-nowrap rounded-full border px-(--s-badge-px) py-(--s-badge-py) text-caption-1-medium">
+              <li class="skill-badge chip inline-flex items-center gap-(--chip-gap) whitespace-nowrap rounded-full border px-(--chip-px) py-(--chip-py) text-caption-1-medium">
                 @if (techIconUrl(skill); as iconUrl) {
                   <img [src]="iconUrl" alt="" aria-hidden="true" class="skill-badge-icon shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" decoding="async" />
                 } @else {

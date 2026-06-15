@@ -76,3 +76,18 @@ button:disabled {
     --app-section-container-px: clamp(0.5rem, 0.2808rem + 0.9231vw, 0.65rem);
   }
 }
+
+.chip {
+  border-color: var(--app-border-color);
+  background-color: var(--app-panel-muted-bg);
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s, transform 0.2s;
+}
+
+@media (hover: hover) {
+  .chip:hover {
+    transform: translateY(-1px);
+    color: var(--app-chip-hover-text);
+    border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
+    background-color: var(--app-accent-soft-bg);
+  }
+}

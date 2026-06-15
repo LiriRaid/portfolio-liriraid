@@ -31,16 +31,16 @@ export const PROJECTS: readonly IProject[] = [
     repo: 'LiriRaid/agentflow-ai',
     githubUrl: 'https://github.com/LiriRaid/agentflow-ai',
     liveUrl: null,
-    screenshots: ['assets/img/projects/agentflow-tui.svg', 'assets/img/projects/agentflow-orchestrator.svg'],
+    screenshots: ['assets/img/projects/agentflow-orchestrator.webp', 'assets/img/projects/agentflow-tui.webp'],
   },
   {
     title: 'Portfolio Liriraid',
     description: 'projects.items.2.description',
-    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'SSR', 'Prerender', 'PrimeNG', 'Tailwind CSS', 'CSS', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
+    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'SSR + Hydration', 'Prerender', 'PrimeNG', 'Tailwind CSS', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
     repo: 'LiriRaid/portfolio-liriraid',
     githubUrl: 'https://github.com/LiriRaid/portfolio-liriraid',
     liveUrl: null,
-    screenshots: ['assets/img/projects/portfolio-hero.svg', 'assets/img/projects/portfolio-projects.svg'],
+    screenshots: ['assets/img/projects/portfolio-hero.webp'],
   },
 ];
 
@@ -68,7 +68,7 @@ export const PROJECT_TECHNOLOGY_CATEGORIES: readonly IProjectTechnologyCategory[
   {
     label: 'projects.tech.categories.architecture',
     icon: 'Layers',
-    technologies: ['Screaming Architecture', 'Feature-first', 'Clean Architecture', 'Prerender', 'SSR', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
+    technologies: ['Screaming Architecture', 'Feature-first', 'Clean Architecture', 'Prerender', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
   },
   {
     label: 'projects.tech.categories.ai',
@@ -81,7 +81,7 @@ export const PROJECT_TECH_FALLBACK_ICONS: Readonly<Record<string, string>> = {
   'Clean Architecture': 'Layers',
   'Screaming Architecture': 'Folder',
   'Feature-first': 'Folder',
-  SSR: 'Server',
+  'SSR + Hydration': 'Server',
   Prerender: 'Globe',
   'Lazy Loading': 'Download',
   'DRY / SOLID': 'ShieldCheck',

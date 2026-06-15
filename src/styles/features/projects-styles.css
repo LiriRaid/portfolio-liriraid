@@ -56,14 +56,14 @@
 
 .projects :is(.projects-tag, .projects-stat, .projects-filter-option, .projects-link, .projects-private) portfolio-icon,
 .projects :is(.projects-tag, .projects-stat, .projects-filter-option, .projects-link, .projects-private) portfolio-icon :is(svg, .lucide) {
-  width: var(--p-chip-icon) !important;
-  height: var(--p-chip-icon) !important;
-  min-width: var(--p-chip-icon) !important;
-  min-height: var(--p-chip-icon) !important;
+  width: var(--chip-compact-icon) !important;
+  height: var(--chip-compact-icon) !important;
+  min-width: var(--chip-compact-icon) !important;
+  min-height: var(--chip-compact-icon) !important;
 }
 
 .projects :is(.projects-tag, .projects-stat, .projects-filter-option, .projects-link, .projects-private) portfolio-icon {
-  flex: 0 0 var(--p-chip-icon);
+  flex: 0 0 var(--chip-compact-icon);
   line-height: 0;
 }
 
@@ -186,13 +186,6 @@
   background-color: var(--app-accent-soft-bg);
 }
 
-.projects .projects-tag:hover,
-.projects .projects-stat:hover {
-  color: var(--app-text-primary);
-  border-color: color-mix(in srgb, var(--app-text-primary) 35%, transparent);
-  background-color: var(--app-accent-soft-bg);
-}
-
 .projects .projects-selected-tag-remove:hover {
   background-color: color-mix(in srgb, var(--app-text-primary) 14%, transparent);
 }
@@ -228,7 +221,7 @@
 }
 
 .projects .projects-stat:hover portfolio-icon {
-  color: var(--app-text-primary);
+  color: inherit;
 }
 
 .projects .projects-stat--loading {

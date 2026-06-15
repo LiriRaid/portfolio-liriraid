@@ -76,6 +76,10 @@ private readonly viewportBuffer = 120;
 
   private readonly layoutSections: LayoutSectionConfig[] = [
     {
+      sectionClass: 'hero',
+      selectors: ['.hero-ctas', '.hero-stack'],
+    },
+    {
       sectionClass: 'projects',
       selectors: ['.projects-toolbar', '.projects-selected-tags', '.projects-results'],
     },
@@ -178,7 +182,6 @@ initialize(): void {
 
     const layoutElements = this.collectLayoutElements(targets);
     const layoutRects = this.createRectMap(layoutElements);
-
     this.activeIconTargets = [...icons];
     this.activeLayoutTargets = [...layoutElements];
 

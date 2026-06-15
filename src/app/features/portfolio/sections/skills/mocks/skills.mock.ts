@@ -11,7 +11,7 @@ export const SKILL_CATEGORIES: readonly ISkillCategory[] = [
   {
     label: 'skills.categories.frontend',
     icon: 'Globe',
-    skills: ['Angular 21', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'RxJS', 'Signals'],
+    skills: ['Angular 21', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'RxJS', 'Signals', 'PrimeNG'],
   },
   {
     label: 'skills.categories.backend',
@@ -31,7 +31,7 @@ export const SKILL_CATEGORIES: readonly ISkillCategory[] = [
   {
     label: 'skills.categories.architecture',
     icon: 'Layers',
-    skills: ['Clean Architecture', 'Screaming Architecture', 'DDD', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID'],
+    skills: ['Clean Architecture', 'Screaming Architecture', 'DDD', 'SSR + Hydration', 'Lazy Loading', 'DRY / SOLID', 'Feature-first', 'Prerender'],
   },
 ];
 
