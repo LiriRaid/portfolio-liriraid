@@ -2,21 +2,6 @@
   display: contents;
 }
 
-/* Solo tamaño/spacing del contenedor. No tocamos los colores de PrimeNG. */
-:host ::ng-deep .p-toast.portfolio-toast-panel {
-  width: min(var(--p-toast-width, 25rem), calc(100vw - 2rem));
-}
-
-:host ::ng-deep .p-toast.portfolio-toast-panel .p-toast-message {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Headless: quitamos padding interno para controlar solo el layout del contenido. */
-:host ::ng-deep .p-toast.portfolio-toast-panel .p-toast-message-content {
-  padding: 0;
-}
-
 /* =========================
    Content
 ========================= */
@@ -51,8 +36,7 @@
   line-height: 1;
 }
 
-.portfolio-toast-icon-wrap portfolio-icon,
-:host ::ng-deep .portfolio-toast-icon-wrap svg {
+.portfolio-toast-icon-wrap portfolio-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -95,40 +79,7 @@
   font-weight: 800;
 }
 
-/* =========================
-   Close button usando portfolio-button
-========================= */
-
-:host ::ng-deep .portfolio-toast-close-button.p-button {
-  width: 1.75rem;
-  min-width: 1.75rem;
-  height: 1.75rem;
-  min-height: 1.75rem;
-  padding: 0;
-  align-self: start;
-  border-radius: 9999px;
-  color: currentColor;
-  background: transparent;
-  border-color: transparent;
-  box-shadow: none;
-  opacity: 0.8;
-}
-
-:host ::ng-deep .portfolio-toast-close-button.p-button:not(:disabled):hover {
-  color: currentColor;
-  background: color-mix(in srgb, currentColor 12%, transparent);
-  border-color: transparent;
-  opacity: 1;
-}
-
-:host ::ng-deep .portfolio-toast-close-button.p-button .p-button-icon,
-:host ::ng-deep .portfolio-toast-close-button.p-button portfolio-icon,
-:host ::ng-deep .portfolio-toast-close-button.p-button svg {
-  width: 20px;
-  height: 20px;
-  margin: 0;
-  color: currentColor;
-}
+/* Close button — estilos en src/styles/components/toast-styles.css */
 
 /* =========================
    Actions
@@ -141,10 +92,7 @@
   padding: 0 1rem 1rem;
 }
 
-:host ::ng-deep .portfolio-toast-action-button.p-button {
-  min-height: 2rem;
-  border-radius: 0.5rem;
-}
+/* Action button — estilos en src/styles/components/toast-styles.css */
 
 /* =========================
    Progress
@@ -178,9 +126,7 @@
 ========================= */
 
 @media (max-width: 480px) {
-  :host ::ng-deep .p-toast.portfolio-toast-panel {
-    width: calc(100vw - 1.5rem);
-  }
+  /* .p-toast.portfolio-toast-panel width — en src/styles/components/toast-styles.css */
 
   .portfolio-toast-main {
     padding: 0.9rem;

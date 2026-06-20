@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, Injector, OnInit, computed, inject, input, output, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, Injector, OnInit, computed, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, ControlValueAccessor, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -14,9 +14,10 @@ type PortfolioIconPosition = 'left' | 'right';
 @Component({
   selector: 'portfolio-input',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PortfolioIcon],
+  imports: [NgClass, FormsModule, ReactiveFormsModule, PortfolioIcon],
   templateUrl: './portfolio-input.html',
   styleUrl: './portfolio-input.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [createControlValueAccessorProvider(PortfolioInput)],
 })
 export class PortfolioInput implements ControlValueAccessor, OnInit {

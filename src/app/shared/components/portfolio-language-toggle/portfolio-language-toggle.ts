@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, ChangeDetectorRef, Component, DoCheck, ElementRef, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { I18nService, type PortfolioLanguage } from '@core/i18n';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -11,6 +11,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
   templateUrl: './portfolio-language-toggle.html',
   styleUrl: './portfolio-language-toggle.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class PortfolioLanguageToggle implements DoCheck {
   private readonly i18nService = inject(I18nService);

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, DestroyRef, PLATFORM_ID, afterNextRender, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, afterNextRender, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { Header } from '../header/header';
@@ -15,6 +15,7 @@ import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection
   imports: [RouterOutlet, Header, Footer, PortfolioToast, PortfolioScrollProgress],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Layout {
   private readonly platformId = inject(PLATFORM_ID);

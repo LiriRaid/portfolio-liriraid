@@ -47,7 +47,7 @@
   background: var(--app-badge-soft-bg);
 }
 
-:host-context(.dark) .hero-badge {
+.dark .hero-badge {
   --h-badge-shadow: 0 0 0 1px color-mix(in srgb, #fff 8%, transparent) inset, 0 0 12px color-mix(in srgb, var(--app-text-primary) 26%, transparent), 0 0 28px color-mix(in srgb, var(--app-text-primary) 22%, transparent);
 
   color: #fff;
@@ -63,11 +63,11 @@
   flex-shrink: 0;
 }
 
-:host ::ng-deep .hero-ctas .p-button {
+portfolio-hero .hero-ctas .p-button {
   min-height: var(--h-btn-min-h);
 }
 
-:host ::ng-deep .hero-primary-cta.p-button {
+portfolio-hero .hero-primary-cta.p-button {
   --h-cta-bg: var(--p-primary-800);
 
   color: #fff !important;
@@ -75,15 +75,15 @@
   border-color: var(--h-cta-bg) !important;
 }
 
-:host ::ng-deep .hero-primary-cta.p-button:not(:disabled):hover {
+portfolio-hero .hero-primary-cta.p-button:not(:disabled):hover {
   --h-cta-bg: var(--p-primary-900);
 }
 
-:host ::ng-deep .hero-primary-cta.p-button:focus-visible {
+portfolio-hero .hero-primary-cta.p-button:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-800) 30%, transparent);
 }
 
-:host ::ng-deep .hero-primary-cta.p-button :is(.p-button-label, .p-button-icon, portfolio-icon, portfolio-icon *) {
+portfolio-hero .hero-primary-cta.p-button :is(.p-button-label, .p-button-icon, portfolio-icon, portfolio-icon *) {
   color: #fff !important;
 }
 
@@ -151,22 +151,22 @@
     --h-stack-gap: clamp(0.4rem, 0.3123rem + 0.3692vw, 0.46rem);
   }
 
-  :host ::ng-deep .hero-ctas :is(portfolio-button, .p-button) {
+  portfolio-hero .hero-ctas :is(portfolio-button, .p-button) {
     width: 100%;
   }
 
-  :host ::ng-deep .hero-ctas .p-button {
+  portfolio-hero .hero-ctas .p-button {
     justify-content: center;
     padding: var(--h-btn-py) var(--h-btn-px);
     font-size: var(--h-btn-size);
   }
 
-  :host ::ng-deep .hero-ctas .p-button-label {
+  portfolio-hero .hero-ctas .p-button-label {
     font-size: inherit;
     line-height: 1.1;
   }
 
-  :host ::ng-deep .hero-ctas :is(.p-button-icon, portfolio-icon) {
+  portfolio-hero .hero-ctas :is(.p-button-icon, portfolio-icon) {
     width: var(--h-btn-icon);
     height: var(--h-btn-icon);
   }
@@ -176,7 +176,7 @@
   color: #0366d6;
 }
 
-:host-context(.dark) :is(.code-keyword, .code-prop) {
+.dark :is(.code-keyword, .code-prop) {
   color: #4daafc;
 }
 
@@ -189,7 +189,7 @@
   color: #1a8754;
 }
 
-:host-context(.dark) .code-string {
+.dark .code-string {
   color: #35f39e;
 }
 
@@ -197,6 +197,6 @@
   color: #6a737d;
 }
 
-:host-context(.dark) .code-punct {
+.dark .code-punct {
   color: #d4d4d4;
 }

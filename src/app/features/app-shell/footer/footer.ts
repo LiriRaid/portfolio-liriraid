@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, computed, inject } from '@angular/core';
 
 import { I18nService } from '@core/i18n';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
@@ -10,6 +10,7 @@ import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-b
   templateUrl: './footer.html',
   styleUrl: './footer.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class Footer {
   private readonly i18nService = inject(I18nService);

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, afterNextRender, computed, inject } from '@angular/core';
 import { type ButtonSeverity } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -14,7 +13,7 @@ type PrimeToastCloseFn = (event: Event) => void;
 @Component({
   selector: 'portfolio-toast',
   standalone: true,
-  imports: [CommonModule, ToastModule, PortfolioIcon, PortfolioButton],
+  imports: [ToastModule, PortfolioIcon, PortfolioButton],
   templateUrl: './portfolio-toast.html',
   styleUrl: './portfolio-toast.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,4 @@
-:host {
+portfolio-header {
   --header-height: var(--app-header-height);
   --header-inner-px: 1.5rem;
   --header-inner-gap: 2rem;
@@ -34,7 +34,7 @@
   background-color: color-mix(in srgb, var(--app-panel-bg) 70%, transparent);
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button {
+portfolio-header :is(.nav-link, .mobile-nav-link, .icon-btn).p-button {
   border: 0;
   background-color: transparent;
   box-shadow: none;
@@ -44,7 +44,7 @@
     background-color 0.2s ease;
 }
 
-:host ::ng-deep .nav-link.p-button {
+portfolio-header .nav-link.p-button {
   height: var(--header-action-size);
   min-height: var(--header-action-size);
   max-height: var(--header-action-size);
@@ -53,7 +53,7 @@
   white-space: nowrap;
 }
 
-:host ::ng-deep .mobile-nav-link.p-button {
+portfolio-header .mobile-nav-link.p-button {
   width: 100%;
   min-height: 2.45rem;
   justify-content: flex-start;
@@ -61,22 +61,22 @@
   border-radius: 0.75rem;
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button .p-button-label {
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button .p-button-label {
   color: var(--app-text-muted);
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
-:host ::ng-deep .nav-link.p-button .p-button-label {
+portfolio-header .nav-link.p-button .p-button-label {
   font-size: var(--font-size-caption-1);
   line-height: 1;
 }
 
-:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
+portfolio-header .mobile-nav-link.p-button .p-button-label {
   font-size: var(--mobile-nav-size);
 }
 
-:host ::ng-deep .icon-btn.p-button {
+portfolio-header .icon-btn.p-button {
   width: var(--header-action-size);
   min-width: var(--header-action-size);
   max-width: var(--header-action-size);
@@ -92,33 +92,33 @@
   color: var(--app-text-muted);
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:hover,
-:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button,
-:host ::ng-deep .icon-btn.p-button:hover,
-:host-context(.portfolio-background-animation-enabled) ::ng-deep .background-animation-btn.p-button,
-:host ::ng-deep .background-animation-btn--active.p-button {
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button:hover,
+portfolio-header :is(.nav-link--active, .mobile-nav-link--active).p-button,
+portfolio-header .icon-btn.p-button:hover,
+.portfolio-background-animation-enabled portfolio-header .background-animation-btn.p-button,
+portfolio-header .background-animation-btn--active.p-button {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:hover .p-button-label,
-:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label,
-:host ::ng-deep .icon-btn.p-button:hover,
-:host-context(.portfolio-background-animation-enabled) ::ng-deep .background-animation-btn.p-button,
-:host ::ng-deep .background-animation-btn--active.p-button {
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button:hover .p-button-label,
+portfolio-header :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label,
+portfolio-header .icon-btn.p-button:hover,
+.portfolio-background-animation-enabled portfolio-header .background-animation-btn.p-button,
+portfolio-header .background-animation-btn--active.p-button {
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .icon-btn.p-button:is(:focus, :focus-visible) {
+portfolio-header .icon-btn.p-button:is(:focus, :focus-visible) {
   outline: none;
   box-shadow: none;
 }
 
-:host ::ng-deep .icon-btn.p-button .p-button-icon {
+portfolio-header .icon-btn.p-button .p-button-icon {
   margin: 0;
 }
 
-:host ::ng-deep .icon-btn.p-button :is(.p-button-icon, portfolio-icon, svg, .lucide),
-:host ::ng-deep .icon-btn.p-button portfolio-icon * {
+portfolio-header .icon-btn.p-button :is(.p-button-icon, portfolio-icon, svg, .lucide),
+portfolio-header .icon-btn.p-button portfolio-icon * {
   width: var(--header-icon-size);
   min-width: var(--header-icon-size);
   height: var(--header-icon-size);
@@ -129,36 +129,36 @@
   stroke: currentColor;
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button:focus-visible {
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
 }
 
-:host ::ng-deep :is(.theme-toggle-btn, .mobile-menu-btn).p-button {
+portfolio-header :is(.theme-toggle-btn, .mobile-menu-btn).p-button {
   position: absolute;
   inset: 0;
 }
 
-:host ::ng-deep :is(.theme-toggle-btn--dark, .mobile-menu-btn--close).p-button {
+portfolio-header :is(.theme-toggle-btn--dark, .mobile-menu-btn--close).p-button {
   display: none;
 }
 
-:host ::ng-deep :is(.theme-toggle-btn--light, .mobile-menu-btn--open).p-button {
+portfolio-header :is(.theme-toggle-btn--light, .mobile-menu-btn--open).p-button {
   display: inline-flex;
 }
 
-:host-context(.dark) ::ng-deep .theme-toggle-btn--dark.p-button,
-:host ::ng-deep .header.mobile-menu-open .mobile-menu-btn--close.p-button {
+.dark portfolio-header .theme-toggle-btn--dark.p-button,
+portfolio-header .header.mobile-menu-open .mobile-menu-btn--close.p-button {
   display: inline-flex;
 }
 
-:host-context(.dark) ::ng-deep .theme-toggle-btn--light.p-button,
-:host ::ng-deep .header.mobile-menu-open .mobile-menu-btn--open.p-button {
+.dark portfolio-header .theme-toggle-btn--light.p-button,
+portfolio-header .header.mobile-menu-open .mobile-menu-btn--open.p-button {
   display: none;
 }
 
 @media (max-width: 1100px) {
-  :host ::ng-deep .nav-link.p-button {
+  portfolio-header .nav-link.p-button {
     padding-inline: 0.75rem;
   }
 }
@@ -172,7 +172,7 @@
     display: inline-flex;
   }
 
-  :host ::ng-deep .mobile-nav-link.p-button {
+  portfolio-header .mobile-nav-link.p-button {
     justify-content: center;
     text-align: center;
   }
@@ -199,7 +199,7 @@
     background: linear-gradient(180deg, color-mix(in srgb, var(--app-panel-bg) 32%, transparent), color-mix(in srgb, var(--app-panel-bg) 20%, transparent)), linear-gradient(180deg, color-mix(in srgb, var(--app-text-color) 5%, transparent), transparent 45%);
   }
 
-  :host ::ng-deep .header--floating .mobile-nav-link.p-button {
+  portfolio-header .header--floating .mobile-nav-link.p-button {
     position: relative;
     z-index: 1;
     border-radius: 0.875rem;
@@ -207,7 +207,7 @@
 }
 
 @media (max-width: 640px) {
-  :host {
+  portfolio-header {
     --header-height: clamp(3rem, 1.714rem + 5.714vw, 4rem);
     --header-inner-px: clamp(0.75rem, -0.964rem + 7.619vw, 1.5rem);
     --header-inner-gap: clamp(0.5rem, -0.643rem + 5.079vw, 1rem);

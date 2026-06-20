@@ -1,5 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/icons/lucide-icons.provider';
 import { PortfolioIconsSVG } from '@core/common/icons/portfolio-icons';
@@ -7,7 +6,8 @@ import { PortfolioIconsSVG } from '@core/common/icons/portfolio-icons';
 @Component({
   selector: 'portfolio-icon',
   standalone: true,
-  imports: [CommonModule, LucideDynamicIcon],
+  imports: [LucideDynamicIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (svgUrl(); as svgUrl) {
       @if (svgColored()) {

@@ -1,42 +1,42 @@
-:host {
+portfolio-theme-color-picker {
   display: inline-flex;
 }
 
-:host ::ng-deep .picker-trigger.p-button .p-button-label {
+portfolio-theme-color-picker .picker-trigger.p-button .p-button-label {
   display: none;
 }
 
-:host ::ng-deep .picker-trigger.p-button .p-button-icon {
+portfolio-theme-color-picker .picker-trigger.p-button .p-button-icon {
   margin: 0;
 }
 
-:host ::ng-deep .picker-trigger.p-button .p-ink {
+portfolio-theme-color-picker .picker-trigger.p-button .p-ink {
   border-radius: inherit;
 }
 
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active:hover {
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active:hover {
   color: var(--app-text-color);
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .picker-trigger.p-button:focus,
-:host ::ng-deep .picker-trigger.p-button:focus-visible,
-:host ::ng-deep .picker-trigger.p-button.p-focus,
-:host ::ng-deep .picker-trigger.p-button[data-p-focused='true'] {
+portfolio-theme-color-picker .picker-trigger.p-button:focus,
+portfolio-theme-color-picker .picker-trigger.p-button:focus-visible,
+portfolio-theme-color-picker .picker-trigger.p-button.p-focus,
+portfolio-theme-color-picker .picker-trigger.p-button[data-p-focused='true'] {
   outline: none !important;
   box-shadow: none !important;
 }
 
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active:focus,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active:focus-visible,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active.p-focus,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active[data-p-focused='true'] {
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active:focus,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active:focus-visible,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active.p-focus,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active[data-p-focused='true'] {
   color: var(--app-text-color) !important;
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-::ng-deep .p-popover.color-picker-panel {
+.p-popover.color-picker-panel {
   --p-popover-background: var(--p-surface-0);
   --p-popover-border-color: var(--p-surface-200);
 
@@ -47,20 +47,20 @@
   opacity: 0;
 }
 
-::ng-deep .p-popover.color-picker-panel[data-positioned='true'] {
+.p-popover.color-picker-panel[data-positioned='true'] {
   opacity: 1;
 }
 
-::ng-deep .p-popover.color-picker-panel::before,
-::ng-deep .p-popover.color-picker-panel::after,
-::ng-deep .p-popover.color-picker-panel .p-popover-arrow {
+.p-popover.color-picker-panel::before,
+.p-popover.color-picker-panel::after,
+.p-popover.color-picker-panel .p-popover-arrow {
   left: var(--color-picker-arrow-x, 50%) !important;
   transform: translateX(-50%) !important;
 }
 
-::ng-deep .dark .p-popover.color-picker-panel,
-::ng-deep .dark.p-popover.color-picker-panel,
-::ng-deep .p-popover.color-picker-panel:where(.dark *) {
+.dark .p-popover.color-picker-panel,
+.dark.p-popover.color-picker-panel,
+.p-popover.color-picker-panel:where(.dark *) {
   --p-popover-background: var(--p-surface-900);
   --p-popover-border-color: var(--p-surface-700);
 

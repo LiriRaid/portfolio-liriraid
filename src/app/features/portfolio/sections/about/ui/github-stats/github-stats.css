@@ -1,4 +1,4 @@
-:host {
+portfolio-github-stats {
   display: block;
 }
 
@@ -135,7 +135,7 @@
   line-height: 0;
 }
 
-:host ::ng-deep .github-metric-icon :is(svg, .lucide) {
+portfolio-github-stats .github-metric-icon :is(svg, .lucide) {
   width: var(--gh-metric-icon-size) !important;
   height: var(--gh-metric-icon-size) !important;
   min-width: var(--gh-metric-icon-size) !important;
@@ -146,7 +146,7 @@
   color: var(--p-yellow-500, #eab308);
 }
 
-:host ::ng-deep .github-box--stars .github-metric-icon svg {
+portfolio-github-stats .github-box--stars .github-metric-icon svg {
   fill: var(--p-yellow-400, #facc15);
   stroke: var(--p-yellow-500, #eab308);
 }

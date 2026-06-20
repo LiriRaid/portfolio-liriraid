@@ -79,7 +79,7 @@
    Footer buttons
    ========================= */
 
-:host ::ng-deep .footer-link-button.p-button {
+portfolio-footer .footer-link-button.p-button {
   min-height: var(--f-button-min-h);
   padding: var(--f-button-py) var(--f-button-px);
   border: none;
@@ -93,31 +93,31 @@
     background-color 0.2s ease;
 }
 
-:host ::ng-deep .footer-link-button.p-button :is(.p-button-label, .p-button-icon, portfolio-icon) {
+portfolio-footer .footer-link-button.p-button :is(.p-button-label, .p-button-icon, portfolio-icon) {
   color: var(--app-text-muted);
   transition: color 0.2s ease;
 }
 
-:host ::ng-deep .footer-link-button.p-button .p-button-label {
+portfolio-footer .footer-link-button.p-button .p-button-label {
   font-size: inherit;
   font-weight: 600;
   line-height: 1.1;
 }
 
-:host ::ng-deep .footer-link-button.p-button .p-button-icon {
+portfolio-footer .footer-link-button.p-button .p-button-icon {
   margin: 0;
 }
 
-:host ::ng-deep .footer-link-button.p-button:not(.p-disabled):hover {
+portfolio-footer .footer-link-button.p-button:not(.p-disabled):hover {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .footer-link-button.p-button:not(.p-disabled):hover :is(.p-button-label, .p-button-icon, portfolio-icon) {
+portfolio-footer .footer-link-button.p-button:not(.p-disabled):hover :is(.p-button-label, .p-button-icon, portfolio-icon) {
   color: var(--app-text-color);
 }
 
-:host ::ng-deep .footer-link-button.p-button:focus-visible {
+portfolio-footer .footer-link-button.p-button:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
   box-shadow: none;

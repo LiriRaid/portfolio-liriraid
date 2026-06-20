@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, afterNextRender, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, PLATFORM_ID, afterNextRender, computed, inject } from '@angular/core';
 
 import { I18nService } from '@core/i18n';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
@@ -18,6 +18,7 @@ import { HeroService } from './hero.service';
   templateUrl: './hero.html',
   styleUrl: './hero.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);

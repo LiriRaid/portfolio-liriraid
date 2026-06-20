@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, DoCheck, OnDestroy, PLATFORM_ID, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, DestroyRef, DoCheck, PLATFORM_ID, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { PortfolioButton } from '../portfolio-button/portfolio-button';
@@ -11,13 +11,15 @@ import { PortfolioInput } from '../portfolio-input/portfolio-input';
   imports: [ReactiveFormsModule, PortfolioButton, PortfolioInput],
   templateUrl: './portfolio-search.html',
   styleUrl: './portfolio-search.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '(window:resize)': 'onResize()',
     '[class.desktop-mode]': '!isMobileLayout()',
     '[class.mobile-mode]': 'isMobileLayout()',
   },
 })
-export class PortfolioSearch implements DoCheck, OnDestroy {
+export class PortfolioSearch implements DoCheck {
   private readonly platformId = inject(PLATFORM_ID);
 
   private readonly mobileBreakpoint = 640;
@@ -50,6 +52,8 @@ export class PortfolioSearch implements DoCheck, OnDestroy {
   }
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => this.clearCollapseTimer());
+
     if (this.isBrowser) {
       afterNextRender(() => {
         this.checkMobile();
@@ -59,10 +63,6 @@ export class PortfolioSearch implements DoCheck, OnDestroy {
 
   ngDoCheck(): void {
     this.syncCollapsedMode();
-  }
-
-  ngOnDestroy(): void {
-    this.clearCollapseTimer();
   }
 
   onResize(): void {

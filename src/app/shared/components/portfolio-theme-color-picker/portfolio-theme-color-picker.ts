@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, DestroyRef, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { Popover } from 'primeng/popover';
 
 import { PRIMARY_COLORS, SURFACE_COLORS } from '@core/theme/theme-palettes';
@@ -13,6 +13,7 @@ import { PortfolioButton } from '../portfolio-button/portfolio-button';
   templateUrl: './portfolio-theme-color-picker.html',
   styleUrl: './portfolio-theme-color-picker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class PortfolioThemeColorPicker {
   private readonly themeService = inject(ThemeService);

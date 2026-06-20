@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 
 import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components';
@@ -17,6 +17,7 @@ import type { GithubStats } from './entities/github-stats.entity';
   templateUrl: './github-stats.html',
   styleUrl: './github-stats.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     style: 'display: block;',
   },

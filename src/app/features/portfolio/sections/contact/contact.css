@@ -97,51 +97,51 @@
   background-image: linear-gradient(135deg, transparent 0, transparent 45%, var(--app-text-muted) 45%, var(--app-text-muted) 55%, transparent 55%, transparent 70%, var(--app-text-muted) 70%, var(--app-text-muted) 80%, transparent 80%, transparent 95%, var(--app-text-muted) 95%);
 }
 
-:host ::ng-deep .contact-form portfolio-input .portfolio-input-field {
+portfolio-contact .contact-form portfolio-input .portfolio-input-field {
   font-size: var(--c-input-size);
   line-height: var(--c-input-lh);
 }
 
-:host ::ng-deep .contact-form portfolio-input :is(label, legend span) {
+portfolio-contact .contact-form portfolio-input :is(label, legend span) {
   font-size: var(--c-input-label-size);
 }
 
-:host ::ng-deep .contact-form portfolio-input .portfolio-input-error {
+portfolio-contact .contact-form portfolio-input .portfolio-input-error {
   font-size: var(--c-input-error-size);
 }
 
-:host ::ng-deep .contact-form portfolio-input portfolio-icon {
+portfolio-contact .contact-form portfolio-input portfolio-icon {
   width: var(--c-input-icon);
   height: var(--c-input-icon);
 }
 
-:host ::ng-deep :is(.contact-social .p-button, .contact-submit-btn) {
+portfolio-contact :is(.contact-social .p-button, .contact-submit-btn) {
   min-height: var(--c-btn-min-h);
 }
 
-:host ::ng-deep .contact-submit-btn.p-button {
+portfolio-contact .contact-submit-btn.p-button {
   color: #ffffff !important;
   background: var(--p-primary-800) !important;
   border-color: var(--p-primary-800) !important;
 }
 
-:host ::ng-deep .contact-submit-btn.p-button:not(:disabled):hover {
+portfolio-contact .contact-submit-btn.p-button:not(:disabled):hover {
   color: #ffffff !important;
   background: var(--p-primary-900) !important;
   border-color: var(--p-primary-900) !important;
 }
 
-:host ::ng-deep .contact-submit-btn.p-button:disabled {
+portfolio-contact .contact-submit-btn.p-button:disabled {
   color: #ffffff !important;
   background: color-mix(in srgb, var(--p-primary-800) 58%, transparent) !important;
   border-color: color-mix(in srgb, var(--p-primary-800) 58%, transparent) !important;
 }
 
-:host ::ng-deep .contact-submit-btn.p-button:focus-visible {
+portfolio-contact .contact-submit-btn.p-button:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-800) 28%, transparent) !important;
 }
 
-:host ::ng-deep .contact-submit-btn.p-button :is(.p-button-label, .p-button-icon, portfolio-icon, portfolio-icon *) {
+portfolio-contact .contact-submit-btn.p-button :is(.p-button-label, .p-button-icon, portfolio-icon, portfolio-icon *) {
   color: #ffffff !important;
 }
 
@@ -188,31 +188,31 @@
     --c-btn-icon: clamp(0.85rem, 0.7615rem + 0.3727vw, 1rem);
   }
 
-  :host ::ng-deep .contact-social portfolio-button {
+  portfolio-contact .contact-social portfolio-button {
     width: auto;
     flex: 0 0 auto;
   }
 
-  :host ::ng-deep .contact-social .p-button {
+  portfolio-contact .contact-social .p-button {
     width: auto;
   }
 
-  :host ::ng-deep .contact-submit-btn {
+  portfolio-contact .contact-submit-btn {
     width: 100%;
     justify-content: center;
   }
 
-  :host ::ng-deep :is(.contact-social .p-button, .contact-submit-btn) {
+  portfolio-contact :is(.contact-social .p-button, .contact-submit-btn) {
     padding: var(--c-btn-py) var(--c-btn-px);
     font-size: var(--c-btn-size);
   }
 
-  :host ::ng-deep :is(.contact-social .p-button-label, .contact-submit-btn .p-button-label) {
+  portfolio-contact :is(.contact-social .p-button-label, .contact-submit-btn .p-button-label) {
     font-size: inherit;
     line-height: 1.1;
   }
 
-  :host ::ng-deep :is(.contact-social .p-button-icon, .contact-submit-btn .p-button-icon, .contact-social portfolio-icon, .contact-submit-btn portfolio-icon) {
+  portfolio-contact :is(.contact-social .p-button-icon, .contact-submit-btn .p-button-icon, .contact-social portfolio-icon, .contact-submit-btn portfolio-icon) {
     width: var(--c-btn-icon);
     height: var(--c-btn-icon);
   }

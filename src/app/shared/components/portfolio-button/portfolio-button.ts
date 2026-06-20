@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, booleanAttribute, computed, input, output } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, output } from '@angular/core';
 import { ButtonModule, type ButtonSeverity } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 
@@ -19,9 +19,11 @@ type ButtonClassParts = {
 @Component({
   selector: 'portfolio-button',
   standalone: true,
-  imports: [CommonModule, ButtonModule, Ripple, PortfolioIcon],
+  imports: [NgClass, NgTemplateOutlet, ButtonModule, Ripple, PortfolioIcon],
   templateUrl: './portfolio-button.html',
   styleUrl: './portfolio-button.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'hostClass()',
   },

@@ -14,6 +14,7 @@
 @import './styles/components/button-styles.css';
 @import './styles/components/carousel-styles.css';
 @import './styles/components/animated-border-styles.css';
+@import './styles/components/toast-styles.css';
 
 @import './styles/features/projects-styles.css';
 

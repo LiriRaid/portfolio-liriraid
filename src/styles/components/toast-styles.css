@@ -1,0 +1,83 @@
+/* =========================
+   Toast — Overrides globales PrimeNG
+   Estas reglas viven aquí porque p-toast renderiza fuera del host
+   (portal al body), por lo que ::ng-deep no puede scopearse al componente.
+========================= */
+
+/* Tamaño del panel */
+.p-toast.portfolio-toast-panel {
+  width: min(var(--p-toast-width, 25rem), calc(100vw - 2rem));
+}
+
+.p-toast.portfolio-toast-panel .p-toast-message {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Headless: eliminamos el padding interno del content de PrimeNG */
+.p-toast.portfolio-toast-panel .p-toast-message-content {
+  padding: 0;
+}
+
+/* SVG dentro de portfolio-icon (child component shadow) */
+.portfolio-toast-icon-wrap svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  line-height: 1;
+}
+
+/* =========================
+   Close button (p-button de PrimeNG)
+========================= */
+
+.portfolio-toast-close-button.p-button {
+  width: 1.75rem;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  min-height: 1.75rem;
+  padding: 0;
+  align-self: start;
+  border-radius: 9999px;
+  color: currentColor;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  opacity: 0.8;
+}
+
+.portfolio-toast-close-button.p-button:not(:disabled):hover {
+  color: currentColor;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  border-color: transparent;
+  opacity: 1;
+}
+
+.portfolio-toast-close-button.p-button .p-button-icon,
+.portfolio-toast-close-button.p-button portfolio-icon,
+.portfolio-toast-close-button.p-button svg {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  color: currentColor;
+}
+
+/* =========================
+   Actions (p-button de PrimeNG)
+========================= */
+
+.portfolio-toast-action-button.p-button {
+  min-height: 2rem;
+  border-radius: 0.5rem;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 480px) {
+  .p-toast.portfolio-toast-panel {
+    width: calc(100vw - 1.5rem);
+  }
+}

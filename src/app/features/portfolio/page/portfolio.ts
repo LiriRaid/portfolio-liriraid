@@ -1,4 +1,4 @@
-import { Component, afterNextRender, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, afterNextRender, signal } from '@angular/core';
 import { Hero } from '../sections/hero/hero';
 import { Experience } from '../sections/experience/experience';
 import { Projects } from '../sections/projects/projects';
@@ -15,6 +15,7 @@ const INTERACTION_EVENTS = ['pointerdown', 'pointerover', 'wheel', 'touchstart',
   imports: [Hero, Experience, Projects, Skills, About, Contact, PortfolioBackgroundAnimation],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Portfolio {
   // Gates @defer prefetch of the below-the-fold sections until the user shows

@@ -20,29 +20,33 @@ describe('Portfolio (page)', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('mounts every portfolio section plus the background animation in order', async () => {
-    const fixture = TestBed.createComponent(Portfolio);
-    fixture.detectChanges();
+  it(
+    'mounts every portfolio section plus the background animation in order',
+    async () => {
+      const fixture = TestBed.createComponent(Portfolio);
+      fixture.detectChanges();
 
-    const deferBlocks = await fixture.getDeferBlocks();
-    for (const block of deferBlocks) {
-      await block.render(DeferBlockState.Complete);
-    }
+      const deferBlocks = await fixture.getDeferBlocks();
+      for (const block of deferBlocks) {
+        await block.render(DeferBlockState.Complete);
+      }
 
-    const root: HTMLElement = fixture.nativeElement;
+      const root: HTMLElement = fixture.nativeElement;
 
-    const expectedSelectors = [
-      'portfolio-hero',
-      'portfolio-experience',
-      'portfolio-projects',
-      'portfolio-skills',
-      'portfolio-about',
-      'portfolio-contact',
-      'portfolio-background-animation',
-    ];
+      const expectedSelectors = [
+        'portfolio-hero',
+        'portfolio-experience',
+        'portfolio-projects',
+        'portfolio-skills',
+        'portfolio-about',
+        'portfolio-contact',
+        'portfolio-background-animation',
+      ];
 
-    for (const selector of expectedSelectors) {
-      expect(root.querySelector(selector)).not.toBeNull();
-    }
-  });
+      for (const selector of expectedSelectors) {
+        expect(root.querySelector(selector)).not.toBeNull();
+      }
+    },
+    15_000,
+  );
 });

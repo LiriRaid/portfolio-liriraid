@@ -121,35 +121,35 @@ portfolio-github-stats {
   }
 }
 
-:host ::ng-deep .about-cta .about-primary-cta.p-button {
+portfolio-about .about-cta .about-primary-cta.p-button {
   color: #fff !important;
   background: var(--p-primary-800) !important;
   border-color: var(--p-primary-800) !important;
 }
 
-:host ::ng-deep .about-cta .about-primary-cta.p-button:not(:disabled):hover {
+portfolio-about .about-cta .about-primary-cta.p-button:not(:disabled):hover {
   color: #fff !important;
   background: var(--p-primary-900) !important;
   border-color: var(--p-primary-900) !important;
 }
 
-:host ::ng-deep .about-cta .about-primary-cta.p-button:focus-visible {
+portfolio-about .about-cta .about-primary-cta.p-button:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-800) 30%, transparent);
 }
 
-:host ::ng-deep .about-cta .about-primary-cta.p-button .p-button-label,
-:host ::ng-deep .about-cta .about-primary-cta.p-button :is(.p-button-icon, portfolio-icon, portfolio-icon *) {
+portfolio-about .about-cta .about-primary-cta.p-button .p-button-label,
+portfolio-about .about-cta .about-primary-cta.p-button :is(.p-button-icon, portfolio-icon, portfolio-icon *) {
   color: #fff !important;
 }
 
 @media (max-width: 640px) {
-  :host ::ng-deep .about-cta .p-button {
+  portfolio-about .about-cta .p-button {
     min-height: var(--a-btn-min-h);
     padding: var(--a-btn-py) var(--a-btn-px);
     font-size: var(--a-btn-size);
   }
 
-  :host ::ng-deep .about-cta .p-button-label {
+  portfolio-about .about-cta .p-button-label {
     font-size: inherit;
     line-height: 1.1;
   }
