@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "preenv": "tsx --tsconfig tsconfig.tools.json tools/env/generate-environment.ts",
     "pretheme": "tsx --tsconfig tsconfig.tools.json tools/theme/generate-pretheme-index.ts",
     "prelanguage": "tsx --tsconfig tsconfig.tools.json tools/i18n/generate-prelanguage-index.ts",
-    "preindex": "pnpm pretheme && pnpm prelanguage",
+    "preindex": "pnpm preenv && pnpm pretheme && pnpm prelanguage",
     "start": "pnpm preindex && ng serve",
     "build": "pnpm preindex && ng build",
     "watch": "pnpm preindex && ng build --watch --configuration development",
