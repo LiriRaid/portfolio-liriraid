@@ -1,0 +1,108 @@
+<article portfolioAnimatedBorder class="github-card flex flex-col gap-(--gh-section-gap) rounded-2xl border p-(--gh-p) [box-shadow:var(--app-container-shadow)]" [attr.aria-label]="ariaLabel()">
+  <header class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-(--gh-header-gap)">
+    <div class="flex min-w-0 flex-col gap-(--gh-title-gap)">
+      <p class="github-eyebrow no-i18n-animation m-0 text-caption-2-bold">{{ eyebrow() }}</p>
+
+      <h3 class="github-title m-0 text-subtitle-2-bold">{{ title() }}</h3>
+
+      <p class="github-muted m-0 text-caption-2-regular">
+        {{ updatedLabel() }}
+      </p>
+    </div>
+
+    <span class="github-icon inline-grid size-(--gh-icon-size) shrink-0 place-items-center rounded-(--gh-icon-radius)" aria-hidden="true">
+      <portfolio-icon name="GitBranch" size="18" extraClass="size-(--gh-cat-icon)" />
+    </span>
+  </header>
+
+  <div class="github-summary grid gap-(--gh-metrics-gap)">
+    <div class="github-box flex min-w-0 flex-col justify-center gap-[0.12rem] rounded-(--gh-metric-radius) border p-(--gh-box-p)">
+      <span class="github-strong inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-subtitle-2-bold">
+        @if (loading()) {
+          —
+        } @else {
+          <portfolio-icon class="github-metric-icon" name="Folder" size="12" />
+          <span>{{ stats()?.publicRepos ?? 0 }}</span>
+        }
+      </span>
+
+      <span class="github-muted text-caption-1-regular">{{ reposLabel() }}</span>
+    </div>
+
+    <div class="github-box github-box--stars flex min-w-0 flex-col justify-center gap-[0.12rem] rounded-(--gh-metric-radius) border p-(--gh-box-p)">
+      <span class="github-strong inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-subtitle-2-bold">
+        @if (loading()) {
+          —
+        } @else {
+          <portfolio-icon class="github-metric-icon" name="Star" size="12" />
+          <span>{{ stats()?.totalStars ?? 0 }}</span>
+        }
+      </span>
+
+      <span class="github-muted text-caption-1-regular">{{ starsLabel() }}</span>
+    </div>
+
+    <div class="github-box flex min-w-0 flex-col justify-center gap-[0.12rem] rounded-(--gh-metric-radius) border p-(--gh-box-p)">
+      <span class="github-strong inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-subtitle-2-bold">
+        @if (loading()) {
+          —
+        } @else {
+          <portfolio-icon class="github-metric-icon" name="GitFork" size="12" />
+          <span>{{ stats()?.totalForks ?? 0 }}</span>
+        }
+      </span>
+
+      <span class="github-muted text-caption-1-regular">{{ forksLabel() }}</span>
+    </div>
+
+    <div class="github-primary github-box flex min-w-0 items-center justify-between rounded-(--gh-metric-radius) border p-(--gh-box-p)">
+      <span class="github-muted github-label text-caption-1-regular">{{ mainLanguageLabel() }}</span>
+
+      <strong class="github-strong inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-caption-1-bold">
+        @if (loading()) {
+          —
+        } @else {
+          @if (techIconUrl(stats()?.primaryLanguage ?? ''); as iconUrl) {
+            <img [src]="iconUrl" alt="" aria-hidden="true" class="github-language-icon shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+          }
+
+          <span class="truncate">
+            {{ stats()?.primaryLanguage ?? 'TypeScript' }}
+          </span>
+        }
+      </strong>
+    </div>
+  </div>
+
+  <div class="github-languages flex flex-col gap-(--gh-language-gap)">
+    @if (loading()) {
+      @for (item of [1, 2, 3, 4, 5]; track item) {
+        <div class="github-language github-language--loading grid items-center gap-(--gh-language-row-gap)">
+          <span class="github-language-name"></span>
+          <span class="github-language-track"></span>
+          <span class="github-language-percent"></span>
+        </div>
+      }
+    } @else {
+      @for (language of stats()?.languages ?? []; track language.name) {
+        <div class="github-language grid items-center gap-(--gh-language-row-gap)">
+          <span class="github-language-name inline-flex min-w-0 items-center gap-(--gh-language-icon-gap) text-caption-1-medium">
+            @if (techIconUrl(language.name); as iconUrl) {
+              <img [src]="iconUrl" alt="" aria-hidden="true" class="github-language-icon shrink-0 rounded-[3px] object-contain" width="16" height="16" loading="lazy" />
+            }
+
+            <span class="truncate">
+              {{ language.name }}
+            </span>
+          </span>
+
+          <span class="github-language-track">
+            <span class="github-language-fill" [style.width.%]="language.percentage"></span>
+          </span>
+
+          <span class="github-muted text-caption-1-regular"> {{ language.percentage }}% </span>
+        </div>
+      }
+    }
+  </div>
+</article>

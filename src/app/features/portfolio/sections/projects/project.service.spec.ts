@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { GithubRepositoryService } from './project.service';
+import { ProjectsService } from './projects.service';
 
-describe('GithubRepositoryService', () => {
-  let service: GithubRepositoryService;
+describe('ProjectsService', () => {
+  let service: ProjectsService;
 
   beforeEach(() => {
     localStorage.clear();
 
     TestBed.configureTestingModule({
-      providers: [GithubRepositoryService],
+      providers: [ProjectsService],
     });
 
-    service = TestBed.inject(GithubRepositoryService);
+    service = TestBed.inject(ProjectsService);
   });
 
   afterEach(() => {

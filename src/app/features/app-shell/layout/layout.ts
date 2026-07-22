@@ -1,23 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, DestroyRef, PLATFORM_ID, afterNextRender, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, afterNextRender, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
+import { PortfolioScrollProgress } from '@shared/components/portfolio-scroll-progress/portfolio-scroll-progress';
 import { PortfolioToast } from '@shared/components/portfolio-toast/portfolio-toast';
+import { AlertService } from '@shared/services/alert.service';
+import { PORTFOLIO_SECTION_IDS, getPortfolioScrollRoot, scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, Header, Footer, PortfolioToast],
+  imports: [RouterOutlet, Header, Footer, PortfolioToast, PortfolioScrollProgress],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Layout {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-
-  private readonly sectionIds = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
+  protected readonly alertService = inject(AlertService);
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -45,12 +48,12 @@ export class Layout {
 
         resizeTimer = setTimeout(() => {
           if (visibleSectionId) {
-            this.scrollToSection(visibleSectionId, 'auto');
+            scrollToPortfolioSection(visibleSectionId, 'auto');
           }
-        }, 50);
+        }, 80);
       };
 
-      window.addEventListener('resize', onResize);
+      window.addEventListener('resize', onResize, { passive: true });
 
       this.destroyRef.onDestroy(() => {
         window.removeEventListener('resize', onResize);
@@ -62,10 +65,6 @@ export class Layout {
     });
   }
 
-  private getScrollRoot(): HTMLElement | null {
-    return document.querySelector<HTMLElement>('.layout-scroll-root');
-  }
-
   private getHeaderHeight(): number {
     const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
     const parsed = Number.parseFloat(value);
@@ -74,35 +73,13 @@ export class Layout {
       return 64;
     }
 
-    return value.endsWith('rem') ? parsed * this.getRootFontSize() : parsed;
-  }
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
 
-  private getRootFontSize(): number {
-    return Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  }
-
-  private scrollToSection(sectionId: string, behavior: ScrollBehavior): void {
-    const scrollRoot = this.getScrollRoot();
-    const section = document.getElementById(sectionId);
-
-    if (!scrollRoot || !section) {
-      return;
-    }
-
-    const scrollRootRect = scrollRoot.getBoundingClientRect();
-    const sectionRect = section.getBoundingClientRect();
-    const headerHeight = this.getHeaderHeight();
-
-    const top = sectionRect.top - scrollRootRect.top + scrollRoot.scrollTop - headerHeight;
-
-    scrollRoot.scrollTo({
-      top: Math.max(0, Math.round(top)),
-      behavior,
-    });
+    return value.endsWith('rem') ? parsed * rootFontSize : parsed;
   }
 
   private getVisibleSectionId(): string | null {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
 
     if (!scrollRoot) {
       return null;
@@ -110,12 +87,13 @@ export class Layout {
 
     const rootRect = scrollRoot.getBoundingClientRect();
     const headerHeight = this.getHeaderHeight();
-    const scanLine = rootRect.top + headerHeight + 1;
+    const scanTop = rootRect.top + headerHeight;
+    const scanBottom = rootRect.bottom;
 
     let bestMatch: string | null = null;
     let maxVisibleHeight = 0;
 
-    for (const id of this.sectionIds) {
+    for (const id of PORTFOLIO_SECTION_IDS) {
       const section = document.getElementById(id);
 
       if (!section) {
@@ -123,8 +101,8 @@ export class Layout {
       }
 
       const rect = section.getBoundingClientRect();
-      const visibleTop = Math.max(rect.top, scanLine);
-      const visibleBottom = Math.min(rect.bottom, rootRect.bottom);
+      const visibleTop = Math.max(rect.top, scanTop);
+      const visibleBottom = Math.min(rect.bottom, scanBottom);
       const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
       if (visibleHeight > maxVisibleHeight) {

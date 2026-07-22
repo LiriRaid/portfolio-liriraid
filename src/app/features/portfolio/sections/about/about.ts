@@ -1,78 +1,85 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject } from '@angular/core';
-import gsap from 'gsap';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject } from '@angular/core';
 
-import { AboutContent, Stat } from '@features/portfolio/entities';
+import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives';
+import { PortfolioSectionRevealService } from '@shared/services';
+import { scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
+
+import { ABOUT_CONTENT, ABOUT_STATS } from './mocks';
+import { AboutService } from './about.service';
+import { GithubStatsComponent } from './ui/github-stats/github-stats';
 
 @Component({
   selector: 'portfolio-about',
   standalone: true,
-  imports: [PortfolioButton, PortfolioIcon],
+  imports: [PortfolioButton, PortfolioIcon, PortfolioAnimatedBorderDirective, GithubStatsComponent],
   templateUrl: './about.html',
   styleUrl: './about.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    style: 'display: block;',
+  },
 })
 export class About {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly aboutService = inject(AboutService);
+  private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('statsRef') statsRef!: ElementRef<HTMLElement>;
 
-  protected readonly about: AboutContent = {
-    label: '¿Quién soy?',
-    title: 'Sobre mí',
-    ctaLabel: 'Contactarme',
-    paragraphs: ['Soy Gabriel Leonardo Cruz Flores, desarrollador Full Angular enfocado en crear aplicaciones web modernas, rápidas y mantenibles con Angular, TypeScript, Tailwind CSS, PrimeNG y Node.js.', 'Trabajo construyendo interfaces, dashboards, formularios, flujos administrativos, componentes reutilizables e integraciones con APIs, cuidando arquitectura, rendimiento y experiencia de usuario.'],
-  };
+  protected readonly about = computed(() => ({
+    label: this.t(ABOUT_CONTENT.label),
+    title: this.t(ABOUT_CONTENT.title),
+    ctaLabel: this.t(ABOUT_CONTENT.ctaLabel),
+    paragraphs: ABOUT_CONTENT.paragraphs.map((key) => ({
+      id: key,
+      text: this.t(key),
+    })),
+  }));
 
-  protected readonly stats: Stat[] = [
-    { value: '2+', label: 'Años de experiencia' },
-    { value: '2', label: 'Proyectos públicos en GitHub' },
-    { value: '100%', label: 'Orientado a producto' },
-  ];
+  protected readonly stats = computed(() =>
+    ABOUT_STATS.map((stat) => ({
+      id: stat.label,
+      value: this.t(stat.value),
+      label: this.t(stat.label),
+    })),
+  );
+
+  protected readonly statsAriaLabel = computed(() => this.t('about.stats.aria'));
 
   constructor() {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
-          this.animateEntrance();
-        }
-      }, { threshold: 0.1 });
-      
-      observer.observe(this.elementRef.nativeElement);
-    });
-  }
-
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-
-    if (this.contentRef?.nativeElement) {
-      tl.fromTo(this.contentRef.nativeElement.children, 
-        { opacity: 0, x: -30 }, 
-        { opacity: 1, x: 0, duration: 0.6, stagger: 0.15 }
-      );
-    }
-
-    if (this.statsRef?.nativeElement) {
-      tl.fromTo(this.statsRef.nativeElement.children, 
-        { opacity: 0, x: 30 }, 
-        { opacity: 1, x: 0, duration: 0.6, stagger: 0.15 }, 
-        "-=0.4"
-      );
-    }
-  }
-
-  protected scrollToContact(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+    afterNextRender(() => {
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
+          this.aboutService.animateEntrance(this.elementRef, this.contentRef, this.statsRef);
+        },
+      });
+    });
+  }
+
+  protected scrollToExperience(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    scrollToPortfolioSection('experience');
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 }

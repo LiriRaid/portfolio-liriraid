@@ -1,21 +1,23 @@
+<portfolio-background-animation />
+
 <portfolio-hero />
 
-@defer (hydrate on viewport) {
-  <portfolio-experience />
-}
-
-@defer (hydrate on viewport) {
-  <portfolio-projects />
-}
-
-@defer (hydrate on viewport) {
-  <portfolio-skills />
-}
-
-@defer (hydrate on viewport) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-about />
 }
 
-@defer (hydrate on viewport) {
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
+  <portfolio-experience />
+}
+
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
+  <portfolio-projects />
+}
+
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
+  <portfolio-skills />
+}
+
+@defer (hydrate on viewport; prefetch when hasInteracted()) {
   <portfolio-contact />
 }

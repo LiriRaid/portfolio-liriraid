@@ -1,0 +1,51 @@
+@layer components {
+  /* =========================
+     Tag
+     ========================= */
+
+  .tag {
+    display: flex;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: default;
+    font-weight: 700;
+    align-items: center;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+}
+
+/* =============================================================
+   p-button global overrides — fuera de @layer para ganar
+   especificidad sobre los estilos internos de PrimeNG.
+   Objetivo: no tener que pasar iconColor="white" / labelClass="text-white!"
+   en cada instancia de portfolio-button
+   ============================================================= */
+
+/* Filled: texto e iconos SIEMPRE blancos */
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(.p-button-plain) {
+  color: #ffffff;
+}
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(.p-button-plain):not(:disabled):hover {
+  color: #ffffff;
+}
+
+/* Outlined: sigue el tema — blanco en dark, surface-900 en light */
+.p-button.p-button-outlined {
+  color: var(--app-outline-button-text);
+  background: var(--app-outline-button-bg);
+  border-color: var(--app-outline-button-border);
+}
+.p-button.p-button-outlined:not(:disabled):hover {
+  color: var(--app-outline-button-hover-text);
+  background: var(--app-outline-button-hover-bg);
+  border-color: var(--app-outline-button-hover-bg);
+}
+.p-button.p-button-outlined:disabled {
+  color: var(--app-outline-button-disabled-text);
+  background: var(--app-outline-button-disabled-bg);
+}

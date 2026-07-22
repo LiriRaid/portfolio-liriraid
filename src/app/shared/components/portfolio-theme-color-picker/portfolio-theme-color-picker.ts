@@ -1,10 +1,10 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, DestroyRef, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { Popover } from 'primeng/popover';
 
 import { PRIMARY_COLORS, SURFACE_COLORS } from '@core/theme/theme-palettes';
 import { ThemeService } from '@core/theme/theme.service';
-import { PortfolioButton } from '..';
+import { PortfolioButton } from '../portfolio-button/portfolio-button';
 
 @Component({
   selector: 'portfolio-theme-color-picker',
@@ -13,6 +13,7 @@ import { PortfolioButton } from '..';
   templateUrl: './portfolio-theme-color-picker.html',
   styleUrl: './portfolio-theme-color-picker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class PortfolioThemeColorPicker {
   private readonly themeService = inject(ThemeService);
@@ -29,10 +30,7 @@ export class PortfolioThemeColorPicker {
   protected readonly isPanelOpen = signal(false);
 
   protected readonly pickerButtonClass = computed(() => {
-    return this.joinClasses(
-      'picker-trigger',
-      this.isPanelOpen() ? 'picker-trigger--active' : '',
-    );
+    return this.joinClasses('picker-trigger', 'icon-btn', this.isPanelOpen() ? 'picker-trigger--active' : '');
   });
 
   private triggerElement: HTMLElement | null = null;
@@ -160,35 +158,18 @@ export class PortfolioThemeColorPicker {
       viewportHeight,
     });
 
-    const arrowX = this.clamp(
-      triggerCenterX - left + 8,
-      this.arrowMinOffset,
-      panelWidth - this.arrowMinOffset,
-    );
+    const arrowX = this.clamp(triggerCenterX - left + 8, this.arrowMinOffset, panelWidth - this.arrowMinOffset);
 
     this.applyPanelPosition(panel, left, top, arrowX);
   }
 
-  private getPanelLeft(params: {
-    triggerCenterX: number;
-    panelWidth: number;
-    viewportWidth: number;
-  }): number {
+  private getPanelLeft(params: { triggerCenterX: number; panelWidth: number; viewportWidth: number }): number {
     const left = params.triggerCenterX - params.panelWidth / 2 + this.getVisualOffsetX();
 
-    return this.clamp(
-      left,
-      this.viewportMargin,
-      params.viewportWidth - params.panelWidth - this.viewportMargin,
-    );
+    return this.clamp(left, this.viewportMargin, params.viewportWidth - params.panelWidth - this.viewportMargin);
   }
 
-  private getPanelTop(params: {
-    panel: HTMLElement;
-    triggerRect: DOMRect;
-    panelHeight: number;
-    viewportHeight: number;
-  }): number {
+  private getPanelTop(params: { panel: HTMLElement; triggerRect: DOMRect; panelHeight: number; viewportHeight: number }): number {
     const belowTop = params.triggerRect.bottom + this.panelGap;
     const aboveTop = params.triggerRect.top - params.panelHeight - this.panelGap;
 
@@ -199,11 +180,7 @@ export class PortfolioThemeColorPicker {
 
     params.panel.dataset['placement'] = 'bottom';
 
-    return this.clamp(
-      belowTop,
-      this.viewportMargin,
-      params.viewportHeight - params.panelHeight - this.viewportMargin,
-    );
+    return this.clamp(belowTop, this.viewportMargin, params.viewportHeight - params.panelHeight - this.viewportMargin);
   }
 
   private applyPanelPosition(panel: HTMLElement, left: number, top: number, arrowX: number): void {
@@ -226,16 +203,7 @@ export class PortfolioThemeColorPicker {
       return;
     }
 
-    for (const property of [
-      'position',
-      'top',
-      'left',
-      'right',
-      'bottom',
-      'transform',
-      'margin-top',
-      '--color-picker-arrow-x',
-    ]) {
+    for (const property of ['position', 'top', 'left', 'right', 'bottom', 'transform', 'margin-top', '--color-picker-arrow-x']) {
       panel.style.removeProperty(property);
     }
 
@@ -263,9 +231,7 @@ export class PortfolioThemeColorPicker {
       return null;
     }
 
-    return element.classList.contains('p-button')
-      ? element
-      : (element.querySelector<HTMLElement>('.p-button') ?? element);
+    return element.classList.contains('p-button') ? element : (element.querySelector<HTMLElement>('.p-button') ?? element);
   }
 
   private addRuntimeListeners(): void {

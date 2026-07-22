@@ -1,20 +1,15 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, afterNextRender, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, PLATFORM_ID, afterNextRender, computed, inject } from '@angular/core';
 
+import { I18nService } from '@core/i18n';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { AlertService } from '@shared/services/alert.service';
+import { scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
-type CodeToken = {
-  readonly value: string;
-  readonly className: string;
-};
-
-type CodeLine = {
-  readonly indent?: 1 | 2;
-  readonly tokens: readonly CodeToken[];
-};
+import { HERO_CODE_LINES, HERO_CV_FILE, HERO_STACK, HERO_TEXT_KEYS, HERO_WINDOW_DOTS } from './mocks';
+import { HeroService } from './hero.service';
 
 @Component({
   selector: 'portfolio-hero',
@@ -23,78 +18,32 @@ type CodeLine = {
   templateUrl: './hero.html',
   styleUrl: './hero.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class Hero {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly alertService = inject(AlertService);
-
-  private readonly cvUrl = 'assets/docs/gabriel-cruz-cv.pdf';
-  private readonly cvFileName = 'Gabriel-Leonardo-Cruz-Flores-CV.pdf';
+  private readonly heroService = inject(HeroService);
+  private readonly i18nService = inject(I18nService);
 
   protected readonly techIconUrl = techIconUrl;
 
-  protected readonly stack = ['Angular', 'TypeScript', 'HTML', 'CSS', 'SASS', 'Node.js', 'Ruby on Rails', 'PostgreSQL', 'Tailwind CSS'] as const;
+  protected readonly stack = HERO_STACK;
+  protected readonly codeLines = HERO_CODE_LINES;
+  protected readonly windowDots = HERO_WINDOW_DOTS;
 
-  protected readonly windowDots = ['dot-red', 'dot-yellow', 'dot-green'] as const;
-
-  protected readonly codeLines: readonly CodeLine[] = [
-    {
-      tokens: [
-        { value: 'export class', className: 'code-keyword' },
-        { value: ' GabrielCruz', className: 'code-class' },
-        { value: ' {', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [
-        { value: 'role', className: 'code-prop' },
-        { value: ' = ', className: 'code-punct' },
-        { value: "'Full Angular Dev'", className: 'code-string' },
-        { value: ';', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [
-        { value: 'focus', className: 'code-prop' },
-        { value: ' = ', className: 'code-punct' },
-        { value: "'Product & Scale'", className: 'code-string' },
-        { value: ';', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [
-        { value: 'stack', className: 'code-prop' },
-        { value: ' = [', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 2,
-      tokens: [
-        { value: "'Angular'", className: 'code-string' },
-        { value: ',', className: 'code-punct' },
-        { value: " 'Node.js'", className: 'code-string' },
-        { value: ',', className: 'code-punct' },
-      ],
-    },
-    {
-      indent: 2,
-      tokens: [
-        { value: "'Rails'", className: 'code-string' },
-        { value: ',', className: 'code-punct' },
-        { value: " 'PostgreSQL'", className: 'code-string' },
-      ],
-    },
-    {
-      indent: 1,
-      tokens: [{ value: '];', className: 'code-punct' }],
-    },
-    {
-      tokens: [{ value: '}', className: 'code-punct' }],
-    },
-  ];
+  protected readonly badge = computed(() => this.t(HERO_TEXT_KEYS['badge']));
+  protected readonly introPrefix = computed(() => this.t(HERO_TEXT_KEYS['introPrefix']));
+  protected readonly introName = computed(() => this.t(HERO_TEXT_KEYS['introName']));
+  protected readonly titleLine1 = computed(() => this.t(HERO_TEXT_KEYS['titleLine1']));
+  protected readonly titleLine2 = computed(() => this.t(HERO_TEXT_KEYS['titleLine2']));
+  protected readonly titleLine3 = computed(() => this.t(HERO_TEXT_KEYS['titleLine3']));
+  protected readonly description = computed(() => this.t(HERO_TEXT_KEYS['description']));
+  protected readonly aboutCta = computed(() => this.t(HERO_TEXT_KEYS['aboutCta']));
+  protected readonly cvCta = computed(() => this.t(HERO_TEXT_KEYS['cvCta']));
+  protected readonly stackAriaLabel = computed(() => this.t(HERO_TEXT_KEYS['stackAria']));
+  protected readonly cvSuccessTitle = computed(() => this.t(HERO_TEXT_KEYS['cvSuccessTitle']));
+  protected readonly cvSuccessMessage = computed(() => this.t(HERO_TEXT_KEYS['cvSuccessMessage']));
 
   private get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
@@ -110,17 +59,16 @@ export class Hero {
     }
 
     afterNextRender(() => {
-      this.resetToHeroOnLoad();
-      this.animateEntrance();
+      this.heroService.animateEntrance();
     });
   }
 
-  protected scrollToExperience(): void {
+  protected scrollToAbout(): void {
     if (!this.isBrowser) {
       return;
     }
 
-    document.getElementById('experiencia')?.scrollIntoView({ behavior: 'smooth' });
+    scrollToPortfolioSection('about');
   }
 
   protected downloadCV(): void {
@@ -130,8 +78,8 @@ export class Hero {
 
     const link = document.createElement('a');
 
-    link.href = this.cvUrl;
-    link.download = this.cvFileName;
+    link.href = HERO_CV_FILE.url;
+    link.download = HERO_CV_FILE.fileName;
     link.rel = 'noopener';
     link.target = '_blank';
 
@@ -139,39 +87,10 @@ export class Hero {
     link.click();
     link.remove();
 
-    this.alertService.showSuccess('CV descargado', 'Has descargado el CV con éxito.', undefined, 4000, 'top-center');
+    this.alertService.showSuccess(this.cvSuccessTitle(), this.cvSuccessMessage(), undefined, 4000, 'top-center');
   }
 
-  private resetToHeroOnLoad(): void {
-    if (!window.location.hash) {
-      return;
-    }
-
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-    window.scrollTo(0, 0);
-  }
-
-  private async animateEntrance(): Promise<void> {
-    const { gsap } = await import('gsap');
-
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    // Stagger for content items (badge, title, desc, buttons, tech stack)
-    tl.fromTo('.hero-content > *', 
-      { opacity: 0, y: 30 }, 
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }
-    )
-    // Avatar animation with a slight bounce
-    .fromTo('.hero-avatar', 
-      { opacity: 0, scale: 0.8, rotation: -8 }, 
-      { opacity: 1, scale: 1, rotation: 0, duration: 0.8, ease: 'back.out(1.5)' }, 
-      "-=0.6"
-    )
-    // Code block slide in
-    .fromTo('.font-mono', 
-      { opacity: 0, x: 40 }, 
-      { opacity: 1, x: 0, duration: 0.8 }, 
-      "-=0.7"
-    );
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 }

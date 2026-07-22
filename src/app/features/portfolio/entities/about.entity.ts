@@ -1,9 +1,9 @@
-export interface Stat {
+export interface IStat {
   value: string;
   label: string;
 }
 
-export interface AboutContent {
+export interface IAboutContent {
   label: string;
   title: string;
   paragraphs: string[];

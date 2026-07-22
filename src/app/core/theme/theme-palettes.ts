@@ -8,7 +8,7 @@ export interface ThemeColor {
 export const PRIMARY_COLORS: ThemeColor[] = [
   {
     key: 'angular', label: 'Angular', swatch: '#dd0031',
-    palette: { 50:'#fff1f3',100:'#ffe4e8',200:'#ffcbd5',300:'#ff9fb4',400:'#ff6b8d',500:'#f53d67',600:'#eb1f4f',700:'#dd0031',800:'#b8002b',900:'#8f0021',950:'#52000f' }
+    palette: { 50:'#fff1f0',100:'#ffe3df',200:'#ffbdb5',300:'#ff8572',400:'#ff4533',500:'#f02020',600:'#e8001a',700:'#dd0031',800:'#b8002b',900:'#8f0021',950:'#52000f' }
   },
   {
     key: 'black', label: 'Slate', swatch: '#404040',

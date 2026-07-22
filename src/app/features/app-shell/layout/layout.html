@@ -1,4 +1,5 @@
 <div class="layout-scroll-root">
+  <portfolio-scroll-progress />
   <portfolio-header />
 
   <main id="main-content" class="main-content" tabindex="-1">
@@ -8,4 +9,8 @@
   <portfolio-footer />
 </div>
 
-<portfolio-toast />
+@defer (when alertService.toastRequested()) {
+  @if (alertService.toastActive()) {
+    <portfolio-toast />
+  }
+}

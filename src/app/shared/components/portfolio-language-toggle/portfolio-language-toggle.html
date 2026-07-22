@@ -1,0 +1,7 @@
+<label class="language-toggle" [attr.aria-label]="ariaLabel()">
+  <p-toggleswitch
+    [ngModel]="localChecked()"
+    (ngModelChange)="onLanguageChange($event)"
+    [ariaLabel]="ariaLabel()"
+  />
+</label>

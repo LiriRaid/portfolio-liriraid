@@ -2,112 +2,40 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Popover } from 'primeng/popover';
-import gsap from 'gsap';
 
-import { Project, ProjectTechnologyCategory } from '@features/portfolio/entities';
+import { I18nService } from '@core/i18n';
+import { IProject, IProjectTechnologyCategory } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { CarouselItem } from '@shared/components/portfolio-carousel/carousel-item.directive';
 import { PortfolioCarousel } from '@shared/components/portfolio-carousel/portfolio-carousel';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
 import { PortfolioSearch } from '@shared/components/portfolio-search/portfolio-search';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives';
 import { techIconUrl } from '@shared/utils/tech-icons';
 
-import { GithubRepositoryService } from './project.service';
-
-const PROJECTS: Project[] = [
-  {
-    title: 'OmniInbox',
-    description: 'Plataforma conversacional tipo inbox omnicanal construida con Angular 21. Centraliza módulos de login, inbox, perfil y shell autenticado con arquitectura feature-first, componentes standalone, lazy loading, tema claro/oscuro, animaciones y testing moderno.',
-    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'Tailwind CSS', 'PrimeNG', 'GSAP', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
-    repo: 'LiriRaid/omni-inbox',
-    githubUrl: 'https://github.com/LiriRaid/omni-inbox',
-    liveUrl: null,
-    featured: true,
-    screenshots: ['assets/img/projects/omniinbox-profile.svg', 'assets/img/projects/omniinbox-login.svg', 'assets/img/projects/omniinbox-inbox.svg'],
-  },
-  {
-    title: 'AgentFlow AI',
-    description: 'Orquestador multiagente para desarrollo con IA. Coordina agentes como Claude, Codex, OpenCode y Gemini, delega tareas, monitorea progreso en una TUI y mantiene el proyecto principal limpio mediante un workspace separado.',
-    tags: ['Node.js', 'JavaScript', 'NPM', 'CLI', 'TUI', 'AI Agents', 'Automation', 'Clean Architecture'],
-    repo: 'LiriRaid/agentflow-ai',
-    githubUrl: 'https://github.com/LiriRaid/agentflow-ai',
-    liveUrl: null,
-    screenshots: ['assets/img/projects/agentflow-tui.svg', 'assets/img/projects/agentflow-orchestrator.svg'],
-  },
-  {
-    title: 'Portfolio Liriraid',
-    description: 'Portfolio personal profesional creado con Angular 21, SSR, prerender, hidratación normal, sistema de temas dinámico, componentes reutilizables y estructura escalable basada en features.',
-    tags: ['Angular 21', 'TypeScript', 'CSS3', 'RxJS', 'Signals', 'SSR', 'Prerender', 'PrimeNG', 'Tailwind CSS', 'CSS', 'Vitest', 'Lazy Loading', 'Screaming Architecture', 'Feature-first'],
-    repo: 'LiriRaid/portfolio-liriraid',
-    githubUrl: 'https://github.com/LiriRaid/portfolio-liriraid',
-    liveUrl: null,
-    screenshots: ['assets/img/projects/portfolio-hero.svg', 'assets/img/projects/portfolio-projects.svg'],
-  },
-];
-
-const TECHNOLOGY_CATEGORIES: ProjectTechnologyCategory[] = [
-  {
-    label: 'Frontend',
-    icon: 'Globe',
-    technologies: ['Angular 21', 'AngularJS', 'Signals', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'PrimeNG', 'RxJS'],
-  },
-  {
-    label: 'Backend',
-    icon: 'Server',
-    technologies: ['Node.js', 'NestJS', 'Ruby on Rails', 'Express', 'REST API'],
-  },
-  {
-    label: 'Base de datos',
-    icon: 'Database',
-    technologies: ['PostgreSQL', 'Redis'],
-  },
-  {
-    label: 'Herramientas',
-    icon: 'Settings',
-    technologies: ['Git', 'Docker', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'GSAP', 'Vitest', 'NPM'],
-  },
-  {
-    label: 'Arquitectura',
-    icon: 'Layers',
-    technologies: ['Screaming Architecture', 'Feature-first', 'Clean Architecture', 'Prerender', 'SSR', 'Lazy Loading', 'DRY / SOLID', 'DDD'],
-  },
-  {
-    label: 'IA / Automatización',
-    icon: 'Code',
-    technologies: ['JavaScript', 'CLI', 'TUI', 'AI Agents', 'Automation'],
-  },
-];
-
-const FALLBACK_ICONS: Record<string, string> = {
-  'Clean Architecture': 'Layers',
-  'Screaming Architecture': 'Folder',
-  'Feature-first': 'Folder',
-  SSR: 'Server',
-  Prerender: 'Globe',
-  'Lazy Loading': 'Download',
-  'DRY / SOLID': 'ShieldCheck',
-  DDD: 'Database',
-  CLI: 'Code',
-  TUI: 'MediaPreview',
-  'AI Agents': 'MessagesSquare',
-  Automation: 'Settings',
-  'REST API': 'Server',
-  MIT: 'Scale',
-};
+import { PROJECT_TECH_FALLBACK_ICONS, PROJECT_TECHNOLOGY_CATEGORIES, PROJECTS, PROJECTS_EMPTY_STATE, PROJECTS_HEADER } from './mocks';
+import { ProjectsService } from './projects.service';
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-projects',
   standalone: true,
-  imports: [Popover, PortfolioButton, PortfolioCarousel, CarouselItem, PortfolioIcon, PortfolioSearch],
+  imports: [Popover, PortfolioButton, PortfolioCarousel, CarouselItem, PortfolioIcon, PortfolioSearch, PortfolioAnimatedBorderDirective],
+  providers: [ProjectsService],
   templateUrl: './projects.html',
   styleUrl: './projects.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block; background-color: var(--app-panel-muted-bg);',
+  },
 })
 export class Projects {
-  private readonly githubRepositoryService = inject(GithubRepositoryService);
+  private readonly projectsService = inject(ProjectsService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
 
   @ViewChild('headerRef') private headerRef?: ElementRef<HTMLElement>;
   @ViewChild('toolbarRef') private toolbarRef?: ElementRef<HTMLElement>;
@@ -116,16 +44,51 @@ export class Projects {
 
   protected readonly techIconUrl = techIconUrl;
 
+  protected readonly header = computed(() => ({
+    label: this.t(PROJECTS_HEADER.label),
+    title: this.t(PROJECTS_HEADER.title),
+    subtitle: this.t(PROJECTS_HEADER.subtitle),
+  }));
+
+  protected readonly emptyState = computed(() => ({
+    searchTitle: this.t(PROJECTS_EMPTY_STATE.searchTitle),
+    filtersTitle: this.t(PROJECTS_EMPTY_STATE.filtersTitle),
+    description: this.t(PROJECTS_EMPTY_STATE.description),
+  }));
+
+  protected readonly filtersButtonLabel = computed(() => this.t('projects.filters.button'));
+  protected readonly filtersButtonAria = computed(() => this.t('projects.filters.button.aria'));
+  protected readonly filtersClearLabel = computed(() => this.t('projects.filters.clear'));
+  protected readonly filtersClearAria = computed(() => this.t('projects.filters.clear.aria'));
+  protected readonly filtersPanelTitle = computed(() => this.t('projects.filters.panel.title'));
+  protected readonly filtersPanelClear = computed(() => this.t('projects.filters.panel.clear'));
+  protected readonly filtersPanelHint = computed(() => this.t('projects.filters.panel.hint'));
+  protected readonly filtersCategoriesAria = computed(() => this.t('projects.filters.categories.aria'));
+  protected readonly selectedTagsAria = computed(() => this.t('projects.filters.selectedTags.aria'));
+  protected readonly removeFilterPrefix = computed(() => this.t('projects.filters.remove.prefix'));
+  protected readonly searchPlaceholder = computed(() => this.t('projects.search.placeholder'));
+  protected readonly featuredBadge = computed(() => this.t('projects.badge.featured'));
+  protected readonly cardTagsAria = computed(() => this.t('projects.card.tags.aria'));
+  protected readonly statsAria = computed(() => this.t('projects.stats.aria'));
+  protected readonly forkLabel = computed(() => this.t('projects.stats.fork'));
+  protected readonly githubLoading = computed(() => this.t('projects.github.loading'));
+  protected readonly githubUnavailable = computed(() => this.t('projects.github.unavailable'));
+  protected readonly privateProjectLabel = computed(() => this.t('projects.private'));
+  protected readonly viewGithubPrefix = computed(() => this.t('projects.link.github.prefix'));
+  protected readonly viewGithubSuffix = computed(() => this.t('projects.link.github.suffix'));
+  protected readonly demoLabel = computed(() => this.t('projects.link.live'));
+  protected readonly viewDemoPrefix = computed(() => this.t('projects.link.live.prefix'));
+
   protected readonly searchControl = new FormControl<string>('', { nonNullable: true });
   protected readonly searchTerm = signal('');
 
-  protected readonly projects = signal<Project[]>(PROJECTS);
-  protected readonly technologyCategories = signal<ProjectTechnologyCategory[]>(TECHNOLOGY_CATEGORIES);
+  protected readonly projects = signal<IProject[]>([...PROJECTS]);
+  protected readonly technologyCategories = signal<IProjectTechnologyCategory[]>([...PROJECT_TECHNOLOGY_CATEGORIES]);
   protected readonly selectedTechnologies = signal<string[]>([]);
 
-  protected readonly activeFilterCategoryLabel = signal<string | null>(TECHNOLOGY_CATEGORIES[0]?.label ?? null);
+  protected readonly activeFilterCategoryLabel = signal<string | null>(PROJECT_TECHNOLOGY_CATEGORIES[0]?.label ?? null);
 
-  protected readonly displayedProjects = signal<Project[]>(PROJECTS);
+  protected readonly displayedProjects = signal<IProject[]>([...PROJECTS]);
   protected readonly leavingProjectTitles = signal<Set<string>>(new Set());
   protected readonly enteringProjectTitles = signal<Set<string>>(new Set());
 
@@ -174,12 +137,8 @@ export class Projects {
       .join('|');
   });
 
-  private readonly projectExitDuration = 680;
-  private readonly projectEnterDuration = 520;
-
   private readonly leavingProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly enteringProjectTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
-
   private emptyStateTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -205,14 +164,14 @@ export class Projects {
     }
 
     afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
-          this.animateEntrance();
-        }
-      }, { threshold: 0.1 });
-      
-      observer.observe(this.elementRef.nativeElement);
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
+          this.projectsService.animateEntrance(this.elementRef, this.headerRef, this.toolbarRef, this.resultsRef);
+          void this.loadGithubStats();
+        },
+      });
 
       const onResize = (): void => {
         this.filterPanel?.hide();
@@ -220,39 +179,10 @@ export class Projects {
 
       window.addEventListener('resize', onResize);
 
-      void this.loadGithubStats();
-
       this.destroyRef.onDestroy(() => {
         window.removeEventListener('resize', onResize);
       });
     });
-  }
-
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    if (this.headerRef?.nativeElement) {
-      tl.fromTo(this.headerRef.nativeElement.children, 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }
-      );
-    }
-
-    if (this.toolbarRef?.nativeElement) {
-      tl.fromTo(this.toolbarRef.nativeElement, 
-        { opacity: 0, y: 20 }, 
-        { opacity: 1, y: 0, duration: 0.6 }, 
-        "-=0.5"
-      );
-    }
-
-    if (this.resultsRef?.nativeElement) {
-      tl.fromTo(this.resultsRef.nativeElement, 
-        { opacity: 0, y: 40, scale: 0.98 }, 
-        { opacity: 1, y: 0, scale: 1, duration: 0.8 }, 
-        "-=0.4"
-      );
-    }
   }
 
   protected selectFilterCategory(label: string): void {
@@ -292,23 +222,35 @@ export class Projects {
   }
 
   protected techFallbackIcon(technology: string): string {
-    return FALLBACK_ICONS[technology] ?? 'Code';
+    return PROJECT_TECH_FALLBACK_ICONS[technology] ?? 'Code';
   }
 
-  protected isRepositoryLoading(repo: string): boolean {
-    return this.githubRepositoryService.isLoading().has(repo);
+  protected isRepositoryLoading(repo: string | null): boolean {
+    return !!repo && this.projectsService.isLoading().has(repo);
+  }
+
+  protected translateCategoryLabel(label: string): string {
+    return this.t(label);
+  }
+
+  protected translateProjectDescription(description: string): string {
+    return this.t(description);
   }
 
   protected formatVisibility(visibility: string | null | undefined): string {
-    return visibility === 'private' ? 'Privado' : 'Público';
+    return visibility === 'private' ? this.t('projects.stats.visibility.private') : this.t('projects.stats.visibility.public');
   }
 
   protected formatLicense(license: string | null | undefined): string {
     if (!license || license === 'NOASSERTION') {
-      return 'Sin licencia';
+      return this.t('projects.stats.license.none');
     }
 
     return license.toUpperCase() === 'MIT' ? 'MIT' : license;
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 
   private syncDisplayedProjects(): void {
@@ -318,20 +260,18 @@ export class Projects {
     this.activeCarouselProjectTitle.set(nextProjects[0]?.title ?? '');
 
     if (!nextProjects.length) {
-      this.syncEmptyResults(currentDisplayedProjects);
+      this.updateStateForEmptyResults(currentDisplayedProjects);
       return;
     }
 
-    this.syncNonEmptyResults(nextProjects, currentDisplayedProjects);
+    this.updateStateForResults(nextProjects, currentDisplayedProjects);
   }
 
-  private syncEmptyResults(currentDisplayedProjects: Project[]): void {
+  private updateStateForEmptyResults(currentProjects: IProject[]): void {
     this.clearEmptyStateTimer();
     this.clearEnteringProjectAnimations();
 
-    this.activeCarouselProjectTitle.set('');
-
-    if (!currentDisplayedProjects.length) {
+    if (!currentProjects.length) {
       this.displayedProjects.set([]);
       this.showProjectsCarousel.set(false);
       this.showEmptyState.set(true);
@@ -341,156 +281,90 @@ export class Projects {
     this.showProjectsCarousel.set(true);
     this.showEmptyState.set(false);
 
-    const leavingProjects = currentDisplayedProjects;
-
-    this.leavingProjectTitles.update((current) => {
-      const updated = new Set(current);
-
-      leavingProjects.forEach((project) => {
-        updated.add(project.title);
-      });
-
-      return updated;
-    });
-
-    leavingProjects.forEach((project) => {
-      if (this.leavingProjectTimeouts.has(project.title)) return;
-
-      const timeout = setTimeout(() => {
-        this.displayedProjects.update((projects) => projects.filter((item) => item.title !== project.title));
-
-        this.leavingProjectTitles.update((current) => {
-          const updated = new Set(current);
-          updated.delete(project.title);
-          return updated;
-        });
-
-        this.leavingProjectTimeouts.delete(project.title);
-
-        if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
-          this.showProjectsCarousel.set(false);
-          this.showEmptyState.set(true);
-        }
-      }, this.projectExitDuration);
-
-      this.leavingProjectTimeouts.set(project.title, timeout);
+    this.markProjectsState(currentProjects, 'leaving', () => {
+      if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
+        this.showProjectsCarousel.set(false);
+        this.showEmptyState.set(true);
+      }
     });
   }
 
-  private syncNonEmptyResults(nextProjects: Project[], currentDisplayedProjects: Project[]): void {
-    const wasEmptyVisible = this.showEmptyState() || !this.showProjectsCarousel() || !currentDisplayedProjects.length;
+  private updateStateForResults(nextProjects: IProject[], currentProjects: IProject[]): void {
+    const wasEmpty = this.showEmptyState() || !this.showProjectsCarousel() || !currentProjects.length;
 
     this.clearEmptyStateTimer();
     this.showEmptyState.set(false);
     this.showProjectsCarousel.set(true);
 
     const nextTitles = new Set(nextProjects.map((project) => project.title));
-    const currentTitles = new Set(currentDisplayedProjects.map((project) => project.title));
+    const currentTitles = new Set(currentProjects.map((project) => project.title));
 
-    const leavingProjects = currentDisplayedProjects.filter((project) => !nextTitles.has(project.title));
-    const enteringProjects = nextProjects.filter((project) => !currentTitles.has(project.title));
+    const leaving = currentProjects.filter((project) => !nextTitles.has(project.title));
+    const entering = nextProjects.filter((project) => !currentTitles.has(project.title));
 
     nextProjects.forEach((project) => {
-      const leavingTimeout = this.leavingProjectTimeouts.get(project.title);
+      const timeout = this.leavingProjectTimeouts.get(project.title);
 
-      if (!leavingTimeout) return;
+      if (!timeout) {
+        return;
+      }
 
-      clearTimeout(leavingTimeout);
+      clearTimeout(timeout);
       this.leavingProjectTimeouts.delete(project.title);
     });
 
-    this.leavingProjectTitles.update((current) => {
-      const updated = new Set(current);
-
-      nextProjects.forEach((project) => {
-        updated.delete(project.title);
-      });
-
-      leavingProjects.forEach((project) => {
-        updated.add(project.title);
-      });
-
-      return updated;
-    });
-
-    const hasLeavingProjects = leavingProjects.length > 0;
-
-    if (!hasLeavingProjects) {
-      const sortedProjects = this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects()));
-      this.displayedProjects.set(sortedProjects);
-
-      if (wasEmptyVisible) {
-        this.markEnteringProjects(sortedProjects);
-      } else {
-        this.markEnteringProjects(enteringProjects);
-      }
-
+    if (!leaving.length) {
+      const sorted = this.replaceProjectReferences(this.sortProjectsByOriginalOrder(nextProjects, this.projects()));
+      this.displayedProjects.set(sorted);
+      this.markProjectsState(wasEmpty ? sorted : entering, 'entering');
       return;
     }
 
-    const mergedProjects = this.sortProjectsByOriginalOrder([...currentDisplayedProjects, ...enteringProjects], this.projects());
-    this.displayedProjects.set(this.replaceProjectReferences(mergedProjects));
+    const merged = this.sortProjectsByOriginalOrder([...currentProjects, ...entering], this.projects());
+    this.displayedProjects.set(this.replaceProjectReferences(merged));
 
-    this.markEnteringProjects(enteringProjects);
-
-    leavingProjects.forEach((project) => {
-      if (this.leavingProjectTimeouts.has(project.title)) return;
-
-      const timeout = setTimeout(() => {
-        this.displayedProjects.update((projects) => projects.filter((item) => item.title !== project.title));
-
-        this.leavingProjectTitles.update((current) => {
-          const updated = new Set(current);
-          updated.delete(project.title);
-          return updated;
-        });
-
-        this.leavingProjectTimeouts.delete(project.title);
-
-        if (!this.filteredProjects().length && !this.displayedProjects().length && !this.leavingProjectTitles().size) {
-          this.showProjectsCarousel.set(false);
-          this.showEmptyState.set(true);
-        }
-      }, this.projectExitDuration);
-
-      this.leavingProjectTimeouts.set(project.title, timeout);
-    });
+    this.markProjectsState(entering, 'entering');
+    this.markProjectsState(leaving, 'leaving');
   }
 
-  private markEnteringProjects(projects: Project[]): void {
-    if (!projects.length) return;
+  private markProjectsState(projects: IProject[], state: 'entering' | 'leaving', callback?: () => void): void {
+    if (!projects.length) {
+      return;
+    }
+
+    const signal = state === 'entering' ? this.enteringProjectTitles : this.leavingProjectTitles;
+    const timeouts = state === 'entering' ? this.enteringProjectTimeouts : this.leavingProjectTimeouts;
+    const duration = (state === 'entering' ? this.projectsService.ENTER_DURATION : this.projectsService.EXIT_DURATION) * 1000;
 
     projects.forEach((project) => {
-      const existingTimeout = this.enteringProjectTimeouts.get(project.title);
+      const existing = timeouts.get(project.title);
 
-      if (existingTimeout) {
-        clearTimeout(existingTimeout);
-        this.enteringProjectTimeouts.delete(project.title);
+      if (existing) {
+        clearTimeout(existing);
       }
-    });
 
-    this.enteringProjectTitles.update((current) => {
-      const updated = new Set(current);
+      signal.update((current) => new Set(current).add(project.title));
 
-      projects.forEach((project) => {
-        updated.add(project.title);
-      });
-
-      return updated;
-    });
-
-    projects.forEach((project) => {
       const timeout = setTimeout(() => {
-        this.enteringProjectTitles.update((current) => {
+        if (state === 'leaving') {
+          this.displayedProjects.update((list) => list.filter((item) => item.title !== project.title));
+        }
+
+        signal.update((current) => {
           const updated = new Set(current);
           updated.delete(project.title);
+
           return updated;
         });
 
-        this.enteringProjectTimeouts.delete(project.title);
-      }, this.projectEnterDuration);
+        timeouts.delete(project.title);
 
-      this.enteringProjectTimeouts.set(project.title, timeout);
+        if (callback) {
+          callback();
+        }
+      }, duration);
+
+      timeouts.set(project.title, timeout);
     });
   }
 
@@ -501,19 +375,21 @@ export class Projects {
   }
 
   private clearEmptyStateTimer(): void {
-    if (!this.emptyStateTimer) return;
+    if (!this.emptyStateTimer) {
+      return;
+    }
 
     clearTimeout(this.emptyStateTimer);
     this.emptyStateTimer = null;
   }
 
-  private replaceProjectReferences(projects: Project[]): Project[] {
+  private replaceProjectReferences(projects: IProject[]): IProject[] {
     const projectByTitle = new Map(this.projects().map((project) => [project.title, project]));
 
     return projects.map((project) => projectByTitle.get(project.title) ?? project);
   }
 
-  private sortProjectsByOriginalOrder(projects: Project[], originalProjects: Project[]): Project[] {
+  private sortProjectsByOriginalOrder(projects: IProject[], originalProjects: IProject[]): IProject[] {
     const uniqueProjects = new Map(projects.map((project) => [project.title, project]));
     const order = new Map(originalProjects.map((project, index) => [project.title, index]));
 
@@ -522,8 +398,8 @@ export class Projects {
     });
   }
 
-  private projectMatchesSearch(project: Project, term: string): boolean {
-    return this.normalizeText(project.title).includes(term) || this.normalizeText(project.description).includes(term) || project.tags.some((tag) => this.normalizeText(tag).includes(term));
+  private projectMatchesSearch(project: IProject, term: string): boolean {
+    return this.normalizeText(project.title).includes(term) || this.normalizeText(this.t(project.description)).includes(term) || project.tags.some((tag) => this.normalizeText(tag).includes(term));
   }
 
   private normalizeText(value: string): string {
@@ -534,7 +410,7 @@ export class Projects {
     const entries = await Promise.all(
       this.projects().map(async (project) => ({
         repo: project.repo,
-        stats: await this.githubRepositoryService.getRepositoryStats(project.repo),
+        stats: project.repo ? await this.projectsService.getRepositoryStats(project.repo) : null,
       })),
     );
 

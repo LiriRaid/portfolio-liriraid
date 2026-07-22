@@ -37,3 +37,4 @@ Cada documento responde:
 - [docs/app/](app/README.md) — documentación de `src/app`
 - [docs/assets/](assets/README.md) — documentación de `src/assets`
 - [docs/styles/](styles/README.md) — documentación de `src/styles`
+- [docs/testing.md](testing.md) — cómo se ejecutan los tests (Vitest) y por qué no `ng test`

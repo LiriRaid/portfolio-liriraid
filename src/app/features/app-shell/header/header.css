@@ -1,150 +1,164 @@
-:host {
+portfolio-header {
+  --header-height: var(--app-header-height);
+  --header-inner-px: 1.5rem;
+  --header-inner-gap: 2rem;
+  --header-actions-gap: clamp(0.42rem, 0.328rem + 0.256vw, 0.55rem);
+
+  --header-logo-size: clamp(0.875rem, 0.6154rem + 0.7212vw, 1.25rem);
+  --header-dot-size: clamp(1rem, 0.6538rem + 0.9615vw, 1.5rem);
+
+  --header-action-size: clamp(2rem, 1.8269rem + 0.4808vw, 2.25rem);
+  --header-icon-size: 1rem;
+
+  --header-nav-py: 8px;
+  --header-nav-px: 16px;
+
+  --header-bg: color-mix(in srgb, var(--app-panel-bg) 78%, transparent);
+
+  --mobile-nav-bg: color-mix(in srgb, var(--app-panel-bg) 82%, transparent);
+  --mobile-nav-column-min: 13rem;
+  --mobile-nav-px: 1rem;
+  --mobile-nav-py: 0.75rem;
+  --mobile-nav-size: var(--font-size-body-2);
+
   position: sticky;
   top: 0;
   z-index: 100;
   display: block;
-  height: var(--app-header-height);
-  flex: 0 0 var(--app-header-height);
+  height: var(--header-height);
+  flex: 0 0 var(--header-height);
 }
 
-.header {
-  --header-bg: color-mix(in srgb, var(--app-panel-bg) 90%, transparent);
-  --mobile-nav-bg: color-mix(in srgb, var(--app-panel-bg) 85%, transparent);
-
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+.header--floating {
+  border-bottom-width: 1px !important;
+  background-color: color-mix(in srgb, var(--app-panel-bg) 70%, transparent);
 }
 
-/* =========================
-   PrimeNG buttons
-   ========================= */
-
-:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button {
+portfolio-header :is(.nav-link, .mobile-nav-link, .icon-btn).p-button {
   border: 0;
   background-color: transparent;
   box-shadow: none;
+  box-sizing: border-box;
   transition:
     color 0.2s ease,
     background-color 0.2s ease;
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button {
+portfolio-header .nav-link.p-button {
+  height: var(--header-action-size);
+  min-height: var(--header-action-size);
+  max-height: var(--header-action-size);
+  padding: var(--header-nav-py) var(--header-nav-px);
   border-radius: 0.75rem;
-}
-
-:host ::ng-deep .nav-link.p-button {
-  min-height: auto;
-  padding: 0.45rem 1rem;
   white-space: nowrap;
 }
 
-:host ::ng-deep .mobile-nav-link.p-button {
+portfolio-header .mobile-nav-link.p-button {
   width: 100%;
+  min-height: 2.45rem;
   justify-content: flex-start;
-  padding: 0.75rem 1rem;
+  padding: var(--mobile-nav-py) var(--mobile-nav-px);
+  border-radius: 0.75rem;
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link).p-button .p-button-label {
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button .p-button-label {
   color: var(--app-text-muted);
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
-:host ::ng-deep .nav-link.p-button .p-button-label {
+portfolio-header .nav-link.p-button .p-button-label {
   font-size: var(--font-size-caption-1);
+  line-height: 1;
 }
 
-:host ::ng-deep .mobile-nav-link.p-button .p-button-label {
-  font-size: var(--font-size-body-2);
+portfolio-header .mobile-nav-link.p-button .p-button-label {
+  font-size: var(--mobile-nav-size);
 }
 
-:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active).p-button:hover,
-:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button {
-  background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
-}
-
-:host ::ng-deep :is(.nav-link, .nav-link--active, .mobile-nav-link, .mobile-nav-link--active).p-button:hover .p-button-label,
-:host ::ng-deep :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label {
-  color: var(--app-text-color);
-}
-
-/* =========================
-   Icon buttons
-   ========================= */
-
-:host ::ng-deep .icon-btn.p-button {
-  width: 2.25rem;
-  min-width: 2.25rem;
-  height: 2.25rem;
+portfolio-header .icon-btn.p-button {
+  width: var(--header-action-size);
+  min-width: var(--header-action-size);
+  max-width: var(--header-action-size);
+  height: var(--header-action-size);
+  min-height: var(--header-action-size);
+  max-height: var(--header-action-size);
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   border-radius: 0.5rem;
   color: var(--app-text-muted);
-  overflow: hidden;
 }
 
-:host ::ng-deep .icon-btn.p-button:hover {
-  color: var(--app-text-color);
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button:hover,
+portfolio-header :is(.nav-link--active, .mobile-nav-link--active).p-button,
+portfolio-header .icon-btn.p-button:hover,
+.portfolio-background-animation-enabled portfolio-header .background-animation-btn.p-button,
+portfolio-header .background-animation-btn--active.p-button {
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .icon-btn.p-button .p-button-icon {
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button:hover .p-button-label,
+portfolio-header :is(.nav-link--active, .mobile-nav-link--active).p-button .p-button-label,
+portfolio-header .icon-btn.p-button:hover,
+.portfolio-background-animation-enabled portfolio-header .background-animation-btn.p-button,
+portfolio-header .background-animation-btn--active.p-button {
+  color: var(--app-text-color);
+}
+
+portfolio-header .icon-btn.p-button:is(:focus, :focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+portfolio-header .icon-btn.p-button .p-button-icon {
   margin: 0;
 }
 
-:host ::ng-deep :is(.nav-link, .mobile-nav-link, .icon-btn).p-button:focus-visible {
+portfolio-header .icon-btn.p-button :is(.p-button-icon, portfolio-icon, svg, .lucide),
+portfolio-header .icon-btn.p-button portfolio-icon * {
+  width: var(--header-icon-size);
+  min-width: var(--header-icon-size);
+  height: var(--header-icon-size);
+  min-height: var(--header-icon-size);
+  font-size: var(--header-icon-size);
+  line-height: 0;
+  color: inherit;
+  stroke: currentColor;
+}
+
+portfolio-header :is(.nav-link, .mobile-nav-link).p-button:focus-visible {
   outline: 2px solid var(--app-text-primary);
   outline-offset: 2px;
 }
 
-/* =========================
-   Theme toggle SSR-safe
-   ========================= */
-
-:host ::ng-deep .theme-toggle-btn.p-button,
-:host ::ng-deep .mobile-menu-btn.p-button {
+portfolio-header :is(.theme-toggle-btn, .mobile-menu-btn).p-button {
   position: absolute;
   inset: 0;
 }
 
-:host ::ng-deep .theme-toggle-btn--dark.p-button,
-:host ::ng-deep .mobile-menu-btn--close.p-button {
+portfolio-header :is(.theme-toggle-btn--dark, .mobile-menu-btn--close).p-button {
   display: none;
 }
 
-:host ::ng-deep .theme-toggle-btn--light.p-button,
-:host ::ng-deep .mobile-menu-btn--open.p-button {
+portfolio-header :is(.theme-toggle-btn--light, .mobile-menu-btn--open).p-button {
   display: inline-flex;
 }
 
-:host-context(.dark) ::ng-deep .theme-toggle-btn--dark.p-button {
+.dark portfolio-header .theme-toggle-btn--dark.p-button,
+portfolio-header .header.mobile-menu-open .mobile-menu-btn--close.p-button {
   display: inline-flex;
 }
 
-:host-context(.dark) ::ng-deep .theme-toggle-btn--light.p-button {
+.dark portfolio-header .theme-toggle-btn--light.p-button,
+portfolio-header .header.mobile-menu-open .mobile-menu-btn--open.p-button {
   display: none;
 }
-
-/* =========================
-   Mobile menu SSR-safe
-   ========================= */
-
-:host ::ng-deep .header.mobile-menu-open .mobile-menu-btn--open.p-button {
-  display: none;
-}
-
-:host ::ng-deep .header.mobile-menu-open .mobile-menu-btn--close.p-button {
-  display: inline-flex;
-}
-
-/* =========================
-   Responsive
-   ========================= */
 
 @media (max-width: 1100px) {
-  :host ::ng-deep .nav-link.p-button {
+  portfolio-header .nav-link.p-button {
     padding-inline: 0.75rem;
   }
 }
@@ -156,5 +170,52 @@
 
   .mobile-menu-slot {
     display: inline-flex;
+  }
+
+  portfolio-header .mobile-nav-link.p-button {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .header--floating .mobile-nav {
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    border: 1px solid var(--app-border-color);
+    border-radius: 1.25rem;
+    background-color: color-mix(in srgb, var(--app-panel-bg) 90%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+    backdrop-filter: blur(18px) saturate(135%);
+    box-shadow: 0 18px 48px -24px rgba(0, 0, 0, 0.55);
+  }
+
+  .header--floating .mobile-nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--app-panel-bg) 32%, transparent), color-mix(in srgb, var(--app-panel-bg) 20%, transparent)), linear-gradient(180deg, color-mix(in srgb, var(--app-text-color) 5%, transparent), transparent 45%);
+  }
+
+  portfolio-header .header--floating .mobile-nav-link.p-button {
+    position: relative;
+    z-index: 1;
+    border-radius: 0.875rem;
+  }
+}
+
+@media (max-width: 640px) {
+  portfolio-header {
+    --header-height: clamp(3rem, 1.714rem + 5.714vw, 4rem);
+    --header-inner-px: clamp(0.75rem, -0.964rem + 7.619vw, 1.5rem);
+    --header-inner-gap: clamp(0.5rem, -0.643rem + 5.079vw, 1rem);
+    --header-actions-gap: clamp(0.28rem, 0.188rem + 0.41vw, 0.38rem);
+
+    --mobile-nav-column-min: clamp(9.5rem, 42vw, 13rem);
+    --mobile-nav-px: clamp(0.75rem, 0.179rem + 2.54vw, 1rem);
+    --mobile-nav-py: clamp(0.55rem, 0.093rem + 2.032vw, 0.75rem);
+    --mobile-nav-size: clamp(0.78rem, 0.506rem + 1.219vw, var(--font-size-body-2));
   }
 }

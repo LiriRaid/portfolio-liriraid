@@ -5,6 +5,7 @@ import AuraDivider from '@primeuix/themes/aura/divider';
 import AuraPopover from '@primeuix/themes/aura/popover';
 import AuraRipple from '@primeuix/themes/aura/ripple';
 import AuraToast from '@primeuix/themes/aura/toast';
+import AuraToggleSwitch from '@primeuix/themes/aura/toggleswitch';
 
 import { DEFAULT_PRIMARY_PALETTE, DEFAULT_SURFACE_PALETTE } from './theme-palettes';
 
@@ -16,6 +17,7 @@ const portfolioAuraBase = {
     popover: AuraPopover,
     ripple: AuraRipple,
     toast: AuraToast,
+    toggleswitch: AuraToggleSwitch,
   },
 };
 
@@ -42,10 +44,10 @@ export const createPortfolioAuraPreset = (primaryPalette: Record<string, string>
         dark: {
           surface: surfacePalette,
           primary: {
-            color: '{primary.600}',
+            color: '{primary.500}',
             inverseColor: '#ffffff',
-            hoverColor: '{primary.700}',
-            activeColor: '{primary.800}',
+            hoverColor: '{primary.600}',
+            activeColor: '{primary.700}',
           },
           highlight: {
             background: 'rgba(255, 255, 255, 0.15)',

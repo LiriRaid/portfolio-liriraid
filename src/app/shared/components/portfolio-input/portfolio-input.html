@@ -24,6 +24,7 @@
             (input)="onInput($event)"
             (focus)="onFocusInput()"
             (blur)="onBlurInput()"
+            (keyup)="keyup.emit($event)"
             [attr.inputmode]="type() === 'price' ? 'decimal' : null"
             [attr.autocomplete]="autocomplete() || null"
             [attr.placeholder]="placeholderAttr()"
@@ -54,7 +55,7 @@
           @if (hasIcon() && lucideIcon()) {
             <portfolio-icon
               [name]="lucideIcon()"
-              [size]="16"
+              [size]="iconSize()"
               class="absolute top-1/2 -translate-y-1/2 transition-colors duration-150"
               [ngClass]="{
                 'left-3': iconPosition() === 'left',
@@ -82,6 +83,7 @@
             (input)="onInput($event)"
             (focus)="onFocusInput()"
             (blur)="onBlurInput()"
+            (keyup)="keyup.emit($event)"
             [attr.inputmode]="type() === 'price' ? 'decimal' : null"
             [attr.autocomplete]="autocomplete() || null"
             [attr.placeholder]="placeholderAttr()"
@@ -114,7 +116,7 @@
           @if (hasIcon() && lucideIcon()) {
             <portfolio-icon
               [name]="lucideIcon()"
-              [size]="16"
+              [size]="iconSize()"
               class="absolute top-1/2 -translate-y-1/2 transition-colors duration-150"
               [ngClass]="{
                 'left-3': iconPosition() === 'left',
