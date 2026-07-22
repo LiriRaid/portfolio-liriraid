@@ -181,8 +181,12 @@ portfolio-hero .hero-primary-cta.p-button :is(.p-button-label, .p-button-icon, p
 }
 
 .code-class {
-  color: var(--app-text-primary);
+  color: color-mix(in srgb, var(--app-text-primary) 78%, black);
   font-weight: 600;
+}
+
+.dark .code-class {
+  color: color-mix(in srgb, var(--app-text-primary) 62%, white);
 }
 
 .code-string {
