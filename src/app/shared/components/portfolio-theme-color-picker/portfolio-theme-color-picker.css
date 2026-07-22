@@ -1,87 +1,42 @@
-:host {
+portfolio-theme-color-picker {
   display: inline-flex;
 }
 
-/* =========================
-   Trigger
-   ========================= */
-
-:host ::ng-deep .picker-trigger.p-button {
-  width: 2.25rem;
-  height: 2.25rem;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
-  padding: 0;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border: none;
-  border-radius: 0.5rem;
-  background-color: transparent;
-  color: var(--app-text-muted);
-  box-shadow: none;
-  overflow: hidden;
-
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-:host ::ng-deep .picker-trigger.p-button .p-button-label {
+portfolio-theme-color-picker .picker-trigger.p-button .p-button-label {
   display: none;
 }
 
-:host ::ng-deep .picker-trigger.p-button .p-button-icon {
+portfolio-theme-color-picker .picker-trigger.p-button .p-button-icon {
   margin: 0;
 }
 
-:host ::ng-deep .picker-trigger.p-button .p-ink {
+portfolio-theme-color-picker .picker-trigger.p-button .p-ink {
   border-radius: inherit;
 }
 
-:host ::ng-deep .picker-trigger.p-button :is(.p-button-icon, portfolio-icon, svg),
-:host ::ng-deep .picker-trigger.p-button portfolio-icon * {
-  color: inherit;
-  stroke: currentColor;
-}
-
-/* =========================
-   Estados
-   ========================= */
-
-:host ::ng-deep .picker-trigger.p-button:hover,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active {
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active:hover {
   color: var(--app-text-color);
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
 }
 
-:host ::ng-deep .picker-trigger.p-button:focus,
-:host ::ng-deep .picker-trigger.p-button:focus-visible,
-:host ::ng-deep .picker-trigger.p-button.p-focus,
-:host ::ng-deep .picker-trigger.p-button[data-p-focused='true'] {
-  background-color: transparent !important;
-  color: var(--app-text-muted) !important;
-  border-color: transparent !important;
+portfolio-theme-color-picker .picker-trigger.p-button:focus,
+portfolio-theme-color-picker .picker-trigger.p-button:focus-visible,
+portfolio-theme-color-picker .picker-trigger.p-button.p-focus,
+portfolio-theme-color-picker .picker-trigger.p-button[data-p-focused='true'] {
   outline: none !important;
   box-shadow: none !important;
 }
 
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active:focus,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active:focus-visible,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active.p-focus,
-:host ::ng-deep .picker-trigger.p-button.picker-trigger--active[data-p-focused='true'] {
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active:focus,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active:focus-visible,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active.p-focus,
+portfolio-theme-color-picker .picker-trigger.p-button.picker-trigger--active[data-p-focused='true'] {
   color: var(--app-text-color) !important;
   background-color: color-mix(in srgb, var(--app-text-primary) 24%, transparent) !important;
-  box-shadow: none !important;
 }
 
-/* =========================
-   Popover
-   ========================= */
-
-::ng-deep .p-popover.color-picker-panel {
+.p-popover.color-picker-panel {
   --p-popover-background: var(--p-surface-0);
   --p-popover-border-color: var(--p-surface-200);
 
@@ -92,30 +47,26 @@
   opacity: 0;
 }
 
-::ng-deep .p-popover.color-picker-panel[data-positioned='true'] {
+.p-popover.color-picker-panel[data-positioned='true'] {
   opacity: 1;
 }
 
-::ng-deep .p-popover.color-picker-panel::before,
-::ng-deep .p-popover.color-picker-panel::after,
-::ng-deep .p-popover.color-picker-panel .p-popover-arrow {
+.p-popover.color-picker-panel::before,
+.p-popover.color-picker-panel::after,
+.p-popover.color-picker-panel .p-popover-arrow {
   left: var(--color-picker-arrow-x, 50%) !important;
   transform: translateX(-50%) !important;
 }
 
-::ng-deep .dark .p-popover.color-picker-panel,
-::ng-deep .dark.p-popover.color-picker-panel,
-::ng-deep .p-popover.color-picker-panel:where(.dark *) {
+.dark .p-popover.color-picker-panel,
+.dark.p-popover.color-picker-panel,
+.p-popover.color-picker-panel:where(.dark *) {
   --p-popover-background: var(--p-surface-900);
   --p-popover-border-color: var(--p-surface-700);
 
   background: var(--p-surface-900);
   border-color: var(--p-surface-700);
 }
-
-/* =========================
-   Contenido
-   ========================= */
 
 .color-picker-content,
 .color-picker-section {
@@ -156,15 +107,12 @@
   width: 22px;
   height: 22px;
   padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 50%;
   border: 2px solid transparent;
+  border-radius: 50%;
   cursor: pointer;
-
   transition:
     transform 0.15s ease,
     border-color 0.15s ease;
@@ -183,7 +131,7 @@
 .color-swatch .check {
   color: white;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }

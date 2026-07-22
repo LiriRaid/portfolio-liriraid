@@ -1,31 +1,43 @@
-export interface ProjectGithubStats {
+export interface IProjectsHeader {
+  label: string;
+  title: string;
+  subtitle: string;
+}
+
+export interface IProjectsEmptyState {
+  searchTitle: string;
+  filtersTitle: string;
+  description: string;
+}
+
+export interface IProjectGithubStats {
   stars: number;
   forks: number;
   visibility: 'public' | 'private' | string;
   license: string | null;
 }
 
-export type GithubRepositoryStats = ProjectGithubStats;
+export type IGithubRepositoryStats = IProjectGithubStats;
 
-export interface Project {
+export interface IProject {
   title: string;
   description: string;
   tags: string[];
-  repo: string;
-  githubUrl: string;
+  repo: string | null;
+  githubUrl: string | null;
   liveUrl: string | null;
   featured?: boolean;
   screenshots?: string[];
-  githubStats?: ProjectGithubStats;
+  githubStats?: IProjectGithubStats;
 }
 
-export interface ProjectTechnologyCategory {
+export interface IProjectTechnologyCategory {
   label: string;
   icon: string;
   technologies: string[];
 }
 
-export interface GithubRepositoryResponse {
+export interface IGithubRepositoryResponse {
   stargazers_count: number;
   forks_count: number;
   visibility: 'public' | 'private';

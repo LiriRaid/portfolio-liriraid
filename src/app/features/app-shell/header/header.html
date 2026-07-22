@@ -1,36 +1,40 @@
-<header class="header relative h-full border-b border-(--app-border-color) bg-(--header-bg) backdrop-blur-md" [class.mobile-menu-open]="mobileMenuOpen()" role="banner">
-  <div class="mx-auto flex h-full max-w-7xl items-center justify-between gap-8 px-6 max-[1100px]:gap-4 max-[1100px]:px-4">
-    <a href="#inicio" class="group flex shrink-0 items-baseline gap-[0.05rem] no-underline" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#inicio', 'inicio')">
-      <span class="text-xl font-bold tracking-[-0.02em] text-(--app-text-color) transition-colors group-hover:text-(--app-text-primary)"> Liriraid </span>
-      <span class="text-2xl font-bold leading-none text-(--app-text-primary)" aria-hidden="true">.</span>
+<header class="header relative mx-auto h-full border-b border-(--app-border-color) bg-(--header-bg) transition-colors duration-300 [backdrop-filter:blur(18px)_saturate(135%)] [-webkit-backdrop-filter:blur(18px)_saturate(135%)]" [class.mobile-menu-open]="mobileMenuOpen()" [class.header--floating]="isFloating()" role="banner">
+  <div class="header-inner mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-(--header-inner-gap) px-(--header-inner-px) max-[1100px]:gap-4 max-[1100px]:px-4">
+    <a href="#home" class="group flex shrink-0 items-center gap-[0.05rem] no-underline" aria-label="Ir al inicio - Liriraid" (click)="onNavLinkClick($event, '#home', 'home')">
+      <span class="font-bold leading-none tracking-[-0.02em] text-(--app-text-color) text-(length:--header-logo-size) transition-colors group-hover:text-(--app-text-primary)"> Liriraid </span>
+      <span class="font-bold leading-none text-(--app-text-primary) text-(length:--header-dot-size)" aria-hidden="true">.</span>
     </a>
 
     <nav class="header-nav flex flex-1 items-center justify-center gap-2" aria-label="Navegación principal">
-      @for (link of navLinks; track link.href) {
+      @for (link of navLinks(); track link.href) {
         <portfolio-button variant="text" [label]="link.label" [href]="link.href" [styleClass]="navLinkClass(link.sectionId)" (onClick)="onNavLinkClick($event, link.href, link.sectionId)" />
       }
     </nav>
 
-    <div class="flex shrink-0 items-center gap-2">
+    <div class="flex shrink-0 items-center gap-(--header-actions-gap)">
+      <portfolio-button variant="text" icon="Sparkles" iconSize="16" [styleClass]="backgroundAnimationButtonClass()" [ariaLabel]="backgroundAnimationAriaLabel()" (onClick)="toggleBackgroundAnimation()" />
+
       <portfolio-theme-color-picker />
 
-      <span class="theme-toggle-slot relative inline-flex size-9 min-w-9 items-center justify-center">
-        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--dark" icon="Sun" iconSize="18" ariaLabel="Activar modo claro" (onClick)="toggleThemeMode()" />
+      <portfolio-language-toggle />
 
-        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--light" icon="Moon" iconSize="18" ariaLabel="Activar modo oscuro" (onClick)="toggleThemeMode()" />
+      <span class="theme-toggle-slot relative inline-flex size-(--header-action-size) min-w-(--header-action-size) items-center justify-center">
+        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--dark" icon="Moon" iconSize="16" [ariaLabel]="lightThemeAriaLabel()" (onClick)="toggleThemeMode()" />
+
+        <portfolio-button variant="text" styleClass="icon-btn theme-toggle-btn theme-toggle-btn--light" icon="Sun" iconSize="16" [ariaLabel]="darkThemeAriaLabel()" (onClick)="toggleThemeMode()" />
       </span>
 
-      <span class="mobile-menu-slot relative hidden size-9 min-w-9 items-center justify-center">
-        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--open" icon="Menu" iconSize="20" ariaLabel="Abrir menú" (onClick)="toggleMobileMenu()" />
+      <span class="mobile-menu-slot relative hidden size-(--header-action-size) min-w-(--header-action-size) items-center justify-center">
+        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--open" icon="Menu" iconSize="16" [ariaLabel]="openMenuAriaLabel()" (onClick)="toggleMobileMenu()" />
 
-        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--close" icon="Close" iconSize="20" ariaLabel="Cerrar menú" (onClick)="toggleMobileMenu()" />
+        <portfolio-button variant="text" styleClass="icon-btn mobile-menu-btn mobile-menu-btn--close" icon="Close" iconSize="16" [ariaLabel]="closeMenuAriaLabel()" (onClick)="toggleMobileMenu()" />
       </span>
     </div>
   </div>
 
   @if (isMobileMenuRendered()) {
-    <nav class="mobile-nav absolute left-0 right-0 top-full z-99 flex flex-col gap-1 border-y border-(--app-border-color) bg-(--mobile-nav-bg) px-4 py-3 backdrop-blur-lg [box-shadow:0_8px_24px_-8px_rgba(0,0,0,0.25)]" style="clip-path: inset(0 0 100% 0);" aria-label="Navegación móvil">
-      @for (link of navLinks; track link.href) {
+    <nav class="mobile-nav absolute left-0 right-0 top-full z-99 flex flex-col gap-1 border-y border-(--app-border-color) bg-(--mobile-nav-bg) px-4 py-3 backdrop-blur-lg [box-shadow:0_8px_24px_-8px_rgba(0,0,0,0.25)] max-[768px]:grid max-[768px]:grid-cols-[repeat(auto-fit,minmax(min(100%,var(--mobile-nav-column-min)),1fr))] max-[768px]:items-stretch max-[768px]:gap-2" style="clip-path: inset(0 0 100% 0)" aria-label="Navegación móvil">
+      @for (link of navLinks(); track link.href) {
         <portfolio-button variant="text" [label]="link.label" [href]="link.href" [styleClass]="mobileNavLinkClass(link.sectionId)" (onClick)="onNavLinkClick($event, link.href, link.sectionId); closeMobileMenu()" />
       }
     </nav>

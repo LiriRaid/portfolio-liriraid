@@ -4,7 +4,7 @@ import { updatePrimaryPalette, updateSurfacePalette } from '@primeuix/themes';
 
 import { DEFAULT_PRIMARY_COLOR_KEY, DEFAULT_SURFACE_COLOR_KEY, getPrimaryColor, getSurfaceColor } from './theme-palettes';
 
-import { getStoredPrimaryColorKey, getStoredSurfaceColorKey, getStoredThemeMode, setStoredPrimaryColorKey, setStoredSurfaceColorKey, setStoredThemeMode } from './theme-preferences.storage';
+import { getInitialThemeMode, getStoredPrimaryColorKey, getStoredSurfaceColorKey, setStoredPrimaryColorKey, setStoredSurfaceColorKey, setStoredThemeMode } from './theme-preferences.storage';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -34,8 +34,6 @@ export class ThemeService {
     }
   }
 
-  // ── Mode ──────────────────────────────────────────────
-
   toggleMode(): void {
     this.setMode(this.mode() === 'dark' ? 'light' : 'dark');
   }
@@ -44,8 +42,6 @@ export class ThemeService {
     this.applyMode(mode, true);
     setStoredThemeMode(mode);
   }
-
-  // ── Primary color ─────────────────────────────────────
 
   applyColor(key: string): void {
     const color = getPrimaryColor(key);
@@ -62,8 +58,6 @@ export class ThemeService {
     this.updateFavicon(color.palette['500']);
   }
 
-  // ── Surface color ─────────────────────────────────────
-
   applySurface(key: string): void {
     const color = getSurfaceColor(key);
 
@@ -77,14 +71,8 @@ export class ThemeService {
     this.rootElement.dataset['surfaceColor'] = color.key;
   }
 
-  // ── Private ───────────────────────────────────────────
-
   private initMode(): void {
-    const saved = getStoredThemeMode();
-
-    const resolved: ThemeMode = saved ? saved : globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-
-    this.applyMode(resolved, false);
+    this.applyMode(getInitialThemeMode(), false);
   }
 
   private initColor(): void {
@@ -105,6 +93,7 @@ export class ThemeService {
     }
 
     this.rootElement.classList.toggle('dark', mode === 'dark');
+    this.rootElement.style.colorScheme = mode;
 
     if (withTransitionGuard) {
       requestAnimationFrame(() => {
@@ -159,16 +148,27 @@ export class ThemeService {
 
   private createTintedFaviconHref(svg: string, color: string): string {
     const filter = `
-<filter id="favicon-primary-tint" color-interpolation-filters="sRGB">
-  <feFlood flood-color="${color}" result="tint"/>
-  <feBlend in="tint" in2="SourceGraphic" mode="color" result="colored"/>
-  <feComposite in="colored" in2="SourceAlpha" operator="in"/>
-</filter>`;
+<defs>
+  <filter id="favicon-primary-tint" color-interpolation-filters="sRGB">
+    <feFlood flood-color="${color}" result="tint"/>
+    <feBlend in="tint" in2="SourceGraphic" mode="color" result="colored"/>
+    <feComposite in="colored" in2="SourceAlpha" operator="in"/>
+  </filter>
+</defs>`;
 
-    const withFilter = svg.replace('</defs>', `${filter}</defs>`);
-    const withTint = withFilter.replace('<g id="surface2">', '<g id="surface2" filter="url(#favicon-primary-tint)">');
+    let nextSvg = svg;
 
-    return `data:image/svg+xml,${encodeURIComponent(withTint)}`;
+    nextSvg = nextSvg.replace(/<svg([^>]*)>/, `<svg$1>${filter}`);
+
+    if (nextSvg.includes('<image')) {
+      nextSvg = nextSvg.replace(/<image\b(?![^>]*filter=)/, '<image filter="url(#favicon-primary-tint)"');
+    }
+
+    if (nextSvg.includes('<g id="surface2"')) {
+      nextSvg = nextSvg.replace(/<g id="surface2"\b(?![^>]*filter=)/, '<g id="surface2" filter="url(#favicon-primary-tint)"');
+    }
+
+    return `data:image/svg+xml,${encodeURIComponent(nextSvg)}`;
   }
 
   private ensureFaviconLink(): HTMLLinkElement {

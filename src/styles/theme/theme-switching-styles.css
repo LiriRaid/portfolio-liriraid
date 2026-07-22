@@ -1,0 +1,22 @@
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button *,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button::before,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button::after,
+:root.theme-switching portfolio-theme-color-picker .theme-picker-trigger.p-button :is(.p-button-icon, portfolio-icon, svg) {
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    fill,
+    stroke,
+    box-shadow,
+    outline-color,
+    text-decoration-color,
+    column-rule-color,
+    -webkit-text-fill-color !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}

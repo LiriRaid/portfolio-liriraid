@@ -1,6 +1,48 @@
 import type { LucideIcon, LucideIconData } from '@lucide/angular';
-import { LucideArrowRight, LucideBuilding2, LucideCheck, LucideCircleCheck, LucideChevronLeft, LucideChevronRight, LucideMaximize2, LucideCirclePlus, LucideCircleX, LucideCode2, LucideDatabase, LucideDownload, LucideExternalLink, LucideGitBranch, LucideGitFork, LucideGlobe, LucideHouse, LucideImagePlus, LucideInfo, LucideLayers, LucideListFilter, LucideLock, LucideMail, LucideMenu, LucideMoon, LucidePalette, LucideScale, LucideSearch, LucideServer, LucideSettings, LucideShieldCheck, LucideSquarePen, LucideStar, LucideSun, LucideUser, LucideX, LucideSend, LucideFolderInput, LucideLayoutPanelTop, LucideMessagesSquare } from '@lucide/angular';
-
+import {
+  LucideArrowRight,
+  LucideBuilding2,
+  LucideCheck,
+  LucideCircleCheck,
+  LucideChevronLeft,
+  LucideChevronRight,
+  LucideMaximize2,
+  LucideCirclePlus,
+  LucideCircleX,
+  LucideCode2,
+  LucideDatabase,
+  LucideDownload,
+  LucideExternalLink,
+  LucideGitBranch,
+  LucideGitFork,
+  LucideGlobe,
+  LucideHouse,
+  LucideImagePlus,
+  LucideInfo,
+  LucideLayers,
+  LucideListFilter,
+  LucideLock,
+  LucideMail,
+  LucideMenu,
+  LucideMoon,
+  LucidePalette,
+  LucideScale,
+  LucideSearch,
+  LucideServer,
+  LucideSettings,
+  LucideShieldCheck,
+  LucideSquarePen,
+  LucideStar,
+  LucideSun,
+  LucideUser,
+  LucideX,
+  LucideSend,
+  LucideFolderInput,
+  LucideLayoutPanelTop,
+  LucideMessagesSquare,
+  LucideSparkles,
+  LucideZoomIn,
+} from '@lucide/angular';
 type PortfolioLucideIcon = LucideIcon | LucideIconData;
 
 const toLucideIconData = (icon: PortfolioLucideIcon): LucideIconData => ('icon' in icon ? icon.icon : icon);
@@ -24,7 +66,7 @@ const PortfolioLucideIcons = {
   ExternalLink: LucideExternalLink,
   Filter: LucideListFilter,
   Folder: LucideFolderInput,
-  Github: LucideGitBranch,
+  GitBranch: LucideGitBranch,
   GitFork: LucideGitFork,
   Globe: LucideGlobe,
   Home: LucideHouse,
@@ -43,9 +85,11 @@ const PortfolioLucideIcons = {
   Server: LucideServer,
   Settings: LucideSettings,
   ShieldCheck: LucideShieldCheck,
+  Sparkles: LucideSparkles,
   Star: LucideStar,
   Sun: LucideSun,
   User: LucideUser,
+  ZoomIn: LucideZoomIn,
 } as const satisfies Record<string, PortfolioLucideIcon>;
 
 export const LucideIcons = Object.fromEntries(Object.entries(PortfolioLucideIcons).map(([name, icon]) => [name, toLucideIconData(icon)])) as { [Name in keyof typeof PortfolioLucideIcons]: LucideIconData };

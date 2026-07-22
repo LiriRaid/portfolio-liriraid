@@ -14,7 +14,7 @@ const ICONS: Record<string, string> = {
   HTML5: 'assets/svg/technologies/html5.svg',
   CSS: 'assets/svg/technologies/css3.svg',
   CSS3: 'assets/svg/technologies/css3.svg',
-  SASS: 'assets/svg/technologies/sass.svg',
+  SCSS: 'assets/svg/technologies/sass.svg',
   'Tailwind CSS': 'assets/svg/technologies/tailwindcss.svg',
   RxJS: 'assets/svg/technologies/rxjs.svg',
   'Node.js': 'assets/svg/technologies/nodejs.svg',

@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideClientHydration, withEventReplay, withIncrementalHydration } from '@angular/platform-browser';
 import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 import { PORTFOLIO_LUCIDE_ICONS } from '@core/common/icons/lucide-icons.provider';
+import { provideI18nInitializer } from '@core/i18n';
 import { createPortfolioAuraPreset } from '@core/theme/portfolio-aura-preset';
 import { getStoredPrimaryColorKey, getStoredSurfaceColorKey } from '@core/theme/theme-preferences.storage';
 import { getPrimaryColor, getSurfaceColor } from '@core/theme/theme-palettes';
@@ -17,6 +18,7 @@ const portfolioAuraPreset = createPortfolioAuraPreset(getPrimaryColor(getStoredP
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withViewTransitions({ skipInitialTransition: true }), withComponentInputBinding()),
 
@@ -36,6 +38,7 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideThemeInitializer(),
+    provideI18nInitializer(),
     MessageService,
     {
       provide: LUCIDE_ICONS,

@@ -1,35 +1,35 @@
-<section id="sobre-mi" class="about flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--a-py)" aria-labelledby="about-heading">
-  <div class="about-inner mx-auto w-full max-w-7xl px-(--a-px)">
-    <div class="about-layout grid items-start gap-(--a-layout-gap)">
+<section id="about" class="about flex min-h-(--app-section-min-height) flex-col justify-center bg-(--app-panel-muted-bg) py-(--a-py)" aria-labelledby="about-heading">
+  <div class="portfolio-section-container portfolio-section-reveal">
+    <div class="about-layout grid items-center gap-(--a-layout-gap)">
       <div #contentRef class="about-content flex max-w-(--a-content-max) flex-col gap-(--a-content-gap)">
-        <header class="about-header flex flex-col gap-(--a-header-gap)">
-          <p class="about-label m-0">
-            {{ about.label }}
+        <header class="flex flex-col gap-(--a-header-gap)">
+          <p class="about-label m-0 text-caption-2-bold">
+            {{ about().label }}
           </p>
 
           <h2 id="about-heading" class="about-title m-0 text-tittle-4-bold">
-            {{ about.title }}
+            {{ about().title }}
           </h2>
         </header>
 
-        <div class="about-body flex flex-col gap-(--a-body-gap)">
-          @for (paragraph of about.paragraphs; track paragraph) {
+        <div class="flex flex-col gap-(--a-body-gap)">
+          @for (paragraph of about().paragraphs; track paragraph.id) {
             <p class="about-text m-0 text-body-1-regular">
-              {{ paragraph }}
+              {{ paragraph.text }}
             </p>
           }
         </div>
 
         <div class="about-cta flex">
-          <portfolio-button [label]="about.ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" styleClass="rounded-2xl text-body-2-medium" (onClick)="scrollToContact()" />
+          <portfolio-button [label]="about().ctaLabel" icon="ArrowRight" iconPos="right" iconSize="16" iconExtraClass="size-(--a-btn-icon)" styleClass="about-primary-cta rounded-2xl text-body-2-medium" (onClick)="scrollToExperience()" />
         </div>
       </div>
 
-      <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" aria-label="Estadísticas profesionales">
-        @for (stat of stats; track stat.label; let i = $index) {
-          <article class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
-            <div class="stat-content flex min-w-0 flex-col gap-(--a-stat-gap)">
-              <span class="stat-value text-tittle-4-bold">
+      <div #statsRef class="about-stats flex flex-col gap-(--a-stats-gap)" [attr.aria-label]="statsAriaLabel()">
+        @for (stat of stats(); track stat.id; let i = $index) {
+          <article portfolioAnimatedBorder class="stat-card grid items-center gap-(--a-stat-content-gap) rounded-2xl border p-(--a-stat-p)">
+            <div class="flex min-w-0 flex-col gap-(--a-stat-gap)">
+              <span class="stat-value text-subtitle-2-bold">
                 {{ stat.value }}
               </span>
 
@@ -38,23 +38,21 @@
               </span>
             </div>
 
-            <span class="stat-icon inline-flex shrink-0 items-center justify-center" aria-hidden="true">
+            <span class="stat-icon inline-grid size-(--a-stat-icon-size) shrink-0 place-items-center rounded-(--a-stat-icon-radius)" aria-hidden="true">
               @switch (i) {
                 @case (0) {
-                  <portfolio-icon name="Code" size="16" />
-                }
-
-                @case (1) {
-                  <portfolio-icon name="Github" size="16" />
+                  <portfolio-icon name="Code" size="18" extraClass="size-(--a-stat-icon-svg)" />
                 }
 
                 @default {
-                  <portfolio-icon name="ShieldCheck" size="16" />
+                  <portfolio-icon name="ShieldCheck" size="18" extraClass="size-(--a-stat-icon-svg)" />
                 }
               }
             </span>
           </article>
         }
+
+        <portfolio-github-stats />
       </div>
     </div>
   </div>

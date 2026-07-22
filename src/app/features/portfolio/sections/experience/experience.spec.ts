@@ -17,7 +17,7 @@ describe('Experience', () => {
     const fixture = TestBed.createComponent(Experience);
     const component = fixture.componentInstance;
 
-    expect((component as any).experiences.length).toBeGreaterThan(0);
+    expect((component as any).experiences().length).toBeGreaterThan(0);
   });
 
   it('should expose techIconUrl utility', () => {

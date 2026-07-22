@@ -2,132 +2,352 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Gabriel Cruz</title>
+    <title>Portfolio - Gabriel Cruz</title>
     <base href="/" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="preload" as="image" imagesrcset="assets/img/me-hero-mobile.webp" media="(max-width: 640px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="assets/img/me-hero.webp" media="(min-width: 641px)" fetchpriority="high" />
+
     <meta name="description" content="Portfolio de Gabriel Cruz (Liriraid), desarrollador Full Stack especializado en Angular 21, TypeScript y Node.js. Construido con SSR + prerendering." />
     <meta name="author" content="Gabriel Leonardo Cruz Flores" />
     <meta name="robots" content="index, follow" />
     <meta name="keywords" content="Angular, TypeScript, Node.js, Full Stack, Desarrollador, Portfolio, Gabriel Cruz, Liriraid" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Gabriel Cruz · Desarrollador Full Angular" />
+    <meta property="og:title" content="Portfolio - Gabriel Cruz" />
     <meta property="og:description" content="Portfolio de Gabriel Cruz (Liriraid), desarrollador Full Stack especializado en Angular 21, TypeScript y Node.js." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Gabriel Cruz · Desarrollador Full Angular" />
+    <meta name="twitter:title" content="Portfolio - Gabriel Cruz" />
     <meta name="twitter:description" content="Portfolio de Gabriel Cruz (Liriraid), desarrollador Full Stack especializado en Angular 21, TypeScript y Node.js." />
 
     <meta name="theme-color" content="#dd0031" />
-    <script>
-      (function(){try{var c=localStorage.getItem('portfolio-github-stats');if(!c||Date.now()-JSON.parse(c).timestamp>36e5){var l=document.createElement('link');l.rel='preconnect';l.href='https://api.github.com';l.crossOrigin='';document.head.appendChild(l)}}catch(e){}})();
-    </script>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
 
-    <!--
-    Fallback inicial de fondo/color para evitar flash blanco antes de que el script pretheme corra.
-    Cubre el caso JS deshabilitado (mantiene dark) y el milisegundo previo al script.
-  -->
     <style>
-      html { background-color: #0a0a0a; }
-      body { margin: 0; background-color: #0a0a0a; color: #ffffff; }
+      html {
+        color-scheme: light;
+        background-color: #e5e5e5;
+      }
+
+      html.dark {
+        color-scheme: dark;
+        background-color: #0a0a0a;
+      }
+
+      body {
+        margin: 0;
+        background-color: #e5e5e5;
+        color: #171717;
+      }
+
+      html.dark body {
+        background-color: #0a0a0a;
+        color: #ffffff;
+      }
+
+      html.portfolio-i18n-pending portfolio-root {
+        opacity: 0;
+        pointer-events: none;
+      }
     </style>
 
-    <!--
-    Pre-theme para SSR/SSG + hydration.
-    Evita el flash gris/default antes de que Angular + PrimeNG hidraten.
-    Importante: no usamos documentElement.style.setProperty(),
-    usamos un <style> temporal para no bloquear los cambios posteriores.
-  -->
+    <!-- portfolio-prelang:start -->
     <script>
       (function () {
         try {
-          var PP = {
-            angular: ['#fff1f3', '#ffe4e8', '#ffcbd5', '#ff9fb4', '#ff6b8d', '#f53d67', '#eb1f4f', '#dd0031', '#b8002b', '#8f0021', '#52000f'],
-            black: ['#fafafa', '#f5f5f5', '#e5e5e5', '#d4d4d4', '#a3a3a3', '#737373', '#525252', '#404040', '#262626', '#171717', '#0a0a0a'],
-            indigo: ['#eef2ff', '#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1', '#4f46e5', '#4338ca', '#3730a3', '#312e81', '#1e1b4b'],
-            blue: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a', '#172554'],
-            sky: ['#f0f9ff', '#e0f2fe', '#bae6fd', '#7dd3fc', '#38bdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49'],
-            cyan: ['#ecfeff', '#cffafe', '#a5f3fc', '#67e8f9', '#22d3ee', '#06b6d4', '#0891b2', '#0e7490', '#155e75', '#164e63', '#083344'],
-            teal: ['#f0fdfa', '#ccfbf1', '#99f6e4', '#5eead4', '#2dd4bf', '#14b8a6', '#0d9488', '#0f766e', '#115e59', '#134e4a', '#042f2e'],
-            green: ['#ecfdf5', '#d1fae5', '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857', '#065f46', '#064e3b', '#022c22'],
-            amber: ['#fffbeb', '#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e', '#78350f', '#451a03'],
-            orange: ['#fff7ed', '#ffedd5', '#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c', '#9a3412', '#7c2d12', '#431407'],
-            red: ['#fff1f5', '#ffe4ec', '#fecddd', '#fda4c2', '#fb72a6', '#f04f8b', '#d94674', '#b8325d', '#992c52', '#7f2948', '#4d1027'],
-            hotpink: ['#fdf2f8', '#fce7f3', '#fbcfe8', '#f9a8d4', '#f472b6', '#ec4899', '#db2777', '#be185d', '#9d174d', '#831843', '#500724'],
-            pink: ['#fdf4ff', '#fae8ff', '#f5d0fe', '#f0abfc', '#e879f9', '#d946ef', '#c026d3', '#a21caf', '#86198f', '#701a75', '#4a044e'],
-            purple: ['#f5f3ff', '#ede9fe', '#ddd6fe', '#c4b5fd', '#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95', '#2e1065'],
+          var LANGUAGE_KEY = 'portfolio-language';
+          var VALID_LANGUAGES = ['es', 'en'];
+          var DEFAULT_SSR_LANGUAGE = 'es';
+      
+          var PAGE_TITLES = {
+            es: {
+              home: 'Portfolio - Gabriel Cruz | Inicio',
+              about: 'Portfolio - Gabriel Cruz | Sobre mí',
+              experience: 'Portfolio - Gabriel Cruz | Experiencia',
+              projects: 'Portfolio - Gabriel Cruz | Proyectos',
+              skills: 'Portfolio - Gabriel Cruz | Habilidades',
+              contact: 'Portfolio - Gabriel Cruz | Contacto'
+            },
+            en: {
+              home: 'Portfolio - Gabriel Cruz | Home',
+              about: 'Portfolio - Gabriel Cruz | About me',
+              experience: 'Portfolio - Gabriel Cruz | Experience',
+              projects: 'Portfolio - Gabriel Cruz | Projects',
+              skills: 'Portfolio - Gabriel Cruz | Skills',
+              contact: 'Portfolio - Gabriel Cruz | Contact'
+            }
           };
-
-          var SP = {
-            slate: ['#ffffff', '#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a', '#020617'],
-            gray: ['#ffffff', '#f9fafb', '#f3f4f6', '#e5e7eb', '#d1d5db', '#9ca3af', '#6b7280', '#4b5563', '#374151', '#1f2937', '#111827', '#030712'],
-            zinc: ['#ffffff', '#fafafa', '#f4f4f5', '#e4e4e7', '#d4d4d8', '#a1a1aa', '#71717a', '#52525b', '#3f3f46', '#27272a', '#18181b', '#09090b'],
-            neutral: ['#ffffff', '#fafafa', '#f5f5f5', '#e5e5e5', '#d4d4d4', '#a3a3a3', '#737373', '#525252', '#404040', '#262626', '#171717', '#0a0a0a'],
-            stone: ['#ffffff', '#fafaf9', '#f5f5f4', '#e7e5e4', '#d6d3d1', '#a8a29e', '#78716c', '#57534e', '#44403c', '#292524', '#1c1917', '#0c0a09'],
-            soho: ['#ffffff', '#ececec', '#dedfdf', '#c4c4c6', '#adaeb0', '#97979b', '#7f8084', '#6a6b70', '#55565b', '#3f4046', '#2c2c34', '#16161d'],
-            viva: ['#ffffff', '#f3f3f3', '#e7e7e8', '#cfd0d0', '#b7b8b9', '#9fa1a1', '#87898a', '#6e7173', '#565a5b', '#3e4244', '#262b2c', '#0e1315'],
-            ocean: ['#ffffff', '#fbfcfc', '#f7f9f8', '#eff3f2', '#dadedd', '#b1b7b6', '#828787', '#5f7274', '#415b61', '#29444e', '#183240', '#0c1920'],
+      
+          var PAGE_DESCRIPTIONS = {
+            es: {
+              home: 'Portfolio de Gabriel Cruz (Liriraid), desarrollador Full Stack especializado en Angular 21, TypeScript y Node.js. Construido con SSR + prerendering.',
+              about: 'Conoce a Gabriel Cruz, desarrollador Full Angular especializado en Angular, TypeScript, Tailwind CSS, PrimeNG y Node.js.',
+              experience: 'Experiencia laboral de Gabriel Cruz construyendo aplicaciones web empresariales con Angular moderno y tecnologías frontend.',
+              projects: 'Proyectos destacados de Gabriel Cruz creados con Angular, SSR, Tailwind CSS, PrimeNG, Node.js y arquitectura frontend escalable.',
+              skills: 'Habilidades técnicas de Gabriel Cruz en Angular, TypeScript, Tailwind CSS, PrimeNG, Node.js, Ruby on Rails y PostgreSQL.',
+              contact: 'Contacta a Gabriel Cruz para proyectos freelance, colaboración técnica o desarrollo de aplicaciones web con Angular.'
+            },
+            en: {
+              home: 'Portfolio of Gabriel Cruz (Liriraid), Full Stack developer specialized in Angular 21, TypeScript and Node.js. Built with SSR + prerendering.',
+              about: 'Learn about Gabriel Cruz, a Full Angular developer specialized in Angular, TypeScript, Tailwind CSS, PrimeNG and Node.js.',
+              experience: 'Work experience of Gabriel Cruz building enterprise web applications with modern Angular and frontend technologies.',
+              projects: 'Featured projects by Gabriel Cruz built with Angular, SSR, Tailwind CSS, PrimeNG, Node.js and scalable frontend architecture.',
+              skills: 'Technical skills of Gabriel Cruz in Angular, TypeScript, Tailwind CSS, PrimeNG, Node.js, Ruby on Rails and PostgreSQL.',
+              contact: 'Contact Gabriel Cruz for freelance projects, technical collaboration or Angular web application development.'
+            }
           };
-
-          var pShades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-          var sShades = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-
-          var mode = localStorage.getItem('portfolio-theme-mode') || 'dark';
-          var pk = localStorage.getItem('portfolio-primary-color') || 'angular';
-          var sk = localStorage.getItem('portfolio-surface-color') || 'neutral';
-
+      
+          function isValidLanguage(language) {
+            return VALID_LANGUAGES.indexOf(language) !== -1;
+          }
+      
+          function getCookieLanguage() {
+            var match = document.cookie.match(/(?:^|;\s*)portfolio-language=([^;]+)/);
+      
+            if (!match) {
+              return null;
+            }
+      
+            try {
+              return decodeURIComponent(match[1]);
+            } catch (error) {
+              return null;
+            }
+          }
+      
+          function getStoredLanguage() {
+            try {
+              return localStorage.getItem(LANGUAGE_KEY);
+            } catch (error) {
+              return null;
+            }
+          }
+      
+          function getSystemLanguage() {
+            var language = (navigator.language || '').toLowerCase();
+      
+            return language.indexOf('en') === 0 ? 'en' : 'es';
+          }
+      
+          function resolveLanguage() {
+            var cookieLanguage = getCookieLanguage();
+      
+            if (isValidLanguage(cookieLanguage)) {
+              return cookieLanguage;
+            }
+      
+            var storedLanguage = getStoredLanguage();
+      
+            if (isValidLanguage(storedLanguage)) {
+              return storedLanguage;
+            }
+      
+            return getSystemLanguage();
+          }
+      
+          function isKnownPageKey(value) {
+            return value === 'home' || value === 'about' || value === 'experience' || value === 'projects' || value === 'skills' || value === 'contact';
+          }
+      
+          function normalizePageKey(value) {
+            if (!value) {
+              return 'home';
+            }
+      
+            if (value === '') {
+              return 'home';
+            }
+      
+            if (value === '/') {
+              return 'home';
+            }
+      
+            if (value === 'inicio') {
+              return 'home';
+            }
+      
+            if (value === 'sobre-mi') {
+              return 'about';
+            }
+      
+            if (value === 'experiencia') {
+              return 'experience';
+            }
+      
+            if (value === 'proyectos') {
+              return 'projects';
+            }
+      
+            if (value === 'habilidades') {
+              return 'skills';
+            }
+      
+            if (value === 'contacto') {
+              return 'contact';
+            }
+      
+            return isKnownPageKey(value) ? value : 'home';
+          }
+      
+          function getCurrentPageKey() {
+            var hash = (location.hash || '').replace(/^#\/?/, '').split('?')[0].split('/')[0].trim();
+      
+            if (hash) {
+              return normalizePageKey(hash);
+            }
+      
+            var path = (location.pathname || '').replace(/^\//, '').split('?')[0].split('/')[0].trim();
+      
+            if (path) {
+              return normalizePageKey(path);
+            }
+      
+            return 'home';
+          }
+      
+          function setMetaByName(name, content) {
+            var element = document.querySelector('meta[name="' + name + '"]');
+      
+            if (element) {
+              element.setAttribute('content', content);
+            }
+          }
+      
+          function setMetaByProperty(property, content) {
+            var element = document.querySelector('meta[property="' + property + '"]');
+      
+            if (element) {
+              element.setAttribute('content', content);
+            }
+          }
+      
+          function applyMetadata(language) {
+            var pageKey = getCurrentPageKey();
+            var title = PAGE_TITLES[language][pageKey] || PAGE_TITLES[language].home;
+            var description = PAGE_DESCRIPTIONS[language][pageKey] || PAGE_DESCRIPTIONS[language].home;
+            var locale = language === 'en' ? 'en_US' : 'es_ES';
+      
+            document.title = title;
+      
+            setMetaByName('description', description);
+            setMetaByProperty('og:title', title);
+            setMetaByProperty('og:description', description);
+            setMetaByProperty('og:locale', locale);
+            setMetaByName('twitter:title', title);
+            setMetaByName('twitter:description', description);
+          }
+      
+          var language = resolveLanguage();
           var root = document.documentElement;
-
-          if (mode === 'dark') {
-            root.classList.add('dark');
-          } else {
-            root.classList.remove('dark');
+      
+          root.setAttribute('lang', language);
+          root.setAttribute('data-language', language);
+      
+          applyMetadata(language);
+      
+          if (language !== DEFAULT_SSR_LANGUAGE) {
+            root.classList.add('portfolio-i18n-pending');
           }
-
-          root.dataset.primaryColor = pk;
-          root.dataset.surfaceColor = sk;
-
-          var pp = PP[pk] || PP.black;
-          var sp = SP[sk] || SP.neutral;
-
-          var css = ':root{';
-
-          pShades.forEach(function (shade, index) {
-            css += '--p-primary-' + shade + ':' + pp[index] + ';';
-          });
-
-          css += '--p-primary-color:' + pp[5] + ';';
-
-          sShades.forEach(function (shade, index) {
-            css += '--p-surface-' + shade + ':' + sp[index] + ';';
-          });
-
-          css += '}';
-
-          // Pintar de inmediato body bg/color con los valores correctos del modo+paleta
-          // para que el primer paint ya esté en el color final (evita flash blanco/light).
-          var shellBg = mode === 'dark' ? sp[11] : sp[3];
-          var textColor = mode === 'dark' ? sp[0] : sp[10];
-          css += 'html{background-color:' + shellBg + ';}';
-          css += 'body{background-color:' + shellBg + ';color:' + textColor + ';}';
-
-          var style = document.createElement('style');
-          style.id = 'portfolio-pretheme';
-          style.textContent = css;
-
-          document.head.appendChild(style);
-
-          var themeMeta = document.querySelector('meta[name="theme-color"]');
-          if (themeMeta) {
-            themeMeta.setAttribute('content', pp[7] || pp[5]);
-          }
-        } catch (e) {}
+        } catch (error) {}
       })();
     </script>
+    <!-- portfolio-prelang:end -->
+
+    <!-- portfolio-pretheme:start -->
+    <script>
+      (function () {
+        try {
+          var PRIMARY_PALETTES = {"angular":["#fff1f0","#ffe3df","#ffbdb5","#ff8572","#ff4533","#f02020","#e8001a","#dd0031","#b8002b","#8f0021","#52000f"],"black":["#fafafa","#f5f5f5","#e5e5e5","#d4d4d4","#a3a3a3","#737373","#525252","#404040","#262626","#171717","#0a0a0a"],"indigo":["#eef2ff","#e0e7ff","#c7d2fe","#a5b4fc","#818cf8","#6366f1","#4f46e5","#4338ca","#3730a3","#312e81","#1e1b4b"],"blue":["#eff6ff","#dbeafe","#bfdbfe","#93c5fd","#60a5fa","#3b82f6","#2563eb","#1d4ed8","#1e40af","#1e3a8a","#172554"],"sky":["#f0f9ff","#e0f2fe","#bae6fd","#7dd3fc","#38bdf8","#0ea5e9","#0284c7","#0369a1","#075985","#0c4a6e","#082f49"],"cyan":["#ecfeff","#cffafe","#a5f3fc","#67e8f9","#22d3ee","#06b6d4","#0891b2","#0e7490","#155e75","#164e63","#083344"],"teal":["#f0fdfa","#ccfbf1","#99f6e4","#5eead4","#2dd4bf","#14b8a6","#0d9488","#0f766e","#115e59","#134e4a","#042f2e"],"green":["#ecfdf5","#d1fae5","#a7f3d0","#6ee7b7","#34d399","#10b981","#059669","#047857","#065f46","#064e3b","#022c22"],"amber":["#fffbeb","#fef3c7","#fde68a","#fcd34d","#fbbf24","#f59e0b","#d97706","#b45309","#92400e","#78350f","#451a03"],"orange":["#fff7ed","#ffedd5","#fed7aa","#fdba74","#fb923c","#f97316","#ea580c","#c2410c","#9a3412","#7c2d12","#431407"],"red":["#fff1f5","#ffe4ec","#fecddd","#fda4c2","#fb72a6","#f04f8b","#d94674","#b8325d","#992c52","#7f2948","#4d1027"],"hotpink":["#fdf2f8","#fce7f3","#fbcfe8","#f9a8d4","#f472b6","#ec4899","#db2777","#be185d","#9d174d","#831843","#500724"],"pink":["#fdf4ff","#fae8ff","#f5d0fe","#f0abfc","#e879f9","#d946ef","#c026d3","#a21caf","#86198f","#701a75","#4a044e"],"purple":["#f5f3ff","#ede9fe","#ddd6fe","#c4b5fd","#a78bfa","#8b5cf6","#7c3aed","#6d28d9","#5b21b6","#4c1d95","#2e1065"]};
+          var SURFACE_PALETTES = {"slate":["#ffffff","#f8fafc","#f1f5f9","#e2e8f0","#cbd5e1","#94a3b8","#64748b","#475569","#334155","#1e293b","#0f172a","#020617"],"gray":["#ffffff","#f9fafb","#f3f4f6","#e5e7eb","#d1d5db","#9ca3af","#6b7280","#4b5563","#374151","#1f2937","#111827","#030712"],"zinc":["#ffffff","#fafafa","#f4f4f5","#e4e4e7","#d4d4d8","#a1a1aa","#71717a","#52525b","#3f3f46","#27272a","#18181b","#09090b"],"neutral":["#ffffff","#fafafa","#f5f5f5","#e5e5e5","#d4d4d4","#a3a3a3","#737373","#525252","#404040","#262626","#171717","#0a0a0a"],"stone":["#ffffff","#fafaf9","#f5f5f4","#e7e5e4","#d6d3d1","#a8a29e","#78716c","#57534e","#44403c","#292524","#1c1917","#0c0a09"],"soho":["#ffffff","#ececec","#dedfdf","#c4c4c6","#adaeb0","#97979b","#7f8084","#6a6b70","#55565b","#3f4046","#2c2c34","#16161d"],"viva":["#ffffff","#f3f3f3","#e7e7e8","#cfd0d0","#b7b8b9","#9fa1a1","#87898a","#6e7173","#565a5b","#3e4244","#262b2c","#0e1315"],"ocean":["#ffffff","#fbfcfc","#F7F9F8","#EFF3F2","#DADEDD","#B1B7B6","#828787","#5F7274","#415B61","#29444E","#183240","#0c1920"]};
+      
+          var PRIMARY_SHADES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+          var SURFACE_SHADES = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+      
+          var DEFAULT_PRIMARY = 'angular';
+          var DEFAULT_SURFACE = 'neutral';
+      
+          var storedMode = localStorage.getItem('portfolio-theme-mode');
+          var systemMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          var mode = storedMode === 'dark' || storedMode === 'light' ? storedMode : systemMode;
+      
+          var primaryKey = localStorage.getItem('portfolio-primary-color') || DEFAULT_PRIMARY;
+          var surfaceKey = localStorage.getItem('portfolio-surface-color') || DEFAULT_SURFACE;
+          var storedBackgroundAnimation = localStorage.getItem('portfolio-background-animation-enabled');
+          var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var backgroundAnimationEnabled = storedBackgroundAnimation === null ? !prefersReducedMotion : storedBackgroundAnimation === 'true';
+      
+          var primaryPalette = PRIMARY_PALETTES[primaryKey] || PRIMARY_PALETTES[DEFAULT_PRIMARY];
+          var surfacePalette = SURFACE_PALETTES[surfaceKey] || SURFACE_PALETTES[DEFAULT_SURFACE];
+      
+          var root = document.documentElement;
+      
+          root.classList.toggle('dark', mode === 'dark');
+          root.style.colorScheme = mode;
+          root.dataset.primaryColor = primaryKey;
+          root.dataset.surfaceColor = surfaceKey;
+          root.classList.toggle('portfolio-background-animation-enabled', backgroundAnimationEnabled);
+      
+          var css = ':root{';
+      
+          PRIMARY_SHADES.forEach(function (shade, index) {
+            css += '--p-primary-' + shade + ':' + primaryPalette[index] + ';';
+          });
+      
+          css += '--p-primary-color:' + primaryPalette[5] + ';';
+      
+          SURFACE_SHADES.forEach(function (shade, index) {
+            css += '--p-surface-' + shade + ':' + surfacePalette[index] + ';';
+          });
+      
+          css += '}';
+      
+          css += ':root {--app-shell-bg: var(--p-surface-200);--app-panel-bg: var(--p-surface-0);--app-panel-muted-bg: var(--p-surface-50);--app-border-color: var(--p-surface-300);--app-text-color: var(--p-surface-900);--app-text-muted: var(--p-surface-600);--app-text-subtle: var(--p-surface-500);--app-text-primary: var(--p-primary-700);--app-container-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);--app-container-border: transparent;--app-control-surface-bg: var(--p-surface-0);--app-control-surface-border: var(--p-surface-300);--app-control-surface-text: var(--p-surface-900);--app-control-focus-ring: color-mix(in srgb, var(--p-primary-600) 60%, transparent);--app-control-disabled-bg: color-mix(in srgb, var(--app-panel-muted-bg) 82%, white);--app-control-disabled-border: var(--p-surface-200);--app-control-disabled-text: var(--p-surface-700);--app-search-input-bg: var(--p-surface-0);--app-search-input-border: var(--p-surface-300);--app-search-input-text: var(--p-surface-900);--app-search-input-prefix: var(--p-surface-900);--app-search-button-bg: var(--p-surface-0);--app-search-button-border: var(--p-surface-300);--app-search-button-text: var(--p-surface-900);--app-search-button-hover-bg: var(--p-primary-600);--app-search-button-hover-text: var(--p-surface-0);--app-search-button-active-bg: var(--p-surface-0);--app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);--app-primary-button-bg: var(--p-primary-700);--app-primary-button-disabled-text: var(--p-surface-0);--app-outline-button-bg: var(--p-surface-0);--app-outline-button-border: var(--p-surface-500);--app-outline-button-text: var(--p-surface-900);--app-outline-button-hover-bg: var(--p-primary-600);--app-outline-button-hover-text: var(--p-surface-0);--app-outline-button-disabled-bg: rgba(0, 0, 0, 0.3);--app-outline-button-disabled-text: var(--p-surface-0);--app-textarea-bg: var(--app-panel-bg);--app-textarea-border: var(--p-surface-300);--app-textarea-focus-outline: solid 3px rgba(251, 0, 33, 0.3);--app-accent-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, transparent);--app-badge-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, var(--app-panel-bg));--app-badge-soft-text: var(--p-primary-800);--app-action-icon-color: var(--app-text-subtle);--app-disabled-text: var(--p-surface-700);}.dark {--app-shell-bg: color-mix(in srgb, var(--p-surface-950) 88%, black);--app-panel-bg: color-mix(in srgb, var(--p-surface-900) 84%, var(--p-surface-950));--app-panel-muted-bg: color-mix(in srgb, var(--p-surface-800) 78%, var(--p-surface-900));--app-border-color: color-mix(in srgb, var(--p-surface-700) 72%, rgba(255, 255, 255, 0.18));--app-text-color: var(--p-surface-0);--app-text-muted: var(--p-surface-200);--app-text-subtle: var(--p-surface-400);--app-text-primary: var(--p-primary-500);--app-container-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);--app-container-border: var(--app-border-color);--app-control-surface-bg: var(--app-panel-bg);--app-control-surface-border: color-mix(in srgb, var(--app-border-color) 75%, rgba(255, 255, 255, 0.2));--app-control-surface-text: var(--app-text-color);--app-control-focus-ring: color-mix(in srgb, var(--p-primary-600) 60%, transparent);--app-control-disabled-bg: color-mix(in srgb, var(--app-panel-muted-bg) 80%, black);--app-control-disabled-border: var(--app-border-color);--app-control-disabled-text: var(--p-surface-400);--app-search-input-bg: var(--app-panel-bg);--app-search-input-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));--app-search-input-text: var(--p-surface-0);--app-search-input-prefix: var(--app-text-muted);--app-search-button-bg: var(--p-surface-0);--app-search-button-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));--app-search-button-text: var(--p-surface-900);--app-search-button-hover-bg: var(--p-primary-600);--app-search-button-hover-text: var(--p-surface-0);--app-search-button-active-bg: var(--app-panel-muted-bg);--app-search-button-focus-ring: color-mix(in srgb, var(--p-primary-600) 40%, transparent);--app-primary-button-bg: var(--p-primary-700);--app-primary-button-disabled-text: var(--p-surface-0);--app-outline-button-bg: var(--app-panel-bg);--app-outline-button-border: var(--app-border-color);--app-outline-button-text: var(--app-text-color);--app-outline-button-hover-bg: var(--p-primary-600);--app-outline-button-hover-text: var(--p-surface-0);--app-outline-button-disabled-bg: rgba(255, 255, 255, 0.12);--app-outline-button-disabled-text: var(--app-text-color);--app-textarea-bg: var(--app-panel-bg);--app-textarea-border: color-mix(in srgb, var(--app-border-color) 82%, rgba(255, 255, 255, 0.18));--app-textarea-focus-outline: solid 3px rgba(251, 0, 33, 0.3);--app-accent-soft-bg: color-mix(in srgb, var(--p-primary-500) 16%, transparent);--app-badge-soft-bg: color-mix(in srgb, var(--p-primary-500) 12%, var(--app-panel-bg));--app-badge-soft-text: var(--p-primary-500);--app-action-icon-color: var(--p-surface-0);--app-disabled-text: var(--p-surface-400);}.dark[data-primary-color="black"] {--app-accent-soft-bg: color-mix(in srgb, var(--p-surface-0) 9%, transparent);--app-badge-soft-bg: color-mix(in srgb, var(--p-surface-0) 9%, var(--app-panel-bg));--app-badge-soft-text: var(--p-surface-100);}';
+      
+          var shellBg = mode === 'dark' ? surfacePalette[11] : surfacePalette[3];
+          var textColor = mode === 'dark' ? surfacePalette[0] : surfacePalette[10];
+      
+          css += 'html{color-scheme:' + mode + ';background-color:' + shellBg + ';}';
+          css += 'body{background-color:' + shellBg + ';color:' + textColor + ';}';
+      
+          var style = document.createElement('style');
+      
+          style.id = 'portfolio-pretheme';
+          style.textContent = css;
+      
+          document.head.appendChild(style);
+      
+          var themeMeta = document.querySelector('meta[name="theme-color"]');
+      
+          if (themeMeta) {
+            themeMeta.setAttribute('content', primaryPalette[7] || primaryPalette[5]);
+          }
+        } catch (error) {}
+      })();
+    </script>
+    <!-- portfolio-pretheme:end -->
+
+    <script>
+      (function () {
+        try {
+          var cachedGithubStats = localStorage.getItem('portfolio-github-stats');
+
+          if (!cachedGithubStats || Date.now() - JSON.parse(cachedGithubStats).timestamp > 36e5) {
+            var link = document.createElement('link');
+
+            link.rel = 'preconnect';
+            link.href = 'https://api.github.com';
+            link.crossOrigin = '';
+
+            document.head.appendChild(link);
+          }
+        } catch (error) {}
+      })();
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
   </head>
 
   <body>

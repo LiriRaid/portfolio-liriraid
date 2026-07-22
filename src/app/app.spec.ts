@@ -1,16 +1,27 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('creates the root component', () => {
     const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+
+    expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('renders a router-outlet so child routes can mount', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const outlet = fixture.nativeElement.querySelector('router-outlet');
+
+    expect(outlet).not.toBeNull();
   });
 });

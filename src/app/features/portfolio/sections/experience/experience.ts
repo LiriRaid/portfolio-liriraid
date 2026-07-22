@@ -1,38 +1,78 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, QueryList, ViewChild, ViewChildren, afterNextRender, computed, inject } from '@angular/core';
 
-import { ExperienceItem } from '@features/portfolio/entities';
+import { I18nService } from '@core/i18n';
 import { PortfolioIcon } from '@shared/components/portfolio-icon/portfolio-icon';
+import { PortfolioAnimatedBorderDirective } from '@shared/directives';
 import { techIconUrl } from '@shared/utils/tech-icons';
+
+import { EXPERIENCE_HEADER, EXPERIENCES } from './mocks';
+import { ExperienceService } from './experience.service';
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-experience',
   standalone: true,
-  imports: [PortfolioIcon],
+  imports: [PortfolioIcon, PortfolioAnimatedBorderDirective],
   templateUrl: './experience.html',
   styleUrl: './experience.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    style: 'display: block;',
+  },
 })
 export class Experience {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly experienceService = inject(ExperienceService);
+  private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
+
+  @ViewChild('headerRef') protected headerRef!: ElementRef<HTMLElement>;
+  @ViewChild('timelineRef') protected timelineRef!: ElementRef<HTMLElement>;
+  @ViewChildren('lineRef') protected lineRefs!: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('dotRef') protected dotRefs!: QueryList<ElementRef<HTMLElement>>;
+
   protected readonly techIconUrl = techIconUrl;
 
-  protected readonly experiences: readonly ExperienceItem[] = [
-    {
-      company: 'CIT (Creative Infotainment Technologies)',
-      role: 'Desarrollador Full Angular',
-      period: 'Julio · 2024 — Presente',
-      location: 'Presencial',
-      description: 'Desarrollo de aplicaciones web empresariales con Angular moderno, enfocadas en arquitectura escalable, componentes reutilizables, rendimiento y experiencia de usuario.',
-      responsibilities: [
-        'Construcción de módulos administrativos con Angular 21, TypeScript, PrimeNG y Tailwind CSS.',
-        'Implementación de arquitectura frontend basada en features, rutas lazy loading y separación clara por dominio.',
-        'Desarrollo de componentes reutilizables para formularios, botones, iconos, sidebars, modales, filtros, inputs y elementos de interfaz.',
-        'Manejo de estado moderno con signals, computed, effects, servicios reactivos y RxJS cuando aplica.',
-        'Integración con APIs REST para flujos CRUD, autenticación, permisos, paginación, filtros avanzados y dashboards.',
-        'Optimización de rendimiento, carga inicial, experiencia responsive y consistencia visual del sistema.',
-        'Mantenimiento y mejora de proyectos legacy con AngularJS, migrando lógica hacia soluciones más modernas y mantenibles.',
-      ],
-      technologies: ['Angular 21', 'AngularJS', 'TypeScript', 'Signals', 'RxJS', 'PrimeNG', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
-      current: true,
-    },
-  ];
+  protected readonly header = computed(() => ({
+    label: this.t(EXPERIENCE_HEADER.label),
+    title: this.t(EXPERIENCE_HEADER.title),
+    subtitle: this.t(EXPERIENCE_HEADER.subtitle),
+  }));
+
+  protected readonly currentBadge = computed(() => this.t('experience.badge.current'));
+  protected readonly technologiesAriaLabel = computed(() => this.t('experience.tags.aria'));
+
+  protected readonly experiences = computed(() =>
+    EXPERIENCES.map((item) => ({
+      ...item,
+      role: this.t(item.role),
+      period: this.t(item.period),
+      location: item.location ? this.t(item.location) : undefined,
+      description: this.t(item.description),
+      responsibilities: item.responsibilities.map((key) => this.t(key)),
+    })),
+  );
+
+  constructor() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    afterNextRender(() => {
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
+          this.experienceService.animateEntrance(this.elementRef, this.headerRef, this.timelineRef, this.lineRefs, this.dotRefs);
+        },
+      });
+    });
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
+  }
 }

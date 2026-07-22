@@ -1,19 +1,17 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, DestroyRef, ElementRef, PLATFORM_ID, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import gsap from 'gsap';
 
+import { I18nService } from '@core/i18n';
 import { environment } from '@environments/environment';
-import { SocialLink } from '@features/portfolio/entities';
+import { TContactForm } from '@features/portfolio/entities';
 import { PortfolioButton } from '@shared/components/portfolio-button/portfolio-button';
 import { PortfolioInput } from '@shared/components/portfolio-input/portfolio-input';
 import { AlertService } from '@shared/services/alert.service';
 
-type ContactForm = FormGroup<{
-  name: FormControl<string>;
-  email: FormControl<string>;
-  message: FormControl<string>;
-}>;
+import { CONTACT_CONTENT, CONTACT_SOCIAL_LINKS } from './mocks';
+import { ContactService } from './contact.service';
+import { PortfolioSectionRevealService } from '@shared/services';
 
 @Component({
   selector: 'portfolio-contact',
@@ -22,33 +20,47 @@ type ContactForm = FormGroup<{
   templateUrl: './contact.html',
   styleUrl: './contact.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    style: 'display: block;',
+  },
 })
 export class Contact {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly alertService = inject(AlertService);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly contactService = inject(ContactService);
+  private readonly revealService = inject(PortfolioSectionRevealService);
+  private readonly i18nService = inject(I18nService);
 
   @ViewChild('contentRef') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('formRef') formRef!: ElementRef<HTMLElement>;
 
-  protected readonly socialLinks: SocialLink[] = [
-    {
-      techIcon: 'GitHub',
-      label: 'GitHub',
-      href: 'https://github.com/liriraid',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-    },
-    {
-      techIcon: 'LinkedIn',
-      label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/gabriel-leonardo-cruz-flores-64570a1a4/',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-    },
-  ];
+  protected readonly contact = computed(() => ({
+    label: this.t(CONTACT_CONTENT.label),
+    titleStart: this.t(CONTACT_CONTENT.titleStart),
+    titleHighlight: this.t(CONTACT_CONTENT.titleHighlight),
+    description: this.t(CONTACT_CONTENT.description),
+  }));
 
-  protected readonly form: ContactForm = new FormGroup({
+  protected readonly socialLinks = computed(() =>
+    CONTACT_SOCIAL_LINKS.map((link) => ({
+      ...link,
+      label: this.t(link.label),
+    })),
+  );
+
+  protected readonly nameLabel = computed(() => this.t('contact.form.name.label'));
+  protected readonly namePlaceholder = computed(() => this.t('contact.form.name.placeholder'));
+  protected readonly emailLabel = computed(() => this.t('contact.form.email.label'));
+  protected readonly emailPlaceholder = computed(() => this.t('contact.form.email.placeholder'));
+  protected readonly messageLabel = computed(() => this.t('contact.form.message.label'));
+  protected readonly messagePlaceholder = computed(() => this.t('contact.form.message.placeholder'));
+  protected readonly submitLabel = computed(() => this.t('contact.form.submit'));
+  protected readonly submittingLabel = computed(() => this.t('contact.form.submitting'));
+
+  protected readonly form: TContactForm = new FormGroup({
     name: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(2)],
@@ -66,44 +78,26 @@ export class Contact {
   protected readonly sending = signal(false);
 
   constructor() {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     afterNextRender(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
-          this.animateEntrance();
-        }
-      }, { threshold: 0.1 });
-      
-      observer.observe(this.elementRef.nativeElement);
+      this.revealService.revealOnViewport({
+        hostRef: this.elementRef,
+        destroyRef: this.destroyRef,
+        onReveal: () => {
+          this.contactService.animateEntrance(this.elementRef, this.contentRef, this.formRef);
+        },
+      });
     });
-  }
-
-  private animateEntrance(): void {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    if (this.contentRef?.nativeElement) {
-      tl.fromTo(this.contentRef.nativeElement.children, 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }
-      );
-    }
-
-    if (this.formRef?.nativeElement) {
-      tl.fromTo(this.formRef.nativeElement, 
-        { opacity: 0, x: 30, scale: 0.98 }, 
-        { opacity: 1, x: 0, scale: 1, duration: 0.8 }, 
-        "-=0.5"
-      );
-    }
   }
 
   protected async onSubmit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
 
-      this.alertService.showWarning('Formulario incompleto', 'Completa tu nombre, un correo válido y un mensaje antes de enviar.', undefined, 5000, false, 'top-center');
+      this.alertService.showWarning(this.t('contact.alerts.incomplete.title'), this.t('contact.alerts.incomplete.message'), undefined, 5000, false, 'top-center');
 
       return;
     }
@@ -123,11 +117,11 @@ export class Contact {
         message: '',
       });
 
-      this.alertService.showSuccess('Mensaje enviado', 'Gracias por escribirme. Te responderé pronto.', undefined, 4500, 'top-center');
+      this.alertService.showSuccess(this.t('contact.alerts.success.title'), this.t('contact.alerts.success.message'), undefined, 4500, 'top-center');
     } catch (error) {
       console.error('[EmailJS] Error sending contact email:', error);
 
-      this.alertService.showError('No se pudo enviar', 'Hubo un error al enviar tu mensaje. Intenta nuevamente en unos minutos.', undefined, 6000, 'top-center');
+      this.alertService.showError(this.t('contact.alerts.error.title'), this.t('contact.alerts.error.message'), undefined, 6000, 'top-center');
     } finally {
       this.sending.set(false);
     }
@@ -168,5 +162,9 @@ export class Contact {
     const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
 
     return `${first}${last}`.toUpperCase();
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
   }
 }

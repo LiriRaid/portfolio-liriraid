@@ -1,0 +1,105 @@
+@layer base {
+  input,
+  textarea {
+    caret-color: var(--p-primary-600);
+  }
+
+  textarea {
+    outline: none !important;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--app-textarea-border);
+    box-shadow: none !important;
+    background-color: var(--app-textarea-bg);
+  }
+
+  textarea:focus {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    outline: var(--app-textarea-focus-outline) !important;
+  }
+
+  textarea:disabled {
+    background-color: var(--app-control-disabled-bg);
+    border: 1px solid var(--app-control-disabled-border);
+    color: var(--app-control-disabled-text);
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  input:not(.portfolio-input-field),
+  textarea:not(.portfolio-input-field) {
+    box-shadow: none !important;
+  }
+
+  input:not(.portfolio-input-field):focus,
+  textarea:not(.portfolio-input-field):focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@layer components {
+  /* =========================
+     Textarea wrapper
+     ========================= */
+
+  .textarea {
+    padding: 8px 4px 8px 18px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--app-control-surface-text);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .textarea.textarea-default {
+    border: 1px solid var(--app-textarea-border);
+    background-color: var(--app-textarea-bg);
+  }
+
+  .textarea.textarea-default:focus-within {
+    border-color: var(--app-control-focus-ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-control-focus-ring) 20%, transparent);
+  }
+
+  .textarea.textarea-default:focus-within > svg[lucideIcon],
+  .textarea.textarea-default:focus-within > span.prefix {
+    color: var(--app-control-surface-text);
+  }
+
+  .textarea-default textarea {
+    outline: none !important;
+    border: none !important;
+    flex: 1;
+    width: 100%;
+    padding: 0 14px 0 0 !important;
+    background-color: transparent;
+    box-shadow: none !important;
+    font-size: var(--font-size-caption-1);
+    line-height: var(--line-height-caption-1);
+    font-weight: 500;
+    color: inherit;
+  }
+
+  .textarea-default textarea::placeholder {
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    color: var(--app-text-subtle);
+  }
+}

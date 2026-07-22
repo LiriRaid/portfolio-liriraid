@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, Injector, OnInit, computed, inject, input, output, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, Injector, OnInit, computed, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, ControlValueAccessor, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 import { LucideIconName } from '@core/common/icons/lucide-icons';
 import { createControlValueAccessorProvider } from '@core/forms/control-value-accessor.provider';
-import { PortfolioIcon } from '..';
+import { PortfolioIcon } from '../portfolio-icon/portfolio-icon';
 
 type PortfolioInputType = 'text' | 'email' | 'password' | 'number' | 'date' | 'tel' | 'url' | 'price';
 type PortfolioVariant = 'over' | 'in' | 'on';
@@ -14,9 +14,10 @@ type PortfolioIconPosition = 'left' | 'right';
 @Component({
   selector: 'portfolio-input',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PortfolioIcon],
+  imports: [NgClass, FormsModule, ReactiveFormsModule, PortfolioIcon],
   templateUrl: './portfolio-input.html',
   styleUrl: './portfolio-input.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [createControlValueAccessorProvider(PortfolioInput)],
 })
 export class PortfolioInput implements ControlValueAccessor, OnInit {
@@ -36,6 +37,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly variant = input<PortfolioVariant>('on');
 
   readonly lucideIcon = input<LucideIconName | ''>('');
+  readonly iconSize = input<number>(16);
   readonly iconPosition = input<PortfolioIconPosition>('left');
   readonly iconClickable = input<boolean>(false);
 
@@ -50,6 +52,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly valueChange = output<string>();
   readonly tagsChange = output<string[]>();
   readonly iconClick = output<Event>();
+  readonly keyup = output<KeyboardEvent>();
 
   readonly isDisabled = signal(false);
   readonly tags = signal<string[]>([]);
@@ -287,7 +290,7 @@ export class PortfolioInput implements ControlValueAccessor, OnInit {
   readonly labelColor = computed(() => {
     if (this.hasErrors()) return '#e51d21';
     if (this.isDisabled()) return 'var(--app-disabled-text)';
-    if (this.isInputFocused() || this.isFocused()) return 'var(--p-primary-500)';
+    if (this.isInputFocused() || this.isFocused()) return 'var(--p-primary-600)';
     if (this.hasValue()) return 'var(--app-text-muted)';
 
     return 'var(--app-text-subtle)';

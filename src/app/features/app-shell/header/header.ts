@@ -1,51 +1,85 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
-import gsap from 'gsap';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component, DestroyRef, ElementRef, PLATFORM_ID, afterNextRender, computed, effect, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
+import { I18nService } from '@core/i18n';
 import { ThemeService } from '@core/theme/theme.service';
 import { PortfolioButton } from '@shared/components';
+import { PortfolioLanguageToggle } from '@shared/components/portfolio-language-toggle/portfolio-language-toggle';
 import { PortfolioThemeColorPicker } from '@shared/components/portfolio-theme-color-picker/portfolio-theme-color-picker';
-
-type PortfolioSectionId = 'inicio' | 'experiencia' | 'proyectos' | 'habilidades' | 'sobre-mi' | 'contacto';
+import { PORTFOLIO_SECTION_IDS, PortfolioSectionId, getPortfolioScrollRoot, scrollToPortfolioSection } from '@shared/utils/portfolio-scroll';
+import { HeaderService } from './header.service';
+import { PortfolioBackgroundAnimationService } from '@features/portfolio/ui/portfolio-background-animation/portfolio-background-animation.service';
 
 @Component({
   selector: 'portfolio-header',
   standalone: true,
-  imports: [PortfolioButton, PortfolioThemeColorPicker],
+  imports: [PortfolioButton, PortfolioThemeColorPicker, PortfolioLanguageToggle],
+  providers: [HeaderService],
   templateUrl: './header.html',
   styleUrl: './header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class Header {
   private readonly themeService = inject(ThemeService);
+  private readonly headerService = inject(HeaderService);
+  private readonly backgroundAnimationService = inject(PortfolioBackgroundAnimationService);
+  private readonly i18nService = inject(I18nService);
+  private readonly titleService = inject(Title);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
+  private readonly baseTitle = 'Portfolio - Gabriel Cruz';
+
   protected readonly mobileMenuOpen = signal(false);
   protected readonly isMobileMenuRendered = signal(false);
-  protected readonly activeSection = signal<PortfolioSectionId>('inicio');
+  protected readonly activeSection = signal<PortfolioSectionId>('home');
+  protected readonly isFloating = signal(false);
+  protected readonly backgroundAnimationEnabled = this.backgroundAnimationService.enabled;
+
+  protected readonly navLinks = computed(() => [
+    { label: this.t('header.nav.home'), href: '#home', sectionId: 'home' as const },
+    { label: this.t('header.nav.about'), href: '#about', sectionId: 'about' as const },
+    { label: this.t('header.nav.experience'), href: '#experience', sectionId: 'experience' as const },
+    { label: this.t('header.nav.projects'), href: '#projects', sectionId: 'projects' as const },
+    { label: this.t('header.nav.skills'), href: '#skills', sectionId: 'skills' as const },
+    { label: this.t('header.nav.contact'), href: '#contact', sectionId: 'contact' as const },
+  ]);
+
+  protected readonly backgroundAnimationAriaLabel = computed(() => {
+    return this.backgroundAnimationEnabled() ? this.t('header.background.disable') : this.t('header.background.enable');
+  });
+
+  protected readonly lightThemeAriaLabel = computed(() => this.t('header.theme.light'));
+  protected readonly darkThemeAriaLabel = computed(() => this.t('header.theme.dark'));
+  protected readonly openMenuAriaLabel = computed(() => this.t('header.menu.open'));
+  protected readonly closeMenuAriaLabel = computed(() => this.t('header.menu.close'));
 
   private scrollAnimationFrameId: number | null = null;
   private scrollUnlockTimer: ReturnType<typeof setTimeout> | null = null;
+  private initialScrollTimer: ReturnType<typeof setTimeout> | null = null;
   private targetSection: PortfolioSectionId | null = null;
-  private menuAnimation?: gsap.core.Tween;
 
-  private readonly sectionIds: PortfolioSectionId[] = ['inicio', 'experiencia', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
-
-  protected readonly navLinks = [
-    { label: 'Inicio', href: '#inicio', sectionId: 'inicio' },
-    { label: 'Experiencia', href: '#experiencia', sectionId: 'experiencia' },
-    { label: 'Proyectos', href: '#proyectos', sectionId: 'proyectos' },
-    { label: 'Habilidades', href: '#habilidades', sectionId: 'habilidades' },
-    { label: 'Sobre mí', href: '#sobre-mi', sectionId: 'sobre-mi' },
-    { label: 'Contacto', href: '#contacto', sectionId: 'contacto' },
-  ] as const;
+  private readonly sectionIds = PORTFOLIO_SECTION_IDS;
 
   constructor() {
+    effect(() => {
+      const sectionKey = `header.nav.${this.activeSection()}`;
+      const sectionLabel = this.i18nService.t(sectionKey);
+      const nextTitle = sectionLabel && sectionLabel !== sectionKey ? `${this.baseTitle} | ${sectionLabel}` : this.baseTitle;
+
+      this.titleService.setTitle(nextTitle);
+    });
+
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+
+    effect(() => {
+      document.documentElement.classList.toggle('header-is-floating', this.isFloating());
+    });
 
     afterNextRender(() => {
       setTimeout(() => {
@@ -62,6 +96,14 @@ export class Header {
     return this.getLinkClass('mobile-nav-link', 'mobile-nav-link--active', sectionId);
   }
 
+  protected backgroundAnimationButtonClass(): string {
+    return this.backgroundAnimationEnabled() ? 'icon-btn background-animation-btn background-animation-btn--active' : 'icon-btn background-animation-btn';
+  }
+
+  protected toggleBackgroundAnimation(): void {
+    this.backgroundAnimationService.toggle();
+  }
+
   protected onNavLinkClick(event: MouseEvent, href: string, sectionId: PortfolioSectionId): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -73,7 +115,11 @@ export class Header {
     this.targetSection = sectionId;
     this.clearScrollUnlockTimer();
 
-    this.scrollToSection(sectionId, 'smooth');
+    if (sectionId !== 'home') {
+      this.isFloating.set(true);
+    }
+
+    scrollToPortfolioSection(sectionId, 'smooth');
 
     history.replaceState(null, '', `${window.location.pathname}${window.location.search}${href}`);
 
@@ -89,74 +135,65 @@ export class Header {
 
   protected toggleMobileMenu(): void {
     const willOpen = !this.mobileMenuOpen();
-    this.mobileMenuOpen.set(willOpen);
 
     if (willOpen) {
-      this.isMobileMenuRendered.set(true);
-      setTimeout(() => {
-        const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
-        if (nav) {
-          if (this.menuAnimation) this.menuAnimation.kill();
-          
-          // The element is already clipped to 0 height natively via style attribute
-          // so we only need to animate it to full visibility.
-          this.menuAnimation = gsap.to(nav, {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 0.4,
-            ease: 'power3.inOut',
-            clearProps: 'clipPath'
-          });
-        }
-      });
-    } else {
-      const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
-      if (nav) {
-        if (this.menuAnimation) this.menuAnimation.kill();
-        
-        this.menuAnimation = gsap.to(nav, {
-          clipPath: 'inset(0 0 100% 0)',
-          duration: 0.3,
-          ease: 'power2.inOut',
-          onComplete: () => {
-            this.isMobileMenuRendered.set(false);
-          }
-        });
-      } else {
-        this.isMobileMenuRendered.set(false);
-      }
+      this.openMobileMenu();
+      return;
     }
+
+    this.closeMobileMenu();
   }
 
   protected closeMobileMenu(): void {
     if (!this.mobileMenuOpen()) return;
+
     this.mobileMenuOpen.set(false);
-    
-    const nav = this.elementRef.nativeElement.querySelector('.mobile-nav') as HTMLElement;
-    if (nav) {
-      if (this.menuAnimation) this.menuAnimation.kill();
-      
-      this.menuAnimation = gsap.to(nav, {
-        clipPath: 'inset(0 0 100% 0)',
-        duration: 0.3,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          this.isMobileMenuRendered.set(false);
-        }
-      });
-    } else {
+
+    const nav = this.getMobileNavElement();
+
+    if (!nav) {
       this.isMobileMenuRendered.set(false);
+      return;
     }
+
+    this.headerService.closeMobileMenu(nav, () => {
+      this.isMobileMenuRendered.set(false);
+    });
+  }
+
+  private t(key: string): string {
+    return this.i18nService.t(key);
+  }
+
+  private openMobileMenu(): void {
+    this.mobileMenuOpen.set(true);
+    this.isMobileMenuRendered.set(true);
+
+    setTimeout(() => {
+      const nav = this.getMobileNavElement();
+
+      if (!nav) return;
+
+      this.headerService.openMobileMenu(nav);
+    });
   }
 
   private initializeHeaderRuntime(): void {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
 
     if (!scrollRoot) {
       return;
     }
 
-    this.syncInitialHash();
-    this.syncActiveSection();
+    history.scrollRestoration = 'manual';
+
+    const initialHash = this.syncInitialHash();
+
+    if (initialHash !== 'home' && scrollRoot.scrollTop > 1) {
+      this.syncActiveSection();
+    }
+
+    this.scheduleHeaderMorph(scrollRoot.scrollTop);
 
     const desktopMq = window.matchMedia('(min-width: 769px)');
 
@@ -164,10 +201,13 @@ export class Header {
       if (event.matches) {
         this.closeMobileMenu();
       }
+
+      this.scheduleHeaderMorph(scrollRoot.scrollTop);
     };
 
     const onScrollOrResize = (): void => {
       this.scheduleActiveSectionSync();
+      this.scheduleHeaderMorph(scrollRoot.scrollTop);
     };
 
     const onManualScroll = (): void => {
@@ -203,6 +243,33 @@ export class Header {
 
       this.cancelActiveSectionFrame();
       this.clearScrollUnlockTimer();
+      this.clearInitialScrollTimer();
+      this.headerService.destroy();
+    });
+  }
+
+  private scheduleHeaderMorph(scrollTop: number): void {
+    const header = this.getHeaderElement();
+
+    if (!header) {
+      return;
+    }
+
+    this.headerService.scheduleHeaderMorph({
+      header,
+      scrollTop,
+      hostWidth: window.innerWidth,
+      headerHeight: this.getHeaderHeight(),
+      isMobile: window.innerWidth <= 768,
+      onFloatingChange: (floating) => {
+        if (this.targetSection && this.targetSection !== 'home' && !floating) {
+          return;
+        }
+
+        if (this.isFloating() !== floating) {
+          this.isFloating.set(floating);
+        }
+      },
     });
   }
 
@@ -226,61 +293,64 @@ export class Header {
     this.closeMobileMenu();
   }
 
-  private syncInitialHash(): void {
+  private syncInitialHash(): PortfolioSectionId | null {
     const hash = window.location.hash.replace('#', '') as PortfolioSectionId;
 
     if (!this.sectionIds.includes(hash)) {
-      return;
+      return null;
     }
 
     this.activeSection.set(hash);
 
-    requestAnimationFrame(() => {
-      this.scrollToSection(hash, 'auto');
-    });
+    if (hash !== 'home') {
+      this.waitAndScrollToSection(hash, 0);
+    }
+
+    return hash;
+  }
+
+  private waitAndScrollToSection(sectionId: PortfolioSectionId, attempt: number): void {
+    if (document.getElementById(sectionId)) {
+      scrollToPortfolioSection(sectionId, 'auto');
+      return;
+    }
+
+    if (attempt >= 30) {
+      return;
+    }
+
+    this.initialScrollTimer = setTimeout(() => {
+      this.waitAndScrollToSection(sectionId, attempt + 1);
+    }, 100);
+  }
+
+  private clearInitialScrollTimer(): void {
+    if (this.initialScrollTimer === null) {
+      return;
+    }
+
+    clearTimeout(this.initialScrollTimer);
+    this.initialScrollTimer = null;
   }
 
   private getLinkClass(baseClass: string, activeClass: string, sectionId: PortfolioSectionId): string {
     return this.activeSection() === sectionId ? `${baseClass} ${activeClass}` : baseClass;
   }
 
-  private getScrollRoot(): HTMLElement | null {
-    return document.querySelector<HTMLElement>('.layout-scroll-root');
+  private getHeaderElement(): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>('.header');
+  }
+
+  private getMobileNavElement(): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector<HTMLElement>('.mobile-nav');
   }
 
   private getHeaderHeight(): number {
-    const value = getComputedStyle(document.documentElement).getPropertyValue('--app-header-height').trim();
-    const parsed = Number.parseFloat(value);
-
-    if (!Number.isFinite(parsed)) {
+    if (window.innerWidth > 640) {
       return 64;
     }
 
-    return value.endsWith('rem') ? parsed * this.getRootFontSize() : parsed;
-  }
-
-  private getRootFontSize(): number {
-    return Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  }
-
-  private scrollToSection(sectionId: PortfolioSectionId, behavior: ScrollBehavior): void {
-    const scrollRoot = this.getScrollRoot();
-    const section = document.getElementById(sectionId);
-
-    if (!scrollRoot || !section) {
-      return;
-    }
-
-    const scrollRootRect = scrollRoot.getBoundingClientRect();
-    const sectionRect = section.getBoundingClientRect();
-    const headerHeight = this.getHeaderHeight();
-
-    const top = sectionRect.top - scrollRootRect.top + scrollRoot.scrollTop - headerHeight;
-
-    scrollRoot.scrollTo({
-      top: Math.max(0, Math.round(top)),
-      behavior,
-    });
+    return Math.min(64, Math.max(48, 27.424 + window.innerWidth * 0.05714));
   }
 
   private scheduleActiveSectionSync(): void {
@@ -300,13 +370,28 @@ export class Header {
 
     const currentSection = this.getCurrentSectionId();
 
-    if (currentSection) {
+    if (currentSection && currentSection !== this.activeSection()) {
       this.activeSection.set(currentSection);
+      this.updateUrlHash(currentSection);
     }
   }
 
+  private updateUrlHash(sectionId: PortfolioSectionId): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const currentHash = window.location.hash.replace('#', '');
+
+    if (currentHash === sectionId) {
+      return;
+    }
+
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${sectionId}`);
+  }
+
   private syncTargetSection(): void {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
     const target = document.getElementById(this.targetSection!);
 
     if (!scrollRoot || !target) {
@@ -314,12 +399,8 @@ export class Header {
       return;
     }
 
-    const scrollRootRect = scrollRoot.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
-    const headerHeight = this.getHeaderHeight();
-
-    const targetVisualTop = targetRect.top - scrollRootRect.top;
-    const reachedTarget = Math.abs(targetVisualTop - headerHeight) <= 2 || targetVisualTop <= headerHeight;
+    const targetScrollTop = this.targetSection === 'home' ? 0 : Math.max(0, Math.round(target.offsetTop));
+    const reachedTarget = Math.abs(scrollRoot.scrollTop - targetScrollTop) <= 5;
 
     if (!reachedTarget) {
       return;
@@ -335,7 +416,7 @@ export class Header {
   }
 
   private getCurrentSectionId(): PortfolioSectionId | null {
-    const scrollRoot = this.getScrollRoot();
+    const scrollRoot = getPortfolioScrollRoot();
 
     if (!scrollRoot) {
       return null;

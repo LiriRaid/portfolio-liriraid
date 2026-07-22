@@ -4,7 +4,7 @@ Documentación de `src/app/features/app-shell/`.
 
 ## Objetivo
 
-Proporcionar la estructura visual que envuelve toda la aplicación: el header de navegación, el footer y el contenedor donde se renderizan las rutas hijas.
+Proporcionar la estructura visual que envuelve toda la aplicación: header con navegación + controles (idioma, tema, color), footer y contenedor donde se renderizan las rutas hijas.
 
 ## Estructura
 
@@ -13,7 +13,8 @@ app-shell/
 ├── header/
 │   ├── header.ts
 │   ├── header.html
-│   └── header.css
+│   ├── header.css
+│   └── header.service.ts        → morph del header y animación del menú móvil
 ├── footer/
 │   ├── footer.ts
 │   ├── footer.html
@@ -24,39 +25,65 @@ app-shell/
     └── layout.css
 ```
 
-## Archivos clave
+## `layout/`
 
-### `layout/layout.ts`
-Componente contenedor que monta `Header`, `Footer`, `RouterOutlet` y `PortfolioToast`.
+Componente contenedor que monta `Header`, `Footer`, `RouterOutlet` y `PortfolioToast` (de [`portfolio-toast`](../shared/components.md#portfolio-toast)).
 
-Incluye un listener de resize que mantiene el scroll en la sección correcta cuando cambia el ancho del viewport.
+- Renderiza el scroll en un contenedor propio `.layout-scroll-root` (no en el body), con `overflow-y: auto` y altura `100dvh`. El header queda fijo sin necesidad de `position: fixed` y la animación de fondo puede vivir detrás de las secciones.
+- Listener de resize: cuando el ancho del viewport cambia, vuelve a scrollear a la sección actualmente visible (calculada midiendo intersecciones con `getBoundingClientRect`) para evitar que un breakpoint corte una sección por la mitad.
+- Conoce los IDs canónicos de sección mediante [`PORTFOLIO_SECTION_IDS`](../shared/utils.md#portfolio-scrollts): `home`, `experience`, `projects`, `skills`, `about`, `contact`.
 
-**IDs de sección conocidos:**
-```
-inicio, experiencia, proyectos, habilidades, sobre-mi, contacto
-```
+Se carga con `loadComponent` (lazy loading) desde `app.routes.ts`.
 
-### `header/header.ts`
-Componente `OnPush` con la siguiente funcionalidad:
+## `header/`
+
+Componente `OnPush` con el header de navegación principal.
+
+### Funcionalidades
 
 | Función | Descripción |
 |---------|-------------|
-| Navegación | Links a cada sección del portfolio con scroll suave |
-| Sección activa | Calcula qué sección está visible según posición de scroll (umbral: 42% del viewport) |
-| Menú móvil | Toggle para pantallas pequeñas |
-| Theme toggle | Cambia entre modo claro y oscuro |
-| Color picker | Abre un popover con las paletas de color disponibles |
+| Navegación | Links a cada sección con scroll suave vía [`scrollToPortfolioSection`](../shared/utils.md#portfolio-scrollts) |
+| Sección activa | Calcula qué sección está visible (scanLine = top + header height, fallback al middle del viewport) y actualiza el hash de la URL |
+| Menú móvil | Toggle con animación GSAP coordinada por `HeaderService` |
+| Theme toggle | Cambia entre modo claro y oscuro (delega en `ThemeService.toggleMode`) |
+| Color picker | Monta el popover de [`PortfolioThemeColorPicker`](../shared/components.md#portfolio-theme-color-picker) |
+| Language toggle | Switch ES/EN vía [`PortfolioLanguageToggle`](../shared/components.md#portfolio-language-toggle) |
+| Background animation toggle | Activa/desactiva la capa de partículas (delega en `PortfolioBackgroundAnimationService`) |
+| Título dinámico | Actualiza `document.title` según la sección activa, usando claves i18n |
 
-**Lógica de scroll:**
-El header detecta si el scroll es manual o programático y bloquea actualizaciones de sección activa durante los scrolls suaves para evitar parpadeos en el indicador.
+### Lógica de scroll
 
-### `footer/footer.ts`
-Componente simple con:
-- Brand: Liriraid + tagline
-- Links a GitHub y sección de contacto
-- Año dinámico de copyright
+- Distingue scroll manual (rueda/touch) de scroll programático (click en un link).
+- **`history.scrollRestoration = 'manual'`** al inicializar: deshabilita la restauración nativa del browser para evitar conflictos con el scroll programático al recargar la página en un hash distinto de `#home`.
+- Durante un scroll programático bloquea la detección de sección activa con `targetSection` (lock). El lock se libera cuando `Math.abs(scrollRoot.scrollTop - target.offsetTop) <= 5px`. Fallback: timeout de 1200ms.
+- Al recargar con hash en la URL (`#projects`, `#contact`, etc.), `waitAndScrollToSection` hace polling cada 100ms hasta que `document.getElementById(sectionId)` retorne el elemento (máx. 30 intentos = 3s), luego hace scroll con `behavior: 'auto'`.
+- Sincroniza el hash de la URL via `history.replaceState` (sin disparar navegación).
+
+#### Corrección URL flickering (upward navigation)
+
+`syncTargetSection` compara `scrollRoot.scrollTop` vs `target.offsetTop` directamente. La lógica anterior comparaba coordenadas de viewport (`targetVisualTop <= expectedTop`), que era `true` inmediatamente cuando el destino estaba por encima del viewport (valor negativo), liberando el lock en el primer frame y causando que la URL mostrara brevemente la sección de origen antes de la destino.
+
+### `HeaderService`
+
+Servicio interno de la feature (`providers: [HeaderService]`). Encapsula:
+
+- **Morph del header al scrollear**: anima width, height y posición Y entre `morphStart=0` y `morphEnd=220` px de scroll. Configs distintos para desktop (`widthRatio 0.92`, `maxWidth 980`, target height 56px) y mobile (`widthRatio 0.96`, target height 44px). Throttled con `requestAnimationFrame`.
+- **Animación del menú móvil**: open/close con GSAP (cargado lazy via [`gsap-loader`](../shared/utils.md#gsap-loaderts)).
+
+Mantener este servicio dentro de la feature (no en `shared/`) porque solo lo consume el header.
+
+## `footer/`
+
+Componente simple `OnPush`.
+
+- Brand (Liriraid) + tagline traducible (`footer.tagline`).
+- Links a GitHub y a la sección de contacto.
+- Año dinámico de copyright via interpolación `{year}` en la clave i18n `footer.copyright`.
 
 ## Notas
 
-- `Layout` se carga con `loadComponent` (lazy loading) para no contaminar el bundle inicial del portfolio.
-- `Header` usa `ChangeDetectionStrategy.OnPush` para evitar re-renders innecesarios durante el scroll.
+- `Layout` se carga lazy via `loadComponent` para no contaminar el bundle inicial.
+- `Header` usa `OnPush` y signals para evitar re-renders durante el scroll.
+- Todos los textos pasan por `I18nService.t(key)` — no hay strings duros en los componentes.
+- El header funciona dentro del scroll root `.layout-scroll-root`, no contra `window`.

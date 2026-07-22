@@ -1,4 +1,10 @@
-export interface ExperienceItem {
+export interface IExperienceHeader {
+  label: string;
+  title: string;
+  subtitle: string;
+}
+
+export interface IExperienceItem {
   company: string;
   role: string;
   period: string;

@@ -1,24 +1,19 @@
-:host {
+portfolio-search {
   display: block;
 }
 
-:host(.desktop-mode) {
+portfolio-search.desktop-mode {
   width: 100%;
   max-width: 25rem;
 }
 
-:host(.mobile-mode) {
+portfolio-search.mobile-mode {
   display: contents;
 }
 
-/* Botón colapsado: siempre 40x40, sin variantes responsive */
-.search-collapsed-btn {
-  width: 40px !important;
-  min-width: 40px !important;
-  height: 40px !important;
-  min-height: 40px !important;
-  padding: 0 !important;
-  border-radius: 0.55rem !important;
+/* Collapsed button — tamaño via portfolio-btn-medium/icon en portfolio-button.css */
+portfolio-search portfolio-button .p-button.search-collapsed-btn {
+  border-radius: 0.55rem;
 }
 
 .search-mobile-panel {
@@ -27,13 +22,10 @@
   flex-basis: 100%;
   width: 100%;
   min-width: 0;
-
   display: grid;
   grid-template-rows: 1fr;
-
   padding-top: var(--search-mobile-gap);
   margin: 0;
-
   overflow: hidden;
   will-change: grid-template-rows, padding-top, opacity;
 }
@@ -47,54 +39,46 @@
   transform: translateZ(0);
 }
 
-/* Input desktop: 42px de alto, fuente 16px (text-body-2-medium aplicado en el HTML) */
-:host ::ng-deep .input.input-default {
-  min-height: 42px !important;
-  height: 42px !important;
-  width: 100%;
+/* Sobreescribimos las variables CSS que portfolio-input consume internamente
+   para adaptarlo al contexto visual del search (colores de búsqueda) */
+portfolio-search portfolio-input {
+  --app-control-surface-bg: var(--app-search-input-bg);
+  --app-control-surface-border: var(--app-search-input-border);
+  --app-control-surface-text: var(--app-search-input-text);
+  --app-action-icon-color: var(--app-search-input-prefix);
 }
 
-:host ::ng-deep .input.input-default portfolio-icon {
-  color: var(--app-search-input-prefix);
-  opacity: 1;
-  transition:
-    color 0.2s ease,
-    opacity 0.2s ease;
-}
-
-:host ::ng-deep .input.input-default:focus-within portfolio-icon {
-  color: var(--app-search-input-prefix);
-  opacity: 1;
-}
-
-:host ::ng-deep .input.input-default input,
-:host ::ng-deep input {
+portfolio-search portfolio-input .portfolio-input-field {
+  min-height: 42px;
+  background-color: var(--app-search-input-bg) !important;
   color: var(--app-search-input-text) !important;
   -webkit-text-fill-color: var(--app-search-input-text) !important;
   caret-color: var(--app-text-primary);
-
-  min-height: 0 !important;
-  height: auto !important;
 }
 
-:host ::ng-deep .input.input-default input::placeholder,
-:host ::ng-deep input::placeholder {
+portfolio-search portfolio-input .portfolio-input-field::placeholder {
   color: var(--app-search-input-prefix) !important;
   -webkit-text-fill-color: var(--app-search-input-prefix) !important;
   opacity: 0.72;
 }
 
-/* Responsive (<= 640px): input 38px de alto, fuente 14px (caption-1) heredada al placeholder */
 @media (max-width: 640px) {
-  :host ::ng-deep .input.input-default {
-    min-height: 38px !important;
-    height: 38px !important;
+  portfolio-search {
+    --search-action-size: 36px;
+    --search-input-height: clamp(36px, calc(30px + 1.25vw), 38px);
+    --search-input-size: clamp(var(--font-size-caption-2), calc(0.375rem + 1.25vw), var(--font-size-caption-1));
+    --search-icon-size: 18px;
   }
 
-  :host ::ng-deep .input.input-default input,
-  :host ::ng-deep input {
-    font-size: var(--font-size-caption-1) !important;
-    line-height: var(--line-height-caption-1) !important;
-    font-weight: 500;
+  portfolio-search portfolio-button .p-button.search-collapsed-btn {
+    width: var(--search-action-size) !important;
+    min-width: var(--search-action-size) !important;
+    height: var(--search-action-size) !important;
+    min-height: var(--search-action-size) !important;
+  }
+
+  portfolio-search portfolio-input .portfolio-input-field {
+    min-height: var(--search-input-height);
+    font-size: var(--search-input-size);
   }
 }
